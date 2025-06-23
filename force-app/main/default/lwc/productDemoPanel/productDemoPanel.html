@@ -1,0 +1,24 @@
+<template>
+    <c-time-slot-panel title={titleTimeSlot} available-label={availableLabel} object-api-name={objectApiName}
+        record-fieldset-name={recordFieldsetNameTimeSlot} default-field-values={defaultFieldValuesTimeSlot}
+        transaction-type={transactionType} site-transaction-type={siteTransactionType}
+        no-data-message={noDataMessageDateSlot} no-data-message-slot={noDataMessageTimeSlot} days-count={daysCount}
+        branch-id={branchId} ondateslotchanged={handleDateSlotChanged} ontimeslotchanged={handleTimeSlotChanged}
+        onfilterchanged={handleFilterChanged}>
+    </c-time-slot-panel>
+    <lightning-layout pull-to-boundary="medium">
+        <lightning-layout-item size="8" padding="horizontal-medium">
+            <c-partner-search-panel title={titlePartnerPanel} record-fieldset-name={recordFieldsetNamePartnerPanel}
+                show-filter-panel={showFilterPanelPartnerPanel} no-data-message={noDataMessagePartnerPanel}
+                onbranchselected={handleBranchSelected} onfilterchanged={handlePartnerFilterChanged}
+                default-field-values={}>
+            </c-partner-search-panel>
+        </lightning-layout-item>
+        <lightning-layout-item size="4" padding="horizontal-medium">
+            <c-record-panel-v1 title={titleRecordPanel} object-api-name={objectApiNameRecordPanel}
+                record-fieldset-name={recordFieldsetNameRecordPanel}
+                default-field-values={defaultFieldValuesRecordPanel} onvaluechanged={handleValueChanged}>
+            </c-record-panel-v1>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>

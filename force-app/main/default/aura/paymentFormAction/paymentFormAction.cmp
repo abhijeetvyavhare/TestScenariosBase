@@ -1,0 +1,21 @@
+<aura:component implements="lightning:actionOverride,force:lightningQuickAction,force:hasRecordId,force:hasSObjectName">
+    <aura:html tag="style">
+        .slds-modal__container{
+            width: 90%;
+            max-width: 900px;
+            padding: 0px;
+        }
+        .cuf-content{
+            padding:0px;
+        }
+    </aura:html> 
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="sObjectName" type="String" />
+    <c:paymentForm 
+        aura:id="pdPanel" 
+        objectApiName="{!v.sObjectName}" 
+        recordId="{!v.recordId}"
+        onrecordsaved="{!c.closeAction}" 
+        oncloseclicked="{!c.closeAction}">
+    </c:paymentForm>
+</aura:component>

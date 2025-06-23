@@ -1,0 +1,12 @@
+<template>
+    <c-header-card hide-body-margin show-page-header={showHeader} title={title} show-header-border={showHeader}>
+        <template if:true={markers}>
+            <lightning-map map-markers={markers} title="Partner Locations" options={mapOptions} list-view="hidden"
+                selected-marker-value={selectedMarker} onmarkerselect={handleMarkerSelect}></lightning-map>
+        </template>
+        <template if:false={markers}>
+            <c-illustration-no-data size="large" message="No visit records!" view="desert">
+            </c-illustration-no-data>
+        </template>
+    </c-header-card>
+</template>

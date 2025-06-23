@@ -1,0 +1,21 @@
+public enum LedgerTypeEnum {
+    None,
+    Adjustment,
+    TransferOutward,
+    TransferInward,
+    Inward,
+    Outward,
+    Assemble,
+    Fulfillment,
+    HardCommit,
+    SoftCommit,    
+    Purchased,
+    Sold,
+    Damaged,
+    Expired,
+    OnHold,
+    OnLoan,
+    Inspection,
+    InspectionAdjustment,
+    Shortage
+}

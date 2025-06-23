@@ -1,0 +1,228 @@
+<template>
+    <lightning-quick-action-panel header={customLabel.headerLabel}>
+        <template if:false={isLoaded}>
+            <div class="spinnerHolder lds-align_absolute-center">
+              <lightning-spinner variant="brand" alternative-text="Loading" size="medium"></lightning-spinner>
+            </div>
+        </template>
+        <template if:true={isLoaded}>
+            <lightning-record-edit-form name="sourceObjectForm" 
+                id="lightning-record-form" density="comfy" 
+                onload={handleLeadFormLoaded}
+                object-api-name={objectApiName} 
+                record-id={recordId}>
+                <div class="slds-hide">
+                    <lightning-input-field field-name="dmpl__PerformCreateServiceRequest__c">
+                    </lightning-input-field>
+                </div>
+                <div class="slds-grid slds-grid_vertical">
+                    <div class="slds-col">
+                        <template if:true={hasAccountFields}>
+                            <div class="slds-section slds-is-open">
+                                <div class="slds-grid slds-theme_shade slds-p-around_x-small">
+                                    <div class="slds-col slds-section__title">
+                                        <span class="slds-truncate slds-p-horizontal_small"
+                                        title="Account">Account</span>
+                                    </div>
+                                    <div class="slds-col">
+                                        <lightning-radio-group name='rgAccount' 
+                                            class="slds-float_right"
+                                            label="Account"
+                                            variant="label-hidden"
+                                            options={accountOptions}
+                                            value={accountOptionId}
+                                            onchange={handleAccountOptionChange}
+                                            type="button"></lightning-radio-group>
+                                    </div>
+                                </div>
+                                <div aria-hidden="false" class="slds-section__content">
+                                    <template if:true={isNewAccount}>
+                                        <lightning-record-edit-form name="accountObjectForm" density="comfy" 
+                                        onload={handleAccountFormLoad}
+                                        onsuccess={handleAccountObjectSuccess} object-api-name="Account">
+                                            <lightning-tabset>
+                                                <lightning-tab label="Basic Details">
+                                                    <div class="slds-grid slds-gutters slds-wrap">
+                                                        <template for:each={getNewAccountFieldset1}
+                                                            for:item="field">
+                                                            <div class="slds-col slds-size_3-of-3 slds-large-size_1-of-2"
+                                                                key={field.apiName}>
+                                                                <lightning-input-field id={field.apiName} field-name={field.apiName}
+                                                                    disabled={field.disabled} required={field.required} onchange={handleFieldChange}>
+                                                                </lightning-input-field>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                </lightning-tab>
+                                                <lightning-tab label="Billing Address">
+                                                    <div class="slds-grid slds-gutters slds-wrap">
+                                                        <template for:each={getNewAccountFieldset2}
+                                                            for:item="field">
+                                                            <div class="slds-col slds-size_3-of-3 slds-large-size_1-of-2"
+                                                                key={field.apiName}>
+                                                                <lightning-input-field id={field.apiName} field-name={field.apiName}
+                                                                    disabled={field.disabled} required={field.required} onchange={handleFieldChange}>
+                                                                </lightning-input-field>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                </lightning-tab>
+                                                <lightning-tab label="Shipping Address">
+                                                    <div class="slds-grid slds-gutters slds-wrap">
+                                                        <template for:each={getNewAccountFieldset3}
+                                                            for:item="field">
+                                                            <div class="slds-col slds-size_3-of-3 slds-large-size_1-of-2"
+                                                                key={field.apiName}>
+                                                                <lightning-input-field id={field.apiName} field-name={field.apiName}
+                                                                    disabled={field.disabled} required={field.required} onchange={handleFieldChange}>
+                                                                </lightning-input-field>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                </lightning-tab>
+                                            </lightning-tabset>
+                                        </lightning-record-edit-form>
+                                    </template>
+                                    <template if:true={isExistingAccount}>
+                                        <div class="slds-grid slds-grid_vertical">
+                                            <div class="slds-col">
+                                                <lightning-input-field field-name="dmpl__AccountId__c"
+                                                    onchange={handleAccountChange}>
+                                                </lightning-input-field>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+                        <template if:true={hasContactFields}>
+                            <div class="slds-section slds-is-open">
+                                <div class="slds-grid slds-theme_shade slds-p-around_x-small">
+                                    <div class="slds-col slds-section__title">
+                                        <span class="slds-truncate slds-p-horizontal_small"
+                                        title="Account">Contact</span>
+                                    </div>
+                                    <div class="slds-col">
+                                        <lightning-radio-group name='rgContact' 
+                                            class="slds-float_right"
+                                            label="Contact"
+                                            variant="label-hidden"
+                                            options={contactOptions}
+                                            value={contactOptionId}
+                                            onchange={handleContactOptionChange}
+                                            type="button"></lightning-radio-group>
+                                    </div>
+                                </div>
+                                <div aria-hidden="false" class="slds-section__content">
+                                    <template if:true={isNewContact}>
+                                        <lightning-record-edit-form name="contactObjectForm" 
+                                            onload={handleContactFormLoad}
+                                            density="comfy" object-api-name="Contact">                                    
+                                            <div class="slds-grid slds-gutters slds-wrap">
+                                                <template for:each={getNewContactFieldset}
+                                                    for:item="field">
+                                                    <div class="slds-col slds-size_3-of-3 slds-large-size_1-of-2"
+                                                        key={field.apiName}>
+                                                        <lightning-input-field id={field.apiName} field-name={field.apiName}
+                                                            disabled={field.disabled} required={field.required} onchange={handleFieldChange}>
+                                                        </lightning-input-field>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </lightning-record-edit-form>
+                                    </template>
+                                    <template if:true={isExistingContact}>
+                                        <div class="slds-grid slds-grid_vertical">
+                                            <div class="slds-col">
+                                                <lightning-input-field field-name="dmpl__ContactId__c"
+                                                    onchange={handleAccountChange}>
+                                                </lightning-input-field>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+                        <template if:true={hasOptyFields}>
+                            <div class="slds-section slds-is-open">
+                                <div class="slds-grid slds-theme_shade slds-p-around_x-small">
+                                    <div class="slds-col slds-section__title">
+                                        <span class="slds-truncate slds-p-horizontal_small"
+                                        title="Account">Opportunity</span>
+                                    </div>
+                                    <div class="slds-col">
+                                        <lightning-radio-group name='rgOpty' 
+                                            label="Opty"
+                                            variant="label-hidden"
+                                            options={optyOptions}
+                                            value={optyOptionId}
+                                            class="slds-float_right"
+                                            onchange={handleOptyOptionChange}
+                                            type="button"></lightning-radio-group>
+                                    </div>
+                                </div>
+                                <div aria-hidden="false" class="slds-section__content">
+                                    <template if:true={isNewOpty}>
+                                        <lightning-record-edit-form name="optyObjectForm" density="comfy" 
+                                            onload={handleOptyFormLoad}
+                                            object-api-name={targetObjectApiName}>
+                                            <div class="slds-grid slds-gutters slds-wrap">
+                                                <template for:each={getNewOptyFieldset}
+                                                    for:item="field">
+                                                    <div class="slds-col slds-size_3-of-3 slds-large-size_1-of-2"
+                                                        key={field.apiName}>
+                                                        <lightning-input-field id={field.apiName} field-name={field.apiName}
+                                                            disabled={field.disabled} required={field.required} onchange={handleFieldChange}>
+                                                        </lightning-input-field>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </lightning-record-edit-form>
+                                    </template>
+                                    <template if:true={isExistingOpty}>
+                                        <div class="slds-grid slds-grid_vertical">
+                                            <div class="slds-col">
+                                                <lightning-input-field field-name="dmpl__ServiceRequestId__c"
+                                                    onchange={handleFieldChange}>
+                                                </lightning-input-field>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>             
+                        </template>
+                        <template if:true={hasFieldsetFields}>
+                            <div class="slds-section slds-is-open">
+                                <div class="slds-grid slds-theme_shade slds-p-around_x-small">
+                                    <div class="slds-col slds-section__title">
+                                        <span class="slds-truncate slds-p-horizontal_small"
+                                        title="Account">Lead</span>
+                                    </div>
+                                </div>
+                                <div aria-hidden="false" class="slds-section__content">
+                                    <!-- <lightning-record-edit-form name="leadObjectForm" density="comfy" object-api-name={targetObjectApiName}> -->
+                                        <div class="slds-grid slds-gutters slds-wrap">
+                                            <template if:true={getFieldsetFields} for:each={getFieldsetFields} for:item="field">
+                                                <div class="slds-col slds-size_3-of-3 slds-large-size_1-of-2" key={field.apiName}>
+                                                    <lightning-input-field id={field.apiName} field-name={field.apiName}
+                                                        disabled={field.disabled} required={field.required} onchange={handleFieldChange}>
+                                                    </lightning-input-field>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    <!-- </lightning-record-edit-form> -->
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </lightning-record-edit-form>
+        </template>
+        <div slot="footer">
+            <lightning-button class="slds-button" variant="neutral" label="Cancel"
+                onclick={handleClose}></lightning-button>
+            <lightning-button class="slds-button slds-m-left_x-small" variant="brand" label="Convert" type="Submit"
+                disabled={isWorking} onclick={handleSave}></lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

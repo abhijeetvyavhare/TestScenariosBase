@@ -1,0 +1,165 @@
+<template>
+    <div id="map"></div>
+    <template if:false={isPlanAccepted}>
+        <div class="slds-grid slds-p-bottom_small slds-grid_align-center slds-grid_vertical slds-border_bottom">
+            <template if:true={acceptanceStatusList} for:each={acceptanceStatusList} for:item="f">
+                <div key={f.value} class="slds-col slds-p-vertical_xx-small slds-align_absolute-center">
+                    <div class="slds-col slds-p-horizontal_x-small">
+                        <lightning-button class="visitActionButton" name={f.value} label={f.label} title={f.label}
+                        onclick={handleAcceptanceClick}></lightning-button>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </template>              
+    <div class="slds-card">
+        <div class="slds-card__body slds-card__body_inner">
+            <template if:true={visits}>
+                <template if:true={isMobileView}>
+                    <div>
+                        <ul class="slds-welcome-mat__tiles dmpl-welcome-mat__tiles">
+                            <template if:true={visits} for:each={visits} for:item="visit">
+                                <li class="slds-welcome-mat__tile" key={visit.value}>
+                                    <a href={visit.navigationLink} data-id={visit.value} onclick={handleActionClick}
+                                        class="slds-box slds-box_link slds-media">
+                                        <div
+                                            class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center">
+                                            <div class="slds-welcome-mat__tile-figure">
+                                                <lightning-icon icon-name="standard:visits"
+                                                    alternative-text="Schemes Applied" size="large" title="large size">
+                                                </lightning-icon>
+                                            </div>
+                                        </div>
+                                        <div class="slds-media__body">
+                                            <div class="slds-welcome-mat__tile-body">
+                                                <h3 class="slds-welcome-mat__tile-title">{visit.title}</h3>
+                                                <div class="slds-truncate slds-p-left_xx-small" title={visit.title}>
+                                                    <template if:false={visit.isCompleted}>
+                                                        <span
+                                                            class="slds-welcome-mat__tile-description slds-p-left_xx-small">Visit
+                                                            Status {visit.status}, planned at {visit.plannedStartTime}
+                                                            for {visit.plannedDuration} mins.</span>
+                                                    </template>
+                                                    <template if:true={visit.isCompleted}>
+                                                        <span
+                                                            class="slds-welcome-mat__tile-description slds-p-left_xx-small">Visit
+                                                            Completed at {visit.endTime} in {visit.visitDuration}
+                                                            mins.</span>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </template>
+                <template if:false={isMobileView}>
+                    <div>
+                        <ul class="slds-timeline">
+                            <template if:true={visits} for:each={visits} for:item="f">
+                                <li key={f.value}>
+                                    <div class="slds-timeline__item_expandable slds-timeline__item_task slds-is-open">
+                                        <span class="slds-assistive-text">task</span>
+                                        <div class="slds-media">
+                                            <div class="slds-media__figure">
+                                                <template if:false={f.isCollapsed}>
+                                                    <lightning-button-icon if:false={f.isCollapsed}
+                                                        icon-class="slds-timeline__details-action-icon"
+                                                        icon-name="utility:chevrondown" variant="bare"
+                                                        alternative-text="Toggle details" onclick={handleVisibility}
+                                                        data-recordid={f.value}>
+                                                    </lightning-button-icon>
+                                                </template>
+                                                <template if:true={f.isCollapsed}>
+                                                    <lightning-button-icon if:true={f.isCollapsed}
+                                                        icon-class="slds-timeline__details-action-icon"
+                                                        icon-name="utility:chevronright" variant="bare"
+                                                        alternative-text="Toggle details" onclick={handleVisibility}
+                                                        data-recordid={f.value}>
+                                                    </lightning-button-icon>
+                                                </template>
+                                                <div class="slds-icon_container slds-icon-standard-task slds-timeline__icon"
+                                                    title="task">
+                                                    <lightning-icon size="small" icon-name="standard:task">
+                                                    </lightning-icon>
+                                                </div>
+                                            </div>
+                                            <div class="slds-media__body">
+                                                <div class="slds-grid slds-grid_align-spread slds-timeline__trigger">
+                                                    <div
+                                                        class="slds-grid slds-grid_vertical-align-center slds-truncate_container_75 slds-no-space">
+                                                        <h3 class="slds-truncate" title={f.title}>
+                                                            <a href={f.navigationLink} data-id={f.value}
+                                                                onclick={handleActionClick}>
+                                                                <strong>{f.title}</strong>
+                                                            </a>
+                                                        </h3>
+                                                    </div>
+                                                    <div class="slds-timeline__actions slds-timeline__actions_inline">
+                                                        <p class="slds-timeline__date">{f.plannedStartTime} |
+                                                            {f.visitDate}</p>
+                                                    </div>
+                                                </div>
+                                                <p class="slds-m-horizontal_xx-small">
+                                                    <template if:true={f.isCompleted}>
+                                                        Visit Status {f.status}, planned at {f.plannedStartTime} for
+                                                        {f.plannedDuration} mins.
+                                                        deviation
+                                                    </template>
+                                                    <template if:false={f.isCompleted}>
+                                                        Visit Completed at {f.endTime} in {f.visitDuration} mins.
+                                                    </template>
+                                                </p>
+                                                <template if:false={f.isCollapsed}>
+                                                    <article if:true={getFieldsetFields}
+                                                        class="slds-box slds-timeline__item_details slds-theme_shade slds-m-top_x-small slds-m-horizontal_xx-small slds-p-around_medium"
+                                                        aria-hidden="false">
+                                                        <lightning-record-view-form density="comfy"
+                                                            object-api-name='dmpl__Visit__c' record-id={f.value}>
+                                                            <lightning-messages> </lightning-messages>
+                                                            <div class="slds-grid slds-wrap">
+                                                                <template for:each={getFieldsetFields} for:item="field">
+                                                                    <div key={field.apiName}
+                                                                        class="slds-col slds-size_1-of-2">
+                                                                        <lightning-output-field
+                                                                            field-name={field.apiName}>
+                                                                        </lightning-output-field>
+                                                                    </div>
+                                                                </template>
+                                                                <template if:true={remarksFieldName}>
+                                                                    <div class="slds-col slds-size_1-of-1">
+                                                                        <lightning-output-field
+                                                                            field-name={remarksFieldName}>
+                                                                        </lightning-output-field>
+                                                                    </div>
+                                                                </template>
+                                                                <template if:true={actionName}>
+                                                                    <div class="slds-col slds-size_1-of-1">
+                                                                        <lightning-button class="slds-float_right"
+                                                                            value={f.value} label="Open Visit"
+                                                                            title="Open Visit"
+                                                                            onclick={handleActionClick}></lightning-button>
+                                                                    </div>
+                                                                </template>
+                                                            </div>
+                                                        </lightning-record-view-form>
+                                                    </article>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </template>
+            </template>
+            <template if:false={visits}>
+                <c-illustration-no-data size="small" message="No visit records!" view="openroad">
+                </c-illustration-no-data>
+            </template>
+        </div>
+    </div>
+</template>

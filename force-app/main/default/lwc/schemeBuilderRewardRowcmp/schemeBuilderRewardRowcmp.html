@@ -1,0 +1,148 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <div if:true={isEditing}>
+        <lightning-record-edit-form density="comfy" object-api-name={resultObjectApiName} record-id={result.Id}
+        onsuccess={handleSuccess} onerror={handleError}>
+            <lightning-messages> </lightning-messages>
+            <li class="slds-expression__row">
+                <fieldset>
+                    <legend class="slds-expression__legend">
+                        <span>{getApplicabilityLabel}</span>
+                        <span class="slds-assistive-text">Reward
+                            {getApplicabilityLabel}</span>
+                    </legend>    
+                    <div class="slds-hide">
+                        <lightning-input-field field-name="dmpl__RewardType__c"
+                            value={rewardType}></lightning-input-field>
+                        <lightning-input-field field-name="Name">
+                        </lightning-input-field>
+                        <lightning-input-field field-name="dmpl__SchemeLineId__c" value={schemeLineId}> 
+                        </lightning-input-field>
+                        <lightning-input-field field-name="dmpl__SchemeId__c" value={schemeId}>
+                        </lightning-input-field>    
+                        <lightning-input-field field-name="dmpl__SequenceNumber__c" value={newSequenceNumber}>
+                        </lightning-input-field>
+                    </div>
+                    <div class="slds-grid slds-gutters_xx-small">
+                        <div class="slds-col slds-grow-none">
+                            <lightning-input-field field-name="dmpl__Title__c">
+                            </lightning-input-field>
+                        </div>
+                        <div class="slds-col">
+                            <div class="slds-form-element">
+                                <lightning-combobox name="rewardType" label="Reward Type" value={rewardType}
+                                    placeholder="Select Reward Type" options={rewardTypeList}
+                                    onchange={handleRewardChange} required></lightning-combobox>
+                            </div>
+                        </div>
+                        <div class="slds-col" if:true={isDiscountItemVisible}>
+                            <lightning-input-field field-name="dmpl__DiscountedItemId__c">
+                            </lightning-input-field>
+                        </div>
+                        <div class="slds-col" if:true={isItemDiscountItemSKUVisible}>
+                            <lightning-input-field field-name="dmpl__DiscountedSKUId__c">
+                            </lightning-input-field>
+                        </div>
+                        <div class="slds-col" if:true={isDiscountItemGroupVisible}>
+                            <lightning-input-field field-name="dmpl__DiscountedItemGroupId__c">
+                            </lightning-input-field>
+                        </div>
+                        <div class="slds-col" if:true={isItemDiscountItemQuantityVisible}>
+                            <lightning-input-field field-name="dmpl__DiscountedItemQuantity__c">
+                            </lightning-input-field>
+                        </div>
+                        <div class="slds-col" if:true={isDiscountAmountVisible}>
+                            <lightning-input-field field-name="dmpl__DiscountAmount__c">
+                            </lightning-input-field>
+                        </div>
+                        <div class="slds-col" if:true={isDiscountPercentVisible}>
+                            <lightning-input-field field-name="dmpl__DiscountPercent__c">
+                            </lightning-input-field>
+                        </div>
+                        <div class="slds-col" if:true={isRewardPointsVisible}>
+                            <lightning-input-field field-name="dmpl__RewardPoints__c">
+                            </lightning-input-field>
+                        </div>
+                        <template if:false={disableActions}>
+                            <div class="slds-col slds-grow-none slds-m-top_large">
+                                <lightning-button-icon icon-name="utility:save" variant="border-filled"
+                                alternative-text="Save Condition" title="Save" onclick={handleSaveCondition}>
+                                </lightning-button-icon>
+                            </div>
+                            <div class="slds-col slds-grow-none slds-m-top_large">
+                                <lightning-button-icon icon-name="utility:clear" variant="border-filled"
+                                alternative-text="Cancel" title="Cancel" onclick={handleCancelCondition}>
+                                </lightning-button-icon>
+                            </div>
+                        </template>
+                    </div>
+                </fieldset>
+            </li>
+        </lightning-record-edit-form>
+    </div>
+    <div if:false={isEditing}>
+        <lightning-record-view-form density="comfy" object-api-name={resultObjectApiName} record-id={result.Id}>
+            <lightning-messages> </lightning-messages>
+            <li class="slds-expression__row">
+                <fieldset>
+                    <legend class="slds-expression__legend">
+                        <span>{getApplicabilityLabel}</span>
+                        <span class="slds-assistive-text">Reward
+                            {getApplicabilityLabel}</span>
+                    </legend>    
+                    <div class="slds-grid slds-gutters_xx-small">
+                        <div class="slds-col">
+                            <lightning-output-field field-name="dmpl__RewardType__c">
+                            </lightning-output-field>
+                        </div>
+                        <div class="slds-col" if:true={isDiscountItemVisible}>
+                            <lightning-output-field field-name="dmpl__DiscountedItemId__c">
+                            </lightning-output-field>
+                        </div>
+                        <div class="slds-col" if:true={isItemDiscountItemSKUVisible}>
+                            <lightning-output-field field-name="dmpl__DiscountedSKUId__c">
+                            </lightning-output-field>
+                        </div>
+                        <div class="slds-col" if:true={isDiscountItemGroupVisible}>
+                            <lightning-output-field field-name="dmpl__DiscountedItemGroupId__c">
+                            </lightning-output-field>
+                        </div>
+                        <div class="slds-col" if:true={isItemDiscountItemQuantityVisible}>
+                            <lightning-output-field field-name="dmpl__DiscountedItemQuantity__c">
+                            </lightning-output-field>
+                        </div>
+                        <div class="slds-col" if:true={isDiscountAmountVisible}>
+                            <lightning-output-field field-name="dmpl__DiscountAmount__c">
+                            </lightning-output-field>
+                        </div>
+                        <div class="slds-col" if:true={isDiscountPercentVisible}>
+                            <lightning-output-field field-name="dmpl__DiscountPercent__c" value={defaultDiscount}>
+                            </lightning-output-field>
+                        </div>
+                        <div class="slds-col" if:true={isRewardPointsVisible}>
+                            <lightning-output-field field-name="dmpl__RewardPoints__c">
+                            </lightning-output-field>
+                        </div>
+                        <template if:false={disableActions}>
+                            <div class="slds-col slds-grow-none slds-m-top_large">
+                                <lightning-button-icon icon-name="utility:edit" variant="border-filled"
+                                alternative-text="Edit Condition" title="Edit" onclick={handleEditCondition}>
+                                </lightning-button-icon>
+                            </div>
+                            <div class="slds-col slds-grow-none slds-m-top_large">
+                                <lightning-button-icon icon-name="utility:edit_form" variant="border-filled"
+                                    alternative-text="Edit Form" title="Edit" onclick={handleEditFormCondition}>
+                                </lightning-button-icon>
+                            </div>
+                            <div class="slds-col slds-grow-none slds-m-top_large">
+                                <lightning-button-icon icon-name="utility:delete" variant="border-filled"
+                                    alternative-text="Delete Condition" title="Delete" onclick={handleDeleteCondition}>
+                                </lightning-button-icon>
+                            </div>
+                        </template>
+                    </div>
+                </fieldset>
+            </li>
+        </lightning-record-view-form>
+    </div>
+</template>

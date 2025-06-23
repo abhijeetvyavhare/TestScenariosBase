@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <masterLabel>Bulk Order Processing</masterLabel>
+    <targetConfigs>
+        <targetConfig targets="lightning__AppPage">
+            <property name="objectApiName" label="Object API Name" type="String"/>
+            <property name="filterFieldSetName" label="Filter Field Set Name" type="String"/>
+            <property name="resultLabel" label="Related Object Label" type="String"/>
+            <property name="relatedObjectApiName" label="Related Object API Name" type="String"/>
+            <property name="relatedObjectFieldSetName" label="Related Object Field Set Name" type="String"/>
+            <property name="parentLookupField" label="Parent Lookup Field API" type="String"/>
+            <property name="defaultWhereClause" label="Default Where Clause" type="String"/>
+            <property name="defaultOrderByClause" label="Default Order By Clause" type="String"/>
+            <property name="editableFields" label="Editable Fields" type="String"/>
+        </targetConfig>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="objectApiName" label="Object API Name" type="String"/>
+            <property name="filterFieldSetName" label="Filter Field Set Name" type="String"/>
+            <property name="resultLabel" label="Related Object Label" type="String"/>
+            <property name="relatedObjectApiName" label="Related Object API Name" type="String"/>
+            <property name="relatedObjectFieldSetName" label="Related Object Field Set Name" type="String"/>
+            <property name="parentLookupField" label="Parent Lookup Field API" type="String"/>
+            <property name="defaultWhereClause" label="Default Where Clause" type="String"/>
+            <property name="defaultOrderByClause" label="Default Order By Clause" type="String"/>
+            <property name="editableFields" label="Editable Fields" type="String"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

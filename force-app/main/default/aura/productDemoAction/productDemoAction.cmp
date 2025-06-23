@@ -1,0 +1,18 @@
+<aura:component implements="force:lightningQuickActionWithoutHeader,force:hasRecordId">
+    <aura:html tag="style">
+        .slds-modal__container{
+            width: 70%;
+            max-width: 59rem;
+            padding: 0px;
+        }
+        .cuf-content{
+            padding:0px;
+        }
+    </aura:html> 
+    <aura:attribute name="recordId" type="String" />
+    <c:productDemoPanelcmp 
+        aura:id="pdPanel" 
+        objectApiName="dmpl__SaleOrder__c" 
+        recordId="{!v.recordId}"
+        onrecordsaved="{!c.closeAction}"></c:productDemoPanelcmp>
+</aura:component>

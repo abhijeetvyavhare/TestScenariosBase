@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>52.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <masterLabel>
+        Quick Add Panel
+    </masterLabel>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <property name="title" type="String" label="Title" default="New" description="Title of the panel to be shown on top." />
+            <property name="relationName" type="String" label="Relation Name" description="The related list name to which you need to add the new record." />
+            <!-- datasource="apex://dmpl.RelatedFieldDynamicPickList" -->
+            <property name="childFieldsetName" type="String" label="Child Fieldset" description="The fieldset to be used to show fields on the quick add panel." />
+            <!-- datasource="apex://dmpl.FieldsetDynamicPickList" -->
+            <property name="childRecordTypeId" type="String" label="Child Record Type" required="false" description="The Record Type to be used to add new object." />
+            <!-- datasource="apex://dmpl.RecordTypeDynamicPickList" -->
+            <property name="showStock" type="Boolean" label="Show Stock" description="Show Stock for the selected Item." />
+            <property name="showSKUStock" type="Boolean" label="Show SKU Stock" description="Show stock for all SKUs of selected Item." />
+            <property name="showItemLotTypeStock" type="Boolean" label="Show Item Lot Type Stock" description="Show stock for Selected ItemLotTypes of selected Item." />
+            <property name="showAllItemLotTypeStock" type="Boolean" label="Show All Item Lot Type Stock" description="Show stock for all ItemLotTypes of selected Item." />
+            <property name="showOtherBranchesStock" type="Boolean" label="Show Other Branches Stock" description="Show Stock for other branches." />
+            <property name="fetchPrices" type="Boolean" label="Fetch Prices" description="Prices to be feched when Item or SKU is selected." />
+            <property name="fetchTaxes" type="Boolean" label="Fetch Taxes" description="Taxes to be fetched when the Item or SKU is selected." />
+            <property name="showType" type="Boolean" label="Show Type" description="Show type of fetched items ( Original / Alternate Item )" />
+            <property name="showAlternateItems" type="Boolean" label="Show Alternate Items" description="Show alternate items if exists" />
+            <property name="showImportOption" type="Boolean" label="Show Import Option" description="Show option to import Excel File." />
+            <property name="showMRP" type="Boolean" label="Show MRP" description="Show MRP of selected Item." />
+            <property name="importFieldName" type="String" label="Import Fieldset" description="The field to show while importing Excel file." />
+            <property name="importActionName" type="String" label="Import Action" description="The action to invoke while importing Excel file." />
+            <property name="showScanOption" type="Boolean" label="Show Scan Option" description="Allow user to add using the scanner." />
+            <property name="scannedFieldName" type="String" label="Scanned Fieldset" description="The field to show while scanning." />
+            <property name="barCodeType" type="String" label="Bar Code Type" description="One of the allowed values of Bar Code(code128, code39, code93, datamatrix, ean13, ean8, itf, upca, upce, pdf417, qr)." />
+            <property name="displayGridColumns" type="Integer" default="2" label="Display Width" description="Number of columns a field will occupy in a 12 columns grid." />
+            <property name="disabledFields" type="String" label="Disabled Fields" description="Comma seperated field names that needs to be disabled." />
+
+            <property name="showCustomItemLookup" type="Boolean" label="Custom Item Lookup" description="Enabled custom item lookup." />
+            <property name="customItemLookupFilter" type="String" label="Custom Item Lookup Filter" description="Filter String for custom item lookup." />
+            <property name="customItemLookupFieldsetName" type="String" label="Custom Item Lookup Fieldset" description="Fieldset for custom item lookup." />
+            <supportedFormFactors>
+                <supportedFormFactor type="Small" />
+                <supportedFormFactor type="Large" />
+            </supportedFormFactors>
+        </targetConfig>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="recordId" type="String" default="{!recordId}"></property>
+            <property name="objectApiName" type="String" default=""></property>
+            <property name="title" type="String" label="Title" default="New" description="Title of the panel to be shown on top." />
+            <property name="relationName" type="String" label="Relation Name" description="The related list name to which you need to add the new record." />
+            <!-- datasource="apex://dmpl.RelatedFieldDynamicPickList" -->
+            <property name="childFieldsetName" type="String" label="Child Fieldset" description="The fieldset to be used to show fields on the quick add panel." />
+            <!-- datasource="apex://dmpl.FieldsetDynamicPickList" -->
+            <property name="childRecordTypeId" type="String" label="Child Record Type" required="false" description="The Record Type to be used to add new object." />
+            <!-- datasource="apex://dmpl.RecordTypeDynamicPickList" -->
+            <property name="showStock" type="Boolean" label="Show Stock" description="Show Stock for the selected Item." />
+            <property name="showSKUStock" type="Boolean" label="Show SKU Stock" description="Show stock for all SKUs of selected Item." />
+            <property name="showItemLotTypeStock" type="Boolean" label="Show Item Lot Type Stock" description="Show stock for selected ItemLotTypes of selected Item." />
+            <property name="showAllItemLotTypeStock" type="Boolean" label="Show All Item Lot Type Stock" description="Show stock for all ItemLotTypes of selected Item." />
+            <property name="showOtherBranchesStock" type="Boolean" label="Show Other Branches Stock" description="Show Stock for other branches." />
+            <property name="fetchPrices" type="Boolean" label="Fetch Prices" description="Prices to be feched when Item or SKU is selected." />
+            <property name="fetchTaxes" type="Boolean" label="Fetch Taxes" description="Taxes to be fetched when the Item or SKU is selected." />
+            <property name="showType" type="Boolean" label="Show Type" description="Show type of fetched items ( Original / Alternate Item )" />
+            <property name="showAlternateItems" type="Boolean" label="Show Alternate Items" description="Show alternate items if exists" />
+            <property name="showImportOption" type="Boolean" label="Show Import Option" description="Show option to import Excel File." />
+            <property name="showMRP" type="Boolean" label="Show MRP" description="Show MRP of selected Item." />
+            <property name="importFieldName" type="String" label="Import Fieldset" description="The field to show while importing Excel file." />
+            <property name="importActionName" type="String" label="Import Action" description="The action to invoke while importing Excel file." />
+            <property name="showScanOption" type="Boolean" label="Show Scan Option" description="Allow user to add using the scanner." />
+            <property name="scannedFieldName" type="String" label="Scanned Fieldset" description="The field to show while scanning." />
+            <property name="barCodeType" type="String" label="Bar Code Type" description="One of the allowed values of Bar Code(code128, code39, code93, datamatrix, ean13, ean8, itf, upca, upce, pdf417, qr)." />
+            <property name="displayGridColumns" type="Integer" default="2" label="Display Width" description="Number of columns a field will occupy in a 12 columns grid." />        
+            <property name="disabledFields" type="String" label="Disabled Fields" description="Comma seperated field names that needs to be disabled." />
+            <property name="showCustomItemLookup" type="Boolean" label="Custom Item Lookup" description="Enabled custom item lookup." />
+            <property name="customItemLookupFilter" type="String" label="Custom Item Lookup Filter" description="Filter String for custom item lookup." />
+            <property name="customItemLookupFieldsetName" type="String" label="Custom Item Lookup Fieldset" description="Fieldset for custom item lookup." />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

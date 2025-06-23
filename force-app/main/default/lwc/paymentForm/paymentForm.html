@@ -1,0 +1,355 @@
+<template>
+	<lightning-quick-action-panel class="dmpl-header">
+		<div class="slds-grid slds-grid_vertical">
+			<lightning-record-edit-form id="lightning-record-form" density="comfy" object-api-name={objectApiName}
+				record-id={recordId} onsuccess={handleSuccess} onload={handleLoad} onerror={handleError}>
+				<div class="slds-hide">
+					<lightning-input-field 
+						field-name="dmpl__SaleOrderId__c" >
+					</lightning-input-field>
+					<lightning-input-field 
+						field-name="dmpl__SaleInvoiceId__c" >
+					</lightning-input-field>
+					<lightning-input-field 
+						field-name="dmpl__PurchaseOrderId__c" >
+					</lightning-input-field>
+					<lightning-input-field 
+						field-name="dmpl__BillId__c"  >
+					</lightning-input-field>
+					<lightning-input-field 
+						field-name="dmpl__RepairOrderId__c"  >
+					</lightning-input-field>
+					<lightning-input-field 
+						field-name="dmpl__CreditNoteId__c"  >
+					</lightning-input-field>
+					<lightning-input-field 
+						field-name="dmpl__DebitNoteId__c"  >
+					</lightning-input-field>
+					<lightning-input-field 
+						class="slds-hidden" 
+						field-name="dmpl__PaymentMode__c" >
+					</lightning-input-field>
+				</div>
+				<div class="slds-col slds-grid">
+					<div class="slds-col slds-size_9-of-12">
+						<!-- <template if:true={isLoading}>
+							<lightning-spinner alternative-text="Loading..." variant="brand">
+							</lightning-spinner>
+						</template> -->
+						<lightning-messages> </lightning-messages>
+						<div class="slds-grid slds-grid_vertical">
+							<c-header-card title="Amount Details" icon-name="standard:calibration" show-page-header
+								hide-body-margin show-header-border>
+								<div class="slds-col slds-grid slds-m-around_small slds-grid_vertical">
+									<div class="slds-col slds-box slds-grid">
+										<div class="slds-col">
+											<lightning-input-field 
+												field-name="dmpl__AccountId__c" 
+												required
+												onchange={handleAccountChange}>
+											</lightning-input-field>
+										</div>
+										<div class="slds-col">
+											<lightning-input-field 
+												field-name="dmpl__Amount__c" 
+												required
+												onchange={handleAmountChange}>
+											</lightning-input-field>
+										</div>
+									</div>
+									<div class="slds-col slds-grid">
+										<div class="slds-col slds-size_4-of-12">
+											<lightning-vertical-navigation selected-item={selectedPaymentOption}
+												onselect={handlePaymentMethodChange}>
+												<lightning-vertical-navigation-section label="Payment Mode">
+													<lightning-vertical-navigation-item-icon label="Cash" name="Cash"
+														value="Cash" icon-name="utility:money">
+													</lightning-vertical-navigation-item-icon>
+													<lightning-vertical-navigation-item-icon label="Card" name="Card"
+														value="Card" icon-name="utility:toggle_panel_bottom">
+													</lightning-vertical-navigation-item-icon>
+													<lightning-vertical-navigation-item-icon label="Cheque"
+														name="Cheque" value="Cheque" icon-name="utility:color_swatch">
+													</lightning-vertical-navigation-item-icon>
+													<lightning-vertical-navigation-item-icon label="Electronic Transfer"
+														value="Electronic Transfer" name="Electronic Transfer"
+														icon-name="utility:payment_gateway">
+													</lightning-vertical-navigation-item-icon>
+												</lightning-vertical-navigation-section>
+												<!-- <lightning-vertical-navigation-section label="Online Payment">
+														<lightning-vertical-navigation-item-icon label="Provider One" value="Online"
+															name="Online" icon-name="utility:payment_gateway">
+														</lightning-vertical-navigation-item-icon>
+													</lightning-vertical-navigation-section> -->
+											</lightning-vertical-navigation>
+										</div>
+										<div class="slds-col slds-size_8-of-12 slds-m-left_small">
+											<div class="slds-m-around_small">
+												<template if:true={isCashSelected}>
+													<div class="slds-grid slds-grid_vertical">
+														<div class="slds-col">
+															<lightning-input-field field-name="dmpl__Remarks__c">
+															</lightning-input-field>
+														</div>
+													</div>
+												</template>
+											</div>
+											<div class="slds-m-around_small">
+												<template if:true={isCardSelected}>
+													<div class="slds-grid slds-grid_vertical">
+														<div class="slds-grid">
+															<div class="slds-col">
+																<lightning-input-field 
+																	field-name="dmpl__CardType__c">
+																</lightning-input-field>
+															</div>
+															<div class="slds-col">
+																<lightning-input-field 
+																	field-name="dmpl__CardNumber__c">
+																</lightning-input-field>
+															</div>
+														</div>
+														<div class="slds-col slds-grid">
+															<div class="slds-col">
+																<lightning-input-field 
+																	field-name="dmpl__CardExpiry__c">
+																</lightning-input-field>
+															</div>
+															<div class="slds-col">
+																<lightning-input-field 
+																	field-name="dmpl__BankName__c">
+																</lightning-input-field>
+															</div>
+														</div>
+														<div class="slds-col">
+															<lightning-input-field 
+																field-name="dmpl__Remarks__c">
+															</lightning-input-field>
+														</div>
+													</div>
+												</template>
+											</div>
+											<div class="slds-m-around_small">
+												<template if:true={isChequeSelected}>
+													<div class="slds-grid slds-grid_vertical">
+														<div class="slds-col">
+															<lightning-input-field 
+																field-name="dmpl__ChequeNumber__c">
+															</lightning-input-field>
+														</div>
+														<div class="slds-col slds-grid">
+															<div class="slds-col">
+																<lightning-input-field 
+																	field-name="dmpl__ChequeDate__c">
+																</lightning-input-field>
+															</div>
+															<div class="slds-col">
+																<lightning-input-field 
+																	field-name="dmpl__BankName__c">
+																</lightning-input-field>
+															</div>
+														</div>
+														<div class="slds-col">
+															<lightning-input-field 
+																field-name="dmpl__Remarks__c">
+															</lightning-input-field>
+														</div>
+													</div>
+												</template>
+											</div>
+											<div class="slds-m-around_small">
+												<template if:true={isETSelected}>
+													<div class="slds-grid slds-grid_vertical">
+														<div class="slds-col slds-grid">
+															<div class="slds-col">
+																<lightning-input-field
+																	field-name="dmpl__ElectronicMode__c">
+																</lightning-input-field>
+															</div>
+															<div class="slds-col">
+																<lightning-input-field
+																	field-name="dmpl__TransactionReference__c">
+																</lightning-input-field>
+															</div>
+															<div class="slds-col">
+																<lightning-input-field
+																	field-name="dmpl__TransactionDate__c">
+																</lightning-input-field>
+															</div>
+														</div>
+														<div class="slds-col">
+															<lightning-input-field 
+																field-name="dmpl__BankName__c">
+															</lightning-input-field>
+														</div>
+														<div class="slds-col">
+															<lightning-input-field 
+																field-name="dmpl__Remarks__c"
+															>
+															</lightning-input-field>
+														</div>
+													</div>
+												</template>
+											</div>
+										</div>
+									</div>
+								</div>
+							</c-header-card>
+						</div>
+					</div>
+					<div class="slds-col slds-size_3-of-12 slds-m-left_small slds-p-right_small">
+						<!-- Tabs -->
+						<c-header-card show-header-border>
+							<div class="slds-tabs_default slds-tabs_medium">
+								<ul class="slds-tabs_default__nav" role="tablist">
+								<li class="slds-tabs_default__item" title="Item One" role="presentation">
+									<lightning-button 
+										variant="base"
+										class="slds-m-left_x-small" 
+										label="Payment Details" 
+										onclick={toggleVisibilityTab1}>
+									</lightning-button>
+								</li>
+								<li class="slds-tabs_default__item" title="Item Two" role="presentation">
+									<lightning-button 
+										variant="base"
+										class="slds-m-left_x-small"
+										label="Additional Details" 
+										onclick={toggleVisibilityTab2}>
+									</lightning-button>
+								</li>
+								</ul>
+								<div id="tab-default-1" class={elementClassTab1} role="tabpanel" aria-labelledby="tab-default-1__item">
+									<div class="slds-grid slds-grid_vertical slds-m-around_small">
+										<div class="slds-col">
+											<lightning-input-field 
+												field-name="dmpl__PartnerAccountId__c"
+												onchange={handleAccountChange}>
+											</lightning-input-field>
+										</div>
+										<div class="slds-col">
+											<lightning-input-field 
+												field-name="dmpl__BranchId__c"
+												onchange={handleAccountChange}>
+											</lightning-input-field>
+										</div>
+										<div class="slds-col">
+											<lightning-input-field 
+												field-name="dmpl__PaymentType__c"
+												onchange={handlePaymentTypeChange}>
+											</lightning-input-field>
+										</div>
+										<div class="slds-col">
+											<lightning-input-field 
+												field-name="dmpl__PaymentDate__c"
+												onchange={handleAccountChange}>
+											</lightning-input-field>
+										</div>
+										<div class="slds-col">
+											&nbsp;
+										</div>
+									</div>
+								</div>
+								<div id="tab-default-2" class={elementClassTab2} role="tabpanel" aria-labelledby="tab-default-2__item">
+									<div class="slds-grid slds-grid_vertical slds-m-around_small">
+										<div class="slds-col slds-scrollable" style = "height: 250px;">
+											<template for:each={fieldsetFields} for:item="column">
+												<div key={column.apiName} class="slds-col">
+													<lightning-input-field 
+														field-name={column.apiName}
+														name={column.apiName}
+														required={column.required}>
+													</lightning-input-field>
+												</div>
+											</template>
+										</div>
+										<div class="slds-col">
+											&nbsp;
+										</div>
+									</div>
+								</div>
+							</div>
+						</c-header-card>
+					</div>
+				</div>
+			<div class="slds-col slds-grid">
+				<div class="slds-col slds-size_9-of-12">
+					<div class="slds-m-top_small">
+						<c-header-card title="Open Documents" icon-name="standard:calibration" show-page-header
+							hide-body-margin show-header-border>
+							<lightning-input slot="actions" type="search" variant="label-hidden" onchange={handleSearch}
+								placeholder="search numbers..."></lightning-input>
+							<c-dmpl-datatable key-field="Id" suppress-bottom-bar hide-checkbox-column
+								oncellchange={handleCellChange} columns={adjustmentColumns}
+								onselectedrec={handleSelectedRec} draft-values={draftValues} data={adjustmentData}>
+							</c-dmpl-datatable>
+						</c-header-card>
+					</div>
+				</div>
+				<div class="slds-col slds-size_3-of-12 slds-m-left_small slds-p-right_small">
+					<div class="slds-m-top_small">
+						<c-header-card title="Adjustment Summary" icon-name="standard:calibration" show-page-header
+							show-header-border>
+							<div class="slds-p-horizontal_medium slds-m-bottom_x-small">
+								<ul class="slds-has-dividers_around-space">
+									<li class="slds-item">
+										<article class="slds-tile slds-tile_board">
+											<h3 class="slds-tile__title slds-truncate" title="Document Amount">
+												Document Amount
+											</h3>
+											<div class="slds-tile__detail">
+												<p class="slds-text-heading_medium">
+													<lightning-formatted-number value={documentAmount}
+														format-style="currency">
+													</lightning-formatted-number>
+												</p>
+											</div>
+										</article>
+									</li>
+									<li class="slds-item">
+										<article class="slds-tile slds-tile_board">
+											<h3 class="slds-tile__title slds-truncate" title="Adjusted Amount">
+												Adjusted Amount
+											</h3>
+											<div class="slds-tile__detail">
+												<p class="slds-text-heading_medium">
+													<lightning-formatted-number value={adjustedAmount}
+														format-style="currency">
+													</lightning-formatted-number>
+												</p>
+											</div>
+										</article>
+									</li>
+									<li class="slds-item">
+										<article class="slds-tile slds-tile_board">
+											<h3 class="slds-tile__title slds-truncate" title="Open Amount">
+												Open Amount
+											</h3>
+											<div class="slds-tile__detail">
+												<p class="slds-text-heading_medium">
+													<lightning-formatted-number value={openAmount}
+														format-style="currency">
+													</lightning-formatted-number>
+												</p>
+											</div>
+										</article>
+									</li>
+								</ul>
+								<div class="slds-col">
+									&nbsp;
+								</div>
+							</div>
+						</c-header-card>
+					</div>
+				</div>
+			</div>
+		</lightning-record-edit-form>
+		</div>
+
+		<div slot="footer">
+			<lightning-button variant="neutral" onclick={handleClose} label="Cancel"></lightning-button>
+			<lightning-button variant="brand" label="Save" onclick={handleSave} type="submit"
+				class="slds-m-left_x-small" disabled={isLoading}></lightning-button>
+		</div>
+	</lightning-quick-action-panel>
+</template>

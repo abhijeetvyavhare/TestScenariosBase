@@ -1,0 +1,6 @@
+.lgc-bg-inverse {
+    background-color: rgb(22, 50, 92);
+}
+:host {
+    --sds-c-textarea-sizing-min-height: 500px;
+}

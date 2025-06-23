@@ -1,0 +1,37 @@
+<template>
+    <lightning-quick-action-panel header={title}>
+        <div class="slds-m-around_medium">
+            <h1 class="slds-text-heading_small">Product</h1>
+            <template if:true={getConfigurableItems}>
+                <lightning-combobox name="product" value={selectedLineId} placeholder="Select Product"
+                    options={getConfigurableItems} onchange={handleProductChange} required variant="label-hidden">
+                </lightning-combobox>
+            </template>
+        </div>
+        <lightning-accordion class="dmpl-border-box" allow-multiple-sections-open active-section-name={getFeatureNames}>
+            <lightning-datatable key-field="Id" suppress-bottom-bar resize-column-disabled hide-checkbox-column
+                columns={columns}>
+            </lightning-datatable>
+            <div if:false={isLoaded}>
+                <lightning-spinner size="medium" variant="brand" alternative-text="Loading..."></lightning-spinner>
+            </div>
+            <template if:true={isNoData} >
+                <c-illustration-no-data class="slds-m-around_large" size="small" view="desert"></c-illustration-no-data>
+            </template>
+            <template if:true={dataSource} for:each={dataSource} for:item="feature">
+                <lightning-accordion-section name={feature.name} key={feature.name} label={feature.name}>
+                    <c-dmpl-datatable key-field="Id" suppress-bottom-bar hide-checkbox-column
+                        data={feature.components} columns={columns} oncellchange={handleCellChange}
+                        selected-rows={feature.selectedComponents} onselectedrec={handleSelectedRec}
+                        row-number-offset={feature.rowNumberOffset} hide-table-header>
+                    </c-dmpl-datatable>
+                </lightning-accordion-section>
+            </template>
+        </lightning-accordion>
+        <div slot="footer">
+            <lightning-button variant="neutral" onclick={handleDialogClose} label="Cancel"></lightning-button>
+            <lightning-button variant="brand" label="Save" onclick={handleSave} class="slds-m-left_x-small">
+            </lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

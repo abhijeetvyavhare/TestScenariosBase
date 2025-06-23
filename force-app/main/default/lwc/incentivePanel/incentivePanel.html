@@ -1,0 +1,49 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <lightning-modal-header label="Process Incentive"></lightning-modal-header>
+    <lightning-modal-body>
+        <div class="slds-grid slds-grid_vertical">
+            <div class="slds-col">
+                <lightning-radio-group name="processType" label="Type" options={processOptions} value={processValue}
+                    onchange={handleProcessChange} type="button"></lightning-radio-group>
+            </div>
+            <div class="slds-col slds-m-top_small" if:true={isSimulation}>
+                <lightning-record-edit-form 
+                    object-api-name='dmpl__IncentivePeriod__c'
+                    onsubmit={handleSimulationSubmit}>
+                    <lightning-input-field class="slds-hide" field-name='dmpl__IncentivePlanId__c' value={recordId}> </lightning-input-field>
+                    <lightning-input-field field-name='dmpl__SimulationName__c' required> </lightning-input-field>
+                    <lightning-input-field field-name='dmpl__SimulationType__c' required> </lightning-input-field>
+                    <lightning-input-field field-name='dmpl__SimulationSourcePeriod__c' required> </lightning-input-field>
+                    <lightning-input-field field-name='dmpl__SimulationDeviation__c'> </lightning-input-field>
+                    <lightning-button class="slds-hide" label="OK" type="submit"></lightning-button>
+                </lightning-record-edit-form>
+            </div>
+            <div class="slds-col slds-m-top_small" if:false={isSimulation}>
+
+                    <lightning-record-picker
+                        object-api-name="dmpl__IncentivePeriod__c"
+                        label="Incentive Periods"
+                        onchange={handleRecordSelect}
+                        value={selectedPeriodId}
+                        placeholder="Search Incentive Period...">
+                        filter={filter}
+                        <!-- display-info={displayInfo} -->
+                    </lightning-record-picker>
+                    <template if:true={selectedPeriodId}>
+                        <lightning-record-view-form object-api-name='dmpl__IncentivePeriod__c' record-id={selectedPeriodId}>
+                            <lightning-output-field field-name='dmpl__DateFrom__c'> </lightning-output-field>
+                            <lightning-output-field field-name='dmpl__DateTo__c'> </lightning-output-field>
+                            <lightning-output-field field-name='dmpl__Status__c'> </lightning-output-field>
+                        </lightning-record-view-form>
+                    </template>
+                    <template if:false={selectedPeriodId}>
+                        <c-illustration-no-data message="No Incentive Period selected"></c-illustration-no-data>
+                    </template>
+            </div>
+        </div>
+    </lightning-modal-body>
+    <lightning-modal-footer>
+        <lightning-button label="OK" type="submit" onclick={handleOkay}></lightning-button>
+    </lightning-modal-footer>
+</template>

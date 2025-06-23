@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>52.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <masterLabel>
+        Partner Search Panel
+    </masterLabel>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <property name="title" type="String" label="Title" default="Partner Locations" description="Title of the panel to be shown on top."/>
+            <property name="recordFieldsetName" type="String" label="Branch Fieldset" description="The Branch fieldset to be used to show location details." /> 
+            <property name="showFilterPanel" type="Boolean" label="Show Filter Panel" description="Show or Hide the Filter Panel."/>
+            <property name="noDataMessage" type="String" label="No Data Message" default="No Partner Locatons available!" description="Message to be shown when no data is available."/>
+            <supportedFormFactors>
+                <supportedFormFactor type="Small"/>
+                <supportedFormFactor type="Large"/>
+            </supportedFormFactors>
+        </targetConfig>
+        <targetConfig targets="lightningCommunity__Default">
+            <!-- <property name="recordId" type="String" ></property>
+            <property name="objectApiName" type="String" ></property> -->
+            <property name="title" type="String" label="Title" default="Partner Locations" description="Title of the panel to be shown on top."/>
+            <property name="recordFieldsetName" type="String" label="Branch Fieldset" description="The Branch fieldset to be used to show location details." /> 
+            <property name="showFilterPanel" type="Boolean" label="Show Filter Panel" description="Show or Hide the Filter Panel."/>
+            <property name="noDataMessage" type="String" label="No Data Message" default="No Partner Locatons available!" description="Message to be shown when no data is available."/>
+        </targetConfig>
+        <targetConfig targets="lightning__AppPage">
+            <property name="title" type="String" label="Title" default="Partner Locations" description="Title of the panel to be shown on top."/>
+            <property name="showFilterPanel" type="Boolean" label="Show Filter Panel" description="Show or Hide the Filter Panel."/>
+            <property name="recordFieldsetName" type="String" label="Branch Fieldset" description="The Branch fieldset to be used to show location details." /> 
+            <property name="noDataMessage" type="String" label="No Data Message" default="No Partner Locatons available!" description="Message to be shown when no data is available."/>
+            <event name="branchselected" label="Branch Selected" description="This event fires when a branch is selected.">
+                <schema>
+                    {
+                        "type": "object",
+                        "properties": {
+                            "recordId": {
+                                "type": "string",
+                                "title": "Record ID",
+                                "description": "Enter an 18-digit record ID."
+                            },
+                            "partnerAccountId": {
+                                "type": "string",
+                                "title": "Partner Record ID"
+                            },
+                           "name": {
+                               "type": "string"
+                           }
+                       }
+                    }
+                </schema>
+            </event>
+            <event name="filterchanged" label="Filters Changed" description="This event fires when a filter value is changed.">
+                <schema>
+                    {
+                        "type": "object",
+                        "properties": {
+                           "name": {
+                               "type": "string"
+                           },
+                           "value": {
+                                "type": "string"
+                            }
+                       }
+                    }
+                </schema>
+            </event>
+            <supportedFormFactors>
+                <supportedFormFactor type="Small"/>
+                <supportedFormFactor type="Large"/>
+            </supportedFormFactors>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

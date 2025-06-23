@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>52.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <property name="title" type="String" label="Title" default="New" description="Title of the panel to be shown on top." />
+            <property name="relatedListId" type="String" label="Relation Name" description="The related list name to which you need to add the new record." />
+            <property name="sourceObjectApiName" type="String" label="Source Object Api Name" description="Developer name of the Source Object this Filter Builder will work on." />
+            <property name="dynamicSourceObjectFieldName" type="String" label="Dynamic Source Object Field Name" description="Field Name to pick Source Object this Filter Builder will work on." />
+            <property name="parentFieldName" type="String" label="Parent Field Name" description="The developer field name on the child object that relates to the parent object." />
+            <property name="allowDateTimeLitrals" type="Boolean" label="Allow Date Time Litrals" description="Whether to allow date time litrals." />
+            <supportedFormFactors>
+                <supportedFormFactor type="Small" />
+                <supportedFormFactor type="Large" />
+            </supportedFormFactors>
+        </targetConfig>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="recordId" type="String" default="{!recordId}"></property>
+            <property name="objectApiName" type="String" default=""></property>
+            <property name="title" type="String" label="Title" default="New" description="Title of the panel to be shown on top." />
+            <property name="relatedListId" type="String" label="Relation Name" description="The related list name to which you need to add the new record." />
+            <property name="sourceObjectApiName" type="String" label="Source Object Api Name" description="Developer name of the Source Object this Filter Builder will work on." />
+            <property name="dynamicSourceObjectFieldName" type="String" label="Dynamic Source Object Field Name" description="Field Name to pick Source Object this Filter Builder will work on." />
+            <property name="parentFieldName" type="String" label="Parent Field Name" description="The developer field name on the child object that relates to the parent object." />
+            <property name="allowDateTimeLitrals" type="Boolean" label="Allow Date Time Litrals" description="Whether to allow date time litrals." />
+        </targetConfig>
+    </targetConfigs>
+    <masterLabel>
+        Filter Builder Panel
+    </masterLabel>
+</LightningComponentBundle>

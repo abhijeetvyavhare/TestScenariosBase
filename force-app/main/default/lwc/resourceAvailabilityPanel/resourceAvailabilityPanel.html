@@ -1,0 +1,69 @@
+<template>
+    <div class="slds-card slds-card-boundary">
+        <div class="spinner">
+            <template if:true={isLoading}>
+                 <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+                 </lightning-spinner>
+            </template>
+        </div>
+        <div class="calendar">
+            <div class="slds-grid slds-wrap slds-border_top slds-border_left slds-border_right slds-p-around_small">
+            <div class="slds-col slds-size_3-of-12">
+            <p class="slds-text-title">Resource Name</p>
+            <p><b>{resourceName}</b></p>
+        </div>
+        <div class="slds-col slds-size_6-of-12">
+            <div class="slds-grid slds-align_absolute-center slds-m-top_x-small">
+              <lightning-icon icon-name="utility:chevronleft" size="x-small"
+                    onclick={goToPreviousMonth} class="slds-text-link_reset"></lightning-icon>
+                <h2 class="slds-p-left_medium slds-p-right_medium"><b>{currentMonth}</b></h2>
+                <lightning-icon icon-name="utility:chevronright" size="x-small"
+                    onclick={goToNextMonth} class="slds-text-link_reset"></lightning-icon>
+            </div>
+        </div>
+    </div>
+        
+               
+               
+
+
+
+        <div class="slds-col slds-size_12-of-12">
+            <div class="slds-grid slds-border_top slds-border_left slds-border_right slds-p-around_small slds-align-end">
+
+                <!--days-->
+                <template for:each={markers} for:item="marker">
+                    <span key={marker.Name} class="slds-grid slds-align-items">
+                       
+                        <lightning-icon icon-name="utility:stop" size="xx-small" class={marker.class}></lightning-icon>
+                        
+                        <!-- <span  class="slds-p-right_x-small slds-text-title"><b>{marker.days}</b> <b>{marker.Name}</b>  </span> -->
+                    <span class="slds-p-right_x-small slds-text-title slds-text-align_center">
+                        <template if:true={marker.showDays}>
+                            {marker.days}<br>
+                        </template>
+                        {marker.Name}  </span> 
+                    </span>
+                </template>
+            </div>
+        </div>
+        </div>
+            <div class=" slds-border_right">
+                <div class="weekdays slds-grid">
+                    <template for:each={weekdays} for:item="weekday">
+                        <div key={weekday} class="weekday dmpl-cal-box   slds-border_top  slds-border_bottom slds-border_left slds-text-align_center">
+                            <div class="slds-align_absolute-center">{weekday}</div>
+                        </div>
+                    </template>
+                </div>
+                <div class="days">
+                    <template for:each={calendarDates} for:item="date">
+                        <div key={date.dateValue} class={date.class}>
+                          <div  class="slds-align_absolute-center slds-border_left slds-border_bottom slds-text-align_center">{date.day}</div> 
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+   
+</template>

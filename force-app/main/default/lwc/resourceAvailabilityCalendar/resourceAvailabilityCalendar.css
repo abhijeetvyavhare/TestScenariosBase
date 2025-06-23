@@ -1,0 +1,146 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+.weekdays {
+    display: flex;
+}
+.weekday {
+    flex: 1;
+    text-align: center;
+   
+}
+.left-align {
+    margin-right: 49.5%;
+    margin-top: 2%;
+}
+.side-align {
+    margin-left: 30px;
+    margin-top: 0px;
+    margin-bottom: 8px;
+}
+.right-align {
+    margin-left: 30%;
+}
+.weekday-background{
+    background-color: #f0f0f0;
+}
+.days div {
+    text-align: center;
+}
+.green-utility-icon {
+    --sds-c-icon-color-foreground-default: #F4FBE6;
+}
+.purple-utility-icon {
+    --sds-c-icon-color-foreground-default: #f4c7f4;
+}
+
+.red-utility-icon {
+    --sds-c-icon-color-foreground-default: #FFD7D7;
+}
+.blue-utility-icon {
+    --sds-c-icon-color-foreground-default: #D7EDFF;
+}
+
+.gray-utility-icon {
+    --sds-c-icon-color-foreground-default: #F3F3F3;
+}
+.yellow-utility-icon {
+    --sds-c-icon-color-foreground-default: #FFFDC1;
+}
+.dmpl-present{
+    background-color: #F4FBE6;
+}
+.dmpl-absent{
+    background-color: #FFD7D7;
+}
+.dmpl-weekend{
+    background-color: #F3F3F3;
+}
+.dmpl-holiday{
+    background-color: #D7EDFF;
+}
+.dmpl-leave{
+    background-color: #FFFDC1;
+}
+.dmpl-half-day{
+    background-color: #f3def3;
+}
+.dmpl-default{
+    background-color: #ffffff;
+}
+.custom-grid {
+    align-items: stretch;
+}
+.height-custom {
+    height: 100%;
+    align-items: center;
+}
+
+.border-bottom{
+    border-bottom: 0px !important;
+}
+.slds-text-blue{
+    color: rgba(1, 118, 211, 1);
+    cursor: pointer;
+}
+.mobile-box {
+    width: 100%;
+    max-height: 700px;
+    overflow: auto;
+}
+.align-end{
+    align-items: flex-end;
+}
+.app-card .dmpl-cal-box {
+    height: 100%;
+    display: grid;
+    align-items: center;
+}
+.align-center{
+    align-items: center;
+}
+.align-end {
+    justify-content: end;
+}
+@media screen and (max-width: 1200px) {
+    .app-card .mobile-box{
+        overflow: auto;
+    }
+    .app-card .slds-custom-box {
+        max-width: 51px;
+        min-width: 51px;
+    }
+   .custom-float {
+        float: inherit;
+        margin-top: 8px;
+        padding: 0 12px 0 5px;
+    }
+    .custom-center{
+        text-align: center  !important;
+    }
+}
+@media screen and (max-width: 767px) {
+    .reverse {
+        flex-direction: column-reverse;
+    }
+    .mobile-box{
+        overflow: auto;
+    }
+    .slds-custom-box {
+        max-width: 51px;
+        min-width: 51px;
+    }
+    .combo-custom-height  {
+        --lwc-heightInput: 32px;
+    }
+    .slds-grid {
+        align-items: center; /* Ensures vertical alignment */
+    }
+    
+    .lightning-button {
+        margin-top: 0; /* Adjusts any top margin that may be affecting alignment */
+    }
+}

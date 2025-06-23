@@ -1,0 +1,10 @@
+.lgc-bg-inverse {
+    background-color: rgb(242, 242, 242);
+}
+.dmpl-scrollable{
+    scroll-behavior: auto;
+    max-height: 300px;
+}
+:host {
+    --slds-c-card-heading-font-size : var(slds-text-heading_small);
+}

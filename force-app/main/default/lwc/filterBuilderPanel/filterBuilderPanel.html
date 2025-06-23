@@ -1,0 +1,36 @@
+<template>
+    <c-header-card title={title} icon-name="custom:custom17" is-collapsed={getIsPanelCollapsed} show-page-header
+        show-header-border>
+        <lightning-button-group slot="actions">
+            <lightning-button-stateful label-when-off="Show" label-when-on="Hide" selected={isPanelVisible}
+                onclick={handlePanelVisibility}>
+            </lightning-button-stateful>
+        </lightning-button-group>
+        <div class="slds-p-horizontal_medium">
+            <div class="slds-expression">
+                <!-- <h3 class="slds-expression__title">Subtitle</h3> -->
+                <template if:true={records}>
+                    <template iterator:record={records}>
+                        <div key={record.value.dmpl__SequenceNumber__c}>
+                            <ul>
+                                <c-filter-builder-row 
+                                    is-first-item={record.first} 
+                                    source-object-api-name={sourceObjectApiName}
+                                    child-object-api-name={childObjectApiName}
+                                    parent-record-id={recordId}
+                                    parent-field-name={parentFieldName}
+                                    allow-date-time-litrals={allowDateTimeLitrals}
+                                    record={record.value}>
+                                </c-filter-builder-row>
+                            </ul>
+                        </div>
+                    </template>
+                </template>
+                <div class="slds-expression__buttons">
+                    <lightning-button label="Add Condition" title="Add Condition" icon-name="utility:add"
+                        class="slds-m-left_x-small" onclick={handleAddCondition}></lightning-button>
+                </div>
+            </div>
+        </div>
+    </c-header-card>
+</template>

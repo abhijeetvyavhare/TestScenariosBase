@@ -1,0 +1,12 @@
+<template>
+    <template if:true={isTile}>
+        <div class={getCardStyleCss} role="status">
+            <div class="slds-media__figure">
+                <lightning-icon icon-name={getIcon} variant="inverse" size="small" alternative-text="Notification!" title={getMessage}></lightning-icon>
+            </div>
+            <div class={getBodyStyleCss}>
+                <p>{getMessage}</p>
+            </div>
+        </div>    
+    </template>
+</template>

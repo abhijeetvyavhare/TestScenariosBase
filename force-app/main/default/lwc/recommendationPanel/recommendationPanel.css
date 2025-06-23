@@ -1,0 +1,72 @@
+.blue{
+    text-align: center;
+    background-color: rgba(0,91,187,0.6);
+    clip-path: circle(13px at 50% 50%);
+    border-left: 1px solid #dddbda;
+}
+
+.grey{
+    text-align: center;
+    background-color: lightgrey;
+    clip-path: circle(15px at 50% 50%);
+}
+
+.circle-button{
+    clip-path: circle(13px at 50% 50%);
+}
+.buttonChange:hover{
+    border: none;
+    color: white;
+}
+
+a:hover, a:focus,a:active,a{
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+}
+
+.slds-radio [type=radio]:checked+.slds-radio_faux:after, .slds-radio [type=radio]:checked+.slds-radio--faux:after, .slds-radio [type=radio]:checked~.slds-radio_faux:after, .slds-radio [type=radio]:checked~.slds-radio--faux:after, .slds-radio [type=radio]:checked+.slds-radio__label .slds-radio_faux:after, .slds-radio [type=radio]:checked+.slds-radio__label .slds-radio--faux:after{
+    background: none;
+    content: '';
+    position: absolute;
+    transform: translate3d(-50%, -50%, 0);
+    display: block;
+    width: 8px;
+    height: 14px;
+    top: 4px;
+    left: 8px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0px;
+    transform: rotate( 
+45deg
+ );
+ border-radius: 0;
+}
+
+.slds-table .slds-radio [type=radio]+.slds-radio__label .slds-radio_faux{
+    height: 25px;
+    width: 25px;
+    background: #DDDBDA;
+    border: none;
+    box-shadow: none;
+}
+.slds-table .slds-radio [type=radio]:checked +.slds-radio__label .red-circle{
+    background: #C23934;
+  
+}
+.slds-table .slds-radio [type=radio]:checked +.slds-radio__label .amber-circle{
+    background: #FFB75D;
+}
+
+.slds-table .slds-radio [type=radio]:checked +.slds-radio__label .blue-circle{
+    background: #005BBB;
+}
+
+span.slds-badge{
+    width: 90px;
+    color: #fff;
+}
+
+th.table-header-txt{
+    border-right: 1px solid #dddbda;
+}

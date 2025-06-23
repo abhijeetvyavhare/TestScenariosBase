@@ -1,0 +1,171 @@
+<template>
+    <article class="slds-card slds-card_boundary slds-scrollable">
+        <div class="slds-page-header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <span class="slds-icon_container slds-icon-standard-contact" title="contact">
+                        <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                            <use xlink:href="/assets/icons/standard-sprite/svg/symbols.svg#contact"></use>
+                        </svg>
+                        <span class="slds-assistive-text">{title}</span>
+                    </span>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        <a href="javascript:void(0);" class="slds-card__header-link slds-truncate"
+                            title="New Sale Order Line">
+                            <span>{title}</span>
+                        </a>
+                    </h2>
+                </div>
+            </header>
+        </div>
+        <div>
+            <div class="slds-p-top_medium slds-align_absolute-center slds-scrollable" style="min-width: 400;">
+                <table class="slds-align_absolute-center">
+                    <tr class="slds-align_absolute-center" style="height: 200px;">
+                        <td if:true={currentImageURL} class="slds-align_absolute-center">
+                            <img class="image" style="height: 170px; width:360px;" src={currentImageURL}
+                                data-id="imagePreview" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div if:true={renderDetails}>
+                                <lightning-tabset class="slds-align_absolute-center" style="min-width: 60vw;">
+                                    <template for:each={configuredSections} for:item="configuredSection">
+                                        <lightning-tab key={configuredSection.Name} value={configuredSection.Name}
+                                            class="slds-align_absolute-center" style="width: 60vw;"
+                                            label={configuredSection.Name} onactive={handleSectionSelection}>
+                                            <div if:true={getDetails}>
+                                                <lightning-accordion id={configuredSection.Name}
+                                                    onsectiontoggle={handleSubSectionSelection}>
+                                                    <template for:each={getDetails} for:item="sections">
+                                                        <lightning-accordion-section
+                                                            onselect={handleSubSectionSelection}
+                                                            key={sections.SubSectionName} name={sections.SubSectionName}
+                                                            label={sections.SubSectionName} id={sections.SubSectionName}
+                                                            style="cursor: pointer;">
+                                                            <template if:true={renderDetails} for:each={getDetails}
+                                                                for:item="sections">
+                                                                <div key={sections.SubSectionName}
+                                                                    class={sections.SubClass}
+                                                                    id={sections.SubSectionName} role="tabpanel"
+                                                                    aria-labelledby="slds-vertical-tabs-0__nav">
+                                                                    <div class="slds-text-longform">
+                                                                        <article key={sections.SubSectionName}
+                                                                            class="slds-card">
+                                                                            <div
+                                                                                class="slds-card__body slds-card__body_inner">
+                                                                                <ul
+                                                                                    class="slds-grid slds-wrap slds-grid_pull-padded">
+                                                                                    <template for:each={sections.Issues}
+                                                                                        for:item="issue">
+                                                                                        <li key={issue.Name}
+                                                                                            class="slds-p-horizontal_small slds-size_1-of-1 slds-medium-size_1-of-3">
+                                                                                            <article
+                                                                                                class="slds-tile slds-media slds-card__tile slds-hint-parent">
+                                                                                                <div
+                                                                                                    class="slds-media__figure">
+                                                                                                    <span>
+                                                                                                        <lightning-button-icon-stateful
+                                                                                                            if:false={issue.IsSelected}
+                                                                                                            id={issue.Value}
+                                                                                                            key={issue.Name}
+                                                                                                            icon-name="utility:add"
+                                                                                                            selected={likeState}
+                                                                                                            value={issue.Value}
+                                                                                                            onclick={handleCheck}
+                                                                                                            alternative-text={issue.Name}>
+                                                                                                        </lightning-button-icon-stateful>
+                                                                                                        <lightning-button-icon-stateful
+                                                                                                            if:true={issue.IsSelected}
+                                                                                                            key={issue.Name}
+                                                                                                            icon-name="utility:check"
+                                                                                                            id={issue.Value}
+                                                                                                            selected={issue.IsSelected}
+                                                                                                            value={issue.Value}
+                                                                                                            onclick={handleUnCheck}
+                                                                                                            alternative-text={issue.Name}>
+                                                                                                        </lightning-button-icon-stateful>
+                                                                                                    </span>
+                                                                                                </div>
+                                                                                                <div
+                                                                                                    class="slds-media__body">
+                                                                                                    <div
+                                                                                                        class="slds-grid slds-grid_align-spread slds-has-flexi-truncate vertically-center">
+                                                                                                        <h3 class="slds-tile__title slds-truncate"
+                                                                                                            title={issue.Name}>
+                                                                                                            {issue.Name}
+                                                                                                        </h3>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </article>
+                                                                                        </li>
+                                                                                    </template>
+                                                                                </ul>
+                                                                            </div>
+                                                                            <div if:false={currentRecordId}>
+                                                                                <lightning-textarea
+                                                                                    class="slds-p-left_large slds-p-right_large"
+                                                                                    id={currentRemarksId} name="input1"
+                                                                                    label="Remarks"
+                                                                                    onblur={updateRemarks}
+                                                                                    style="resize: none;"
+                                                                                    value={currentRemarks}>
+                                                                                </lightning-textarea>
+                                                                            </div>
+                                                                            <div if:true={currentRecordId}
+                                                                                class="slds-p-horizontal_small">
+                                                                                <lightning-layout multiple-rows>
+                                                                                    <lightning-layout-item
+                                                                                        class="horizontal-min-width"
+                                                                                        style="min-width: 100%;">
+                                                                                        <div class="slds-col">
+                                                                                            <div class="slds-p-left_small"
+                                                                                                style="margin-top:-3px;">
+                                                                                                <label>Remarks</label>
+                                                                                            </div>
+                                                                                            <div
+                                                                                                class="slds-p-left_small">
+                                                                                                <textarea
+                                                                                                    style="border-radius: 5px; border-color: lightgrey; width: 100%;resize:none;resize:none;"
+                                                                                                    class=""
+                                                                                                    id={currentRemarksId}
+                                                                                                    name="input1"
+                                                                                                    label="Remarks"
+                                                                                                    onblur={updateRemarks}
+                                                                                                    value={currentRemarks}>{currentRemarks}
+                                                                                </textarea>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </lightning-layout-item>
+                                                                                </lightning-layout>
+                                                                            </div>
+                                                                        </article>
+                                                                    </div>
+                                                                </div>
+                                                            </template>
+                                                        </lightning-accordion-section>
+                                                    </template>
+                                                </lightning-accordion>
+                                            </div>
+                                        </lightning-tab>
+                                    </template>
+
+                                </lightning-tabset>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <footer class="slds-card__footer">
+            <div slot="footer" style="text-align: right;">
+                <lightning-button label="Cancel" variant="neutral" onclick={handleCancelModal}></lightning-button>
+                <lightning-button class="slds-p-left_small" label="Save" variant="brand" onclick={handleSave}>
+                </lightning-button>
+            </div>
+        </footer>
+    </article>
+</template>

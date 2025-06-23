@@ -1,0 +1,83 @@
+/* .slds-visual-picker_small .slds-visual-picker__figure{
+  height: 6.0rem;
+} */
+.dmpl-visual-picker{
+  --slds-c-icon-color-foreground-default: rgb(255,255,255);
+  margin-bottom: 1rem;
+}
+
+.dmpl-visual-picker_vertical {
+  width: 6.0rem;
+  display: flex;
+}
+
+.dmpl-visual-picker_vertical .slds-visual-picker__figure{
+  padding: 1rem;
+  height: 6.0rem;
+  width: 6.5rem;
+}
+
+.dmpl-visual-picker_xxsmall .slds-visual-picker__figure{
+  padding: 1rem;
+  height: 6.0rem;
+  width: 6.5rem;
+}
+
+.dmpl-visual-picker_long .slds-visual-picker__figure{
+  padding: 1rem;
+  height: 6.0rem;
+  width: 12.0rem;
+}
+
+.dmpl-visual-picker__t-box {
+  position: absolute;
+  top: 0.1rem;
+  left: 0.625rem;
+  right: 0.625rem;
+  text-align: center;
+}
+
+.dmpl-visual-picker__tl-box {
+    position: absolute;
+    top: 0.1rem;
+    left: 0.625rem;
+}
+
+.dmpl-visual-picker__b-box {
+  position: absolute;
+  bottom: 0.625rem;
+  left: 0.625rem;
+  right: 0.625rem;
+  text-align: center;
+}
+
+.dmpl-visual-picker__bl-box {
+  position: absolute;
+  bottom: 0.1rem;
+  left: 0.625rem;
+}
+
+.dmpl-visual-picker__br-box {
+  position: absolute;
+  bottom: 0.1rem;
+  right: 0.625rem;
+  text-align: right;
+}
+
+.dmpl-slot{
+    /* white-space: nowrap; 
+    overflow-x: auto;
+    text-align: center; */
+}
+
+.dmpl-time-slot{
+  white-space: nowrap; 
+  overflow-x: auto;
+  text-align: center;
+}
+
+.dmpl-toogle-spacing{
+    margin-bottom: 0;
+    margin-right: 50px;
+    /* min-width: 270px!important; */
+}

@@ -1,0 +1,40 @@
+<template>
+    <!-- <template if:false={value}> -->
+        <div class="fileUploadBlock" id="fileUpload">
+            <div if:true={showFileUpload} class="fileupload-container">
+                <lightning-input 
+                    class="slds-popover slds-popover_edit slds-popover__body"
+                    type="file" 
+                    name="fileUploader" 
+                    accept={acceptedFormats}
+                    record-id={recordId} 
+                    onchange={handleUploadFinished}>
+                    </lightning-input>
+            </div>
+            <div if:false={showFileUpload} class="slds-table_edit_container slds-is-relative">
+                <span class="slds-grid slds-grid_align-spread slds-cell-edit">
+                    <template if:false={value}>
+                        <span class="slds-truncate">...</span>
+                    </template>
+                    <template if:true={value}>
+                        <button class="slds-button slds-button_icon slds-button_icon-border-filled slds-button_icon-x-small" aria-haspopup="true" tabindex="-1" 
+                        title="Preview" onclick={handlePreview}>
+                            <svg class="slds-button__icon slds-button__icon_hint slds-button__icon_small" aria-hidden="true">
+                              <use xlink:href="/_slds/icons/utility-sprite/svg/symbols.svg?cache=9.37.1#preview"></use>
+                            </svg>
+                            <span class="slds-assistive-text">Preview</span>
+                          </button>
+                    </template>
+                    <button data-id={relatedRecord} class="slds-button slds-button_icon slds-cell-edit__button slds-m-left_x-small" tabindex="-1" title="Upload"
+                        onclick={handleEditClick}>
+                        <svg class="slds-button__icon slds-button__icon_hint slds-button__icon_lock slds-button__icon_small slds-button__icon_edit slds-icon slds-icon-text-default slds-icon_xx-small"
+                            aria-hidden="true">
+                            <use xlink:href="/_slds/icons/utility-sprite/svg/symbols.svg?cache=9.37.1#upload"></use>
+                        </svg>
+                        <span class="slds-assistive-text">upload</span>
+                    </button>
+                </span>
+            </div>
+        </div>
+    <!-- </template> -->
+</template>

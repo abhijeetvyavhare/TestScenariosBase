@@ -1,0 +1,91 @@
+<template>
+    <article class="slds-card">
+        <div class="slds-grid slds-einstein-header slds-card__header">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-grid slds-grid_vertical-align-center slds-size_3-of-4 slds-medium-size_2-of-3">
+                    <div class="slds-media__body">
+                        <h2 class="slds-truncate" title={title}>
+                            <a href="#" class="slds-card__header-link" title={title}>
+                                <span class="slds-text-heading_small">{title}</span>
+                            </a>
+                        </h2>
+                    </div>
+                </div>
+                <div class="slds-einstein-header__figure slds-size_1-of-4 slds-medium-size_1-of-3"></div>
+            </header>
+        </div>
+        <div class="">
+            <ul class="slds-welcome-mat__tiles ">
+                <template if:true={getLedgerData} for:each={getLedgerData} for:item="data">
+                    <li class="slds-welcome-mat__tile" key={data.dmpl__Title__c}>
+                        <a href="#" class="slds-box slds-box_link slds-media">
+                            <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center">
+                                <div class="slds-welcome-mat__tile-figure">
+                                    <lightning-icon icon-name="standard:discounts" alternative-text="Schemes Applied"
+                                        size="large" title="large size">
+                                    </lightning-icon>
+                                </div>
+                            </div>
+                            <div class="slds-media__body">
+                                <div class="slds-welcome-mat__tile-body">
+                                    <h3 class="slds-welcome-mat__tile-title">Scheme Applied : {data.dmpl__Title__c}</h3>
+                                    <div class="slds-truncate slds-p-left_xx-small" title={data.dmpl__Title__c}>
+                                        <span data-slds-trend="up" class="slds-icon-trend slds-is-animated"
+                                            title={data.dmpl__Title__c}>
+                                            <svg viewBox="0 0 16 16" aria-hidden="true">
+                                                <path class="slds-icon-trend__arrow" d="M.75 8H11M8 4.5L11.5 8 8 11.5"></path>
+                                                <circle class="slds-icon-trend__circle" cy="8" cx="8" r="7.375" transform="rotate(-28 8 8) scale(-1 1) translate(-16 0)"></circle>
+                                            </svg>
+                                            <span class="slds-assistive-text">{data.dmpl__Title__c}</span>
+                                        </span>
+                                        <span class="slds-welcome-mat__tile-description slds-p-left_xx-small">{data.dmpl__Title__c}</span>
+                                    </div>    
+                                </div>
+                            </div>
+                        </a>
+                    </li>       
+                </template>
+
+                <template if:true={getRecomendationsData} for:each={getRecomendationsData} for:item="data">
+                    <li class="slds-welcome-mat__tile" key={data.Id}>
+                        <a href="#" class="slds-box slds-box_link slds-media">
+                            <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center">
+                                <div class="slds-welcome-mat__tile-figure">
+                                    <lightning-icon icon-name={data.IconName__c} alternative-text="Click to Call"
+                                        size="large" title="large size">
+                                    </lightning-icon>
+                                </div>
+                            </div>
+                            <div class="slds-media__body">
+                                <div class="slds-welcome-mat__tile-body">
+                                    <h3 class="slds-welcome-mat__tile-title">{data.Heading__c}</h3>
+                                    <p class="slds-welcome-mat__tile-description">{data.Recommendation__c}</p>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </template>
+                
+                <template if:true={getNoRecomendationAvailable}>
+                    <li class="slds-welcome-mat__tile">
+                        <a href="#" class="slds-box slds-box_link slds-media">
+                            <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center">
+                                <div class="slds-welcome-mat__tile-figure">
+                                    <lightning-icon icon-name='standard:resource_absence' alternative-text="No Recommendations available"
+                                        size="large" title="large size">
+                                    </lightning-icon>
+                                </div>
+                            </div>
+                            <div class="slds-media__body">
+                                <div class="slds-welcome-mat__tile-body">
+                                    <h3 class="slds-welcome-mat__tile-title">Recommendations unavailable!</h3>
+                                    <p class="slds-welcome-mat__tile-description">There are no schemes active. </p>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </template>
+            </ul>
+        </div>
+    </article>
+</template>

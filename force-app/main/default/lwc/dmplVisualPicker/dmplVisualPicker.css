@@ -1,0 +1,7 @@
+.dmpl-visual-picker{
+    --slds-c-icon-color-foreground-default: rgb(255,255,255);
+  }
+
+.dmpl-justify_left{
+    justify-content: left;
+}

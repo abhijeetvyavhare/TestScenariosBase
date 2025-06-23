@@ -1,0 +1,35 @@
+:host{
+    --sds-c-card-header-spacing-block-end : 0;
+}
+.visitActionPanel{
+
+}
+
+.visitActionButton{
+    width: 100%;
+    max-width: 400px;
+    min-width: 300px;
+    display: inline-grid 
+}
+
+.visitActionBarButton{
+    width: 100%;
+    max-width: 200px;
+    min-width: 150px;
+    display: inline-grid 
+}
+
+.visitInput{
+    width: 100%;
+    max-width: 300px;
+    min-width: 200px;
+    display: inline-grid 
+}
+
+.dmpl-hide{
+    display: none;
+}
+
+.dmpl-show{
+    display: block;
+}

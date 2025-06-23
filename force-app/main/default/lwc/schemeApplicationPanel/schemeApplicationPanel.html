@@ -1,0 +1,71 @@
+<template>
+  <c-wizard header={getDocumentTitle} hide-progress variant="base-shaded" current-step={currentStep}
+    oncomplete={handleClose} oncancel={handleClose} hide-action-slot>
+    <c-wizard-step label="Select Scheme Slab" name="step-1" hide-next-button>
+      <template if:false={hasQualifiedSchemes}>
+        <div if:true={isLoaded}>
+          <c-illustration-no-data size="small" message={customLabel.noQualifiedSchemesFound} view="desert">
+          </c-illustration-no-data>
+        </div>
+      </template>
+      <template if:true={hasQualifiedSchemes}>
+        <div class="slds-grid slds-gutters">
+          <div class="slds-col">
+            <div class="dmpl-scrollable">
+              <c-dmpl-visual-picker is-vertical picker-style="text" heading="Select Scheme Slab."
+                source-data={qualifiedSchemes} onvaluechanged={handleSchemeLineChanged}>
+              </c-dmpl-visual-picker>
+            </div>
+          </div>
+          <div class="slds-col slds-grid slds-grid_vertical">
+            <template if:true={isSchemeSelected}>
+              <c-dmpl-visual-picker is-vertical picker-style="text" heading="Select Scheme Benefit to Apply."
+                source-data={benefitOptions} onvaluechanged={handleBenefitChanged}>
+              </c-dmpl-visual-picker>
+            </template>
+          </div>
+        </div>
+      </template>
+    </c-wizard-step>
+    <c-wizard-step label="Select discounted items." name="step-2" hide-next-button>
+      <c-header-card show-page-header show-header-border hide-body-margin title={getSelectedBenefitTitle}>
+        <div class="slds-p-around_small">
+          {getSelectedBenefitSubTitle}
+        </div>
+      </c-header-card>
+      <template if:true={benefitHasItemGroup}>
+        <div class="slds-p-top_small">
+          <c-header-card show-page-header show-header-border hide-body-margin title="Select Reward Items">
+            <lightning-input type="search" slot="actions" variant="label-hidden" onchange={handleSearch}
+              placeholder="search..." value={searchKey}></lightning-input>
+            <div if:false={isLinesDataLoaded}>
+              <lightning-spinner variant="brand" alternative-text="Loading" size="medium"></lightning-spinner>
+            </div>
+            <div class="dmpl-scrollable">
+              <c-dmpl-datatable key-field="Id" suppress-bottom-bar hide-checkbox-column onrowselection={handleRowSelection}
+                oncellchange={handleCellChange} columns={itemListColumns} onselectedrec={handleSelectedRec}
+                draft-values={draftValues} data={itemListData}>
+              </c-dmpl-datatable>
+            </div>
+            <div if:true={noItemListData}>
+              <c-illustration-no-data size="small" message="No eligible records!" view="openroad">
+              </c-illustration-no-data>
+            </div>
+          </c-header-card>
+        </div>
+      </template>
+    </c-wizard-step>
+    <c-wizard-step label="Summary" name="step-3">
+      <template if:true={applySchemeResult}>
+        <c-dmpl-tile show-avatar avatar-icon-name="standard:survey"
+          heading='Scheme Applied Successfully!' sub-heading='The selected scheme was applied successfully.'>
+        </c-dmpl-tile>
+      </template>
+    </c-wizard-step>
+    <template if:true={isSaveVisible}>
+      <lightning-button slot="actions" disabled={isSaveDisabled} variant="brand" label="Save" title="Save"
+        onclick={handleSave} icon-name="utility:save"></lightning-button>
+    </template>
+    <lightning-button slot="mactions" variant="base" label="Reset Scheme" title="Reset" onclick={handleReset}></lightning-button>
+  </c-wizard>
+</template>

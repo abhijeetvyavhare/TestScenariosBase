@@ -1,0 +1,65 @@
+<template>
+    <article class="slds-card">
+        <div class="slds-grid slds-einstein-header slds-card__header">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-grid slds-grid_vertical-align-center slds-size_3-of-4 slds-medium-size_2-of-3">
+                    <div class="slds-media__body">
+                        <h2 class="slds-truncate" title={title}>
+                            <a href="#" class="slds-card__header-link" title={title}>
+                                <span class="slds-text-heading_small">{title}</span>
+                            </a>
+                        </h2>
+                    </div>
+                </div>
+                <div class="slds-einstein-header__figure slds-size_1-of-4 slds-medium-size_1-of-3"></div>
+            </header>
+        </div>
+        <div class="">
+            <ul class="slds-welcome-mat__tiles ">
+                <template if:true={getRecomendationsData} for:each={getRecomendationsData} for:item="data">
+                    <li class="slds-welcome-mat__tile slds-welcome-mat__tile_complete" key={data.Id}>
+                        <div href="#" class="slds-box slds-box_link slds-media">
+                            <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center">
+                                <div class="slds-welcome-mat__tile-figure">
+                                    <lightning-icon icon-name={data.dmpl__IconName__c} alternative-text="Recommendation"
+                                        size="large" title="large size">
+                                    </lightning-icon>
+                                </div>
+                            </div>
+                            <div class="slds-media__body">
+                                <div class="slds-welcome-mat__tile-body">
+                                    <h3 class="slds-welcome-mat__tile-title">{data.dmpl__Title__c}</h3>
+                                    <p class="slds-welcome-mat__tile-description">{data.dmpl__Recommendation__c}</p>
+                                    <lightning-button name="reject" class="slds-p-top_x-small" label={data.dmpl__RejectLabel__c}
+                                        data-record-id={data.Id} onclick={handleActionClick}></lightning-button>
+                                    <lightning-button variant="brand" class="slds-p-left_small slds-m-top_x-small" name="accept" label={data.dmpl__AcceptLabel__c}
+                                        data-record-id={data.Id} onclick={handleActionClick}></lightning-button>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </template>
+                
+                <template if:true={getNoRecomendationAvailable}>
+                    <li class="slds-welcome-mat__tile slds-welcome-mat__tile_complete">
+                        <a href="#" class="slds-box slds-box_link slds-media">
+                            <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center">
+                                <div class="slds-welcome-mat__tile-figure">
+                                    <lightning-icon icon-name='standard:resource_absence' alternative-text="No Recommendations available"
+                                        size="large" title="large size">
+                                    </lightning-icon>
+                                </div>
+                            </div>
+                            <div class="slds-media__body">
+                                <div class="slds-welcome-mat__tile-body">
+                                    <h3 class="slds-welcome-mat__tile-title">Recommendations unavailable!</h3>
+                                    <p class="slds-welcome-mat__tile-description">There are no active recommendations. </p>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </template>
+            </ul>
+        </div>
+    </article>
+</template>

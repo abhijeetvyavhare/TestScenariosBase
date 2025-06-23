@@ -1,0 +1,34 @@
+trigger BillReturnTrigger on BillReturn__c (
+    before insert, 
+    before update, 
+    before delete, 
+    after insert, 
+    after update, 
+    after delete) {
+        if(OrgSettingHelper.IsTriggerDisabled()){
+            return;
+        }
+        if(Trigger.isBefore){
+            BillReturnHelper.validateData(
+                trigger.isInsert, 
+                trigger.isUpdate, 
+                trigger.isDelete,
+                trigger.new, 
+                trigger.old);
+            BillReturnHelper.postData(
+                trigger.isInsert, 
+                trigger.isUpdate, 
+                trigger.isDelete, 
+                trigger.new, 
+                trigger.old);    
+        }
+        else if(Trigger.isAfter){
+            BillReturnHelper.afterPostData(
+                trigger.isInsert, 
+                trigger.isUpdate, 
+                trigger.isDelete, 
+                trigger.new, 
+                trigger.old);
+        }
+        new MetadataTriggerHandler().run();
+}

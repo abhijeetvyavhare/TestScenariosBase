@@ -1,0 +1,85 @@
+<template>
+    <div class="slds-box slds-theme_shade">
+        <div class="slds-grid slds-grid_align-spread">
+            <div class="slds-col">
+                <div class="slds-m-left_xxx-small slds-m-top_xxx-small">
+                    <h3 class="slds-text-heading_small"><strong>Attendance</strong></h3>
+                </div>
+            </div>
+            <div class="slds-col" style="position: relative; display: inline-block;">
+                <lightning-button
+                    label={buttonLabel}
+                    variant={buttonVariant}
+                    onclick={handleClick}
+                    disabled={disableButton}>
+                </lightning-button>
+        
+                <template if:true={isDisabled}>
+                    <lightning-spinner 
+                        size="small" 
+                        alternative-text="Loading" 
+                        style="position: absolute">
+                    </lightning-spinner>
+                </template>
+            </div> 
+        </div>
+    </div>
+
+    <div class="slds-box slds-p-around_medium slds-text-align_center slds-theme_default">
+        <template if:true={isResourceAvailable}>
+            <div class="slds-grid slds-wrap slds-justify_center slds-m-top_small">
+                <div class="slds-col slds-size_1-of-10"></div>
+                    <div class="slds-box_x-small slds-m-horizontal_small" style="background-color: #e9bcbc; font-size: 18px;">{formattedHours}</div>
+                    <div class="slds-m-vertical_xx-small" style="font-size: 24px;">:</div>
+                    <div class="slds-box_x-small slds-m-horizontal_small" style="background-color: #e9bcbc; font-size: 18px;">{formattedMinutes}</div>
+                    <div class="slds-m-vertical_xx-small" style="font-size: 24px;">:</div>
+                    <div class="slds-box_x-small slds-m-horizontal_small" style="background-color: #e9bcbc; font-size: 18px;">{formattedSeconds}</div>
+                <div class="slds-col slds-size_1-of-10"></div>
+            </div>
+    
+            <div class="slds-text-body_regular slds-m-vertical_small">
+                <span class="slds-m-right_small slds-text-align:center"><strong>{currentDate}</strong></span>
+            </div>
+        
+            <div class="slds-m-bottom_large"></div>
+    
+            <div>
+                <div class="slds-m-vertical_small">
+                    <template for:each={entitlements} for:item="entitlement">
+                        <div key={entitlement.Id} class="slds-box slds-theme_default slds-m-around_small">
+                            <div class="slds-grid slds-wrap slds-m-top_xxx-small">
+                                <div class="slds-col slds-size_1-of-1 slds-m-left_xxx-small slds-m-bottom_x-small">
+                                    <div class="slds-text-heading_xx-small slds-float_left"><strong>{entitlement.Name}</strong></div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 slds-float_left"> 
+                                    <div style="color:orange;">
+                                        <strong>{entitlement.Available}</strong>
+                                    </div>
+                                    Available
+                                </div>
+                                
+                                <div class="slds-col slds-size_1-of-3"> 
+                                    <div style="color: green;">
+                                        <strong>{entitlement.Balance}</strong>
+                                    </div>
+                                    Balance
+                                </div>
+    
+                                <div class="slds-col slds-size_1-of-3 slds-float_right"> 
+                                    <div style="color: red;">
+                                        <strong>{entitlement.Booked}</strong>
+                                    </div>
+                                Booked
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </template>
+
+        <template if:false={isResourceAvailable}>
+            <c-illustration-no-data size="small" view="desert" message="No Resource is configured against this user"></c-illustration-no-data>
+        </template>
+    </div>
+</template>

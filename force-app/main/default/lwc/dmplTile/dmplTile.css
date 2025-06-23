@@ -1,0 +1,54 @@
+.dmpl-title-body_x-small {
+  position: relative;
+  min-width: 6rem;
+}
+
+.dmpl-title-body_small {
+  position: relative;
+  min-width: 9rem;
+}
+
+.dmpl-tile__tl-box {
+  position: absolute;
+  top: -6px;
+  left: 0.0rem;
+  text-align: left;
+  max-width: 35%;
+}
+
+.dmpl-tile__tr-box {
+  position: absolute;
+  top: -6px;
+  right: 0.0rem;
+  text-align: right;
+  max-width: 65%;
+}
+
+.dmpl-tile__bl-box {
+  position: absolute;
+  bottom: -6px;
+  left: 0.0rem;
+  text-align: left;
+  max-width: 50%;
+}
+
+.dmpl-tile__br-box {
+  position: absolute;
+  bottom: -6px;
+  right: 0.0rem;
+  text-align: right;
+  max-width: 50%;
+}
+
+.dmpl-tile__tbox-text {
+  margin-top: -4px;
+}
+
+.dmpl-tile__bbox-text {
+  margin-bottom: -4px;
+}
+
+.dmpl-tile__box-headingLabel {
+  margin-top: -6px;
+  margin-bottom: 6px;
+}

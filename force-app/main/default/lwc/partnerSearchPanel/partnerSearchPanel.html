@@ -1,0 +1,31 @@
+<template>
+    <c-header-card title={getSelectedTitle} icon-name="standard:address" show-page-header="true" show-header-border="true">
+        <div slot="actions">
+            <template if:true={showFilterPanel}>
+                <div class="slds-no-flex">
+                    <lightning-layout vertical-align="center" multiple-rows>
+                        <lightning-layout-item flexibility="no-flex" padding="horizontal-small">
+                            <lightning-input name="postalCode" label="Postal Code" placeholder="Postal Code" type="text" value={postalCode} variant="label-hidden"
+                                onchange={handlePostalCodeChange}>
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item flexibility="no-flex" padding="horizontal-small">
+                            <lightning-input name="cityName" label="City" type="text" placeholder="City" value={cityName} variant="label-hidden" onchange={handleCityNameChange}>
+                            </lightning-input>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </div>
+            </template>
+        </div>
+        <div>
+            <template if:true={markers}>
+                <lightning-map map-markers={markers} title="Partner Locations" options={mapOptions}
+                    selected-marker-value={selectedMarker} onmarkerselect={handleMarkerSelect}></lightning-map>
+            </template>
+            <template if:false={markers}>
+                <c-illustration-no-data message={noDataMessage} view="OpenRoad" errors={errors}>
+                </c-illustration-no-data>
+            </template>
+        </div>
+    </c-header-card>
+</template>

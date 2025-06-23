@@ -1,0 +1,27 @@
+<template>
+    <div slot="footer">
+        <div class="slds-grid slds-grid_align-spread">
+            <lightning-button label={getPreviousLabel} onclick={handlePrevious} class="slds-m-left_x-small">
+            </lightning-button>
+            <template if:false={hideProgress}>
+                <lightning-progress-indicator type={progressIndicatorType} has-error={hasError} class="dmpl-pb-style"
+                    variant={progressIndicatorVariant} current-step={currentStep}>
+                    <template for:each={flow} for:item="step">
+                        <lightning-progress-step key={step.name} label={step.label} value={step.name}>
+                        </lightning-progress-step>
+                    </template>
+                </lightning-progress-indicator>
+            </template>
+            <lightning-button variant="brand" label={getNextLabel} onclick={handleNext} class="slds-m-left_x-small">
+            </lightning-button>
+        </div>
+    </div>
+    <template if:true={hasError}>
+        <div class="slds-container_fluid slds-theme_error">
+            <span>{_errorMessages}</span>
+        </div>
+    </template>
+
+    <slot onslotchange={slotChange} onstepregistered={registerStep}></slot>
+
+</template>

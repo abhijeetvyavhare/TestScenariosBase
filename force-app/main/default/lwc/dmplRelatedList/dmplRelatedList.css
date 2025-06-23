@@ -1,0 +1,26 @@
+.related-list-header {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom: 1px solid rgb(201, 201, 201);
+}
+
+.related-list-title {
+    font-size: 1rem;
+    position: relative;
+    top: 2px;
+}
+
+.related-list-meta {
+    font-size: 0.8rem;
+}
+
+.related-list-body {
+    position: relative;
+    min-height: 10vh;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.setings-down-arrow {
+    --lwc-squareIconXxSmallContent: 0.6rem;
+}

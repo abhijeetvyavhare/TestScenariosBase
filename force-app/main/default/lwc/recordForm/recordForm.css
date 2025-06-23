@@ -1,0 +1,16 @@
+.dmpl-header .slds-hyphenate {
+      font-size: var(--slds-c-modal-heading-font-size, var(--sds-c-modal-heading-font-size, 1.25rem));
+  }
+
+.dmpl-radio {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.dmpl-customInput{
+    width: 100%;
+}
+
+.spinnerPanel{
+    background-color: white;
+}

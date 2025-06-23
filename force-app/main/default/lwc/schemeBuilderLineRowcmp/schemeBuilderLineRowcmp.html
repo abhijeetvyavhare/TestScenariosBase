@@ -1,0 +1,153 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <c-header-card 
+        title={fullTitle}
+        nav-object-api-name={schmeLineObjectApiName}
+        nav-record-id={schemeLine.Id}
+        icon-name="custom:custom17" is-collapsed={getIsPanelCollapsed} show-page-header
+        show-header-border show-footer={isEditing}>
+        <lightning-button-group slot="actions">
+            <lightning-button if:true={getIsEditButtonVisible} label="Edit" onclick={handleEditClicked}>
+            </lightning-button>
+            <lightning-button if:true={getIsDeleteButtonVisible} label="Delete" onclick={handleDeleteClicked}>
+            </lightning-button>
+            <lightning-button-stateful label-when-off="Show" label-when-on="Hide" selected={isPanelVisible}
+                onclick={handlePanelVisibility}>
+            </lightning-button-stateful>
+        </lightning-button-group>
+        <template if:true={isEditing}>
+            <lightning-record-edit-form density="comfy" id="lightning-record-form"
+                object-api-name={schmeLineObjectApiName} record-id={schemeLine.Id} onsuccess={handleSuccess}>
+                <lightning-messages> </lightning-messages>
+                <div class="slds-hide">
+                    <lightning-input-field field-name="dmpl__SchemeId__c"
+                        value={schemeLine.dmpl__SchemeId__c}></lightning-input-field>
+                    <lightning-input-field field-name="Name"></lightning-input-field>
+                </div>
+                <div class="slds-p-horizontal_medium">
+                    <div class="slds-expression">
+                        <div class="slds-expression__options dmpl-expression__options">
+                            <div class="slds-grid slds-gutters_xx-small">
+                                <div class="slds-col">
+                                    <lightning-input-field field-name="dmpl__SequenceNumber__c"></lightning-input-field>
+                                </div>
+                                <div class="slds-col">
+                                    <lightning-input-field field-name="dmpl__Title__c"></lightning-input-field>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="slds-expression__title">{conditionTitle}</h3>
+                        <div class="slds-expression__options">
+                            <lightning-input-field id="dmpl__DefinitionFilterCriteria__c"
+                                field-name="dmpl__DefinitionFilterCriteria__c"
+                                onchange={handleFilterCriteriaChange}></lightning-input-field>
+                        </div>
+                        <div class="slds-expression__custom-logic" if:true={isConditionCustomLogic}>
+                            <lightning-input-field field-name="dmpl__DefinitionCustomLogic__c"></lightning-input-field>
+                        </div>
+                        <template if:true={schemeConditions}>
+                            <template iterator:condition={schemeConditions}>
+                                <div key={condition.value.dmpl__SequenceNumber__c}>
+                                    <ul>
+                                        <c-scheme-builder-condition-rowcmp filter-criteria={filterCriteria}
+                                            disable-actions is-first-item={condition.first}
+                                            condition-type={condition.value.dmpl__ConditionType__c}
+                                            condition={condition.value}>
+                                        </c-scheme-builder-condition-rowcmp>
+                                    </ul>
+                                </div>
+                            </template>
+                        </template>
+                    </div>
+                    <div class="slds-expression slds-m-top_medium">
+                        <h3 class="slds-expression__title">{resultTitle}</h3>
+                        <div class="slds-expression__options">
+                            <lightning-input-field id="dmpl__RewardApplicability__c"
+                                onchange={handleRewardApplicabilityChange}
+                                field-name="dmpl__RewardApplicability__c"></lightning-input-field>
+                        </div>
+                        <div class="slds-expression__custom-logic" if:true={isRewardCustomLogic}>
+                            <lightning-input-field field-name="dmpl__RewardCustomLogic__c"></lightning-input-field>
+                        </div>
+                        <template if:true={schemeBenefits}>
+                            <template iterator:reward={schemeBenefits}>
+                                <div key={reward.value.dmpl__SequenceNumber__c}>
+                                    <ul>
+                                        <c-scheme-builder-reward-rowcmp reward-type={reward.value.dmpl__RewardType__c}
+                                            reward-applicability={rewardApplicability} is-first-item={reward.first}
+                                            disable-actions result={reward.value}></c-scheme-builder-reward-rowcmp>
+                                    </ul>
+                                </div>
+                            </template>
+                        </template>
+                    </div>
+                </div>
+            </lightning-record-edit-form>
+        </template>
+        <template if:false={isEditing}>
+            <lightning-record-view-form density="comfy" object-api-name={schmeLineObjectApiName}
+                record-id={schemeLine.Id}>
+                <div class="slds-p-horizontal_medium">
+                    <div class="slds-expression">
+                        <h3 class="slds-expression__title">{conditionTitle}</h3>
+                        <div class="slds-expression__custom-logic" if:true={isConditionCustomLogic}>
+                            <lightning-output-field
+                                field-name="dmpl__DefinitionCustomLogic__c"></lightning-output-field>
+                        </div>
+                        <template if:true={schemeConditions}>
+                            <template iterator:condition={schemeConditions}>
+                                <div key={condition.value.dmpl__SequenceNumber__c}>
+                                    <ul>
+                                        <c-scheme-builder-condition-rowcmp filter-criteria={filterCriteria}
+                                            is-first-item={condition.first} disable-actions={getDisableActions}
+                                            condition-type={condition.value.dmpl__ConditionType__c}
+                                            condition={condition.value}>
+                                        </c-scheme-builder-condition-rowcmp>
+                                    </ul>
+                                </div>
+                            </template>
+                        </template>
+                        <template if:true={allowEditing}>
+                            <div class="slds-expression__buttons">
+                                <lightning-button label="Add Condition" title="Add Condition" icon-name="utility:add"
+                                    class="slds-m-left_x-small" onclick={handleAddCondition}></lightning-button>
+                            </div>
+                        </template>
+                    </div>
+                    <div class="slds-expression slds-m-top_medium">
+                        <h3 class="slds-expression__title">{resultTitle}</h3>
+                        <div class="slds-expression__custom-logic" if:true={isRewardCustomLogic}>
+                            <lightning-output-field field-name="dmpl__RewardCustomLogic__c"></lightning-output-field>
+                        </div>
+                        <template if:true={schemeBenefits}>
+                            <template iterator:reward={schemeBenefits}>
+                                <div key={reward.value.dmpl__SequenceNumber__c}>
+                                    <ul>
+                                        <c-scheme-builder-reward-rowcmp reward-type={reward.value.dmpl__RewardType__c}
+                                            reward-applicability={rewardApplicability} is-first-item={reward.first}
+                                            disable-actions={getDisableActions}
+                                            result={reward.value}></c-scheme-builder-reward-rowcmp>
+                                    </ul>
+                                </div>
+                            </template>
+                        </template>
+                        <template if:true={allowEditing}>
+                            <div class="slds-expression__buttons">
+                                <lightning-button label="Add Reward" title="Add Reward" icon-name="utility:add"
+                                    class="slds-m-left_x-small" onclick={handleAddReward}></lightning-button>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </lightning-record-view-form>
+        </template>
+        <div slot="footer">
+            <div class="slds-grid slds-grid_align-end">
+                <lightning-button label="Cancel" onclick={handleCancelClicked} class="slds-m-left_x-small">
+                </lightning-button>
+                <lightning-button variant="brand" label="Save" onclick={handleSaveClicked} class="slds-m-left_x-small">
+                </lightning-button>
+            </div>
+        </div>
+    </c-header-card>
+</template>

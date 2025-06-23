@@ -1,0 +1,335 @@
+<template>
+    <lightning-quick-action-panel class="slds-modal_large" header={title}>
+        <template if:true={showLoader}>
+            <div class="spinnerHolder">
+                <lightning-spinner class="spinnerPanel" alternative-text="Loading..." variant="brand">
+                </lightning-spinner>
+            </div>
+        </template>
+        <lightning-record-edit-form id="lightning-record-form" density="comfy" object-api-name={objectApiName} record-type-id={recordTypeId}
+            record-id={recordId} onsuccess={handleSuccess} onload={handleLoad} onerror={handleError}>
+            <lightning-messages> </lightning-messages>
+                <div class="slds-grid slds-gutters slds-wrap">
+                    <div class="slds-col slds-size_3-of-3 slds-medium-size_1-of-3 slds-large-size_1-of-3 slds-border_right">
+                        <!-- <c-header-card title={sectionHeading} icon-name="standard:calibration" show-page-header="true"
+                            show-header-border="true" show-footer={isfooterVisible}> -->
+                            <div class="slds-section slds-is-open">
+                                <h3 class="slds-section__title slds-theme_shade">
+                                    <span class="slds-truncate slds-p-horizontal_small"
+                                        title={sectionHeading}>{sectionHeading}</span>
+                                </h3>
+                                <div aria-hidden="false" class="slds-section__content">
+                                    <template if:true={isLoaded}>
+                                        <div class="slds-grid slds-gutters slds-wrap">
+                                            <template if:true={getFieldsetFields} for:each={getFieldsetFields} for:item="field">
+                                                <div class="slds-col slds-size_3-of-3" key={field.apiName}>
+                                                    <template if:false={field.isCustomLookup}>
+                                                        <lightning-input-field id={field.apiName} field-name={field.apiName}
+                                                            disabled={field.disabled} required={field.required}
+                                                            onchange={handleFieldChange}>
+                                                        </lightning-input-field>
+                                                    </template>
+                                                    <template if:true={field.isCustomLookup}>
+                                                        <div class="slds-grid">
+                                                            <div class="slds-hide">
+                                                                <lightning-input-field id={field.apiName} field-name={field.apiName}>
+                                                                </lightning-input-field>
+                                                            </div>
+                                                            <c-dmpl-lookup 
+                                                                class="dmpl-customInput"
+                                                                label={field.label}
+                                                                name={field.apiName}
+                                                                disabled={field.disabled} 
+                                                                required={field.required}
+                                                                onsearch={handleSearch}
+                                                                onfocusacquired={handleSearchFocus}
+                                                                onselectionchange={handleSelectionChange}>
+                                                            </c-dmpl-lookup>
+                                                            <template if:true={field.showNew}>
+                                                                <lightning-button-icon class="slds-m-top_large" icon-name="utility:new" variant="border-filled"
+                                                                    alternative-text="New" title="New" onclick={handleNewClick}>
+                                                                </lightning-button-icon>
+                                                            </template>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                            <div class="slds-hide">
+                                                <lightning-input-field field-name="dmpl__PartnerAccountId__c">
+                                                </lightning-input-field>
+                                                <lightning-input-field field-name="dmpl__BranchId__c">
+                                                </lightning-input-field>
+                                                <lightning-input-field field-name="dmpl__ResourceId__c">
+                                                </lightning-input-field>
+                                                <lightning-input-field field-name="dmpl__SaleExecutiveId__c">
+                                                </lightning-input-field>
+                                            </div>
+                                        </div>
+                                    </template>
+                            </div>
+                        </div>
+                        <!-- </c-header-card> -->
+                    </div>
+                    <div class="slds-col slds-size_3-of-3 slds-medium-size_2-of-3 slds-large-size_2-of-3 slds-wrap">
+                        <lightning-tabset active-tab-value="one">
+                            <template if:true={tabTitle1}>
+                                <lightning-tab label={tabTitle1} value="one">
+                                    <template if:true={getTab1FieldsetFields1} >
+                                        <div class="slds-section slds-is-open">
+                                            <h3 class="slds-section__title slds-theme_shade">
+                                                <span class="slds-truncate slds-p-horizontal_small"
+                                                    title={tab1sectionHeading1}>{tab1sectionHeading1}</span>
+                                            </h3>
+                                            <div aria-hidden="false" class="slds-section__content">
+                                                <div class="slds-grid slds-gutters slds-wrap">
+                                                    <template if:true={isBillingAddressOptionsVisible}>
+                                                        <template if:true={isBillingAddressOptionsSmall}>
+                                                            <div class="slds-col slds-size_3-of-3">
+                                                                <lightning-radio-group name='rgB' 
+                                                                    label="Billing Address"
+                                                                    options={billingAddressOptions}
+                                                                    value={billingAddressId}
+                                                                    class="dmpl-radio"
+                                                                    onchange={handleBillingAddressChange}
+                                                                    type="button"></lightning-radio-group>
+                                                            </div>
+                                                        </template>
+                                                        <template if:false={isBillingAddressOptionsSmall}>
+                                                            <div class="slds-col slds-size_3-of-3">
+                                                                <lightning-combobox
+                                                                    label="Billing Address"
+                                                                    value={billingAddressId}
+                                                                    placeholder="Select Billing Address"
+                                                                    options={billingAddressOptions}
+                                                                    onchange={handleBillingAddressChange} ></lightning-combobox>
+                                                            </div>
+                                                        </template>
+                                                    </template>
+                                                    <template for:each={getTab1FieldsetFields1}
+                                                        for:item="field">
+                                                        <div class="slds-col slds-size_3-of-3 slds-large-size_1-of-2"
+                                                            key={field.apiName}>
+                                                            <lightning-input-field id={field.apiName} field-name={field.apiName}
+                                                                disabled={field.disabled} required={field.required} onchange={handleFieldChange}>
+                                                            </lightning-input-field>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <template if:true={getTab1FieldsetFields2}>
+                                        <div class="slds-section slds-is-open">
+                                            <h3 class="slds-section__title slds-theme_shade">
+                                                <span class="slds-truncate slds-p-horizontal_small"
+                                                    title={tab1sectionHeading2}>{tab1sectionHeading2}</span>
+                                            </h3>
+                                            <div aria-hidden="false" class="slds-section__content">
+                                                <div class="slds-grid slds-gutters slds-wrap">
+                                                    <template if:true={isShippingAddressOptionsVisible}>
+                                                        <template if:true={isShippingAddressOptionsSmall}>
+                                                            <div class="slds-col slds-size_3-of-3">
+                                                                <lightning-radio-group name='rgS' 
+                                                                    label="Shipping Address"
+                                                                    options={shippingAddressOptions}
+                                                                    value={shippingAddressId}
+                                                                    class="dmpl-radio"
+                                                                    onchange={handleShippingAddressChange}
+                                                                    type="button"></lightning-radio-group>
+                                                            </div>
+                                                        </template>
+                                                        <template if:false={isShippingAddressOptionsSmall}>
+                                                            <div class="slds-col slds-size_3-of-3">
+                                                                <lightning-combobox
+                                                                    label="Shipping Address"
+                                                                    value={shippingAddressId}
+                                                                    placeholder="Select Shipping Address"
+                                                                    options={shippingAddressOptions}
+                                                                    onchange={handleShippingAddressChange} ></lightning-combobox>
+                                                            </div>
+                                                        </template>
+                                                    </template>
+                                                    <template for:each={getTab1FieldsetFields2}
+                                                        for:item="field">
+                                                        <div class="slds-col slds-size_3-of-3 slds-large-size_1-of-2"
+                                                            key={field.apiName}>
+                                                            <lightning-input-field id={field.apiName} field-name={field.apiName}
+                                                                disabled={field.disabled} required={field.required} onchange={handleFieldChange}>
+                                                            </lightning-input-field>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <template if:true={getTab1FieldsetFields3}>
+                                        <div class="slds-section slds-is-open">
+                                            <h3 class="slds-section__title slds-theme_shade">
+                                                <span class="slds-truncate slds-p-horizontal_small"
+                                                    title={tab1sectionHeading3}>{tab1sectionHeading3}</span>
+                                            </h3>
+                                            <div aria-hidden="false" class="slds-section__content">
+                                                <div class="slds-grid slds-gutters slds-wrap">
+                                                    <template for:each={getTab1FieldsetFields3}
+                                                        for:item="field">
+                                                        <div class="slds-col slds-size_3-of-3 slds-large-size_1-of-2"
+                                                            key={field.apiName}>
+                                                            <lightning-input-field id={field.apiName} field-name={field.apiName}
+                                                                disabled={field.disabled} required={field.required} onchange={handleFieldChange}>
+                                                            </lightning-input-field>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </lightning-tab>
+                            </template>
+                            <template if:true={tabTitle2}>
+                                <lightning-tab label={tabTitle2} value="two">
+                                    <template if:true={getTab2FieldsetFields1}>
+                                        <div class="slds-section slds-is-open">
+                                            <h3 class="slds-section__title slds-theme_shade">
+                                                <span class="slds-truncate slds-p-horizontal_small"
+                                                    title={tab2sectionHeading1}>{tab2sectionHeading1}</span>
+                                            </h3>
+                                            <div aria-hidden="false" class="slds-section__content">
+                                                <div class="slds-grid slds-gutters slds-wrap">
+                                                    <template for:each={getTab2FieldsetFields1}
+                                                        for:item="field">
+                                                        <div class="slds-col slds-size_3-of-3 slds-large-size_1-of-2"
+                                                            key={field.apiName}>
+                                                            <lightning-input-field id={field.apiName} field-name={field.apiName}
+                                                                disabled={field.disabled} required={field.required} onchange={handleFieldChange}>
+                                                            </lightning-input-field>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>                         
+                                    </template>
+                                    <template if:true={getTab2FieldsetFields2}>
+                                        <div class="slds-section slds-is-open">
+                                            <h3 class="slds-section__title slds-theme_shade">
+                                                <span class="slds-truncate slds-p-horizontal_small"
+                                                    title={tab2sectionHeading2}>{tab2sectionHeading2}</span>
+                                            </h3>
+                                            <div aria-hidden="false" class="slds-section__content">
+                                                <div class="slds-grid slds-gutters slds-wrap">
+                                                    <template for:each={getTab2FieldsetFields2}
+                                                        for:item="field">
+                                                        <div class="slds-col slds-size_3-of-3 slds-large-size_1-of-2"
+                                                            key={field.apiName}>
+                                                            <lightning-input-field id={field.apiName} field-name={field.apiName}
+                                                                disabled={field.disabled} required={field.required} onchange={handleFieldChange}>
+                                                            </lightning-input-field>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <template if:true={getTab2FieldsetFields3}>
+                                        <div class="slds-section slds-is-open">
+                                            <h3 class="slds-section__title slds-theme_shade">
+                                                <span class="slds-truncate slds-p-horizontal_small"
+                                                    title={tab2sectionHeading3}>{tab2sectionHeading3}</span>
+                                            </h3>
+                                            <div aria-hidden="false" class="slds-section__content">
+                                                <div class="slds-grid slds-gutters slds-wrap">
+                                                    <template for:each={getTab2FieldsetFields3}
+                                                        for:item="field">
+                                                        <div class="slds-col slds-size_3-of-3 slds-large-size_1-of-2"
+                                                            key={field.apiName}>
+                                                            <lightning-input-field id={field.apiName} field-name={field.apiName}
+                                                                disabled={field.disabled} required={field.required} onchange={handleFieldChange}>
+                                                            </lightning-input-field>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </lightning-tab>
+                            </template>
+                            <template if:true={tabTitle3}>
+                                <lightning-tab label={tabTitle3} value="three">
+                                    <template if:true={getTab3FieldsetFields1} >
+                                        <div class="slds-section slds-is-open">
+                                            <h3 class="slds-section__title slds-theme_shade">
+                                                <span class="slds-truncate slds-p-horizontal_small"
+                                                    title={tab3sectionHeading1}>{tab3sectionHeading1}</span>
+                                            </h3>
+                                            <div aria-hidden="false" class="slds-section__content">
+                                                <div class="slds-grid slds-gutters slds-wrap">
+                                                    <template for:each={getTab3FieldsetFields1}
+                                                        for:item="field">
+                                                        <div class="slds-col slds-size_3-of-3 slds-large-size_1-of-2"
+                                                            key={field.apiName}>
+                                                            <lightning-input-field id={field.apiName} field-name={field.apiName}
+                                                                disabled={field.disabled} required={field.required} onchange={handleFieldChange}>
+                                                            </lightning-input-field>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <template if:true={getTab3FieldsetFields2} >
+                                        <div class="slds-section slds-is-open">
+                                            <h3 class="slds-section__title slds-theme_shade">
+                                                <span class="slds-truncate slds-p-horizontal_small"
+                                                    title={tab3sectionHeading2}>{tab3sectionHeading2}</span>
+                                            </h3>
+                                            <div aria-hidden="false" class="slds-section__content">
+                                                <div class="slds-grid slds-gutters slds-wrap">
+                                                    <template if:true={getTab3FieldsetFields2} for:each={getTab3FieldsetFields2}
+                                                        for:item="field">
+                                                        <div class="slds-col slds-size_3-of-3 slds-large-size_1-of-2"
+                                                            key={field.apiName}>
+                                                            <lightning-input-field id={field.apiName} field-name={field.apiName}
+                                                                disabled={field.disabled} required={field.required} onchange={handleFieldChange}>
+                                                            </lightning-input-field>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <template if:true={getTab3FieldsetFields3} >
+                                        <div class="slds-section slds-is-open">
+                                            <h3 class="slds-section__title slds-theme_shade">
+                                                <span class="slds-truncate slds-p-horizontal_small"
+                                                    title={tab3sectionHeading3}>{tab3sectionHeading3}</span>
+                                            </h3>
+                                            <div aria-hidden="false" class="slds-section__content">
+                                                <div class="slds-grid slds-gutters slds-wrap">
+                                                    <template for:each={getTab3FieldsetFields3}
+                                                        for:item="field">
+                                                        <div class="slds-col slds-size_3-of-3 slds-large-size_1-of-2"
+                                                            key={field.apiName}>
+                                                            <lightning-input-field id={field.apiName} field-name={field.apiName}
+                                                                disabled={field.disabled} required={field.required} onchange={handleFieldChange}>
+                                                            </lightning-input-field>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </lightning-tab>
+                            </template>
+                        </lightning-tabset>
+                    </div>
+                </div>
+        </lightning-record-edit-form>
+        <div slot="footer">
+            <template if:true={showNewAccount}>
+                <lightning-button variant="neutral" class="slds-float_left" onclick={handleNewAccount} label="New Account"></lightning-button>
+            </template>
+            <lightning-button variant="neutral" onclick={handleClose} label="Cancel"></lightning-button>
+            <lightning-button variant="brand" label="Save" onclick={handleSave} type="submit"
+                class="slds-m-left_x-small" disabled={showLoader}></lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

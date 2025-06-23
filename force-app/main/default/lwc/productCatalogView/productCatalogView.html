@@ -1,0 +1,31 @@
+<template>
+    <lightning-quick-action-panel header={title}>
+        <lightning-card title="Component Details" >
+            <lightning-combobox name="progress" value={selectedImage} options={selectOptions}
+                onchange={handleImageChange}></lightning-combobox>
+                <div class="slds-m-top_x-small">
+            <img src={downloadUrl.jpg} alt="SalesforceCodex- Image Map" usemap="#maptest">
+            <template if:true={maps}>
+                <map name="maptest">
+                    <template for:each={maps} for:item="map">
+                        <area key={map.Id} data-item={map.Id} title={map.Id} shape='rect'
+                            coords={map.dmpl__Coordinate__c} href='' target="_blank" class="area"
+                            onclick={handleMap}>
+                    </template>
+                </map>
+            </template>
+            </div>
+        </lightning-card>
+        <lightning-card title="Component List">
+            <template if:true={maps}>
+                <lightning-datatable key-field="id" data={maps} show-row-number-column columns={columns}>
+                </lightning-datatable>
+            </template>
+        </lightning-card>
+        <div slot="footer">
+            <lightning-button variant="neutral" onclick={handleDialogClose} label="Cancel"></lightning-button>
+            <lightning-button variant="brand" label="Add Selected" onclick={handleSave} class="slds-m-left_x-small">
+            </lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

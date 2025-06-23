@@ -1,0 +1,205 @@
+<template>
+    <article class="slds-card slds-card_boundary slds-grid slds-grid_vertical slds-scrollable">
+        <div class="slds-page-header">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <span class="slds-icon_container slds-icon-standard-contact" title="contact">
+                        <lightning-icon icon-name="standard:einstein_replies" size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Health Check</span>
+                    </span>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        <a href="javascript:void(0);" class="slds-card__header-link slds-truncate"
+                            onclick={handleVisibleClick} title="Vehicle Health Check">
+                            <span>Health Check</span>
+                        </a>
+                    </h2>
+                </div>
+            </header>
+        </div>
+        <div>
+            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered slds-scrollable">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th class="table-header-txt" scope="col" style="width:55%">
+                            <div class="slds-truncate" title="Name">Name</div>
+                        </th>
+                        <th class="table-header-txt" scope="col" style="width:5%">
+                            <div class="slds-truncate slds-align_absolute-center" title="Red">Red</div>
+                        </th>
+                        <th class="table-header-txt" scope="col" style="width:5%">
+                            <div class="slds-truncate slds-align_absolute-center" title="Amber">Amber</div>
+                        </th>
+                        <th class="table-header-txt" scope="col" style="width:5%">
+                            <div class="slds-truncate slds-align_absolute-center" title="Green">Green</div>
+                        </th>
+                        <th class="table-header-txt" scope="col" style="width:15%">
+                            <div class="slds-truncate slds-align_absolute-center" title="Reading">Reading</div>
+                        </th>
+                        <th class="table-header-txt" scope="col" style="width:15%">
+                            <div class="slds-truncate slds-align_absolute-center" title="Text Value">Text Value</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template if:true={renderHealthCheckTemplates} for:each={healthCheckTemplate}
+                        for:item="checklistLine">
+                        <tr key={checklistLine.GroupBy} class="slds-hint-parent" style="min-height: fit-content;">
+                            <th data-label="Group By" scope="row">
+                                <div class="slds-truncate" title="Cloudhub">
+                                    <a href="javascript:void(0);" tabindex="-1"><b>{checklistLine.GroupBy}</b></a>
+                                </div>
+                            </th>
+                            <td data-label="Red">
+                                <div class="slds-truncate">
+                                </div>
+                            </td>
+                            <td data-label="Amber">
+                                <div class="slds-truncate">
+                                </div>
+                            </td>
+                            <td data-label="Green">
+                                <div class="slds-truncate"></div>
+                            </td>
+                            <td data-label="Numeric">
+                                <div class="slds-truncate"></div>
+                            </td>
+
+                            <td data-label="Remarks">
+                                <div class="slds-truncate"></div>
+                            </td>
+                        </tr>
+                        <template for:each={checklistLine.Records} for:item="checklistLineItem">
+                            <tr key={checklistLineItem.Name} class="slds-hint-parent">
+                                <th data-label="Opportunity Name" scope="row" style="border-right: 1px solid #dddbda;">
+                                    <div class="slds-truncate slds-p-left_medium">
+                                        {checklistLineItem.Name}
+                                    </div>
+                                </th>
+                                <td data-label="Red" style="text-align: center;border-right: 1px solid #dddbda;">
+                                    <div if:true={checklistLineItem.IsRed} class="red slds-truncate">
+                                        <lightning-button-icon-stateful class="buttonChange" size="large"
+                                            icon-name="utility:check" disabled={checklistLineItem.disableRAG}>
+                                        </lightning-button-icon-stateful>
+                                    </div>
+                                    <div if:false={checklistLineItem.disableRAG}>
+                                        <div class="black">
+                                            <div if:false={checklistLineItem.IsRed} class="white slds-truncate">
+                                                <lightning-button-icon-stateful class="buttonChange" size="large"
+                                                    icon-name="utility:none" id={checklistLineItem.Id}
+                                                    value={checklistLineItem.Id} onclick={handleRedClick}
+                                                    disabled={checklistLineItem.disableRAG}>
+                                                </lightning-button-icon-stateful>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div if:true={checklistLineItem.disableRAG}>
+                                        <div if:false={checklistLineItem.IsRed} class="grey slds-truncate">
+                                            <lightning-button-icon-stateful class="buttonChange" size="large"
+                                                icon-name="utility:none" id={checklistLineItem.Id}
+                                                value={checklistLineItem.Id} onclick={handleRedClick}
+                                                disabled={checklistLineItem.disableRAG}>
+                                            </lightning-button-icon-stateful>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td data-label="Amber" style="text-align: center;border-right: 1px solid #dddbda;">
+                                    <div if:true={checklistLineItem.IsAmber} class="amber slds-truncate">
+                                        <lightning-button-icon-stateful class="buttonChange" size="large"
+                                            icon-name="utility:check" disabled={checklistLineItem.disableRAG}>
+                                        </lightning-button-icon-stateful>
+                                    </div>
+                                    <div if:false={checklistLineItem.disableRAG}>
+                                        <div class="black">
+                                            <div if:false={checklistLineItem.IsAmber} class="white slds-truncate">
+                                                <lightning-button-icon-stateful class="buttonChange" size="large"
+                                                    icon-name="utility:none" id={checklistLineItem.Id}
+                                                    value={checklistLineItem.Id} onclick={handleAmberClick}
+                                                    disabled={checklistLineItem.disableRAG}>
+                                                </lightning-button-icon-stateful>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div if:true={checklistLineItem.disableRAG}>
+                                        <div if:false={checklistLineItem.IsAmber} class="grey slds-truncate">
+                                            <lightning-button-icon-stateful class="buttonChange" size="large"
+                                                icon-name="utility:none" id={checklistLineItem.Id}
+                                                value={checklistLineItem.Id} onclick={handleAmberClick}
+                                                disabled={checklistLineItem.disableRAG}>
+                                            </lightning-button-icon-stateful>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td data-label="Green" style="text-align: center;border-right: 1px solid #dddbda;">
+                                    <div if:true={checklistLineItem.IsGreen} class="green slds-truncate">
+                                        <lightning-button-icon-stateful class="buttonChange" size="large"
+                                            icon-name="utility:check" disabled={checklistLineItem.disableRAG}>
+                                        </lightning-button-icon-stateful>
+                                    </div>
+                                    <div if:false={checklistLineItem.disableRAG}>
+                                        <div class="black">
+                                            <div if:false={checklistLineItem.IsGreen} class="white slds-truncate">
+                                                <lightning-button-icon-stateful class="buttonChange" size="large"
+                                                    icon-name="utility:none" id={checklistLineItem.Id}
+                                                    value={checklistLineItem.Id} onclick={handleGreenClick}
+                                                    disabled={checklistLineItem.disableRAG}>
+                                                </lightning-button-icon-stateful>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div if:true={checklistLineItem.disableRAG}>
+                                        <div if:false={checklistLineItem.IsGreen} class="grey slds-truncate">
+                                            <lightning-button-icon-stateful class="buttonChange" size="large"
+                                                icon-name="utility:none" id={checklistLineItem.Id}
+                                                value={checklistLineItem.Id} onclick={handleGreenClick}
+                                                disabled={checklistLineItem.disableRAG}>
+                                            </lightning-button-icon-stateful>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td data-label="Numeric" style="text-align: center;border-right: 1px solid #dddbda;">
+                                    <div class="slds-truncate">
+                                        <div class="slds-form-element">
+                                            <div
+                                                class="slds-form-element__control slds-input-has-icon slds-input-has-icon_left">
+                                                <lightning-input style="margin-top: -18px;padding:0px;" type="number"
+                                                    name="input1" id={checklistLineItem.Id}
+                                                    value={checklistLineItem.NumericValue} onchange={handleNumericValue}
+                                                    disabled={checklistLineItem.disableNumeric}>
+                                                </lightning-input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td data-label="Remarks" style="text-align: center;border-right: 1px solid #dddbda;">
+                                    <div class="slds-truncate">
+                                        <div class="slds-form-element">
+                                            <div
+                                                class="slds-form-element__control slds-input-has-icon slds-input-has-icon_left">
+                                                <lightning-input style="margin-top: -18px;" type="text" name="input2"
+                                                    id={checklistLineItem.Id} value={checklistLineItem.TextValue}
+                                                    onchange={handleTextValue} disabled={checklistLineItem.disableText}>
+                                                </lightning-input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </template>
+                    </template>
+                </tbody>
+            </table>
+            <div class="footer" style="text-align: right;">
+                <footer class="slds-card__footer">
+                    <div slot="footer" style="text-align: right;">
+                        <lightning-button label="Cancel" variant="neutral" onclick={handleCancel}>
+                        </lightning-button>
+                        <lightning-button class="slds-p-left_small" label="Save" variant="brand" onclick={handleSave}>
+                        </lightning-button>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </article>
+</template>

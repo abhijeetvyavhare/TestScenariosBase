@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>52.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <masterLabel>
+        Document Amount Panel
+    </masterLabel>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <property name="title" type="String" label="Title" default="Amount Summary" description="Title of the panel to be shown on top."/>
+            <property name="showNewPaymentAction" type="Boolean" default="true" label="Show New Payment Action" description="Show or Hide the New Payment Action on panel header."/>
+            <property name="showNewFinanceCaseAction" type="Boolean" label="Show New Finance Case Action" description="Show or Hide the New Finance Case Action on panel header."/>
+            <property name="documentAmountHeading" type="String" label="Document Amount Section Title" default="Document Amount" description="The title for document amount section."/>
+            <property name="showLineSubtotalRow" type="Boolean" default="true" label="Show Line Subtotal" description="Show or Hide the line subtotal row."/>
+            <property name="lineSubtotalTitle" type="String" default="Total Line Amount" label="Title for Total Line" description="The title for total line amount."/>
+            <property name="lineSubtotalFieldName" type="String" default="dmpl__TotalLineBaseAmount__c" label="Total Line Base Amount Field Name" description="The field name for picking line subtotal."/>
+            <property name="headerAccountFieldName" type="String" default="dmpl__AccountId__c" label="Header Account Field Name" description="The field name for picking header Account."/>
+            <!-- datasource="apex://dmpl.DocumentAmountPanelCurrencyFields" -->
+            <property name="showTaxes" type="Boolean" label="Show Taxes" default="true" description="Show or Hide the document taxes."/>
+            <property name="showRoundOff" type="Boolean" label="Show Round Off" default="true" description="Show or Hide the rounf off amount."/>
+            <property name="roundOffFieldName" type="String" default="dmpl__RoundOff__c" label="Round Off Field Name" description="The field name for picking Round Off amount." />
+            <property name="showDiscounts" type="Boolean" label="Show Discounts" default="true" description="Show or Hide the document discounts."/>
+            <property name="discountAmountTitle" type="String" default="Discount Amount" label="Title for Discount Amount." description="The title for total document disocunt amount line."/>
+            <property name="discountAmountFieldName" type="String" default="dmpl__TotalDiscountAmount__c" label="Total Discount Amount Field Name" description="The field name for picking total discount amount." />
+            <property name="schemeDiscountAmountTitle" type="String" default="Scheme Discount Amount" label="Title for Scheme Discount Amount." description="The title for total document scheme disocunt amount line."/>
+            <property name="schemeDiscountAmountFieldName" type="String" default="dmpl__TotalSchemeDiscountAmount__c" label="Total Scheme Discount Amount Field Name" description="The field name for picking total scheme discount amount." />
+            <property name="showDocumentTotalRow" type="Boolean" default="true" label="Show Total Document Amount" description="Show or Hide total document amount line."/>
+            <property name="documentTotalTitle" type="String" default="Total" label="Title for Total Document Amount." description="The title for total document amount line."/>
+            <property name="documentTotalFieldName" type="String" default="dmpl__TotalAmount__c" label="Total Document Amount Field Name" description="The field name for picking total document amount." />
+            <!-- datasource="apex://dmpl.DocumentAmountPanelCurrencyFields" -->
+            <property name="paymentAmountHeading" type="String" label="Payment Amount Section Title" default="Payments" description="The title for payment amount section."/>
+            <property name="showPaymentLines" type="Boolean" default="true" label="Show Payment Lines" description="Show or Hide the payment lines."/>
+            <property name="showFinanceCaseLines" type="Boolean" default="true" label="Show Finance Case Lines" description="Show or Hide the finance case lines."/>            
+            <property name="showOutstandingAmountRow" type="Boolean" default="true" label="Show Outstanding Amount" description="Show or Hide outstanding amount line."/>
+            <property name="paymentTotalFieldName" type="String" default="dmpl__TotalCreditAmount__c" label="Total Payment Amount Field Name" description="The field name for picking total payment amount." />
+            <!-- datasource="apex://dmpl.DocumentAmountPanelCurrencyFields"  -->
+            <property name="outstandingAmountFieldName" type="String" default="dmpl__OutstandingAmount__c" label="Outstanding Amount Field Name" description="The field name for picking total outstanding amount."  />
+            <property name="objectApiFieldName" type="String" default="dmpl__SaleOrderId__c" label="Payment field Name" description="The field name to be used in desitnation Payment Document."/>
+            <!-- datasource="apex://dmpl.DocumentAmountPanelCurrencyFields"  -->
+            <property name="paymentButtonType" type="String" default="PaymentTaken" label="Payment Type" description="The payment type to be used in desitnation Payment Document."/>
+            <supportedFormFactors>
+                <supportedFormFactor type="Small"/>
+                <supportedFormFactor type="Large"/>
+            </supportedFormFactors>
+        </targetConfig>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="recordId" type="String" default="{!recordId}"></property>
+            <property name="objectApiName" type="String" default=""></property>
+            <property name="title" type="String" label="Title" default="Amount Summary" description="Title of the panel to be shown on top."/>
+            <property name="showNewPaymentAction" type="Boolean" default="true" label="Show New Payment Action" description="Show or Hide the New Payment Action on panel header."/>
+            <property name="showNewFinanceCaseAction" type="Boolean" label="Show New Finance Case Action" description="Show or Hide the New Finance Case Action on panel header."/>
+            <property name="documentAmountHeading" type="String" label="Document Amount Section Title" default="Document Amount" description="The title for document amount section."/>
+            <property name="showLineSubtotalRow" type="Boolean" default="true" label="Show Line Subtotal" description="Show or Hide the line subtotal row."/>
+            <property name="lineSubtotalTitle" type="String" default="Total Line Amount" label="Title for Total Line" description="The title for total line amount."/>
+            <property name="lineSubtotalFieldName" type="String" default="dmpl__TotalLineBaseAmount__c" label="Total Line Base Amount Field Name" description="The field name for picking line subtotal."/>
+            <property name="headerAccountFieldName" type="String" default="dmpl__AccountId__c" label="Header Account Field Name" description="The field name for picking header Account."/>
+            <!-- datasource="apex://dmpl.DocumentAmountPanelCurrencyFields" -->
+            <property name="showTaxes" type="Boolean" label="Show Taxes" default="true" description="Show or Hide the document taxes."/>
+            <property name="showRoundOff" type="Boolean" label="Show Round Off" default="true" description="Show or Hide the rounf off amount."/>
+            <property name="roundOffFieldName" type="String" default="dmpl__RoundOff__c" label="Round Off Field Name" description="The field name for picking Round Off amount." />
+            <property name="showDiscounts" type="Boolean" label="Show Discounts" default="true" description="Show or Hide the document discounts."/>
+            <property name="discountAmountTitle" type="String" default="Discount Amount" label="Title for Discount Amount." description="The title for total document disocunt amount line."/>
+            <property name="discountAmountFieldName" type="String" default="dmpl__TotalDiscountAmount__c" label="Total Discount Amount Field Name" description="The field name for picking total discount amount." />
+            <property name="schemeDiscountAmountTitle" type="String" default="Scheme Discount Amount" label="Title for Scheme Discount Amount." description="The title for total document scheme disocunt amount line."/>
+            <property name="schemeDiscountAmountFieldName" type="String" default="dmpl__TotalSchemeDiscountAmount__c" label="Total Scheme Discount Amount Field Name" description="The field name for picking total scheme discount amount." />
+            <property name="showDocumentTotalRow" type="Boolean" default="true" label="Show Total Document Amount" description="Show or Hide total document amount line."/>
+            <property name="documentTotalTitle" type="String" default="Total" label="Title for Total Document Amount." description="The title for total document amount line."/>
+            <property name="documentTotalFieldName" type="String" default="dmpl__TotalAmount__c" label="Total Document Amount Field Name" description="The field name for picking total document amount." />
+            <!-- datasource="apex://dmpl.DocumentAmountPanelCurrencyFields" -->
+            <property name="paymentAmountHeading" type="String" label="Payment Amount Section Title" default="Payments" description="The title for payment amount section."/>
+            <property name="showPaymentLines" type="Boolean" default="true" label="Show Payment Lines" description="Show or Hide the payment lines."/>
+            <property name="showFinanceCaseLines" type="Boolean" default="true" label="Show Finance Case Lines" description="Show or Hide the finance case lines."/>            
+            <property name="showOutstandingAmountRow" type="Boolean" default="true" label="Show Outstanding Amount" description="Show or Hide outstanding amount line."/>
+            <property name="paymentTotalFieldName" type="String" default="dmpl__TotalCreditAmount__c" label="Total Payment Amount Field Name" description="The field name for picking total payment amount." />
+            <!-- datasource="apex://dmpl.DocumentAmountPanelCurrencyFields"  -->
+            <property name="outstandingAmountFieldName" type="String" default="dmpl__OutstandingAmount__c" label="Outstanding Amount Field Name" description="The field name for picking total outstanding amount."  />
+            <property name="objectApiFieldName" type="String" default="dmpl__SaleOrderId__c" label="Payment field Name" description="The field name to be used in desitnation Payment Document."/>
+            <!-- datasource="apex://dmpl.DocumentAmountPanelCurrencyFields"  -->
+            <property name="paymentButtonType" type="String" default="PaymentTaken" label="Payment Type" description="The payment type to be used in desitnation Payment Document."/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

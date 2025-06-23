@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>57.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <masterLabel>
+        Queue Notification
+    </masterLabel>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <property name="message" type="String" label="Message" default="A Background Operation is in progress. You can monitor the progress below. This notification will disappear once the job is completed." description="Message to be shown for queue execution." />
+            <supportedFormFactors>
+                <supportedFormFactor type="Small" />
+                <supportedFormFactor type="Large" />
+            </supportedFormFactors>
+        </targetConfig>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="recordId" type="String" default="{!recordId}"></property>
+            <property name="objectApiName" type="String" default=""></property>
+            <property name="message" type="String" label="Message" default="A Background Operation is in progress. You can monitor the progress below. This notification will disappear once the job is completed." description="Message to be shown for queue execution." />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

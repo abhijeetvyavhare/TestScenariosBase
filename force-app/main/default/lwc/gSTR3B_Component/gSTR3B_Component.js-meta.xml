@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>52.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage,lightningCommunity__Default">
+            <property name="recordId" type="String"/>
+            <property name="strTitle" type="String" label="Title" description="Enter the title"/>
+            <property name="objectName" type="String" label="Object Name" description="Enter the object name"/>
+            <property name="type" type="String" label="type" description="Enter the type"/>
+            <property name="financeFieldLookupAPI" type="String" label="Parent Field API Name" description="Enter the parent field API Name"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

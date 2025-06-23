@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>55.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <masterLabel>
+        Visit Plan Timeline View
+    </masterLabel>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <property name="title" type="String" label="Title" default="New" description="Title of the panel to be shown on top." />
+            <property name="recordFieldsetName" type="String" label="Visit Fieldset" description="The Visit fieldset to be used to show location details." /> 
+            <property name="remarksFieldName" type="String" label="Remarks Field Name" description="Remarks field name." /> 
+            <property name="actionName" type="String" label="Action Name"/> 
+            <property name="defaultIsCollapsed" type="Boolean" label="Default Is Collapsed?" description="Details should be by default collapsed or not." /> 
+            <supportedFormFactors>
+                <supportedFormFactor type="Small" />
+                <supportedFormFactor type="Large" />
+            </supportedFormFactors>
+        </targetConfig>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="recordId" type="String" default="{!recordId}"></property>
+            <property name="title" type="String" label="Title" default="New" description="Title of the panel to be shown on top." />
+            <property name="recordFieldsetName" type="String" label="Visit Fieldset" description="The Visit fieldset to be used to show location details." /> 
+            <property name="remarksFieldName" type="String" label="Remarks Field Name" description="Remarks field name." /> 
+            <property name="actionName" type="String" label="Action Name"/> 
+            <property name="defaultIsCollapsed" type="Boolean" label="Default Is Collapsed?" description="Details should be by default collapsed or not." /> 
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

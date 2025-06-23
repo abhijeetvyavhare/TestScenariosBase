@@ -1,0 +1,208 @@
+<template>
+    <c-header-card title={title} icon-name="custom:custom17" show-page-header="true" show-footer={getOutstandingSectionVisibility} show-header-border="true">
+        <lightning-button-group slot="actions">
+            <lightning-button if:true={showNewPaymentAction} label="Payment" icon-name="utility:new" onclick={handleNewPaymentClick}></lightning-button>
+            <lightning-button-menu alternative-text="New" menu-alignment="right" variant="border-filled" icon-name="utility:add">
+                <lightning-menu-item if:true={showNewPaymentAction}  label="New Payment Adjustment" onclick={handleNewPaymentAdjustmentClick} value="New Payment Adjustment"></lightning-menu-item>
+                <lightning-menu-item if:true={showNewFinanceCaseAction}  label="New Finance Case" onclick={handleNewFinanceCaseClick} value="New Finance Case"></lightning-menu-item>
+            </lightning-button-menu>
+        </lightning-button-group>
+        <div if:false={isLoaded}>
+            <lightning-spinner variant="brand" alternative-text="Loading" size="medium"></lightning-spinner>
+        </div>
+        <template if:true={hasError}><div class="slds-text-color_destructive">{error}</div></template>
+        <div if:true={isLoaded} class="slds-p-horizontal_small">
+            <div class="slds-p-left_small slds-text-title_bold">{documentAmountHeading}</div>
+            <div class="slds-p-horizontal_medium slds-m-bottom_x-small">
+                <table class="slds-table slds-table_cell-buffer slds-table_header-hidden">
+                    <thead class="slds-assistive-text">
+                        <tr class="slds-line-height_reset">
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Name"></div>
+                            </th>
+                            <th class="slds-text-align_right " scope="col">
+                                <div class="slds-truncate" title="Amount"></div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr if:true={showLineSubtotalRow} class="slds-hint-parent">
+                            <th data-label="Name" scope="row">
+                                <div class="slds-truncate" title={lineSubtotalTitle}>{lineSubtotalTitle}</div>
+                            </th>
+                            <td class="slds-text-align_right" data-label="Amount">{getLineSubTotal}
+                            </td>
+                        </tr>
+                        <template if:true={showDiscounts}>
+                            <template if:true={getDiscountAmount}>
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Name" scope="row">
+                                        <div class="slds-truncate" title={discountAmountTitle}>
+                                            <a href="#" onclick={handleDiscountAmountClick}>(-) {discountAmountTitle}</a>
+                                        </div>
+                                    </th>
+                                    <td class="slds-text-align_right" data-label="Amount">
+                                        <div class="slds-truncate" title={getDiscountAmount}>
+                                            <lightning-formatted-number value={getDiscountAmount} format-style="currency">
+                                            </lightning-formatted-number>
+                                        </div>
+                                    </td>
+                                </tr>    
+                            </template>
+                            <template if:true={getSchemeDiscountAmount}>
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Name" scope="row">
+                                        <div class="slds-truncate" title={schemeDiscountAmountTitle}>(-) {schemeDiscountAmountTitle}
+                                        </div>
+                                    </th>
+                                    <td class="slds-text-align_right" data-label="Amount">
+                                        <div class="slds-truncate" title={getSchemeDiscountAmount}>
+                                            <lightning-formatted-number value={getSchemeDiscountAmount} format-style="currency">
+                                            </lightning-formatted-number>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+                        </template>
+                        <template if:true={showTaxes} for:each={getDocumentLineTaxes} for:item="tax">
+                            <tr key={tax.TaxName} class="slds-hint-parent">
+                                <th data-label="Name" scope="row">
+                                    <div class="slds-truncate" title={tax.TaxName}>({tax.sign}) {tax.TaxName}
+                                    </div>
+                                </th>
+                                <td class="slds-text-align_right" data-label="Amount">
+                                    <div class="slds-truncate" title={tax.TaxAmount}>
+                                        <lightning-formatted-number value={tax.TaxAmount} format-style="currency">
+                                        </lightning-formatted-number>
+                                    </div>
+                                </td>
+                            </tr>
+                        </template>
+                        <template if:true={showTaxes} for:each={getDocumentTaxes} for:item="tax">
+                            <tr key={tax.TaxName} class="slds-hint-parent">
+                                <th data-label="Name" scope="row">
+                                    <div class="slds-truncate" title={tax.TaxName}>({tax.sign})&nbsp;
+                                        <a href="#" onclick={handleHeaderTaxClick}>{tax.TaxName}</a>
+                                    </div>
+                                </th>
+                                <td class="slds-text-align_right" data-label="Amount">
+                                    <div class="slds-truncate" title={tax.TaxAmount}>
+                                        <lightning-formatted-number value={tax.TaxAmount} format-style="currency">
+                                        </lightning-formatted-number>
+                                    </div>
+                                </td>
+                            </tr>
+                        </template>
+                        <tr if:true={showRoundOff} class="slds-hint-parent">
+                            <th data-label="Name" scope="row">
+                                <div class="slds-truncate" title={customLabel.roundOffLabel}>{customLabel.roundOffLabel}
+                                </div>
+                            </th>
+                            <td class="slds-text-align_right" data-label="Amount">
+                                <div class="slds-truncate">
+                                    <lightning-formatted-number value={getRoundOffAmount} format-style="currency">
+                                    </lightning-formatted-number>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr if:true={showDocumentTotalRow} class="slds-hint-parent">
+                            <th data-label="Name" scope="row">
+                                <div class="slds-truncate slds-text-title_bold" title={documentTotalTitle}>{documentTotalTitle}
+                                </div>
+                            </th>
+                            <td class="slds-text-align_right" data-label="Amount">
+                                <div class="slds-truncate">
+                                    <div class="slds-text-title_bold">{getDocumentTotal}</div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <template if:true={getPaymentSectionVisibility}>
+                <div class="slds-p-left_small slds-text-title_bold">{paymentAmountHeading}</div>
+                <div class="slds-p-horizontal_medium">
+                    <table class="slds-table slds-table_cell-buffer slds-table_header-hidden">
+                        <thead class="slds-assistive-text">
+                            <tr class="slds-line-height_reset">
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="c1"></div>
+                                </th>
+                                <th class="slds-text-align_right " scope="col">
+                                    <div class="slds-truncate" title="c2"></div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template if:true={getDocumentPayments} for:each={getDocumentPayments} for:item="payment">
+                                <tr key={payment.Id} class="slds-hint-parent">
+                                    <th data-label="c1" scope="row">
+                                        <a href={payment.recordLink} class="slds-truncate slds-text-link">{payment.Name} - {payment.dmpl__PaymentMode__c}</a>
+                                    </th>
+                                    <td class="slds-text-align_right" data-label="c2">
+                                        <div class="slds-truncate" title={payment.dmpl__Amount__c}>
+                                            <lightning-formatted-number value={payment.dmpl__Amount__c}
+                                                format-style="currency">
+                                            </lightning-formatted-number>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+                            <template if:true={getDocumentAdjustments} for:each={getDocumentAdjustments} for:item="adjustment">
+                                <tr key={adjustment.Id} class="slds-hint-parent">
+                                    <th data-label="c1" scope="row">
+                                        <a href={adjustment.recordLink} class="slds-truncate slds-text-link">{adjustment.documentName} - {adjustment.documentType}</a>
+                                    </th>
+                                    <td class="slds-text-align_right" data-label="c2">
+                                        <div class="slds-truncate" title={adjustment.dmpl__AdjustmentAmount__c}>
+                                            <lightning-formatted-number value={adjustment.dmpl__AdjustmentAmount__c}
+                                                format-style="currency">
+                                            </lightning-formatted-number>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+                            <template if:true={getDocumentFinanceCases} for:each={getDocumentFinanceCases}
+                                for:item="finance">
+                                <tr key={finance.Id} class="slds-hint-parent">
+                                    <th data-label="c1" scope="row">
+                                        <a href={finance.recordLink} class="slds-truncate slds-text-link">{finance.FinancerName} - {finance.Name} - 
+                                            <lightning-formatted-number value={finance.dmpl__RequestedAmount__c}
+                                                format-style="currency">
+                                            </lightning-formatted-number></a>
+                                    </th>
+                                    <td class="slds-text-align_right" data-label="c2">
+                                        <div class="slds-truncate" title={finance.dmpl__DisbursedAmount__c}>
+                                            <lightning-formatted-number value={finance.dmpl__DisbursedAmount__c}
+                                                format-style="currency">
+                                            </lightning-formatted-number>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+                            <tr class="slds-hint-parent" if:true={getPaymentsDataExists} >
+                                <th data-label="c1" scope="row">
+                                    <div class="slds-truncate slds-text-title_bold" title={customLabel.totalAmountLabel}>{customLabel.totalAmountLabel}
+                                    </div>
+                                </th>
+                                <td class="slds-text-align_right" data-label="c2">
+                                    <div class="slds-truncate slds-text-title_bold">
+                                        {getPaymentTotal}
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </template>
+        </div>
+        <div slot="footer">
+            <center>
+                <span if:true={showOutstandingAmountRowRed}
+                    class="slds-badge slds-theme_error">{customLabel.outstandingLabel} : {getOutstandingAmount}</span>
+                <span if:true={showOutstandingAmountRowGreen}
+                    class="slds-badge slds-theme_success">{customLabel.outstandingLabel} : {getOutstandingAmount}</span>
+            </center>
+        </div>
+    </c-header-card>
+</template>

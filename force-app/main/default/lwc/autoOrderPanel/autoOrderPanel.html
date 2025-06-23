@@ -1,0 +1,585 @@
+<template>
+    <ol class="slds-setup-assistant">
+        <li if:true={showInventoryProjectionOptions} class="slds-setup-assistant__item">
+            <article class="slds-setup-assistant__step">
+                <div class="slds-summary-detail slds-is-open">
+                    <div class="slds-container_fluid">
+                        <div class="slds-summary-detail__title">
+                            <div class="slds-setup-assistant__step-summary">
+                                <div class="slds-media">
+                                    <div class="slds-media__figure">
+                                        <div class="slds-progress-ring slds-progress-ring_large">
+                                            <div class="slds-progress-ring__progress" role="progressbar"
+                                                aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                                                <svg viewBox="-1 -1 2 2">
+                                                    <path class="slds-progress-ring__path"
+                                                        d="M 1 0 A 1 1 0 0 0 1.00 -0.00 L 0 0"></path>
+                                                </svg>
+                                            </div>
+                                            <div class="slds-progress-ring__content">1</div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-media__body slds-m-top_x-small">
+                                        <div class="slds-media">
+                                            <div class="slds-setup-assistant__step-summary-content slds-media__body">
+                                                <h3
+                                                    class="slds-setup-assistant__step-summary-title slds-text-heading_small">
+                                                    <button class="slds-button slds-button_reset"
+                                                        aria-controls="step-0-summary-action" aria-expanded="false"
+                                                        onclick={handleShowDetailsClick}>Inventory Projections</button>
+                                                </h3>
+                                                <p>Define how system calculates projected stock for Auto Ordering.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div aria-hidden="true" class="slds-summary-detail__content" id="step-0-summary-action">
+                            <div class="slds-setup-assistant__step-detail">
+                                <div class="slds-progress slds-progress_vertical slds-progress_success">
+                                    <ol class="slds-progress__list slds-progress__list-bordered">
+                                        <li class="slds-progress__item">
+                                            <div class="slds-progress__marker">
+                                                <span class="slds-assistive-text">Active</span>
+                                            </div>
+                                            <div class="slds-progress__item_content slds-grid slds-grid_align-spread">
+                                                <div class="slds-size_3-of-4">Include In-Transit Shipments.</div>
+                                                <div class="slds-grid slds-grid_align-end slds-size_1-of-4">
+                                                    <div class="slds-form-element">
+                                                        <label class="slds-checkbox_toggle slds-grid">
+                                                            <span
+                                                                class="slds-form-element__label slds-m-bottom_none slds-assistive-text">Include
+                                                                In-Transit Shipments</span>
+                                                            <lightning-input type="toggle" variant="label-inline"
+                                                                checked={recordDetails.includeInTransitShipments}
+                                                                data-fieldname="dmpl__IncludeInTransitShipments__c"
+                                                                message-toggle-active="On" message-toggle-inactive="Off"
+                                                                name="intransit"
+                                                                onchange={handleToggle}></lightning-input>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="slds-progress__item slds-is-active">
+                                            <div class="slds-progress__marker">
+                                                <span class="slds-assistive-text">Active</span>
+                                            </div>
+                                            <div class="slds-progress__item_content slds-grid slds-grid_align-spread">
+                                                <div class="slds-size_3-of-4">Include Pending Purchase Orders.</div>
+                                                <div class="slds-grid slds-grid_align-end slds-size_1-of-4">
+                                                    <div class="slds-form-element">
+                                                        <label class="slds-checkbox_toggle slds-grid">
+                                                            <span
+                                                                class="slds-form-element__label slds-m-bottom_none slds-assistive-text">Include
+                                                                Pending Purchase Orders</span>
+                                                            <lightning-input type="toggle" variant="label-inline"
+                                                                checked={recordDetails.includePendingPurchaseOrders}
+                                                                data-fieldname="dmpl__IncludePendingPurchaseOrders__c"
+                                                                message-toggle-active="On" message-toggle-inactive="Off"
+                                                                name="pendingpo"
+                                                                onchange={handleToggle}></lightning-input>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="slds-progress__item slds-is-active">
+                                            <div class="slds-progress__marker">
+                                                <span class="slds-assistive-text">Active</span>
+                                            </div>
+                                            <div class="slds-progress__item_content slds-grid slds-grid_align-spread">
+                                                <div class="slds-size_3-of-4">Consider Open Sale Orders.</div>
+                                                <div class="slds-grid slds-grid_align-end slds-size_1-of-4">
+                                                    <div class="slds-form-element">
+                                                        <label class="slds-checkbox_toggle slds-grid">
+                                                            <span
+                                                                class="slds-form-element__label slds-m-bottom_none slds-assistive-text">Include
+                                                                Open Sale Orders</span>
+                                                            <lightning-input type="toggle" variant="label-inline"
+                                                                checked={recordDetails.includeOpenSaleOrders}
+                                                                data-fieldname="dmpl__IncludeOpenSaleOrders__c"
+                                                                message-toggle-active="On" message-toggle-inactive="Off"
+                                                                name="pendingpo"
+                                                                onchange={handleToggle}></lightning-input>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="slds-progress__item slds-is-active">
+                                            <div class="slds-progress__marker">
+                                                <span class="slds-assistive-text">Active</span>
+                                            </div>
+                                            <div class="slds-progress__item_content slds-grid slds-grid_align-spread">
+                                                <div class="slds-size_3-of-4">Consider High Probability Quote.</div>
+                                                <div class="slds-grid slds-grid_align-end slds-size_1-of-4">
+                                                    <div class="slds-form-element">
+                                                        <label class="slds-checkbox_toggle slds-grid">
+                                                            <span
+                                                                class="slds-form-element__label slds-m-bottom_none slds-assistive-text">Include
+                                                                High Probability Quote</span>
+                                                            <lightning-input type="toggle" variant="label-inline"
+                                                                checked={recordDetails.includeHighProbabilityQuote}
+                                                                data-fieldname="dmpl__IncludeHighProbabilityQuote__c"
+                                                                message-toggle-active="On" message-toggle-inactive="Off"
+                                                                name="pendingpo"
+                                                                onchange={handleToggle}></lightning-input>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="slds-progress__item slds-is-active">
+                                            <div class="slds-progress__marker">
+                                                <span class="slds-assistive-text">Active</span>
+                                            </div>
+                                            <div class="slds-progress__item_content slds-grid slds-grid_align-spread">
+                                                <div class="slds-size_3-of-4">Consider Purchase Requisition.</div>
+                                                <div class="slds-grid slds-grid_align-end slds-size_1-of-4">
+                                                    <div class="slds-form-element">
+                                                        <label class="slds-checkbox_toggle slds-grid">
+                                                            <span
+                                                                class="slds-form-element__label slds-m-bottom_none slds-assistive-text">Consider
+                                                                Purchase Requisition</span>
+                                                            <lightning-input type="toggle" variant="label-inline"
+                                                                checked={recordDetails.includePurchaseRequisition}
+                                                                data-fieldname="dmpl__IncludePurchaseRequisition__c"
+                                                                message-toggle-active="On" message-toggle-inactive="Off"
+                                                                name="pendingpo"
+                                                                onchange={handleToggle}></lightning-input>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+                                <div class="slds-scoped-notification slds-media slds-media_center slds-scoped-notification_light"
+                                    role="status">
+                                    <div class="slds-media__figure">
+                                        <span class="slds-icon_container slds-icon-utility-info" title="information">
+                                            <svg class="slds-icon slds-icon_small slds-icon-text-default"
+                                                aria-hidden="true">
+                                                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#info">
+                                                </use>
+                                            </svg>
+                                            <span class="slds-assistive-text">information</span>
+                                        </span>
+                                    </div>
+                                    <div class="slds-media__body">
+                                        <p>Projected Stock = Available Stock + Stock In Transit + Pending Purchase
+                                            Orders - Open Sale Order - High Probability Quote - Purchase Requisition
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </li>
+        <li if:true={showAIRecommendationOptions} class="slds-setup-assistant__item">
+            <article class="slds-setup-assistant__step">
+                <div class=slds-setup-assistant__step-summary>
+                    <div class="slds-container_fluid">
+                        <div class="slds-summary-detail__title">
+                            <div class="slds-setup-assistant__step-summary">
+                                <div class="slds-media">
+                                    <div class="slds-media__figure">
+                                        <div class="slds-progress-ring slds-progress-ring_large">
+                                            <div class="slds-progress-ring__progress" role="progressbar"
+                                                aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                                                <svg viewBox="-1 -1 2 2">
+                                                    <path class="slds-progress-ring__path"
+                                                        d="M 1 0 A 1 1 0 0 0 1.00 -0.00 L 0 0"></path>
+                                                </svg>
+                                            </div>
+                                            <div class="slds-progress-ring__content">{getAIRecommendationIndex}</div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-media__body slds-m-top_x-small">
+                                        <div class="slds-media">
+                                            <div class="slds-setup-assistant__step-summary-content slds-media__body">
+                                                <h3
+                                                    class="slds-setup-assistant__step-summary-title slds-text-heading_small">
+                                                    <button class="slds-button slds-button_reset"
+                                                        aria-controls="step-1-summary-action" aria-expanded="true">
+                                                        Apply AI Recommendation</button>
+                                                </h3>
+                                                <p>Define what the system will pick if there are different AI models for assistance.</p>
+                                            </div>
+                                            <div class="slds-media__figure slds-media__figure_reverse">
+                                                <lightning-combobox name="comboField" options={aiOptions}
+                                                data-fieldname="dmpl__AIRecommendation__c" value={recordDetails.AIRecommendations}
+                                                    onchange={handleValueChange}
+                                                    ></lightning-combobox>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </li>
+        <li if:true={showInventoryAttributeOptions} class="slds-setup-assistant__item">
+            <article class="slds-setup-assistant__step">
+                <div class=slds-setup-assistant__step-summary>
+                    <div class="slds-container_fluid">
+                        <div class="slds-summary-detail__title">
+                            <div class="slds-setup-assistant__step-summary">
+                                <div class="slds-media">
+                                    <div class="slds-media__figure">
+                                        <div class="slds-progress-ring slds-progress-ring_large">
+                                            <div class="slds-progress-ring__progress" role="progressbar"
+                                                aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                                                <svg viewBox="-1 -1 2 2">
+                                                    <path class="slds-progress-ring__path"
+                                                        d="M 1 0 A 1 1 0 0 0 1.00 -0.00 L 0 0"></path>
+                                                </svg>
+                                            </div>
+                                            <div class="slds-progress-ring__content">{getInventoryAttributesIndex}</div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-media__body slds-m-top_x-small">
+                                        <div class="slds-media">
+                                            <div class="slds-setup-assistant__step-summary-content slds-media__body">
+                                                <h3
+                                                    class="slds-setup-assistant__step-summary-title slds-text-heading_small">
+                                                    <button class="slds-button slds-button_reset"
+                                                        aria-controls="step-1-summary-action" aria-expanded="true">Apply
+                                                        Inventory Attributes (Min, Max Settings)</button>
+                                                </h3>
+                                                <p>Define what the system will pick if there is a difference between
+                                                    manually specified Inventory Attributes and System Calculated
+                                                    Inventory Attributes.</p>
+                                            </div>
+                                            <div class="slds-media__figure slds-media__figure_reverse">
+                                                <lightning-combobox name="comboField" options={minMaxOptions}
+                                                data-fieldname="dmpl__ApplyInventoryAttributeSettings__c" value={recordDetails.applyInventoryAttributeSettings}
+                                                    onchange={handleValueChange}
+                                                    ></lightning-combobox>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </li>
+        <li if:true={showFSNOptions} class="slds-setup-assistant__item">
+            <article class="slds-setup-assistant__step">
+                <div class="slds-summary-detail slds-is-open">
+                    <div class="slds-m-right_x-small slds-m-top_x-small ">
+                        <lightning-button-icon icon-class="slds-summary-detail__action-icon" icon-name="utility:switch"
+                            variant="bare" alternative-text="Toggle details"></lightning-button-icon>
+                    </div>
+                    <div class="slds-container_fluid">
+                        <div class="slds-summary-detail__title">
+                            <div class="slds-setup-assistant__step-summary">
+                                <div class="slds-media">
+                                    <div class="slds-media__figure">
+                                        <div class="slds-progress-ring slds-progress-ring_large">
+                                            <div class="slds-progress-ring__progress" role="progressbar"
+                                                aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                                                <svg viewBox="-1 -1 2 2">
+                                                    <path class="slds-progress-ring__path"
+                                                        id="slds-progress-ring-path-54"
+                                                        d="M 1 0 A 1 1 0 0 0 1.00 -0.00 L 0 0"></path>
+                                                </svg>
+                                            </div>
+                                            <div class="slds-progress-ring__content">{getShowFSNIndex}</div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-media__body slds-m-top_x-small">
+                                        <div class="slds-media">
+                                            <div class="slds-setup-assistant__step-summary-content slds-media__body">
+                                                <h3
+                                                    class="slds-setup-assistant__step-summary-title slds-text-heading_small">
+                                                    <button class="slds-button slds-button_reset"
+                                                        aria-controls="step-3-summary-action"
+                                                        aria-expanded="false">Exclude FSN Items</button>
+                                                </h3>
+                                                <p>Select below options if you want to exclude items as per FSN
+                                                    classifications.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div aria-hidden="true" class="slds-summary-detail__content" id="step-3-summary-action">
+                            <div class="slds-setup-assistant__step-detail">
+                                <div class="slds-progress slds-progress_vertical slds-progress_success">
+                                    <ol class="slds-progress__list slds-progress__list-bordered">
+                                        <li class="slds-progress__item">
+                                            <div class="slds-progress__marker">
+                                                <span class="slds-assistive-text">Active</span>
+                                            </div>
+                                            <div class="slds-progress__item_content slds-grid slds-grid_align-spread">
+                                                <div class="slds-size_3-of-4">Exclude Fast Moving Items.</div>
+                                                <div class="slds-grid slds-grid_align-end slds-size_1-of-4">
+                                                    <div class="slds-form-element">
+                                                        <label class="slds-checkbox_toggle slds-grid">
+                                                            <span
+                                                                class="slds-form-element__label slds-m-bottom_none slds-assistive-text">Exclude
+                                                                Fast Moving Items</span>
+                                                            <lightning-input type="toggle" variant="label-inline"
+                                                                checked={recordDetails.exclueFastMovingItems}
+                                                                data-fieldname="dmpl__ExcludeFastMovingItems__c"
+                                                                message-toggle-active="On" message-toggle-inactive="Off"
+                                                                name="pendingpo"
+                                                                onchange={handleToggle}></lightning-input>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="slds-progress__item slds-is-active">
+                                            <div class="slds-progress__marker">
+                                                <span class="slds-assistive-text">Active</span>
+                                            </div>
+                                            <div class="slds-progress__item_content slds-grid slds-grid_align-spread">
+                                                <div class="slds-size_3-of-4">Exclude Slow Moving Items.</div>
+                                                <div class="slds-grid slds-grid_align-end slds-size_1-of-4">
+                                                    <div class="slds-form-element">
+                                                        <label class="slds-checkbox_toggle slds-grid">
+                                                            <span
+                                                                class="slds-form-element__label slds-m-bottom_none slds-assistive-text">Exclude
+                                                                Slow Moving Items</span>
+                                                            <lightning-input type="toggle" variant="label-inline"
+                                                                checked={recordDetails.excludeSlowMovingItems}
+                                                                data-fieldname="dmpl__ExcludeSlowMovingItems__c"
+                                                                message-toggle-active="On" message-toggle-inactive="Off"
+                                                                name="pendingpo"
+                                                                onchange={handleToggle}></lightning-input>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="slds-progress__item slds-is-active">
+                                            <div class="slds-progress__marker">
+                                                <span class="slds-assistive-text">Active</span>
+                                            </div>
+                                            <div class="slds-progress__item_content slds-grid slds-grid_align-spread">
+                                                <div class="slds-size_3-of-4">Exclude Non Moving Items.</div>
+                                                <div class="slds-grid slds-grid_align-end slds-size_1-of-4">
+                                                    <div class="slds-form-element">
+                                                        <label class="slds-checkbox_toggle slds-grid">
+                                                            <span
+                                                                class="slds-form-element__label slds-m-bottom_none slds-assistive-text">Exclude
+                                                                Non Moving Items</span>
+                                                            <lightning-input type="toggle" variant="label-inline"
+                                                                checked={recordDetails.excludeNonMovingItems}
+                                                                data-fieldname="dmpl__ExcludeNonMovingItems__c"
+                                                                message-toggle-active="On" message-toggle-inactive="Off"
+                                                                name="pendingpo"
+                                                                onchange={handleToggle}></lightning-input>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ol>
+                                    <div aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" role="progressbar">
+                                        <span class="slds-assistive-text">Progress: 50%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </li>
+        <li if:true={showABCOptions} class="slds-setup-assistant__item">
+            <article class="slds-setup-assistant__step">
+                <div class="slds-summary-detail slds-is-open">
+                    <div class="slds-m-right_x-small slds-m-top_x-small ">
+                        <lightning-button-icon icon-class="slds-summary-detail__action-icon" icon-name="utility:switch"
+                            variant="bare" alternative-text="Toggle details"></lightning-button-icon>
+                    </div>
+                    <div class="slds-container_fluid">
+                        <div class="slds-summary-detail__title">
+                            <div class="slds-setup-assistant__step-summary">
+                                <div class="slds-media">
+                                    <div class="slds-media__figure">
+                                        <div class="slds-progress-ring slds-progress-ring_large">
+                                            <div class="slds-progress-ring__progress" role="progressbar"
+                                                aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                                                <svg viewBox="-1 -1 2 2">
+                                                    <path class="slds-progress-ring__path"
+                                                        id="slds-progress-ring-path-55"
+                                                        d="M 1 0 A 1 1 0 0 0 1.00 -0.00 L 0 0"></path>
+                                                </svg>
+                                            </div>
+                                            <div class="slds-progress-ring__content">{getShowABCIndex}</div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-media__body slds-m-top_x-small">
+                                        <div class="slds-media">
+                                            <div class="slds-setup-assistant__step-summary-content slds-media__body">
+                                                <h3
+                                                    class="slds-setup-assistant__step-summary-title slds-text-heading_small">
+                                                    <button class="slds-button slds-button_reset"
+                                                        aria-controls="step-3-summary-action"
+                                                        aria-expanded="false">Exclude ABC Items</button>
+                                                </h3>
+                                                <p>Select below options if you want to exclude items as per ABC
+                                                    categories.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div aria-hidden="true" class="slds-summary-detail__content" id="step-4-summary-action">
+                            <div class="slds-setup-assistant__step-detail">
+                                <div class="slds-progress slds-progress_vertical slds-progress_success">
+                                    <ol class="slds-progress__list slds-progress__list-bordered">
+                                        <li class="slds-progress__item">
+                                            <div class="slds-progress__marker">
+                                                <span class="slds-assistive-text">Active</span>
+                                            </div>
+                                            <div class="slds-progress__item_content slds-grid slds-grid_align-spread">
+                                                <div class="slds-size_3-of-4">Exclude A Category Items.</div>
+                                                <div class="slds-grid slds-grid_align-end slds-size_1-of-4">
+                                                    <div class="slds-form-element">
+                                                        <label class="slds-checkbox_toggle slds-grid">
+                                                            <span
+                                                                class="slds-form-element__label slds-m-bottom_none slds-assistive-text">Exclude
+                                                                A Category Items</span>
+                                                            <lightning-input type="toggle" variant="label-inline"
+                                                                checked={recordDetails.excludeACategoryItems}
+                                                                data-fieldname="dmpl__ExcludeACategoryItems__c"
+                                                                message-toggle-active="On" message-toggle-inactive="Off"
+                                                                name="pendingpo"
+                                                                onchange={handleToggle}></lightning-input>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="slds-progress__item slds-is-active">
+                                            <div class="slds-progress__marker">
+                                                <span class="slds-assistive-text">Active</span>
+                                            </div>
+                                            <div class="slds-progress__item_content slds-grid slds-grid_align-spread">
+                                                <div class="slds-size_3-of-4">Exclude B Category Items.</div>
+                                                <div class="slds-grid slds-grid_align-end slds-size_1-of-4">
+                                                    <div class="slds-form-element">
+                                                        <label class="slds-checkbox_toggle slds-grid">
+                                                            <span
+                                                                class="slds-form-element__label slds-m-bottom_none slds-assistive-text">Exclude
+                                                                B Category Items</span>
+                                                            <lightning-input type="toggle" variant="label-inline"
+                                                                checked={recordDetails.excludeBCategoryItems}
+                                                                data-fieldname="dmpl__ExcludeBCategoryItems__c"
+                                                                message-toggle-active="On" message-toggle-inactive="Off"
+                                                                name="pendingpo"
+                                                                onchange={handleToggle}></lightning-input>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="slds-progress__item slds-is-active">
+                                            <div class="slds-progress__marker">
+                                                <span class="slds-assistive-text">Active</span>
+                                            </div>
+                                            <div class="slds-progress__item_content slds-grid slds-grid_align-spread">
+                                                <div class="slds-size_3-of-4">Exclude C Category Items.</div>
+                                                <div class="slds-grid slds-grid_align-end slds-size_1-of-4">
+                                                    <div class="slds-form-element">
+                                                        <label class="slds-checkbox_toggle slds-grid">
+                                                            <span
+                                                                class="slds-form-element__label slds-m-bottom_none slds-assistive-text">Exclude
+                                                                C Category Items</span>
+                                                            <lightning-input type="toggle" variant="label-inline"
+                                                                checked={recordDetails.excludeCCategoryItems}
+                                                                data-fieldname="dmpl__ExcludeCCategoryItems__c"
+                                                                message-toggle-active="On" message-toggle-inactive="Off"
+                                                                name="pendingpo"
+                                                                onchange={handleToggle}></lightning-input>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ol>
+                                    <div aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" role="progressbar">
+                                        <span class="slds-assistive-text">Progress: 50%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </li>
+        <li if:true={showBudgetOptions} class="slds-setup-assistant__item">
+            <article class="slds-setup-assistant__step">
+                <div class="slds-summary-detail slds-is-open">
+                    <div class="slds-m-right_x-small slds-m-top_x-small ">
+                        <lightning-button-icon icon-class="slds-summary-detail__action-icon" icon-name="utility:switch"
+                            variant="bare" alternative-text="Toggle details"></lightning-button-icon>
+                    </div>
+                    <div class="slds-container_fluid">
+                        <div class="slds-summary-detail__title">
+                            <div class="slds-setup-assistant__step-summary">
+                                <div class="slds-media">
+                                    <div class="slds-media__figure">
+                                        <div class="slds-progress-ring slds-progress-ring_large">
+                                            <div class="slds-progress-ring__progress" role="progressbar"
+                                                aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                                                <svg viewBox="-1 -1 2 2">
+                                                    <path class="slds-progress-ring__path"
+                                                        id="slds-progress-ring-path-56"
+                                                        d="M 1 0 A 1 1 0 0 0 1.00 -0.00 L 0 0"></path>
+                                                </svg>
+                                            </div>
+                                            <div class="slds-progress-ring__content">{getBudgetIndex}</div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-media__body slds-m-top_x-small">
+                                        <div class="slds-media">
+                                            <div class="slds-setup-assistant__step-summary-content slds-media__body">
+                                                <h3
+                                                    class="slds-setup-assistant__step-summary-title slds-text-heading_small">
+                                                    <button class="slds-button slds-button_reset"
+                                                        aria-controls="step-3-summary-action" aria-expanded="false">Fit
+                                                        to Budget</button>
+                                                </h3>
+                                                <p>Enter budget to create order with in amount.</p>
+                                            </div>
+                                            <div class="slds-media__figure slds-media__figure_reverse">
+                                                <lightning-input type="text"
+                                                data-fieldname="dmpl__BudgetAmount__c" variant="label-inline" value={recordDetails.budgetAmount}
+                                                    onblur={handleValueChange}></lightning-input>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div aria-hidden="true" class="slds-summary-detail__content" id="step-5-summary-action">
+                            <div class="slds-setup-assistant__step-detail">
+                                <div class="slds-progress slds-progress_vertical slds-progress_success">
+                                    <div aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" role="progressbar">
+                                        <span class="slds-assistive-text">Progress: 50%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </li>
+    </ol>
+</template>

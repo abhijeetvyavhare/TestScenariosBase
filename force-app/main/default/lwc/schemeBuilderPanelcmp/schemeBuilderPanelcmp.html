@@ -1,0 +1,29 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <template if:true={schemeLines}>
+        <template class="slds-expression" iterator:it={schemeLines}>
+            <div key={it.value.Id}>
+                <div if:false={it.first} class="slds-m-top_small"></div>
+                <c-scheme-builder-line-rowcmp 
+                    title={it.value.Name}
+                    condition-title={conditionTitle}
+                    result-title={resultTitle}
+                    schme-line-object-api-name={schmeLineObjectApiName}
+                    scheme-line={it.value}
+                    allow-editing={allowEditing}
+                ></c-scheme-builder-line-rowcmp>
+            </div>
+        </template>    
+    </template>
+    <template if:true={allowEditing}>
+        <div class="slds-m-top_small"></div>
+        <c-scheme-builder-line-rowcmp 
+                title = "Add Scheme Slab"
+                is-new allow-editing
+                condition-title={conditionTitle}
+                result-title={resultTitle}
+                schme-line-object-api-name={schmeLineObjectApiName}
+                scheme-line={schemeLine}
+        ></c-scheme-builder-line-rowcmp>    
+    </template>
+</template>

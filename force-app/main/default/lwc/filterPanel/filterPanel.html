@@ -1,0 +1,42 @@
+<template>
+    <lightning-card title={title} icon-name="standard:calibration">
+        <div if:true={isLoaded} class="slds-var-p-horizontal_small">
+            <lightning-record-edit-form id="lightning-record-form" density="comfy"
+                object-api-name={objectApiName} onsuccess={handleSuccess} onload={handleLoad}
+                onerror={handleError}>
+                <lightning-messages> </lightning-messages>
+                <div class="slds-hide">
+                    <template if:true={getFieldsetFields} for:each={getFieldsetFields} for:item="field">
+                        <template if:false={field.required}>
+                            <div class="slds-col slds-size_1-of-2" key={field.apiName}>
+                                <lightning-layout-item flexibility="auto" key={field.apiName}>
+                                    <lightning-input-field id={field.apiName} field-name={field.apiName}
+                                        onchange={handleFieldChange}>
+                                    </lightning-input-field>
+                                </lightning-layout-item>
+                            </div>                                
+                        </template>
+                    </template>
+                </div>
+                <div class="slds-grid slds-wrap">
+                    <template if:true={getFieldsetFields} for:each={getFieldsetFields} for:item="field">
+                        <template if:true={field.required}>
+                            <div class="slds-col slds-size_1-of-2" key={field.apiName}>
+                                <lightning-layout-item flexibility="auto" key={field.apiName}>
+                                    <lightning-input-field id={field.apiName} field-name={field.apiName}
+                                        onchange={handleFieldChange}>
+                                    </lightning-input-field>
+                                </lightning-layout-item>
+                            </div>                                
+                        </template>
+                    </template>
+                    <!-- <div class="slds-col slds-size_1-of-1">
+                        <lightning-button class="slds-float_right" variant="brand" type="submit" name="save" label="Search"
+                        disabled={isSubmitDisabled}>
+                    </lightning-button>
+                    </div> -->
+                </div>
+            </lightning-record-edit-form>
+        </div>
+    </lightning-card>
+</template>

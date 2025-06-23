@@ -1,0 +1,3 @@
+.dmpl-expression__options {
+    width: calc(2*var(--lwc-sizeSmall,15rem));
+}

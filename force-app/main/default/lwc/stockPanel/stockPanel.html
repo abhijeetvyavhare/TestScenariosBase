@@ -1,0 +1,52 @@
+<template>
+    <lightning-quick-action-panel header={title}>
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col">
+                <lightning-radio-group name="cbG" options={locationOptions} value={locationValueSelected}
+                    onchange={handleLocationOptionChange} type="button">
+                </lightning-radio-group>
+            </div>
+            <div class="slds-col">
+                <div class="slds-grid slds-grid_vertical slds-gutters">
+                    <div class="slds-col slds-m-top_small">
+                        <lightning-input type="checkbox" label="Out of Stock" name="input1"
+                            onchange={handleOutOfStockChange}></lightning-input>
+                    </div>
+                    <template if:false={getRelationListHidden}>
+                        <div class="slds-col">
+                            <lightning-combobox name="RelationList" label="Relation Name" value={selectedRelationName}
+                                placeholder="Select Related Object to view stock" options={relationListOptions}
+                                onchange={handleRelationNameChange}></lightning-combobox>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <div class="slds-m-top_small">
+            <c-header-card show-page-header show-header-border hide-body-margin title="Stock View">
+                <div slot="actions" class="slds-grid">
+                    <lightning-input type="search" class="slds-col" variant="label-hidden" onchange={handleSearch}
+                        placeholder="search..." value={searchKey}></lightning-input>
+                </div>
+                <c-dmpl-datatable key-field="id" suppress-bottom-bar hide-checkbox-column
+                    columns={dataColumns}
+                    onselectedrec={handleSelectedRec} data={locationList}>
+                </c-dmpl-datatable>
+            </c-header-card>
+        </div>
+ 
+        <div slot="footer">
+            <template if:true={getStockTransferVisible}>
+                <lightning-button disabled={isBranchNull} onclick={handleCreateTR} variant="brand" label="Stock Transfer" class="slds-m-right_x-small"></lightning-button>
+            </template>
+            <template if:true={getFulfilmentVisible}>
+                <lightning-button variant="brand" onclick={handleCreateFF} label="Create Fulfilment" class="slds-m-right_x-small"></lightning-button>
+            </template>
+            <template if:true={getPOVisible}>
+                <lightning-button variant="brand" onclick={handleCreatePO} disabled={isBranchNull} label="Create Purchase Order" class="slds-m-right_x-small"></lightning-button>
+            </template>
+            <lightning-button variant="neutral" onclick={handleDialogClose} label="Close"></lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

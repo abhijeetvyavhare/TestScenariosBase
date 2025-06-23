@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>59.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DMPL Related List</masterLabel>
+    <description>The component displays a datatable that supports editing related list.</description>
+    <targets>
+        <target>lightning__RecordPage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <property name="iconName" type="String" label="Related list icon name" default="standard:case" description="Refer to SLDS icons." required="true"/>
+            <property name="pRelatedObjectApiName" type="String" label="Child Object API name" default="Case" description="Enter the API name of the child object." required="true"/>
+            <property name="pRelatedListTitle" type="String" label="Related List Title" default="Related Cases" description="The title of the related list to be displayed." required="true"/>
+            <property name="pRelatedListName" type="String" label="Related List ID" default="Cases" required="true" description="Child Relationship Name (Append '__r' if needed)." />
+            <property name="pRelatedFields" type="String" label="List Columns" default="Name, CreatedDate, CreatedBy.Alias" description="Provide API names of the fields in the child object (comma separated)." placeholder="Field1, Field2__c, Lookup.Name, etc." required="true" />
+            <property name="pEditableRelatedFields" type="String" label="Editable List Columns" description="Provide API names of the fields in the child object (comma separated)." placeholder="Field1, Field2__c, Lookup.Name, etc." />
+            <property name="pUploadFields" type="String" label="Upload Columns" description="Provide API names of the fields in the child object (comma separated) to be used for Upload." placeholder="Field1, Field2__c, Lookup.Name, etc." />
+            <property name="showNewButton" type="Boolean" label="Allow users to create records" description="Enable to show the New button on the related list" default="true" />
+            <property name="pActionList" type="String" label="Parent Action List" description="Provide Action Name and API names of the actions in the parent object (comma separated)." placeholder="Sample|dmpl__sampleaction|isEstimateVisible, Sample2|dmpl__sampleaction2|isSampleVisible, etc." />
+            <property name="pDefaultSortedBy" type="String" label="Sorted By (Default)" default="CreatedDate" description="Provide the API name of the field in the child object, to sort the list by default." required="true" />
+            <property name="pDefaultSortDirection" type="String" label="Default sort direction" default="desc" datasource="asc,desc" required="true" />
+            <property name="pFilterText" type="String" label="Filter Criteria (GraphQL syntax)" description="The filter to apply to the related list records, in GraphQL syntax." />
+            <property name="pPageSize" type="Integer" label="Page Size" description="Number of records to load in each request." default="50" required="true" max="200" />
+            <supportedFormFactors>
+                <supportedFormFactor type="Small"/>
+                <supportedFormFactor type="Large"/>
+            </supportedFormFactors>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

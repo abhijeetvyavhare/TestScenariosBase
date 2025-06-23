@@ -1,0 +1,159 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <div if:true={isEditing}>
+        <lightning-record-edit-form density="comfy" 
+        object-api-name={childObjectApiName} 
+        record-id={recordId}
+        onload={handleLoad}
+        onsuccess={handleSuccess}>
+        <lightning-messages> </lightning-messages>
+            <li class="slds-expression__row">
+                <fieldset>
+                    <legend class="slds-expression__legend">
+                        <span>{getRecordLabel}</span>
+                        <span class="slds-assistive-text">{getRecordLabel}</span>
+                    </legend>    
+                    <div class="slds-hide">
+                        <lightning-input-field field-name="Name">
+                        </lightning-input-field>
+                        <lightning-input-field field-name={getFieldValue}>
+                        </lightning-input-field>
+                        <lightning-input-field field-name={getFieldName}>
+                        </lightning-input-field>
+                        <lightning-input-field field-name={parentFieldName}>
+                        </lightning-input-field>
+                        <lightning-input-field field-name={getOperator}>
+                        </lightning-input-field>
+                        <lightning-input-field field-name={getSequenceNumber}>
+                        </lightning-input-field>
+                    </div>
+                    <div class="slds-grid slds-gutters_xx-small">
+                        <div class="slds-col">
+                            <lightning-combobox
+                            name="comboField"
+                            label="Field Name"
+                            value={selectedField}
+                            options={fieldOptions}
+                            onchange={handleFieldChange} ></lightning-combobox>
+                        </div>
+                        <div class="slds-col slds-grow-none">
+                            <lightning-combobox
+                                name="oprField"
+                                label="Operator"
+                                value={selectedOperator}
+                                options={filteredOperatorOptions}
+                                onchange={handleOperatorChange} ></lightning-combobox>
+                        </div>
+                        <div class="slds-col" if:true={isPickListField}>
+                            <lightning-combobox
+                                name="comboField"
+                                label="Picklist Value"
+                                options={options}
+                                value={selectedPicklistValue}
+                                onchange={handlePickListChange} ></lightning-combobox>
+                        </div>
+                        <div class="slds-col" if:true={isDateLitral}>
+                            <lightning-combobox
+                                name="comboDtField"
+                                label="Date Litrals"
+                                options={dateOptions}
+                                value={selectedDateLitralValue}
+                                onchange={handleDateLitralChange} ></lightning-combobox>
+                        </div>
+                        <div class="slds-col" if:true={isNumbericField}>
+                            <lightning-input type="number" name="numericInput" onchange={handleChange} value={booleanValue} label="Number" ></lightning-input>
+                        </div>
+                        <div class="slds-col" if:true={isDateNumber}> 
+                            <lightning-input type="number" name="numDateInput" onchange={handleDateLitralNChange} value={dateLitralNValue} label="n Value" ></lightning-input>
+                        </div>
+                        <div class="slds-col" if:true={isCurrencyField}>
+                            <lightning-input type="number" name="currencyInput" onchange={handleChange} label="Currency" value={floatValue} formatter="currency" ></lightning-input>
+                        </div>
+                        <div class="slds-col" if:true={isDoubleField}>
+                            <lightning-input type="number" name="doubleInput" onchange={handleChange} label="Decimal" value={floatValue} formatter="currency" ></lightning-input>
+                        </div>
+                        <div class="slds-col" if:true={isEmailTimeField}>
+                            <lightning-input type="email" name="emailInput" onchange={handleChange} value={stringValue} label="Email"></lightning-input>
+                        </div>
+                        <div class="slds-col" if:true={isUrlTimeField}>
+                            <lightning-input type="url" name="urllInput" onchange={handleChange} value={stringValue} label="Url"></lightning-input>
+                        </div>
+                        <div class="slds-col" if:true={isStringField}>
+                            <lightning-input type="text" name="textInput" onchange={handleChange} value={stringValue} label="Text" ></lightning-input>
+                        </div>
+                        <div class="slds-col" if:true={isDateField}>
+                            <lightning-input type="date" name="dateInput" onchange={handleChange} value={dateValue} label="Date" ></lightning-input>
+                        </div>
+                        <div class="slds-col" if:true={isDateTimeField}>
+                            <lightning-input type="datetime" name="dateTimeInput" onchange={handleChange} value={dateTimeValue} label="Date Time" ></lightning-input>
+                        </div>
+                        <div class="slds-col" if:true={isPhoneTimeField}>
+                            <lightning-input type="tel" name="phoneInput" onchange={handleChange} value={phoneValue} label="Phone" ></lightning-input>
+                        </div>
+                        <div class="slds-col slds-grow-none slds-m-top_large" if:true={isBooleanField}>
+                            <lightning-input 
+                            type="toggle" 
+                            value={booleanValue}
+                            checked={booleanValue}
+                            onchange={handleToggleChange} 
+                            message-toggle-active="true" 
+                            message-toggle-inactive="false" 
+                            name="booleanValue"></lightning-input>
+                        </div>
+                        <div class="slds-col slds-grow-none slds-m-top_large">
+                            <lightning-button-icon icon-name="utility:save" variant="border-filled"
+                            alternative-text="Save Condition" title="Save" onclick={handleSaveCondition}>
+                            </lightning-button-icon>
+                        </div>
+                        <div class="slds-col slds-grow-none slds-m-top_large">
+                            <lightning-button-icon icon-name="utility:clear" variant="border-filled"
+                            alternative-text="Cancel" title="Cancel" onclick={handleCancelCondition}>
+                            </lightning-button-icon>
+                        </div>
+                    </div>
+                </fieldset>
+            </li>
+        </lightning-record-edit-form>
+    </div>
+
+    <div if:false={isEditing}>
+        <lightning-record-view-form density="comfy" 
+        object-api-name={childObjectApiName} 
+        record-id={recordId}>
+            <lightning-messages> </lightning-messages>
+            <li class="slds-expression__row">
+                <fieldset>
+                    <legend class="slds-expression__legend">
+                        <span>{getRecordLabel}</span>
+                        <span class="slds-assistive-text">
+                            {getRecordLabel}</span>
+                    </legend>    
+                    <div class="slds-grid slds-gutters_xx-small">
+                        <div class="slds-col">
+                            <lightning-output-field field-name={getFieldName}>
+                            </lightning-output-field>
+                        </div>
+                        <div class="slds-col">
+                            <lightning-output-field field-name={getOperator}>
+                            </lightning-output-field>
+                        </div>
+                        <div class="slds-col">
+                            <lightning-output-field field-name={getFieldValue}>
+                            </lightning-output-field>
+                        </div>
+                        <div class="slds-col slds-grow-none slds-m-top_large">
+                            <lightning-button-icon icon-name="utility:edit" variant="border-filled"
+                            alternative-text="Edit Condition" title="Edit" onclick={handleEditCondition}>
+                            </lightning-button-icon>
+                        </div>
+                        <div class="slds-col slds-grow-none slds-m-top_large">
+                            <lightning-button-icon icon-name="utility:delete" variant="border-filled"
+                                alternative-text="Delete Condition" title="Delete" onclick={handleDeleteCondition}>
+                            </lightning-button-icon>
+                        </div>
+                    </div>
+                </fieldset>
+            </li>
+        </lightning-record-view-form>
+    </div>
+</template>

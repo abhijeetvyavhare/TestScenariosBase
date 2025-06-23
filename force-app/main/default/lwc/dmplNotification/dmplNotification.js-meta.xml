@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>57.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <masterLabel>
+        Scoped Notification
+    </masterLabel>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <property name="notificationStyle" type="String" label="Style" default="tile" description="Style for Notification. One of the following value. (tile, prompt, confirm, alert)" />
+            <property name="message" type="String" label="Message" default="This is a scoped Notification." description="Message to be shown when message field name is not provided." />
+            <property name="messageFieldName" type="String" label="Message Field Name" description="Field Name from the current record to pick the message." />
+            <property name="variant" type="String" label="Variant" default='info' description="Style of Notification. One of the following values. Tile->(info, success, warning, error) Popup->(header,  headerless)" />
+            <property name="popupTheme" type="String" label="Popup Theme" default='default' description="Style of Popup. One of the following values.(default: white, shade: gray, inverse: dark blue, alt-inverse: darker blue, success: green, info: gray-ish blue, warning: yellow, error: red, offline: ​black​)" />
+            <property name="promptHeader" type="String" label="Prompt Header" description="Header text for prompt variant." />
+            <property name="promptField" type="String" label="Prompt Update Field" description="Field to update with result of popup result." />
+            <property name="isBlink" type="Boolean" label="Blink?" default='false' description="Blink the text in notification." />
+            <supportedFormFactors>
+                <supportedFormFactor type="Small" />
+                <supportedFormFactor type="Large" />
+            </supportedFormFactors>
+        </targetConfig>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="recordId" type="String" default="{!recordId}"></property>
+            <property name="objectApiName" type="String" default=""></property>
+            <property name="notificationStyle" type="String" label="Style" default="tile" description="Style for Notification. One of the following value. (tile, prompt, confirm, alert)" />
+            <property name="message" type="String" label="Message" default="This is a scoped Notification." description="Message to be shown when message field name is not provided." />
+            <property name="messageFieldName" type="String" label="Message Field Name" description="Field Name from the current record to pick the message." />
+            <property name="variant" type="String" label="Variant" default='info' description="Style of Notification. One of the following values. Tile->(info, success, warning, error) Popup->(header,  headerless)" />
+            <property name="popupTheme" type="String" label="Popup Theme" default='default' description="Style of Popup. One of the following values.(default: white, shade: gray, inverse: dark blue, alt-inverse: darker blue, success: green, info: gray-ish blue, warning: yellow, error: red, offline: ​black​)" />
+            <property name="promptHeader" type="String" label="Prompt Header" description="Header text for prompt variant." />
+            <property name="promptField" type="String" label="Prompt Update Field" description="Field to update with result of popup result." />
+            <property name="isBlink" type="Boolean" label="Blink?" default='false' description="Blink the text in notification." />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

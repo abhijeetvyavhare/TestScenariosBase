@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>54.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <masterLabel>
+        Product Demo Panel
+    </masterLabel>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <property name="titleTimeSlot" type="String" label="Title" default="Time Slots" description="Title of the panel to be shown on top."/>
+            <property name="availableLabel" type="String" label="Available Label" default="Available" description="Label for available quantity."/>
+            <property name="objectApiName" type="String" label="Object Api Name" description="Object Api Name to show records for."/>
+            <property name="recordFieldsetNameTimeSlot" type="String" label="Record Fieldset" description="The fieldset to be used to filter." /> 
+            <property name="defaultFieldValuesTimeSlot" type="String" label="Default Field Values" description="The default values to pupulate record with." /> 
+            <property name="transactionType" type="String" label="Transaction Type" description="Transaction of which capcity needs to be shown."/>
+            <property name="siteTransactionType" type="String" label="Onsite Transaction Type" description="Transaction of which capcity needs to be shown."/>
+            <property name="noDataMessageDateSlot" type="String" label="No Data Message" default="Select a partner location to see the available slots." description="Message to be shown when no data is available."/>
+            <property name="noDataMessageTimeSlot" type="String" label="Time Slot No Data Message" default="Select a Date Slot to see the available Time Slots." description="Message to be shown when no data is available."/>
+            <property name="daysCount" type="Integer" min="7" max="30" label="Days Count" default="7" description="Number of days to show."/>
+            <property name="branchId" type="String" label="Branch" description="Branch of which capcity needs to be shown."/>
+
+            <property name="titlePartnerPanel" type="String" label="Title" default="Partner Locations" description="Title of the panel to be shown on top."/>
+            <property name="recordFieldsetNamePartnerPanel" type="String" label="Branch Fieldset" description="The Branch fieldset to be used to show location details." /> 
+            <property name="showFilterPanelPartnerPanel" type="Boolean" label="Show Filter Panel" description="Show or Hide the Filter Panel."/>
+            <property name="noDataMessagePartnerPanel" type="String" label="No Data Message" default="No Partner Locatons available!" description="Message to be shown when no data is available."/>
+
+            <property name="titleRecordPanel" type="String" label="Title" description="Title of the panel to be shown on top."/>
+            <property name="objectApiNameRecordPanel" type="String" label="Object Api Name" description="Object Api Name to show records for."/>
+            <property name="recordFieldsetNameRecordPanel" type="String" label="Record Fieldset" description="The fieldset to be used to show fields." /> 
+            <property name="defaultFieldValuesRecordPanel" type="String" label="Default Field Values" description="The default values to pupulate record with." /> 
+
+            <supportedFormFactors>
+                <supportedFormFactor type="Small"/>
+                <supportedFormFactor type="Large"/>
+            </supportedFormFactors>
+        </targetConfig>
+        <targetConfig targets="lightning__AppPage">
+            <property name="titleTimeSlot" type="String" label="Title" default="Time Slots" description="Title of the panel to be shown on top."/>
+            <property name="availableLabel" type="String" label="Available Label" default="Available" description="Label for available quantity."/>
+            <property name="objectApiName" type="String" label="Object Api Name" description="Object Api Name to show records for."/>
+            <property name="recordFieldsetNameTimeSlot" type="String" label="Record Fieldset" description="The fieldset to be used to filter." /> 
+            <property name="defaultFieldValuesTimeSlot" type="String" label="Default Field Values" description="The default values to pupulate record with." /> 
+            <property name="transactionType" type="String" label="Transaction Type" description="Transaction of which capcity needs to be shown."/>
+            <property name="siteTransactionType" type="String" label="Onsite Transaction Type" description="Transaction of which capcity needs to be shown."/>
+            <property name="noDataMessageDateSlot" type="String" label="No Data Message" default="Select a partner location to see the available slots." description="Message to be shown when no data is available."/>
+            <property name="noDataMessageTimeSlot" type="String" label="Time Slot No Data Message" default="Select a Date Slot to see the available Time Slots." description="Message to be shown when no data is available."/>
+            <property name="daysCount" type="Integer" min="7" max="30" label="Days Count" default="7" description="Number of days to show."/>
+            <property name="branchId" type="String" label="Branch" description="Branch of which capcity needs to be shown."/>
+
+            <property name="titlePartnerPanel" type="String" label="Title" default="Partner Locations" description="Title of the panel to be shown on top."/>
+            <property name="recordFieldsetNamePartnerPanel" type="String" label="Branch Fieldset" description="The Branch fieldset to be used to show location details." /> 
+            <property name="showFilterPanelPartnerPanel" type="Boolean" label="Show Filter Panel" description="Show or Hide the Filter Panel."/>
+            <property name="noDataMessagePartnerPanel" type="String" label="No Data Message" default="No Partner Locatons available!" description="Message to be shown when no data is available."/>
+
+            <property name="titleRecordPanel" type="String" label="Title" description="Title of the panel to be shown on top."/>
+            <property name="objectApiNameRecordPanel" type="String" label="Object Api Name" description="Object Api Name to show records for."/>
+            <property name="recordFieldsetNameRecordPanel" type="String" label="Record Fieldset" description="The fieldset to be used to show fields." /> 
+            <property name="defaultFieldValuesRecordPanel" type="String" label="Default Field Values" description="The default values to pupulate record with." /> 
+
+            <supportedFormFactors>
+                <supportedFormFactor type="Small"/>
+                <supportedFormFactor type="Large"/>
+            </supportedFormFactors>
+        </targetConfig>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="titleTimeSlot" type="String" label="Title" default="Time Slots" description="Title of the panel to be shown on top."/>
+            <property name="availableLabel" type="String" label="Available Label" default="Available" description="Label for available quantity."/>
+            <property name="objectApiName" type="String" label="Object Api Name" description="Object Api Name to show records for."/>
+            <property name="recordFieldsetNameTimeSlot" type="String" label="Record Fieldset" description="The fieldset to be used to filter." /> 
+            <property name="defaultFieldValuesTimeSlot" type="String" label="Default Field Values" description="The default values to pupulate record with." /> 
+            <property name="transactionType" type="String" label="Transaction Type" description="Transaction of which capcity needs to be shown."/>
+            <property name="siteTransactionType" type="String" label="Onsite Transaction Type" description="Transaction of which capcity needs to be shown."/>
+            <property name="noDataMessageDateSlot" type="String" label="No Data Message" default="Select a partner location to see the available slots." description="Message to be shown when no data is available."/>
+            <property name="noDataMessageTimeSlot" type="String" label="Time Slot No Data Message" default="Select a Date Slot to see the available Time Slots." description="Message to be shown when no data is available."/>
+            <property name="daysCount" type="Integer" min="7" max="30" label="Days Count" default="7" description="Number of days to show."/>
+            <property name="branchId" type="String" label="Branch" description="Branch of which capcity needs to be shown."/>
+
+            <property name="titlePartnerPanel" type="String" label="Title" default="Partner Locations" description="Title of the panel to be shown on top."/>
+            <property name="recordFieldsetNamePartnerPanel" type="String" label="Branch Fieldset" description="The Branch fieldset to be used to show location details." /> 
+            <property name="showFilterPanelPartnerPanel" type="Boolean" label="Show Filter Panel" description="Show or Hide the Filter Panel."/>
+            <property name="noDataMessagePartnerPanel" type="String" label="No Data Message" default="No Partner Locatons available!" description="Message to be shown when no data is available."/>
+
+            <property name="titleRecordPanel" type="String" label="Title" description="Title of the panel to be shown on top."/>
+            <property name="objectApiNameRecordPanel" type="String" label="Object Api Name" description="Object Api Name to show records for."/>
+            <property name="recordFieldsetNameRecordPanel" type="String" label="Record Fieldset" description="The fieldset to be used to show fields." /> 
+            <property name="defaultFieldValuesRecordPanel" type="String" label="Default Field Values" description="The default values to pupulate record with." /> 
+
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

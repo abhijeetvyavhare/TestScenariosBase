@@ -1,0 +1,38 @@
+<template>
+    <fieldset class={getWidgetStyle}>
+        <legend class="slds-form-element__legend slds-form-element__label">{heading}</legend>
+        <div class="slds-form-element__control">
+            <template if:true={sourceData} for:each={sourceData} for:item="item">
+                <template if:false={item.hideOption}>
+                    <div key={item.value} class={getPickerSize}>
+                        <input type="radio" id={item.value} value={item.value} name="visualPickerOption" onclick={handleValuePicked}/>
+                        <label for={item.value}>
+                            <span class={getPickerStyle}>
+                                <template if:true={isIcon}>
+                                    <span class="slds-icon_container">
+                                        <lightning-icon size="x-small" icon-name="standard:account"></lightning-icon>
+                                    </span>
+                                </template>
+                                <template if:false={isIcon}>
+                                    <span>
+                                        <span class={getTitleStyle}>{item.title}</span>
+                                        <span class="slds-text-title">{item.subTitle}</span>    
+                                    </span>                                    
+                                </template>
+                            </span>
+                            <template if:true={hasBody}>
+                                <span class="slds-visual-picker__body">
+                                    <span class="slds-text-heading_small">{item.heading}</span>
+                                    <span class="slds-text-title">{item.subHeading}</span>
+                                </span>    
+                            </template>
+                            <span class="slds-icon_container slds-visual-picker__text-check">
+                                <lightning-icon class="slds-icon-text-check" size="x-small" icon-name="utility:check"></lightning-icon>
+                            </span>
+                        </label>
+                    </div>
+                </template>
+            </template>
+        </div>
+    </fieldset>
+</template>

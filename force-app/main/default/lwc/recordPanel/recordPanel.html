@@ -1,0 +1,20 @@
+<template>
+    <c-header-card title={title} icon-name={iconName} 
+        show-page-header 
+        view-style={viewStyle} 
+        nav-object-api-name={targetObjectApiName}
+        nav-record-id={targetObjectRecordId}
+        show-header-border>
+        <div if:true={isLoaded} class="slds-var-p-horizontal_small">
+            <lightning-record-form
+                onsuccess={handleSuccess} 
+                onload={handleLoad}
+                onerror={handleError}
+                mode={viewMode}
+                object-api-name={targetObjectApiName}
+                record-id={targetObjectRecordId}
+                fields={getFieldsetFieldNames}>
+            </lightning-record-form>
+        </div>
+    </c-header-card>
+</template>

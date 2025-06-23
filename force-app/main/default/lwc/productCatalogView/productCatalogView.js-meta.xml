@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>54.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightning__RecordAction</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <masterLabel>
+        Product Catalog View
+    </masterLabel>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordAction">
+            <actionType>ScreenAction</actionType>
+          </targetConfig>
+          <targetConfig targets="lightningCommunity__Default">
+            <property name="recordId" type="String" default="{!recordId}"></property>
+            <property name="objectApiName" type="String" default=""></property>
+            <property name="title" type="String" label="Title" default="Product Configurator" description="Title of the panel to be shown on top."/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

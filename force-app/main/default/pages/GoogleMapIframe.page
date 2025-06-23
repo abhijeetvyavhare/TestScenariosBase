@@ -1,0 +1,45 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false" docType="html-5.0">
+    <html>
+        <head>
+            <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDzU2-Wrk-s-j_JXPWXTIVgb5H3DLznH4k"></script>
+            <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+            <script type="text/javascript"> 
+	            var lexOrigin = "https://computing-site-3752-dev-ed--dmpl.scratch.vf.force.com'";
+            	window.addEventListener("message", function(event){
+                    console.log('Origin ' + event.origin);
+                    console.log('data ' + event.data);
+                    if(event.origin !== lexOrigin){
+                        return;
+                    }
+                    var ds = new google.maps.DirectionsService();
+                    var dd = new google.maps.DirectionsRenderer();
+                    dd.setMap(map);
+                    var request = {
+                        origin : 'Mumbai'.
+                        destination : 'Pune',
+                        travelMode : google.maps.DirectionTravelMode.DRIVING
+                        };
+                   	ds.route(request, function(response, status){
+                        if(status == google.maps.DirectionStatus.OK){
+                            dd.setDirections(response);
+                            }
+                        });
+                    });
+            		var map;
+            		$(document).ready(function(){
+                        map = new google.maps.Map(document.getElementById('map'),{
+                            zoom : 15,
+							mapTypeId : google.maps.MapTypeId.ROADMAP
+                            });
+                        });
+            </script>            
+        </head>
+        <body>
+            <div style="width: 100%; height:100%" id="mapDiv">
+                <div id="map" style="width: 100%; height: 450px; flat: left; margin:0px;color:black;">
+                    
+                </div>
+            </div>
+        </body>
+    </html>
+</apex:page>

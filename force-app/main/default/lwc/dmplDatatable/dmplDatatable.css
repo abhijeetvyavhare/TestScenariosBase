@@ -1,0 +1,10 @@
+.THIS table tr td:first-child {
+    position:sticky;
+    z-index: 1
+}
+.slds-truncate{
+    max-width: 100% !important;
+    /* overflow: hidden; */
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}

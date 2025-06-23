@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>54.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightning__HomePage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <property name="title" type="String" label="Title" default="Service Recommendations" description="Title of the panel to be shown on top." />
+            <property name="targetObjectApiName" type="String" label="Object API Name" default="" description="Object API Name, in which item needs to be added eg: dmpl__RepairOrderLine__c" />
+            <property name="parentLookupField" type="String" label="Parent Lookup Field API Name" default="" description="Parent's Lookup Field API Name eg: dmpl__RepairOrderId__c" />
+            <property name="chidlLookupField" type="String" label="Child Lookup Field API Name" default="" description="Child's Lookup Field API Name eg: dmpl__RepairOrderLineId__c" />
+            <property name="selectionColumnName" type="String" label="Selection Column Name" default="" description="Provide column to display on selection column" />
+            <supportedFormFactors>
+                <supportedFormFactor type="Small" />
+                <supportedFormFactor type="Large" />
+            </supportedFormFactors>
+        </targetConfig>
+        <targetConfig targets="lightning__AppPage">
+            <property name="title" type="String" label="Title" default="Service Recommendations" description="Title of the panel to be shown on top." />
+            <property name="targetObjectApiName" type="String" label="Object API Name" default="" description="Object API Name, in which item needs to be added eg: dmpl__RepairOrderLine__c" />
+            <property name="parentLookupField" type="String" label="Parent Lookup Field API Name" default="" description="Parent's Lookup Field API Name eg: dmpl__RepairOrderId__c" />
+            <property name="chidlLookupField" type="String" label="Child Lookup Field API Name" default="" description="Child's Lookup Field API Name eg: dmpl__RepairOrderLineId__c" />
+            <property name="selectionColumnName" type="String" label="Selection Column Name" default="" description="Provide column to display on selection column" />
+            <supportedFormFactors>
+                <supportedFormFactor type="Small" />
+                <supportedFormFactor type="Large" />
+            </supportedFormFactors>
+        </targetConfig>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="recordId" type="String" default="{!recordId}"></property>
+            <property name="title" type="String" label="Title" default="Service Recommendations" description="Title of the panel to be shown on top." />
+            <property name="targetObjectApiName" type="String" label="Object API Name" default="" description="Object API Name, in which item needs to be added eg: dmpl__RepairOrderLine__c" />
+            <property name="parentLookupField" type="String" label="Parent Lookup Field API Name" default="" description="Parent's Lookup Field API Name eg: dmpl__RepairOrderId__c" />
+            <property name="chidlLookupField" type="String" label="Child Lookup Field API Name" default="" description="Child's Lookup Field API Name eg: dmpl__RepairOrderLineId__c" />
+            <property name="selectionColumnName" type="String" label="Selection Column Name" default="" description="Provide column to display on selection column" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

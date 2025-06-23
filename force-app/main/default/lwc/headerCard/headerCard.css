@@ -1,0 +1,10 @@
+.dmpl-page-header {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom: var(--lwc-borderWidthThin) solid var(--lwc-colorBorder);
+}
+
+.dmpl-card__body {
+    margin-top: 0;
+    margin-bottom: 0;
+}

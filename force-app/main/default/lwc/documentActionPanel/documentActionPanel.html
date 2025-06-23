@@ -1,0 +1,83 @@
+<template>
+  <template if:false={isLoaded}>
+    <div class="spinnerHolder lds-align_absolute-center">
+      <lightning-spinner variant="brand" alternative-text="Loading" size="medium"></lightning-spinner>
+    </div>
+  </template>
+  <template if:true={isLoaded}>
+    <c-wizard header={getDocumentTitle} hide-progress variant="base-shaded" current-step={currentStep}
+      oncomplete={handleClose} oncancel={handleClose} hide-action-slot>
+      <c-wizard-step label="Select Source" name="step-1" hide-next-button>
+        <template if:false={isLoaded}>
+          <lightning-spinner variant="brand" alternative-text="Loading" size="medium"></lightning-spinner>
+        </template>
+        <template if:false={hasActionSettings}>
+          <div if:true={isLoaded}>
+            <c-illustration-no-data size="small" message={customLabel.noDocumentActionSettings} view="desert">
+            </c-illustration-no-data>
+          </div>
+        </template>
+        <template if:true={hasActionSettings}>
+          <c-dmpl-visual-picker is-vertical picker-style="text" heading="Select the Action to perform."
+            source-data={actionSettings} onvaluechanged={handlePickerValueChanged}>
+          </c-dmpl-visual-picker>
+        </template>
+      </c-wizard-step>
+      <c-wizard-step label="Select records to release." name="step-2" hide-next-button>
+          <c-header-card show-page-header show-header-border hide-body-margin>
+            <div slot="title">
+              <lightning-radio-group name="documentScope1" options={documentScopeOptions} value={documentScope}
+                onchange={handleDocumentOptionChange} type="button" disabled={isAllRecordsRestricted}>
+              </lightning-radio-group>
+            </div>
+            <div slot="actions" class="slds-grid">
+              <lightning-input type="search" class="slds-col" variant="label-hidden" onchange={handleSearch}
+                placeholder="search..." value={searchKey}></lightning-input>
+              <template if:false={getIsAllLinesVisible}>
+                <lightning-button-menu alternative-text="Show menu" class="slds-col" variant="border-filled"
+                  menu-alignment="right" icon-name="utility:connected_apps">
+                  <lightning-menu-item value="SelectAll" onclick={handleSelectAllClick}
+                    label="Select All"></lightning-menu-item>
+                  <lightning-menu-item value="DeselectAll" onclick={handleDeSelectAllClick}
+                    label="Deselect All"></lightning-menu-item>
+                </lightning-button-menu>
+              </template>
+            </div>
+            <div if:true={isWorking}>
+              <lightning-spinner variant="brand" alternative-text="Loading" size="medium"></lightning-spinner>
+            </div>
+            <div class="dmpl-scrollable">
+              <template if:true={getIsAllLinesVisible}>
+                <lightning-datatable key-field="Id" suppress-bottom-bar hide-checkbox-column
+                  columns={allChildObjectColumns} data={childObjectsData}
+                  sorted-by={sortBy} sorted-direction={sortDirection} onsort={doSorting} >
+                </lightning-datatable>
+              </template>
+              <template if:false={getIsAllLinesVisible}>
+                <c-dmpl-datatable key-field="Id" suppress-bottom-bar hide-checkbox-column
+                  onrowselection={handleRowSelection} oncellchange={handleCellChange} columns={selectedChildObjectColumns}
+                  onselectedrec={handleSelectedRec} draft-values={draftValues} data={childObjectsData}
+                  sorted-by={sortBy} sorted-direction={sortDirection} onsort={doSorting}>
+                </c-dmpl-datatable>
+              </template>
+            </div>
+            <div if:true={noChildObjectsData}>
+              <c-illustration-no-data size="small" message="No eligible records!" view="openroad">
+              </c-illustration-no-data>
+            </div>
+          </c-header-card>
+      </c-wizard-step>
+      <c-wizard-step label="Summary" name="step-3" hide-previous-button>
+        <template if:true={performActionResult}>
+          <c-dmpl-tile show-avatar avatar-icon-name="custom:custom18" navigation-url={navigationUrl}
+            heading={performActionResult.title} sub-heading={performActionResult.subTitle}>
+          </c-dmpl-tile>
+        </template>
+      </c-wizard-step>
+      <template if:true={isSaveVisible}>
+        <lightning-button slot="actions" disabled={isSaveDisabled} variant="brand" label="Save" title="Save"
+          onclick={handleSave} icon-name="utility:save"></lightning-button>
+      </template>
+    </c-wizard>
+  </template>
+</template>

@@ -1,0 +1,143 @@
+<template>
+    <c-header-card title={title} icon-name="standard:timeslot" show-page-header="true" show-header-border="true">
+        <div slot="actions">
+            <div class="slds-no-flex">
+                <lightning-record-edit-form id="lightning-record-form" density="comfy"
+                object-api-name='dmpl__ProductDemo__c' onsuccess={handleSuccess} onload={handleLoad}
+                onerror={handleError}>
+                <lightning-messages> </lightning-messages>
+                <div class="slds-hide">
+                    <template if:true={getFieldsetFields} for:each={getFieldsetFields} for:item="field">
+                        <template if:false={field.required}>
+                            <lightning-layout-item flexibility="no-flex" class="slds-p-right_xx-small" key={field.apiName}>
+                                <lightning-input-field id={field.apiName} variant="label-hidden" field-name={field.apiName}
+                                    onchange={handleFieldChange}>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                        </template>
+                    </template>
+                </div>
+                <lightning-layout vertical-align="center" multiple-rows>
+                    <lightning-layout-item class="slds-p-right_xx-small" flexibility="auto">
+                        <lightning-input class="dmpl-toogle-spacing" type="toggle" variant="label-inline" label="Onsite?" 
+                        value={isOnsiteSelected} message-toggle-active="" message-toggle-inactive ="" name="isOnsiteSelected" 
+                        onchange={handleIsOnsiteChange}></lightning-input>
+                    </lightning-layout-item>
+                    <template if:true={getFieldsetFields} for:each={getFieldsetFields} for:item="field">
+                        <template if:true={field.required}>
+                            <lightning-layout-item flexibility="auto" class="slds-p-right_xx-small" key={field.apiName}>
+                                <lightning-input-field id={field.apiName} variant="label-hidden" field-name={field.apiName}
+                                    onchange={handleFieldChange}>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                        </template>
+                    </template>
+                    <lightning-layout-item  class="slds-p-right_xx-small" flexibility="auto">
+                        <lightning-combobox name="daysCount" value={daysCount} options={daysOptions}
+                            onchange={handleDaysCountChange} variant="label-hidden"></lightning-combobox>
+                    </lightning-layout-item>
+                </lightning-layout>
+                </lightning-record-edit-form>
+            </div>     
+       </div>
+        <div class="slds-grid slds-gutters slds-grid_vertical slds-m-around_xx-small">
+            <div class="slds-col">
+                <fieldset class="slds-form-element">
+                    <legend class="slds-form-element__legend slds-form-element__label">Select A Date Slot</legend>
+                    <div class="slds-form-element__control dmpl-slot">
+                        <template if:true={getDateSlotAvailable}>
+                            <template for:each={dateSlots} for:item="dateSlot">
+                                <div class="slds-visual-picker dmpl-visual-picker dmpl-visual-picker_xxsmall" key={dateSlot.bookingDate}>
+                                    <input id={dateSlot.bookingDate} type="radio" value={dateSlot.bookingDate}
+                                        name="dateSlot" onclick={handleDaySlotChange} />
+                                    <label for={dateSlot.bookingDate}>
+                                        <span class="dmpl-visual-picker__tl-box">
+                                            <span class="slds-text-heading_small">
+                                                {dateSlot.available}
+                                            </span>
+                                            <span if:true={availableLabel} 
+                                                class="slds-p-left_xxx-small slds-text-body_small slds-text-color_weak">
+                                                {availableLabel}
+                                            </span>
+                                        </span>
+                                        <span class="dmpl-visual-picker__b-box">
+                                            <lightning-progress-bar value={dateSlot.percentage} size="medium" variant="circular">
+                                            </lightning-progress-bar>
+                                        </span>
+                                        <span
+                                            class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center">
+                                            <span>
+                                                <span class="slds-text-heading_large">
+                                                    <lightning-formatted-date-time value={dateSlot.bookingDate}
+                                                        day="2-digit"></lightning-formatted-date-time>
+                                                </span>
+                                                <span class="slds-text-title">
+                                                    <lightning-formatted-date-time value={dateSlot.bookingDate}
+                                                        weekday="short"></lightning-formatted-date-time>,
+                                                    <lightning-formatted-date-time class="slds-p-left_xxx-small"
+                                                        value={dateSlot.bookingDate} month="short">
+                                                    </lightning-formatted-date-time>
+                                                </span>
+                                            </span>
+                                        </span>
+                                        <span class="slds-icon_container slds-visual-picker__text-check">
+                                            <lightning-icon class="slds-icon-text-check" size="x-small" icon-name="utility:check"></lightning-icon>
+                                        </span>
+                                    </label>
+                                </div>
+                            </template>
+                        </template>
+                        <template if:false={getDateSlotAvailable}>
+                            <c-illustration-no-data message={noDataMessage} errors={errors}>
+                            </c-illustration-no-data>
+                        </template>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="slds-col">
+                <fieldset class="slds-form-element">
+                    <legend class="slds-form-element__legend slds-form-element__label">Pick A Time Slot</legend>
+                    <div class="slds-form-element__control slds-scrollable_none dmpl-time-slot">
+                        <template if:true={getTimeSlotAvailable}>
+                            <template for:each={timeSlots} for:item="timeSlot">
+                                <div class="slds-visual-picker dmpl-visual-picker dmpl-visual-picker_long" key={timeSlot.id}>
+                                    <input id={timeSlot.id} type="radio" value={timeSlot.id} name="timeSlot"
+                                        onclick={handleTimeSlotChange} />
+                                    <label for={timeSlot.id}>
+                                        <span class="dmpl-visual-picker__t-box">
+                                            <b><span class="slds-text-title">
+                                                {timeSlot.displayName}
+                                            </span></b>
+                                        </span>
+                                        <span
+                                            class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center">
+                                            <span>
+                                            <span class="slds-text-heading_large">
+                                                {timeSlot.available}
+                                            </span>
+                                            <span if:true={availableLabel} class="slds-text-title">
+                                                {availableLabel}
+                                            </span>
+                                        </span>
+                                        </span>
+                                        <span class="dmpl-visual-picker__b-box">
+                                            <lightning-progress-bar value={timeSlot.percentage} size="small" variant="circular">
+                                            </lightning-progress-bar>
+                                        </span>
+                                        <span class="slds-icon_container slds-visual-picker__text-check">
+                                            <lightning-icon class="slds-icon-text-check" size="x-small" icon-name="utility:check"></lightning-icon>
+                                        </span>
+                                    </label>
+                                </div>
+                            </template>
+                        </template>
+                        <template if:false={getTimeSlotAvailable}>
+                            <c-illustration-no-data message={noDataMessageSlot} errors={errors}>
+                            </c-illustration-no-data>
+                        </template>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </c-header-card>
+</template>

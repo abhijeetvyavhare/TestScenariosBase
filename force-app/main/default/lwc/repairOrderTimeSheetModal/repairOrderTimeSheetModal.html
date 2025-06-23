@@ -1,0 +1,156 @@
+<template>
+    <template if:true={showModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_xx-large">
+            <div class="slds-modal__container">
+                <lightning-record-edit-form object-api-name="dmpl__RepairOrderTimeSheet__c"
+                    record-id={currentTimeSheetId} onsuccess={handleSuccess} onerror={handleError}>
+
+                    <header class="slds-modal__header">
+                        <lightning-button-icon class="slds-modal__close" title="Close" icon-name="utility:close"
+                            icon-class="slds-button_icon-inverse" onclick={cancel}></lightning-button-icon>
+                        <h2 class="slds-text-heading_medium slds-hyphenate header-string">
+                            {timeSheetName}
+                        </h2>
+                        <h2 class="slds-text-heading_medium slds-hyphenate header-slot">
+                            <slot name="header"></slot>
+                        </h2>
+                    </header>
+                    <article class="slds-scrollable_y" style="max-height: 350px">
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <article>
+                                <lightning-messages> </lightning-messages>
+                                <div class="slds-hide">
+                                    <lightning-input-field field-name="dmpl__RepairOrderId__c" value={recordId}>
+                                    </lightning-input-field>
+                                    <lightning-input-field field-name="dmpl__RepairStatus__c" value={status}>
+                                    </lightning-input-field>
+                                    <lightning-input-field field-name="dmpl__WorkStarted__c" value={workStarted}>
+                                    </lightning-input-field>
+                                    <lightning-input-field field-name="dmpl__WorkPaused__c" value={workPaused}>
+                                    </lightning-input-field>
+                                    <lightning-input-field field-name="dmpl__WorkEnded__c" value={workEnded}>
+                                    </lightning-input-field>
+                                </div>
+                                <template if:false={hasWorkOrderLines}>
+                                    <c-illustration-no-data size="small" message='No Work Order lines to allocate.' view="desert">
+                                    </c-illustration-no-data>
+                                </template>
+                                <template if:true={hasWorkOrderLines}>
+                                    <lightning-layout>
+                                        <lightning-layout-item flexibility="no-grow" padding="horizontal-small-t"
+                                            class="slds-size--12-of-12 horizontal-min-width">
+                                            <span class="slds-text-body_medium">Technician</span>
+                                            <lightning-input-field variant="label-hidden"
+                                                field-name="dmpl__TechnicianId__c">
+                                            </lightning-input-field>
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+                                    <div if:false={allowRowSelection} class="slds-p-top_medium slds-p-bottom_medium">
+                                        <span class="slds-text-body_medium">Select work items to allocate</span>
+                                        <lightning-datatable hide-checkbox-column
+                                            class="slds-size--12-of-12 horizontal-min-width" key-field="Id"
+                                            data={workOrderLines} columns={columns}>
+                                        </lightning-datatable>
+                                    </div>
+                                    <div if:true={allowRowSelection} class="slds-p-top_medium slds-p-bottom_medium">
+                                        <span class="slds-text-body_medium">Select work items to allocate</span>
+                                        <lightning-datatable class="slds-size--12-of-12 horizontal-min-width"
+                                            key-field="Id" data={workOrderLines} columns={columns}
+                                            onrowselection={updateSelectedRecords}>
+                                        </lightning-datatable>
+                                    </div>
+                                    <div>
+                                        <span class="slds-text-body_medium">Actions</span>
+                                        <div class="slds-card_boundary">
+                                            <lightning-layout>
+                                                <lightning-layout-item padding="horizontal-small-t"
+                                                    class="slds-size--6-of-12">
+                                                    <lightning-input class="slds-p-top_medium slds-p-left_small"
+                                                        id="dmpl__WorkStarted__c" type="toggle" label="Work Start"
+                                                        name="input1" onchange={handleCheckBox} checked={workStarted}
+                                                        disabled={workStarted}></lightning-input>
+                                                </lightning-layout-item>
+                                                <lightning-layout-item padding="horizontal-small-t"
+                                                    class="slds-size--6-of-12 slds-p-left_x-small">
+                                                    <lightning-output-field field-name="dmpl__WorkStartDate__c">
+                                                    </lightning-output-field>
+                                                </lightning-layout-item>
+                                            </lightning-layout>
+                                            <div class="">
+                                                <lightning-layout if:true={workPaused}>
+                                                    <lightning-layout-item padding="horizontal-small-t"
+                                                        class="slds-size--6-of-12 slds-p-left_x-small">
+                                                        <lightning-output-field field-name="dmpl__WorkEndDate__c">
+                                                        </lightning-output-field>
+                                                    </lightning-layout-item>
+                                                </lightning-layout>
+                                                <lightning-layout if:true={workPaused}>
+                                                    <lightning-layout-item padding="horizontal-small-t"
+                                                        class="slds-size--12-of-12 slds-p-left_x-small">
+                                                        <lightning-output-field class=""
+                                                            field-name="dmpl__RepairPauseReason__c">
+                                                        </lightning-output-field>
+                                                    </lightning-layout-item>
+                                                </lightning-layout>
+
+                                                <lightning-layout if:true={workEnded}>
+
+                                                    <lightning-layout-item padding="horizontal-small-t"
+                                                        class="slds-size--6-of-12 slds-p-left_x-small">
+                                                        <lightning-output-field field-name="dmpl__WorkEndDate__c">
+                                                        </lightning-output-field>
+                                                    </lightning-layout-item>
+                                                </lightning-layout>
+                                                <lightning-layout if:true={showPauseAndEndState}>
+                                                    <lightning-layout-item padding="horizontal-small-t"
+                                                        class="slds-size--6-of-12">
+                                                        <lightning-input class="slds-p-top_medium slds-p-left_x-small"
+                                                            id="dmpl__WorkPaused__c" type="toggle" label="Work Pause"
+                                                            name="dmpl__WorkPaused__c" onchange={handleCheckBox}
+                                                            checked={workPaused}>
+                                                        </lightning-input>
+                                                    </lightning-layout-item>
+                                                    <lightning-layout-item padding="horizontal-small-t"
+                                                        class="slds-size--6-of-12">
+                                                        <lightning-input class="slds-p-top_medium"
+                                                            id="dmpl__WorkEnded__c" type="toggle" label="Work End"
+                                                            name="dmpl__WorkEnded__c" onchange={handleCheckBox}
+                                                            checked={workEnded}>
+                                                        </lightning-input>
+                                                    </lightning-layout-item>
+                                                </lightning-layout>
+                                                <lightning-layout if:true={showPauseAndEndState}>
+                                                    <lightning-layout-item padding="horizontal-small-t"
+                                                        class="slds-size--12-of-12 slds-p-left_x-small">
+                                                        <lightning-input-field field-name="dmpl__WorkEndDate__c">
+                                                        </lightning-input-field>
+                                                    </lightning-layout-item>
+                                                </lightning-layout>
+                                                <lightning-layout if:true={showPauseAndEndState}>
+                                                    <lightning-layout-item padding="horizontal-small-t"
+                                                        class="slds-size--12-of-12 slds-p-left_x-small slds-p-right_x-small">
+                                                        <lightning-input-field field-name="dmpl__RepairPauseReason__c">
+                                                        </lightning-input-field>
+                                                    </lightning-layout-item>
+
+                                                </lightning-layout>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </article>
+                        </div>
+                    </article>
+                    <footer class="slds-modal__footer">
+                        <lightning-button type="cancel" onclick={cancel} label="Cancel"></lightning-button>
+                        <lightning-button disabled={canBeSaved} type="submit" variant="brand" label="Save"
+                            class="slds-m-left_x-small">
+                        </lightning-button>
+                    </footer>
+                </lightning-record-edit-form>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

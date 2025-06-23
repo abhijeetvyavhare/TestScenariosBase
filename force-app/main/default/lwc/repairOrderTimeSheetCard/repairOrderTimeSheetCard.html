@@ -1,0 +1,100 @@
+<template>
+    <article class="slds-card slds-card_boundary slds-grid slds-grid_vertical">
+        <div class="slds-page-header">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <span class="slds-icon_container slds-icon-standard-contact" title="contact">
+                        <lightning-icon icon-name="standard:einstein_replies" size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Time Sheets</span>
+                    </span>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        <a href="javascript:void(0);" class="slds-card__header-link slds-truncate"
+                            onclick={handleVisibleClick} title="Time Sheet">
+                            <span>Time Sheets</span>
+                        </a>
+                    </h2>
+                </div>
+                <lightning-button-group slot="actions">
+                    <lightning-button label="New" onclick={handleNewTimeSheet}>
+                    </lightning-button>
+                </lightning-button-group>
+            </header>
+        </div>
+        <div if:true={isVisible}>
+            <table if:true={isDataPresent}
+                class="slds-table slds-table_bordered slds-table_edit slds-table_fixed-layout slds-table_resizable-cols slds-tree slds-table_tree slds-table_header-hidden slds-table_bordered">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th class="" scope="col" style="width: 20%;">
+                            <div class="slds-truncate slds-p-around_x-small" title="Name">Name</div>
+                        </th>
+                        <th class="" scope="col" style="width: 25%;">
+                            <div class="slds-truncate" title="Name">Technician</div>
+                        </th>
+                        <th class="" scope="col" style="width: 25%;">
+                            <div class="slds-truncate" title="Work Items">Items</div>
+                        </th>
+                        <th class="" scope="col" style="width: 15%;">
+                            <div class="slds-truncate" title="Repair Status">Status</div>
+                        </th>
+                        <th class="" scope="col" style="width: 5%;">
+                            <div class="slds-truncate" title="Edit"></div>
+                        </th>
+                    </tr>
+                </thead>
+                <template for:each={technicianGroupWiseData} for:item="TechnicianInfo">
+                    <tbody key={TechnicianInfo.Name}>
+                        <template for:each={TechnicianInfo.RelatedRecords} for:item="relatedRecords">
+                            <tr key={relatedRecords.Name} class="slds-hint-parent">
+                                <th data-label="Document Name" scope="row">
+                                    <div class="slds-truncate slds-p-left_small noPadding"
+                                        title={relatedRecords.record.Name}>
+                                        <a href={relatedRecords.documentNavigationLink} tabindex="-1">
+                                            {relatedRecords.record.Name}</a>
+                                    </div>
+                                </th>
+                                <td data-label="Work Status" class="noPadding">
+                                    <div key={TechnicianInfo.Name} class="slds-truncate slds-p-around_small noPadding"
+                                        slot="title">
+                                        <a href={TechnicianInfo.navigationLink}>{TechnicianInfo.Name}</a>
+                                    </div>
+                                </td>
+                                <td data-label="Work Items" class="noPadding">
+                                    <div class="slds-truncate noPadding" title={relatedRecords.WorkItems}>
+                                        <ul>
+                                            <template style="overflow:auto;" for:each={relatedRecords.WorkItemsList}
+                                                for:item="workItem">
+                                                <li style="overflow: hidden;" key={workItem}>
+                                                    {workItem}
+                                                </li>
+                                            </template>
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td data-label="Work Status" class="noPadding">
+                                    <div class="slds-truncate noPadding"
+                                        title={relatedRecords.record.dmpl__RepairStatus__c}>
+                                        {relatedRecords.record.dmpl__RepairStatus__c}</div>
+                                </td>
+                                <td class="noPadding">
+                                    <lightning-button-icon class="noPadding" icon-name="utility:new_window"
+                                        variant="bare" id={relatedRecords.record.Id} onclick={handleEditTimeSheet}>
+                                    </lightning-button-icon>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </template>
+            </table>
+
+            <footer if:true={isDataPresent} class="slds-card__footer">
+                <a class="slds-card__footer-action" href={getViewAllLink}>View All
+                    <span class="slds-assistive-text">Time Sheets</span>
+                </a>
+            </footer>
+        </div>
+    </article>
+    <c-repair-order-time-sheet-modal onrefresh={handleRefresh}></c-repair-order-time-sheet-modal>
+</template>

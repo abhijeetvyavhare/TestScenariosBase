@@ -1,0 +1,31 @@
+<template>
+    <c-wizard header={title} variant="base-shaded" current-step={currentStep} oncomplete={handleSave} oncancel={handleCancel}
+        hide-action-slot="true">
+        <c-wizard-step label="Select Location" name="step-1">
+            <c-partner-search-panel title={titlePartnerPanel} record-fieldset-name={recordFieldsetNamePartnerPanel}
+                show-filter-panel={showFilterPanelPartnerPanel} no-data-message={noDataMessagePartnerPanel}
+                onbranchselected={handleBranchSelected} onfilterchanged={handlePartnerFilterChanged} default-field-values={defaultFieldValuesPartner}>
+            </c-partner-search-panel>
+        </c-wizard-step>
+        <c-wizard-step label="Select Date And Time Slot" name="step-2">
+            <c-time-slot-panel title={titleTimeSlot} available-label={availableLabel}
+                record-fieldset-name={recordFieldsetNameTimeSlot} default-field-values={defaultFieldValuesTimeSlot}
+                transaction-type={transactionType} site-transaction-type={siteTransactionType}
+                no-data-message={noDataMessageDateSlot} no-data-message-slot={noDataMessageTimeSlot}
+                days-count={daysCount} branch-id={branchId} ondateslotchanged={handleDateSlotChanged}
+                ontimeslotchanged={handleTimeSlotChanged} onfilterchanged={handleFilterChanged}>
+            </c-time-slot-panel>
+        </c-wizard-step>
+        <c-wizard-step label="Review and Save" name="step-3">
+            <c-record-panel-v1 title={titleRecordPanel} 
+                target-object-api-name='dmpl__ProductDemo__c'
+                hide-submit
+                view-mode="edit"
+                record-fieldset-name={recordFieldsetNameRecordPanel}
+                default-field-values={defaultFieldValuesRecordPanel} 
+                onvaluechanged={handleValueChanged}
+                onrecordsaved={handleRecordSaved}>
+            </c-record-panel-v1>
+        </c-wizard-step>
+    </c-wizard>
+</template>

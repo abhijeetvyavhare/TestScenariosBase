@@ -1,0 +1,359 @@
+<template>
+    <article class="slds-card">
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <span class="slds-icon_container slds-icon-standard-contact" title="contact">
+                        <lightning-icon icon-name={strCardIcon} size="small"></lightning-icon>
+                        <span class="slds-assistive-text">{strTitle}</span>
+                    </span>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        <a href="javascript:void(0);" class="slds-card__header-link slds-truncate"
+                            onclick={handleVisibleClick} title={strTitle}>
+                            <span>{strTitle}</span>
+                        </a>
+                    </h2>
+                </div>
+                <div class="slds-no-flex">
+                    <button class="slds-button slds-button_neutral">New</button>
+                </div>
+            </header>
+        </div>
+        <div class="slds-card__body slds-card__body_inner">
+
+            <div if:true={showRegion3_1} class="">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered "
+                    aria-label="Example table of Opportunities with vertical borders" id="Table">
+                    <thead class="">
+                        <tr class="slds-line-height_reset">
+                            <th class="slds-text-align_left" scope="col">
+                                <div class="slds-truncate" title="Select">Nature Of Supply</div>
+                            </th>
+                            <th class="slds-text-align_center" scope="col">
+                                <div class="slds-truncate" title="Invoice No.">Taxable Value</div>
+                            </th>
+                            <th class="slds-text-align_center" scope="col">
+                                <div class="slds-truncate" title="Invoice Date">Integrated Tax</div>
+                            </th>
+                            <th class="slds-text-align_center" scope="col">
+                                <div class="slds-truncate" title="Invoice Amount">Central Tax</div>
+                            </th>
+                            <th class="slds-text-align_center" scope="col">
+                                <div class="slds-truncate" title="Amount Due">State/UT Tax</div>
+                            </th>
+                            <th class="slds-text-align_center" scope="col">
+                                <div class="slds-truncate" title="Payment">Cess</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={taxSaleOrder} for:item="invoice">
+                            <tr class="slds-hint-parent" key={invoice.Id}>
+                                <td class="slds-text-align_left" data-label="Invoice Entry">
+                                    <!-- <div class="slds-truncate" title={invoice.dmpl__GST3BTableDetails__c}>
+                                        {invoice.dmpl__GST3BTableDetails__c}</div> -->
+                                    <a class="slds-p-left_medium" href={invoice.dmpl__ReportLink__c} tabindex="-1">
+                                        {invoice.dmpl__GST3BTableDetails__c}
+                                    </a>
+                                </td>
+                                <td class="slds-text-align_right" data-label="Invoice Entry">
+                                    <div class="slds-truncate slds-text-align_right" title={invoice.dmpl__TaxableValue__c}>
+                                        <!-- ${invoice.dmpl__TaxableValue__c} -->
+                                        <lightning-formatted-number value={invoice.dmpl__TaxableValue__c}
+                                            format-style="currency">
+                                            currency-code="USD">
+                                        </lightning-formatted-number>
+                                    </div>
+                                </td>
+                                <td class="slds-text-align_right" data-label="Document Date">
+                                    <div class="slds-truncate slds-text-align_right" title={invoice.dmpl__IntegratedTax__c}>
+                                        <!-- ${invoice.dmpl__IntegratedTax__c} -->
+                                        <lightning-formatted-number value={invoice.dmpl__IntegratedTax__c}
+                                            format-style="currency">
+                                            currency-code="USD">
+                                        </lightning-formatted-number>
+                                    </div>
+                                </td>
+                                <td class="slds-text-align_right" data-label="Invoice Amount">
+                                    <div class="slds-truncate" title={invoice.dmpl__CentralTax__c}>
+                                        <!-- ${invoice.dmpl__CentralTax__c} -->
+                                        <lightning-formatted-number value={invoice.dmpl__CentralTax__c}
+                                            format-style="currency">
+                                            currency-code="USD">
+                                        </lightning-formatted-number>
+                                    </div>
+                                </td>
+                                <td class="slds-text-align_right" data-label="Amount Due">
+                                    <div class="slds-truncate" title={invoice.dmpl__StateUTTax__c}>
+                                        <!-- ${invoice.dmpl__StateUTTax__c} -->
+                                        <lightning-formatted-number value={invoice.dmpl__StateUTTax__c}
+                                            format-style="currency">
+                                            currency-code="USD">
+                                        </lightning-formatted-number>
+                                    </div>
+                                </td>
+                                <td class="slds-text-align_right" data-label="Payment">
+                                    <div class="slds-truncate" title={invoice.dmpl__Cess__c}>
+                                        <!-- ${invoice.dmpl__Cess__c} -->
+                                        <lightning-formatted-number value={invoice.dmpl__Cess__c} format-style="currency">
+                                            currency-code="USD">
+                                        </lightning-formatted-number>
+                                    </div>
+                                </td>
+                            </tr>
+                        </template>
+                        <td class="slds-truncate slds-text-heading_small slds-text-align_left" data-label="Payment">
+                            <div class="slds-truncate" title="Total Amount">Total Amount</div>
+                        </td>
+                        <td class="slds-text-align_right" data-label="Payment">
+                            <div class="slds-truncate" title="sumTaxableValue">
+                                <!-- ${sumTaxableValue} -->
+                                <lightning-formatted-number value={sumTaxableValue} format-style="currency">
+                                    currency-code="USD">
+                                </lightning-formatted-number>
+                            </div>
+                        </td>
+                        <td class="slds-text-align_right" data-label="Payment">
+                            <div class="slds-truncate" title="sumIntegretedTax">
+                                <!-- ${sumIntegretedTax} -->
+                                <lightning-formatted-number value={sumIntegretedTax} format-style="currency">
+                                    currency-code="USD">
+                                </lightning-formatted-number>
+                            </div>
+                        </td>
+                        <td class="slds-text-align_right" data-label="Payment">
+                            <div class="slds-truncate" title="sumCentralTax">
+                                <!-- ${sumCentralTax} -->
+                                <lightning-formatted-number value={sumCentralTax} format-style="currency">
+                                    currency-code="USD">
+                                </lightning-formatted-number>
+                            </div>
+                        </td>
+                        <td class="slds-text-align_right" data-label="Payment">
+                            <div class="slds-truncate" title="sumStateTax">
+                                <!-- ${sumStateTax} -->
+                                <lightning-formatted-number value={sumStateTax} format-style="currency">
+                                    currency-code="USD">
+                                </lightning-formatted-number>
+                            </div>
+                        </td>
+                        <td class="slds-text-align_right" data-label="Payment">
+                            <div class="slds-truncate" title="sumCess">
+                                <!-- ${sumCess} -->
+                                <lightning-formatted-number value={sumCess} format-style="currency">
+                                    currency-code="USD">
+                                </lightning-formatted-number>
+                            </div>
+                        </td>
+                    </tbody>
+                </table>
+            </div>
+            <div if:true={showRegion3_2} class="">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered "
+                    aria-label="Example table of Opportunities with vertical borders" id="Table1">
+                    <thead class="">
+                        <tr class="slds-line-height_reset">
+                            <th class="slds-text-align_left" scope="col">
+                                <div class="slds-truncate" title="Select">Nature Of Supply</div>
+                            </th>
+                            <th class="slds-text-align_center" scope="col">
+                                <div class="slds-truncate" title="Invoice Amount">Place of supply</div>
+                            </th>
+                            <th class="slds-text-align_center" scope="col">
+                                <div class="slds-truncate" title="Invoice No.">Taxable Value</div>
+                            </th>
+                            <th class="slds-text-align_center" scope="col">
+                                <div class="slds-truncate" title="Invoice Date">Integrated Tax</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={taxSaleOrder} for:item="invoice">
+                            <tr class="slds-hint-parent" key={invoice.Id}>
+                                <td class="slds-text-align_left">
+                                    <!-- <div class="slds-truncate" title={invoice.dmpl__GST3BTableDetails__c}>
+                                        {invoice.dmpl__GST3BTableDetails__c}</div> -->
+                                    <a class="slds-p-left_medium" href={invoice.dmpl__ReportLink__c} tabindex="-1">
+                                        {invoice.dmpl__GST3BTableDetails__c}
+                                    </a>
+                                </td>
+                                <td class="slds-text-align_center">
+                                    <div class="slds-truncate" title={invoice.dmpl__PlaceofSupply__c}>
+                                        {invoice.dmpl__PlaceofSupply__c}</div>
+                                </td>
+                                <td class="slds-text-align_right" data-label="Invoice Entry">
+                                    <div class="slds-truncate slds-text-align_right" title={invoice.dmpl__TaxableValue__c}>
+                                        <!-- ${invoice.dmpl__TaxableValue__c} -->
+                                        <lightning-formatted-number value={invoice.dmpl__TaxableValue__c}
+                                            format-style="currency">
+                                            currency-code="USD">
+                                        </lightning-formatted-number>
+                                    </div>
+                                </td>
+                                <td class="slds-text-align_right" data-label="Document Date">
+                                    <div class="slds-truncate slds-text-align_right" title={invoice.dmpl__IntegratedTax__c}>
+                                        <!-- ${invoice.dmpl__IntegratedTax__c} -->
+                                        <lightning-formatted-number value={invoice.dmpl__IntegratedTax__c}
+                                            format-style="currency">
+                                            currency-code="USD">
+                                        </lightning-formatted-number>
+                                    </div>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+
+            <div if:true={showRegion3_3} class="">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered "
+                    aria-label="Example table of Opportunities with vertical borders">
+                    <thead class="">
+                        <tr class="slds-line-height_reset">
+                            <th class="slds-text-align_left" scope="col">
+                                <div class="slds-truncate" title="Select">Details</div>
+                            </th>
+                            <th class="slds-text-align_center" scope="col">
+                                <div class="slds-truncate" title="Invoice Date">Integrated Tax</div>
+                            </th>
+                            <th class="slds-text-align_center" scope="col">
+                                <div class="slds-truncate" title="Invoice Amount">Central Tax</div>
+                            </th>
+                            <th class="slds-text-align_center" scope="col">
+                                <div class="slds-truncate" title="Amount Due">State/UT Tax</div>
+                            </th>
+                            <th class="slds-text-align_center" scope="col">
+                                <div class="slds-truncate" title="Payment">Cess</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={taxSaleOrder} for:item="invoice">
+                            <tr class="slds-hint-parent" key={invoice.GroupName}>
+                                <td class="slds-text-align_left" data-label="Invoice Entry">
+                                    <div class="slds-truncate" title={invoice.GroupName}>
+                                        {invoice.GroupName}</div>
+                                </td>
+                                <td class="slds-text-align_center" data-label="Invoice Entry">
+                                    <!-- <div class="slds-truncate slds-text-align_center" title={invoice.dmpl__TaxableValue__c}>
+                                        {invoice.dmpl__TaxableValue__c}</div> -->
+                                </td>
+                                <td class="slds-text-align_center" data-label="Document Date">
+                                    <!-- <div class="slds-truncate slds-text-align_center" title={invoice.dmpl__IntegratedTax__c}>
+                                        {invoice.dmpl__IntegratedTax__c}</div> -->
+                                </td>
+                                <td class="slds-text-align_center" data-label="Invoice Amount">
+                                    <!-- <div class="slds-truncate" title={invoice.dmpl__CentralTax__c}>
+                                        {invoice.dmpl__CentralTax__c}</div> -->
+                                </td>
+                                <td class="slds-text-align_center" data-label="Amount Due">
+                                    <!-- <div class="slds-truncate" title={invoice.dmpl__StateUTTax__c}>{invoice.dmpl__StateUTTax__c}
+                                    </div> -->
+                                </td>
+                                <!-- <td class="slds-text-align_center" data-label="Payment">
+                                    <div class="slds-truncate" title={invoice.dmpl__Cess__c}>{invoice.dmpl__Cess__c}</div>
+                                </td> -->
+                            </tr>
+                            <template for:each={invoice.RelatedRecords} for:item="relatedRecord">
+                                <tr class="slds-hint-parent" key={relatedRecord.dmpl__GSTR3BTableSubDetails__c}>
+                                    <td class="slds-p-left_medium slds-text-align_left" data-label="Invoice Entry">
+                                        <!-- <div class="slds-truncate" title={relatedRecord.dmpl__GSTR3BTableSubDetails__c}>
+                                            {relatedRecord.dmpl__GSTR3BTableSubDetails__c}</div> -->
+                                        <a class="slds-p-left_medium" href={relatedRecord.dmpl__ReportLink__c} tabindex="-1">
+                                            {relatedRecord.dmpl__GSTR3BTableSubDetails__c}
+                                        </a>
+                                    </td>
+                                    <td class="slds-text-align_right" data-label="Invoice Entry">
+                                        <div class="slds-truncate slds-text-align_right"
+                                            title={relatedRecord.dmpl__TaxableValue__c}>
+                                            <!-- ${relatedRecord.dmpl__TaxableValue__c} -->
+                                            <lightning-formatted-number value={relatedRecord.dmpl__TaxableValue__c}
+                                                format-style="currency">
+                                                currency-code="USD">
+                                            </lightning-formatted-number>
+                                        </div>
+                                    </td>
+                                    <td class="slds-text-align_right" data-label="Document Date">
+                                        <div class="slds-truncate slds-text-align_right"
+                                            title={relatedRecord.dmpl__IntegratedTax__c}>
+                                            <!-- ${relatedRecord.dmpl__IntegratedTax__c} -->
+                                            <lightning-formatted-number value={relatedRecord.dmpl__IntegratedTax__c}
+                                                format-style="currency">
+                                                currency-code="USD">
+                                            </lightning-formatted-number>
+                                        </div>
+                                    </td>
+                                    <td class="slds-text-align_right" data-label="Invoice Amount">
+                                        <div class="slds-truncate" title={relatedRecord.dmpl__CentralTax__c}>
+                                            <!-- ${relatedRecord.dmpl__CentralTax__c}  -->
+                                            <lightning-formatted-number value={relatedRecord.dmpl__CentralTax__c}
+                                                format-style="currency">
+                                                currency-code="USD">
+                                            </lightning-formatted-number>
+                                        </div>
+                                    </td>
+                                    <td class="slds-text-align_right" data-label="Amount Due">
+                                        <div class="slds-truncate" title={relatedRecord.dmpl__StateUTTax__c}>
+                                            <!-- ${relatedRecord.dmpl__StateUTTax__c} -->
+                                            <lightning-formatted-number value={relatedRecord.dmpl__StateUTTax__c}
+                                                format-style="currency">
+                                                currency-code="USD">
+                                            </lightning-formatted-number>
+                                        </div>
+                                    </td>
+                                    <!-- <td class="slds-text-align_right" data-label="Payment">
+                                        <div class="slds-truncate" title={relatedRecord.dmpl__Cess__c}>{relatedRecord.dmpl__Cess__c}
+                                        </div>
+                                    </td> -->
+                                </tr>
+                            </template>
+                        </template>
+                        <td class="slds-truncate slds-text-heading_small slds-text-align_left" data-label="Payment">
+                            <div class="slds-truncate" title="Total Amount">Total Amount</div>
+                        </td>
+                        <td class="slds-text-align_right" data-label="Payment">
+                            <div class="slds-truncate" title="sumTaxableValue">
+                                <!-- ${sumTaxableValue} -->
+                                <lightning-formatted-number value={sumTaxableValue} format-style="currency">
+                                    currency-code="USD">
+                                </lightning-formatted-number>
+                            </div>
+                        </td>
+                        <td class="slds-text-align_right" data-label="Payment">
+                            <div class="slds-truncate" title="sumIntegretedTax">
+                                <!-- ${sumIntegretedTax} -->
+                                <lightning-formatted-number value={sumIntegretedTax} format-style="currency">
+                                    currency-code="USD">
+                                </lightning-formatted-number>
+                            </div>
+                        </td>
+                        <td class="slds-text-align_right" data-label="Payment">
+                            <div class="slds-truncate" title="sumCentralTax">
+                                <!-- ${sumCentralTax} -->
+                                <lightning-formatted-number value={sumCentralTax} format-style="currency">
+                                    currency-code="USD">
+                                </lightning-formatted-number>
+                            </div>
+                        </td>
+                        <td class="slds-text-align_right" data-label="Payment">
+                            <div class="slds-truncate" title="sumStateTax">
+                                <!-- ${sumStateTax} -->
+                                <lightning-formatted-number value={sumStateTax} format-style="currency">
+                                    currency-code="USD">
+                                </lightning-formatted-number>
+                            </div>
+                        </td>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <footer class="slds-card__footer">
+            <a class="slds-card__footer-action" href={viewAllLink}>View All
+                <span class="slds-assistive-text">{strTitle}</span>
+            </a>
+        </footer>
+    </article>
+
+</template>

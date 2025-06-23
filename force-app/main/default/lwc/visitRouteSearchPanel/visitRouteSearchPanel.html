@@ -1,0 +1,179 @@
+<template>
+    <lightning-card>
+        <div class="slds-card__body slds-card__body_inner">
+            <div class="slds-border_bottom slds-p-bottom_x-small">
+                <lightning-icon icon-name="standard:person_account" size="small"
+                    class="slds-m-bottom_xxx-small slds-m-right_small slds-text-link_reset"></lightning-icon>
+                    <span class="slds-text-heading_small"> <b> {title} </b></span>
+            </div>
+        </div>
+
+        <div class="slds-col slds-size_1-of-1">
+            <div class="slds-card">
+                <div class="slds-card__body slds-card__body_inner">
+                    <div class="filter-box slds-m-top_medium">
+                        <lightning-accordion allow-multiple-sections-open active-section-name="routes">
+                            <lightning-accordion-section name="routes" label={accordianTitle} class="custom-accordian">
+                                <lightning-input 
+                                    type="text" 
+                                    variant="label-hidden"
+                                    placeholder={accordianTitle} 
+                                    value={searchValue} 
+                                    onchange={handleSearch} 
+                                    class="slds-m-bottom_medium slds-m-top_medium custom-padding">
+                                </lightning-input>
+                                    <div class="dropdown-content">
+                                        <template if:true={filteredRoutes.length}>
+                                            <template for:each={filteredRoutes} for:item="route">
+                                                <div key={route.Id} class="slds-p-around_x-small slds-border_bottom">
+                                                    <lightning-input
+                                                        type="checkbox"
+                                                        label={route.Name}
+                                                        value={route.Id}
+                                                        checked={route.selected}
+                                                        onchange={handleRouteSelection}
+                                                        class="slds-truncate">
+                                                    </lightning-input>
+                                                </div>
+                                            </template>
+                                        </template>
+                                </div>
+                            </lightning-accordion-section>
+
+                            <!-- <template if:true={isVisitPlan}> -->
+                                <lightning-accordion-section name="filters" label="Filters" class="custom-accordian slds-p-top_medium">
+                                    <div class="slds-form-element">
+                                        <div class="slds-form-element__control custom-margin">
+                                            <lightning-record-edit-form id="recordEditForm" object-api-name={objectApiName}
+                                                record-id={recordId} >
+                                                <template for:each={getFieldDetails.data} for:item="field">
+                                                    <lightning-layout-item key={field.apiName} class="slds-col slds-size_1-of-2">
+                                                        <label class="slds-form-element__label custom-style" for={field.apiName}>
+                                                            Accounts of Account Group
+                                                        </label>
+                                                        <div class="slds-form-element__control">
+                                                            <lightning-input-field id={field.apiName} field-name={field.apiName}
+                                                                disabled={field.disabled} required={field.dbRequired}
+                                                                variant="label-hidden" onchange={handleaccountGroup} placeholder={field.label} class="custom-padding">
+                                                            </lightning-input-field>
+                                                            <!-- <lightning-input-field field-name="dmpl__AccountGroupId__c"></lightning-input-field> -->
+                                                        </div>
+                                                    </lightning-layout-item>
+                                                </template>
+                                            </lightning-record-edit-form>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <lightning-input 
+                                            label="From Date" 
+                                            type="date" 
+                                            value={fromDate} 
+                                            onchange={handleFromDateChange} 
+                                            class="slds-m-bottom_medium slds-m-top_medium custom-padding">
+                                        </lightning-input>
+                                        <lightning-input 
+                                            label="To Date" 
+                                            type="date" 
+                                            value={toDate} 
+                                            onchange={handleToDateChange} 
+                                            class="slds-m-bottom_medium slds-m-top_medium custom-padding">
+                                        </lightning-input>
+                                        <lightning-input label="Pincode" value={pincode} onchange={handlePincodeChange} class="slds-m-bottom_medium slds-m-top_medium custom-padding pincode"></lightning-input>
+                                        <lightning-combobox
+                                            name="City"
+                                            label="City"
+                                            value={selectedCity}
+                                            options={cityOptions}
+                                            onchange={handleCityChange}
+                                            class="slds-m-bottom_medium slds-m-top_medium custom-padding city">
+                                        </lightning-combobox>
+                                        <lightning-combobox
+                                            name="State"
+                                            label="State"
+                                            value={state}
+                                            options={stateOptions}
+                                            onchange={handleStateChange}
+                                            class="slds-m-bottom_medium slds-m-top_medium custom-padding state">
+                                        </lightning-combobox>
+                                        <!-- <lightning-input label="City" value={selectedCity} options={cityOptions} onchange={handleCityChange} class="slds-m-bottom_medium slds-m-top_medium custom-padding city"></lightning-input> -->
+                                        <!-- <lightning-input label="State" value={state} onchange={handleStateChange} class="slds-m-bottom_medium slds-m-top_medium custom-padding state"></lightning-input> -->
+                                    </div>
+                                </lightning-accordion-section>
+                            <!-- </template> -->
+                            
+                            <!-- <template if:true={isTransfer}>
+                                <lightning-accordion-section name="filters" label="Filters" class="custom-accordian slds-p-top_medium">
+                                    <div class="slds-form-element">
+                                        <div class="slds-form-element__control custom-margin">
+                                            <lightning-record-edit-form id="recordEditForm1" object-api-name={objectApiName}
+                                                record-id={recordId} >
+                                                <template for:each={getFieldDetails1.data} for:item="field">
+                                                    <lightning-layout-item key={field.apiName} class="slds-col slds-size_1-of-2">
+                                                        <label class="slds-form-element__label custom-style" for={field.apiName}>
+                                                            Accounts of Account Group
+                                                        </label>
+                                                        <div class="slds-form-element__control">
+                                                            <lightning-input-field id={field.apiName} field-name={field.apiName}
+                                                                disabled={field.disabled} required={field.dbRequired}
+                                                                variant="label-hidden" onchange={handleaccountGroup} aria-placeholder={field.label} class="custom-padding">
+                                                            </lightning-input-field>
+                                                        </div>
+                                                    </lightning-layout-item>
+                                                </template>
+                                            </lightning-record-edit-form>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <lightning-input label="Pincode" value={pincode} onchange={handlePincodeChange} class="slds-m-bottom_medium slds-m-top_medium custom-padding"></lightning-input>
+                                        <lightning-input label="City" value={selectedCity} options={cityOptions} onchange={handleCityChange} class="slds-m-bottom_medium slds-m-top_medium custom-padding"></lightning-input>
+                                        <lightning-input label="State" value={state} onchange={handleStateChange} class="slds-m-bottom_medium slds-m-top_medium custom-padding"></lightning-input>
+                                    </div>
+                                </lightning-accordion-section>
+                            </template> -->
+                        </lightning-accordion>   
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Section -->
+        <div slot="footer" class="slds-text-align_right">
+            <div class="slds-col slds-14-size-of_20">
+                <lightning-button variant="brand-outline" label="Go" title="Go" onclick={handleSave}
+                    class="slds-m-left_x-medium">
+                </lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+
+    <template if:true={makeVisible}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_fullscreen">
+            <div class="slds-modal__container slds-modal__container_fullscreen">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse slds-button_icon_small"
+                        title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 class="slds-text-heading_medium">Account Locations</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <template if:false={isLoading}>
+                        <lightning-datatable key-field="InvoiceNumber" data={accountData} onrowselection={handleRowSelection}
+                            columns={columns}>
+                        </lightning-datatable>
+                    </template>
+                    <template if:true={isLoading}>
+                        <lightning-spinner size="medium" style="background: none;"></lightning-spinner>
+                    </template>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button label="Save" onclick={saveData} class="slds-m-right_small"></lightning-button>
+                    <lightning-button variant="neutral" label="Close" onclick={closeModal}></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>    
+</template>

@@ -1,0 +1,121 @@
+<template>
+    <div class="slds-page-header slds-page-header_record-home dmpl-page-header">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-opportunity">
+                            <svg class="slds-icon slds-page-header__icon" aria-hidden="true">
+                                <use xlink:href="/assets/icons/standard-sprite/svg/symbols.svg#opportunity"></use>
+                            </svg>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <h1>
+                                    <span>Stock Ledger and Valuation</span>
+                                    <span class="slds-page-header__title slds-truncate"
+                                        title="Inventory Console">Inventory Console</span>
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-page-header__col-actions">
+                <div class="slds-page-header__controls">
+                    <div class="slds-page-header__control">
+                        <lightning-radio-group name="radioGroup" options={viewOptions} value={viewType} type="button"
+                            onchange={handleViewChanged}></lightning-radio-group>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-page-header__row slds-page-header__row_gutters">
+            <div class="slds-page-header__col-details">
+                <lightning-record-edit-form object-api-name="dmpl__InventoryLedger__c" density="comfy" onload={handleFormLoad}>
+                    <template if:true={isFormLoading}>
+                        <div>
+                            <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+                        </div>
+                    </template>
+                    <ul class="slds-page-header__detail-row">
+                        <li class="slds-p-left_x-small">
+                            <lightning-input-field field-name="dmpl__PartnerAccountId__c" required
+                                onchange={handleFieldChange}></lightning-input-field>
+                        </li>
+                        <li class="slds-p-left_x-small">
+                            <lightning-input-field field-name="dmpl__BranchId__c" required
+                                onchange={handleFieldChange}></lightning-input-field>
+                        </li>
+                        <template if:true={isLedgerView}>
+                            <li class="slds-p-left_x-small">
+                                <lightning-input-field field-name="dmpl__ItemId__c" required
+                                    onchange={handleFieldChange}></lightning-input-field>
+                            </li>
+                            <li class="slds-p-left_x-small">
+                                <lightning-input required label="From Date" type="date" name="fromDate" value={fromDate}
+                                    onchange={handleFieldChange}>
+                                </lightning-input>
+                            </li>
+                            <li class="slds-p-left_x-small">
+                                <lightning-input required label="To Date" type="date" name="toDate" value={toDate}
+                                    onchange={handleFieldChange}>
+                                </lightning-input>
+                            </li>                 
+                        </template>
+                        <template if:false={isLedgerView}>
+                            <li class="slds-p-left_x-small">
+                                <lightning-input required label="As On Date" type="date" name="asOnDate" value={asOnDate}
+                                    onchange={handleFieldChange}>
+                                </lightning-input>
+                            </li>                 
+                        </template>
+                        <li class="slds-p-left_x-small slds-p-top_large">
+                            <lightning-button variant="brand" type="submit" name="go" label="GO"
+                                disabled={isSubmitDisabled} onclick={handleSubmit}></lightning-button>
+                        </li>
+                    </ul>
+                </lightning-record-edit-form>
+            </div>
+        </div>
+    </div>
+
+    
+    <template if:true={isLoading}>
+        <div>
+            <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+        </div>
+    </template>
+    <template if:false={isLoading}>
+        <c-header-card hide-body-margin>
+            <template if:true={hasData}>
+                <div class="dmpl-fullpage-container">
+                    <template if:true={isLedgerView}>
+                        <lightning-datatable
+                            key-field="Id"
+                            data={ledgerData}
+                            columns={ledgerColumns}
+                            hide-checkbox-column="true">
+                        </lightning-datatable>
+                    </template>
+                    <template if:false={isLedgerView}>
+                        <lightning-datatable
+                            key-field="Id"
+                            data={stockData}
+                            columns={stockColumns}
+                            hide-checkbox-column="true">
+                        </lightning-datatable>
+                    </template>
+                </div>              
+            </template>
+            <template if:false={hasData}>
+                <div class="slds-p-around_small">
+                    <c-illustration-no-data size="large" message='No data to Show...' view="openRoad">
+                    </c-illustration-no-data>
+                </div>
+            </template>
+        </c-header-card>
+    </template>
+</template>

@@ -1,0 +1,48 @@
+<template>
+    <lightning-quick-action-panel header="Interface Test Panel">
+        <div class="slds-p-around_medium lgc-bg-inverse">
+            <lightning-button variant="inverse" label="Invoke" onclick={performServerAction} title="Invoke" icon-name="utility:download" class="slds-m-left_x-small"></lightning-button>
+            <span class="slds-float_none slds-text-color_inverse slds-p-left_medium ">{status}</span>
+        </div>
+        <lightning-tabset active-tab-value="response">
+            <lightning-tab label="Headers" value="header">
+                <lightning-input type="text" label="Query String" value={query} onchange={handleQueryChange}></lightning-input>
+                <lightning-textarea
+                    label="Headers"
+                    value={headers}
+                    onchange={handleHeaderChange}>
+                </lightning-textarea>
+            </lightning-tab>
+            <lightning-tab label="Request" value="request">
+                <lightning-input type="text" label="Record Id" value={targetObjectRecordId} onchange={handleRecordIdChange}></lightning-input>
+                <lightning-textarea
+                    label="Request"
+                    value={request}
+                    onchange={handleRequestChange}>
+                </lightning-textarea>
+            </lightning-tab>
+            <lightning-tab label="Response" value="response">
+                <lightning-textarea
+                    label="Response"
+                    value={response}>
+                </lightning-textarea>
+            </lightning-tab>
+            <lightning-tab label="Response Headers" value="responseHeaders">
+                <lightning-textarea
+                    label="Response"
+                    value={responseHeaders}>
+                </lightning-textarea>
+            </lightning-tab>
+            <lightning-tab label="Parsed Request" value="parsedRequest">
+                <lightning-textarea
+                    label="Parsed Request"
+                    value={parsedRequest}>
+                </lightning-textarea>
+            </lightning-tab>
+
+        </lightning-tabset>
+        <div slot="footer">
+            <lightning-button variant="neutral" onclick={handleDialogClose} label="Close"></lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

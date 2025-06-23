@@ -1,0 +1,34 @@
+<template>
+    <lightning-modal-header label="Route Method" style="width: 80vw;"></lightning-modal-header>
+    <lightning-modal-body>
+        <lightning-layout style=" min-height: 50vh;">
+            <lightning-layout-item class="slds-col slds-size_1-of-3">
+                <lightning-radio-group name="routeMethods" options={options} value={value} type="radio"
+                    onchange={handleRouteMethodChange}></lightning-radio-group>
+            </lightning-layout-item>
+            <lightning-layout-item class="slds-col slds-size_2-of-3">
+                <lightning-map style="height: 100%;" if:true={showMapSection} map-markers={mapMarkers}></lightning-map>
+                <lightning-record-edit-form if:true={showRecordEditForm} id="recordEditForm" object-api-name={objectApiName}
+                    record-id={recordId} onsuccess={handleSuccess} onerror={handleError}>
+                    <template for:each={getFieldDetails.data} for:item="field">
+                        <lightning-layout-item key={field.apiName} class="slds-col slds-size_1-of-2">
+                            <lightning-input-field id={field.apiName} field-name={field.apiName}
+                                disabled={field.disabled} required={field.dbRequired}>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                    </template>
+                    <lightning-layout-item class="slds-col slds-size_1-of-2 slds-hide">
+                        <lightning-input-field field-name="dmpl__RouteMethod__c" value={value}>
+                        </lightning-input-field>
+                    </lightning-layout-item>
+                </lightning-record-edit-form>
+            </lightning-layout-item>
+        </lightning-layout>
+    </lightning-modal-body>
+    <lightning-modal-footer>
+        <lightning-button label="Cancel" title="Non-primary action" onclick={closeQuickAction}
+            class="slds-m-left_x-small"></lightning-button>
+        <lightning-button variant="brand" label="Submit" title="Primary action" onclick={handleSubmit}
+            class="slds-m-left_x-small"></lightning-button>
+    </lightning-modal-footer>
+</template>

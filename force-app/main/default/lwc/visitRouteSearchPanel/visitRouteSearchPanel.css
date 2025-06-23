@@ -1,0 +1,91 @@
+.slds-radio {
+    display: inline-block;
+    margin-right: 1rem;
+}
+
+.slds-accordion__summary {
+    padding-left: 0px !important;
+}
+
+.slds-accordion__summary-heading {
+    font-weight: bold;
+}
+
+.slds-accordion__list-item {
+    --lwc-spacingSmall: 0px;
+}
+
+.slds-accordion__summary-content {
+    font-weight: 600 !important;
+}
+
+.custom-overflow {
+    max-height: 300px;
+    overflow: auto;
+    height: max-content;
+}
+
+.custom-padding {
+    --lwc-spacingSmall: 15px;
+}
+
+.slds-accordion__summary-heading {
+    font-weight: bold;
+}
+
+.custom-margin {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.slds-modal_fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999; 
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.slds-modal__container_fullscreen {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    background: white;
+}
+
+.slds-modal__content {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.slds-button_icon_small {
+    font-size: 16px;
+    height: 24px;
+    width: 24px;
+    padding: 4px;
+}
+
+.slds-modal__header {
+    padding: 0.5rem 1rem;
+    font-size: 1.5rem;
+}
+
+.slds-modal__footer {
+    padding: 1rem;
+}
+
+.slds-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+}

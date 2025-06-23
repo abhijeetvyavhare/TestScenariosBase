@@ -1,0 +1,153 @@
+<template>
+    <template if:true={isAppPage}>
+      <div class="slds-card slds-card_boundary app-card" >
+        <!-- <div class="slds-p-vertical_x-small slds-p-horizontal_small slds-text-heading_small">
+          <b>Calender</b>
+        </div> -->
+        <div class="spinner">
+            <template if:true={isLoading}>
+                 <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+                 </lightning-spinner>
+            </template>
+        </div>
+         <div class="calendar">
+          <div class="slds-border_bottom slds-p-around_small">
+            <div class="slds-grid slds-wrap reverse">
+                <div class="slds-col slds-size_12-of-12 slds-grid slds-wrap reverse align-center">
+                    <div class="slds-col slds-size_12-of-12 slds-small-size_2-of-12 slds-large-size_2-of-12">
+                        <lightning-record-edit-form object-api-name="dmpl__Resource__c">
+                            <div class="slds-grid slds-align-middle" style="align-items: center;">
+                                <div class="slds-col slds-size-auto">
+                                    <lightning-input-field 
+                                        field-name="dmpl__DefaultBranchId__c" 
+                                        label="Branch" 
+                                        placeholder="Enter Branch" 
+                                        class="slds-m-left_none slds-m-right_small"
+                                        value={selectedBranch}
+                                        onchange={handleFieldChange}>
+                                    </lightning-input-field>
+                                </div>
+                            </div>
+                        </lightning-record-edit-form>
+                    </div>
+                    <div class="slds-col slds-size_12-of-12 slds-small-size_2-of-12 slds-large-size_2-of-12">
+                      <div class="side-align">
+                        <div class = "slds-form-element__label slds-text-body_small" >Search Resource</div>
+                        <lightning-Input type="search"  placeholder="Search..."  variant="label-hidden" label="Search"  onchange={handleSearch}  ></lightning-input>
+                      </div>
+                    </div>
+                    <div class="slds-col slds-size_12-of-12 slds-small-size_4-of-12 slds-large-size_4-of-12">
+                      <div class="slds-grid slds-align_absolute-center   ">
+                        <lightning-icon icon-name="utility:chevronleft" size="x-small" onclick={goToPreviousWeek} class="slds-text-link_reset"></lightning-icon>
+                        <h2 class="slds-p-left_medium slds-p-right_medium slds-p-top_xxx-small">
+                          <b>{currentWeek}</b>
+                        </h2>
+                        <lightning-icon icon-name="utility:chevronright" size="x-small" onclick={goToNextWeek} class="slds-text-link_reset"></lightning-icon>
+                      </div>
+                    </div>
+                    <div class="slds-col slds-size_12-of-12 slds-small-size_1-of-12 slds-large-size_1-of-12"></div>
+                    <div class="slds-col slds-size_12-of-12 slds-small-size_3-of-12 slds-large-size_3-of-12">
+                      <lightning-combobox name="Month-value" variant="label-hidden" placeholder="Current Month" value={selectedMonth} onchange={handleMonthChange} options={statusOptions} class="slds-float_center  slds-m-bottom_x-small custom-float"></lightning-combobox>
+                    </div>
+                </div>
+                  <div class="slds-col slds-size_12-of-12 slds-grid slds-wrap align-end">
+                    <div class="slds-col slds-size_12-of-12 slds-small-size_4-of-12 slds-large-size_4-of-12">
+                      <div class="slds-text-align_right custom-center">
+                        <template for:each={markers} for:item="marker">
+                          <span key={marker.Id}>
+                            <lightning-icon icon-name="utility:stop" size="xx-small" class={marker.class}></lightning-icon>
+                            <span class="slds-p-right_x-small slds-text-title">{marker.Name}</span>
+                          </span>
+                        </template>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+           
+          </div>
+          <div class=" slds-border_bottom slds-border_left slds-border_right slds-p-around_small">
+            <div class="slds-border_top mobile-box slds-border_right">
+                <div class="slds-grid slds-wrap custom-grid">
+                  <div class="slds-col slds-size_3-of-12 slds-small-size_2-of-12 slds-large-size_2-of-12">
+                    <div class="slds-border_bottom slds-border_left slds-theme_shade slds-grid height-custom ">
+                      <div class="slds-p-around_small  slds-custom-box ">Resource Name</div>
+                    </div>
+                  </div>
+                  <!-- <div class="slds-col slds-size_4-of-12 slds-small-size_2-of-12 slds-large-size_2-of-12">
+                    <div class="slds-border_bottom slds-border_left slds-theme_shade slds-grid   height-custom ">
+                      <div class="slds-p-around_small    slds-custom-box ">Branch Name</div>
+                    </div>
+                  </div> -->
+                  <div class="slds-col slds-size_9-of-12 slds-small-size_10-of-12 slds-large-size_-of-12 slds-grid">
+                    <template for:each={weekdays} for:item="weekday">
+                      <div key={weekday} class="slds-col slds-size_2-of-12 weekday weekday-background slds-p-around_small  slds-border_bottom slds-border_left  slds-text-align_center slds-custom-box">
+                        <div>{weekday.day} <br />{weekday.dayName}</div> 
+                    </div>
+                    </template>
+                  </div>
+                </div>
+                <div class="slds-grid slds-wrap custom-grid">
+                    <template if:true={hasData}>
+                        <template if:true={filteredResourceData}>
+                            <template for:each={filteredResourceData} for:item="resource">
+                                <div key={resource.Id} class="slds-col  slds-size_3-of-12 slds-small-size_2-of-12 slds-large-size_2-of-12">
+                                  <div class="resource-column  slds-border_left slds-border_bottom slds-grid   height-custom">
+                                    <div class="slds-p-around_small slds-resource-box slds-text-link slds-text-blue slds-grid slds-" data-recordid={resource.Id}  onclick={handleSubmit}>{resource.Name}</div>
+                                  </div>
+                                </div>
+                                <!-- <div key={resource.Id} class="slds-col  slds-size_4-of-12 slds-small-size_2-of-12 slds-large-size_2-of-12">
+                                    <template if:true={resource.dmpl__DefaultBranchId__r}>
+                                        <div class="resource-column slds-border_left slds-border_bottom slds-grid   height-custom">
+                                            <div class="slds-p-around_small   slds-resource-box slds-text-link slds-text-blue" data-recordid={resource.dmpl__DefaultBranchId__c}  onclick={handleBranchSubmit}>{resource.dmpl__DefaultBranchId__r.Name}</div>                    
+                                        </div>
+                                    </template>
+                                    <template if:false={resource.dmpl__DefaultBranchId__r}>
+                                        <div class="resource-column slds-border_left slds-border_bottom slds-grid   height-custom">
+                                            <div class="slds-p-around_small   slds-resource-box slds-text-link slds-text-blue">-</div>                    
+                                        </div>
+                                    </template>
+                                 </div> -->
+                                <div key={resouce} class="slds-col slds-size_9-of-12 slds-small-size_10-of-12 slds-large-size_10-of-12 slds-grid slds-grid">
+                                <template if:true={hasAvailabilityArray}>
+                                    <template for:each={resource.dmpl__ResourceAvailabilities__r} for:item="resouceAvailable">
+                                        <div key={resouceAvailable.dmpl__Date__c} class="slds-col slds-size_1-of-12 weekday   slds-border_bottom slds-border_left  slds-text-align_center slds-custom-box">
+                                           <template if:true={resouceAvailable.firstLetter}>
+                                            <div class={resouceAvailable.class}>
+                                                {resouceAvailable.firstLetter}
+                                              </div>
+                                           </template>
+                                           <template if:false={resouceAvailable.firstLetter}>
+                                            <div class={resouceAvailable.class}>
+                                               {resouceAvailable.dmpl__AvailabilityType__c}
+                                              </div>
+                                           </template>
+                                        </div>
+                                    </template>          
+                                </template>
+                                <template if:false={hasAvailabilityArray}>
+                                    <template for:each={resource.dmpl__ResourceAvailabilities__r} for:item="resouceAvailable">
+                                        <div key={resouceAvailable.dmpl__Date__c} class="slds-col slds-size_1-of-12 weekday   slds-border_bottom slds-border_left  slds-text-align_center slds-custom-box">        
+                                             <div class={resouceAvailable.class}>
+                                                {resouceAvailable.dmpl__AvailabilityType__c}
+                                               </div>
+                                         </div>
+                                    </template> 
+                                </template>
+                                </div>
+                              </template>
+                          </template>  
+                    </template>
+                  
+                  <template if:false={hasData}>
+                   <div class="slds-align_absolute-center slds-p-top_large">
+                        <c-illustration-no-data size="small" view="openroad">
+                        </c-illustration-no-data>
+                   </div>
+                  </template>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </template>
+  </template>

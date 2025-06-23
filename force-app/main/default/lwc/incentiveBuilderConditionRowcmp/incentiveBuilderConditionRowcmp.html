@@ -1,0 +1,191 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <div if:true={isEditing}>
+        <lightning-record-edit-form density="comfy" object-api-name={conditionObjectApiName} record-id={condition.Id}
+        onsuccess={handleSuccess} onerror={handleError}>
+        <lightning-messages> </lightning-messages>
+            <li class="slds-expression__row">
+                <fieldset>
+                    <legend class="slds-expression__legend">
+                        <span>{getConditionLabel}</span>
+                        <span class="slds-assistive-text">Condition
+                            {getConditionLabel}</span>
+                    </legend>    
+                    <div class="slds-hide">
+                        <lightning-input-field field-name="dmpl__IncentiveTargetType__c">
+                        </lightning-input-field>
+                        <lightning-input-field field-name="Name">
+                        </lightning-input-field>
+                        <lightning-input-field field-name="dmpl__IncentiveLineId__c" value={incentiveLineId}>
+                        </lightning-input-field>
+                        <lightning-input-field field-name="dmpl__IncentivePlanId__c" value={incentiveId}>
+                        </lightning-input-field>
+                        <lightning-input-field field-name="dmpl__SequenceNumber__c" value={newSequenceNumber}>
+                        </lightning-input-field>
+                    </div>
+                    <div class="slds-grid slds-gutters_xx-small">
+                        <div class="slds-col">
+                            <lightning-input-field field-name="dmpl__KPIConfigurationId__c">
+                            </lightning-input-field>
+                        </div>
+                        <!-- <div class="slds-col">
+                            <lightning-combobox name="conditionType" label="Condition Type" value={conditionType}
+                                placeholder="Select Condition Type" options={conditionTypeList}
+                                onchange={handleConditionChange} required></lightning-combobox>
+                        </div> -->
+                        <!-- <div class="slds-col">
+                            <lightning-input-field field-name="dmpl__IncentivePeriodId__c">
+                            </lightning-input-field>
+                        </div> -->
+                        <div class="slds-col" if:true={isItemVisible}>
+                            <lightning-input-field field-name="dmpl__ItemId__c">
+                            </lightning-input-field>
+                        </div>
+                        <div class="slds-col" if:true={isItemSKUVisible}>
+                            <lightning-input-field field-name="dmpl__SKUId__c">
+                            </lightning-input-field>
+                        </div>
+                        <div class="slds-col" if:true={isItemGroupVisible}>
+                            <lightning-input-field field-name="dmpl__ItemGroupId__c">
+                            </lightning-input-field>
+                        </div>
+                        <div class="slds-col" if:true={isAccountVisible}>
+                            <lightning-input-field field-name="dmpl__AccountId__c">
+                            </lightning-input-field>
+                        </div>
+                        <div class="slds-col" if:true={isAccountGroupVisible}>
+                            <lightning-input-field field-name="dmpl__AccountGroupId__c">
+                            </lightning-input-field>
+                        </div>
+                        <div class="slds-col">
+                            <lightning-input-field field-name="dmpl__Operation__c">
+                            </lightning-input-field>
+                        </div>
+                        <div class="slds-col">
+                            <lightning-input-field field-name="dmpl__TargetValueType__c" 
+                            value={targetValueType}
+                            onchange={handleTargetValueTypeChange}>
+                            </lightning-input-field>
+                        </div>
+                        <!-- <div class="slds-col" if:true={isQuantityVisible}>
+                            <lightning-input-field field-name="dmpl__ConditionQuantity__c">
+                            </lightning-input-field>
+                        </div> -->
+                        
+                        
+                        <div class="slds-col" if:true={isValueVisible}>
+                            <lightning-input-field field-name="dmpl__Value__c">
+                            </lightning-input-field>
+                        </div>
+                        <div class="slds-col" if:true={isValuePercentageVisible}>
+                            <lightning-input-field field-name="dmpl__ValuePercentage__c">
+                            </lightning-input-field>
+                        </div>
+                        <template if:false={disableActions}>
+                            <div class="slds-col slds-grow-none slds-m-top_large">
+                                <lightning-button-icon icon-name="utility:save" variant="border-filled"
+                                alternative-text="Save Condition" title="Save" onclick={handleSaveCondition}>
+                                </lightning-button-icon>
+                            </div>
+                            <div class="slds-col slds-grow-none slds-m-top_large">
+                                <lightning-button-icon icon-name="utility:clear" variant="border-filled"
+                                alternative-text="Cancel" title="Cancel" onclick={handleCancelCondition}>
+                                </lightning-button-icon>
+                            </div>
+                        </template>
+                    </div>
+                </fieldset>
+            </li>
+        </lightning-record-edit-form>
+    </div>
+
+    <div if:false={isEditing}>
+        <lightning-record-view-form density="comfy" object-api-name={conditionObjectApiName} record-id={condition.Id}>
+            <lightning-messages> </lightning-messages>
+            <li class="slds-expression__row">
+                <fieldset>
+                    <legend class="slds-expression__legend">
+                        <span>{getConditionLabel}</span>
+                        <span class="slds-assistive-text">Condition
+                            {getConditionLabel}</span>
+                    </legend>    
+                    <div class="slds-grid slds-gutters_xx-small">
+                        <div class="slds-col">
+                            <lightning-output-field field-name="dmpl__KPIConfigurationId__c">
+                            </lightning-output-field>
+                        </div>
+                        <!-- <div class="slds-col">
+                            <lightning-output-field field-name="dmpl__IncentiveTargetType__c">
+                            </lightning-output-field>
+                        </div>
+                        <div class="slds-col">
+                            <lightning-output-field field-name="dmpl__IncentivePeriodId__c">
+                            </lightning-output-field>
+                        </div> -->
+                        <div class="slds-col" if:true={isItemVisible}>
+                            <lightning-output-field field-name="dmpl__ItemId__c">
+                            </lightning-output-field>
+                        </div>
+                        <div class="slds-col" if:true={isItemSKUVisible}>
+                            <lightning-output-field field-name="dmpl__SKUId__c">
+                            </lightning-output-field>
+                        </div>
+                        <div class="slds-col" if:true={isItemGroupVisible}>
+                            <lightning-output-field field-name="dmpl__ItemGroupId__c">
+                            </lightning-output-field>
+                        </div>
+                        <div class="slds-col" if:true={isAccountVisible}>
+                            <lightning-output-field field-name="dmpl__AccountId__c">
+                            </lightning-output-field>
+                        </div>
+                        <div class="slds-col" if:true={isAccountGroupVisible}>
+                            <lightning-output-field field-name="dmpl__AccountGroupId__c">
+                            </lightning-output-field>
+                        </div>
+                        <div class="slds-col">
+                            <lightning-output-field field-name="dmpl__Operation__c">
+                            </lightning-output-field>
+                        </div>
+                        <div class="slds-col">
+                            <lightning-output-field field-name="dmpl__TargetValueType__c">
+                            </lightning-output-field>
+                        </div>
+                        <!-- <div class="slds-col">
+                            <lightning-output-field field-name="dmpl__ConditionOperator__c">
+                            </lightning-output-field>
+                        </div> -->
+                        <!-- <div class="slds-col" if:true={isQuantityVisible}>
+                            <lightning-output-field field-name="dmpl__ConditionQuantity__c">
+                            </lightning-output-field>
+                        </div> -->
+                        <div class="slds-col" if:true={isValueVisible}>
+                            <lightning-output-field field-name="dmpl__Value__c">
+                            </lightning-output-field>
+                        </div>
+                        <div class="slds-col" if:true={isValuePercentageVisible}>
+                            <lightning-output-field field-name="dmpl__ValuePercentage__c">
+                            </lightning-output-field>
+                        </div>
+                        <template if:false={disableActions}>
+                            <div class="slds-col slds-grow-none slds-m-top_large">
+                                <lightning-button-icon icon-name="utility:edit" variant="border-filled"
+                                alternative-text="Edit Condition" title="Edit" onclick={handleEditCondition}>
+                                </lightning-button-icon>
+                            </div>
+                            <div class="slds-col slds-grow-none slds-m-top_large">
+                                <lightning-button-icon icon-name="utility:edit_form" variant="border-filled"
+                                    alternative-text="Edit Form" title="Edit" onclick={handleEditFormCondition}>
+                                </lightning-button-icon>
+                            </div>
+                            <div class="slds-col slds-grow-none slds-m-top_large">
+                                <lightning-button-icon icon-name="utility:delete" variant="border-filled"
+                                    alternative-text="Delete Condition" title="Delete" onclick={handleDeleteCondition}>
+                                </lightning-button-icon>
+                            </div>
+                        </template>
+                    </div>
+                </fieldset>
+            </li>
+        </lightning-record-view-form>
+    </div>
+</template>

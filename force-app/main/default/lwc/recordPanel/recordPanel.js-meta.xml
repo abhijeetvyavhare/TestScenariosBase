@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>52.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Record Panel</masterLabel>
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightning__AppPage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <property name="title" type="String" label="Title" description="Title of the panel to be shown on top."/>
+            <property name="iconName" type="String" label="Icon Name" default="standard:calibration" /> 
+            <property name="targetObjectApiName" type="String" label="Target Object Api Name" description="Object Api Name to show records for."/>
+            <property name="targetObjectRecordIdFieldName" type="String" label="Target Object Record Id" description="Record Id of the object to show data for."/>
+            <property name="recordFieldsetName" type="String" label="Record Fieldset" description="The fieldset to be used to show fields." /> 
+            <property name="viewMode" type="String" label="View Mode" default="view" description="The component accepts a mode value that determines the user interaction allowed for the form. edit,view,readonly" /> 
+            <property name="viewStyle" type="String" label="View Style" default="card" description="View Style allowed values are card, page" /> 
+            <property name="defaultFieldValues" type="String" label="Default Field Values" description="The default values to pupulate record with." /> 
+            <supportedFormFactors>
+                <supportedFormFactor type="Small" />
+                <supportedFormFactor type="Large" />
+            </supportedFormFactors>
+        </targetConfig>
+        <targetConfig targets="lightning__AppPage">
+            <property name="title" type="String" label="Title" description="Title of the panel to be shown on top."/>
+            <property name="iconName" type="String" label="Icon Name" default="standard:calibration" /> 
+            <property name="objectApiName" type="String" label="Object Api Name" description="Object Api Name to show records for."/>
+            <property name="targetObjectApiName" type="String" label="Target Object Api Name" description="Object Api Name to show records for."/>
+            <property name="targetObjectRecordIdFieldName" type="String" label="Target Object Record Id" description="Record Id of the object to show data for."/>
+            <property name="recordFieldsetName" type="String" label="Record Fieldset" description="The fieldset to be used to show fields." /> 
+            <property name="viewMode" type="String" label="View Mode" default="view" description="The component accepts a mode value that determines the user interaction allowed for the form. edit,view,readonly" /> 
+            <property name="viewStyle" type="String" label="View Style" default="card" description="View Style allowed values are card, page" /> 
+            <property name="defaultFieldValues" type="String" label="Default Field Values" description="The default values to pupulate record with." /> 
+            <event name="valuechanged" label="Value Changed" description="This event fires when a value is changed.">
+                <schema>
+                    {
+                        "type": "object",
+                        "properties": {
+                           "name": {
+                               "type": "string"
+                           },
+                           "value": {
+                                "type": "string"
+                            }
+                       }
+                    }
+                </schema>
+            </event>
+            <supportedFormFactors>
+                <supportedFormFactor type="Small"/>
+                <supportedFormFactor type="Large"/>
+            </supportedFormFactors>
+        </targetConfig>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="title" type="String" label="Title" description="Title of the panel to be shown on top."/>
+            <property name="iconName" type="String" label="Icon Name" default="standard:calibration" /> 
+            <property name="objectApiName" type="String" default="{!objectApiName}"></property>
+            <property name="targetObjectApiName" type="String" label="Target Object Api Name" description="Object Api Name to show records for."/>
+            <property name="targetObjectRecordIdFieldName" type="String" label="Target Object Record Id" description="Record Id of the object to show data for."/>
+            <property name="recordFieldsetName" type="String" label="Record Fieldset" description="The fieldset to be used to show fields." /> 
+            <property name="viewMode" type="String" label="View Mode" default="view" description="The component accepts a mode value that determines the user interaction allowed for the form. edit,view,readonly" /> 
+            <property name="viewStyle" type="String" label="View Style" default="card" description="View Style allowed values are card, page" /> 
+            <property name="defaultFieldValues" type="String" label="Default Field Values" description="The default values to pupulate record with." /> 
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

@@ -1,0 +1,118 @@
+<template>
+    <div class="related-list-style-div"></div>
+    <div class="slds-card_boundary">
+        <div class="slds-page-header related-list-header">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <lightning-icon icon-name={iconName} alternative-text={relatedListTitle} size="small"
+                                title="large size"></lightning-icon>
+                        </div>
+                        <div class="slds-media__body">
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title">
+                                    <h1>
+                                        <span class="slds-page-header__title slds-truncate related-list-title"
+                                            title={relatedListTitleWithCount}>
+                                            {relatedListTitleWithCount}
+                                        </span>
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-page-header__col-actions">
+                    <div class="slds-page-header__controls">
+                        <div if:true={showClipWrapButton} class="slds-page-header__control">
+                            <button class="slds-button slds-button_icon slds-button_icon-more" aria-haspopup="true"
+                                aria-expanded="false" title="Clip/Wrap Text" onclick={handleClipWrap}>
+                                <lightning-icon if:true={wrapText} icon-name="utility:right_align"
+                                    alternative-text="Wrap Text" size="xx-small"></lightning-icon>
+                                <lightning-icon if:false={wrapText} icon-name="utility:center_align_text"
+                                    alternative-text="Clip Text" size="xx-small"></lightning-icon>
+                                <span class="slds-assistive-text">Clip/Wrap Text</span>
+                            </button>
+                        </div>
+                        <div>
+                            <lightning-button-group slot="actions">
+                                <lightning-button-stateful label-when-off="Show" label-when-on="Hide"
+                                    selected={isPanelVisible}
+                                    onclick={togglePanelVisibility}></lightning-button-stateful>
+                                <lightning-button-icon icon-name="utility:refresh"
+                                    onclick={handleRefreshList}></lightning-button-icon>
+                            </lightning-button-group>
+                        </div>
+                        <!-- <div class="slds-page-header__control">
+                            <button class="slds-button slds-button_icon slds-button_icon-border-filled"
+                                title="Refresh List" onclick={handleRefreshList}>
+                                <lightning-icon icon-name="utility:refresh" alternative-text="Refresh List"
+                                    size="xx-small"></lightning-icon>
+                                <span class="slds-assistive-text">Refresh List</span>
+                            </button>
+                        </div> -->
+
+                        <template if:true={showNewButton}>
+                            <div class="slds-page-header__control">
+                                <ul class="slds-button-group-list">
+                                    <li>
+                                        <lightning-button variant="neutral" label="New"
+                                            onclick={navigateToNewRecordPage}></lightning-button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </template>
+
+                        <template if:true={_actionList}>
+                            <div class="slds-page-header__control">
+                                <ul class="slds-button-group-list">
+                                    <template for:each={_actionList} for:item="item">
+                                        <template if:false={item.hidden}>
+                                            <li key={item.value}>
+                                                <lightning-button data-record-id={item.value} variant="neutral"
+                                                    label={item.label} value={item.value}
+                                                    onclick={handleActionClick}></lightning-button>
+                                            </li>
+                                        </template>
+                                    </template>
+                                </ul>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+            <template if:true={showListMeta}>
+                <div class="slds-page-header__row">
+                    <div class="slds-page-header__col-meta">
+                        <p class="slds-page-header__meta-text related-list-meta">{recordCountMeta} items • Sorted by
+                            {sortedByFieldLabel}</p>
+                    </div>
+                </div>
+            </template>
+        </div>
+        <template if:true={isPanelVisible}>
+            <div class="related-list-body" onitemregister={handleRegisterItem}>
+                <template if:true={showLoading}>
+                    <lightning-spinner alternative-text="Loading"></lightning-spinner>
+                </template>
+                <c-dmpl-datatable key-field="Id" draft-values={draftValues} columns={dataTableColumns}
+                    data={relatedData} hide-checkbox-column="true" sorted-direction={sortDirection} sorted-by={sortedBy}
+                    onsort={handleSort} enable-infinite-loading onloadmore={handleLoadMore} load-more-offset="10"
+                    show-row-number-column="true" onsave={handleSave} onfileuploaded={handleUploadFinished}
+                    onvaluechange={handleValueChange} onpreview={handlePreview} onselectedrec={handleToggle}
+                    oncellchange={handleCellChange} onedit={handleEdit} oncancel={handleCancel}>
+                </c-dmpl-datatable>
+                <template if:true={showEmptyMessage}>
+                    <div style="height: 10vh; background: #f3f3f3" class="slds-align_absolute-center">
+                        <p>
+                            <template if:false={unsupportedListview}>No items to display</template>
+                            <template if:true={unsupportedListview}>Unsupported listview. Please review the component's
+                                design attributes.</template>
+                        </p>
+                    </div>
+                </template>
+            </div>
+        </template>
+    </div>
+</template>

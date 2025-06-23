@@ -1,0 +1,17 @@
+<apex:page showHeader="false" 
+    standardController="SaleInvoice__c" 
+    lightningStyleSheets="true" 
+    renderAs="PDF"
+    applyBodyTag="False" 
+    applyHtmlTag="False"
+    standardStylesheets="false" 
+    sidebar="false">
+    <apex:slds /> 
+    <div class="slds-scope">
+        <!-- SLDS markup here -->
+    </div>
+<!-- Begin Default Content REMOVE THIS -->
+<h1>Congratulations</h1>
+This is your new Page
+<!-- End Default Content REMOVE THIS -->
+</apex:page>

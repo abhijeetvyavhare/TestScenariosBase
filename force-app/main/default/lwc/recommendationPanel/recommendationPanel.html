@@ -1,0 +1,124 @@
+<template>
+    <article class="slds-card slds-card_boundary slds-grid slds-grid_vertical">
+        <div class="slds-page-header">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <span class="slds-icon_container slds-icon-standard-contact">
+                        <lightning-icon icon-name="standard:einstein_replies" size="small"></lightning-icon>
+                    </span>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        <a href="javascript:void(0);" class="slds-card__header-link slds-truncate"
+                            onclick={handleVisibleClick} title={title}>
+                            <span>{title}</span>
+                        </a>
+                    </h2>
+                </div>
+            </header>
+        </div>
+        <div if:true={isVisible}>
+            <div if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+            </div>
+            <table if:true={renderRecords} class="slds-table slds-table_cell-buffer slds-table_bordered ">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th class="table-header-txt" scope="col" style="width:15%">
+                            <div class="slds-truncate" title="Items">Items</div>
+                        </th>
+                        <th class="table-header-txt" scope="col" style="width:15%">
+                            <div class="slds-truncate slds-align_absolute-center" title="">Risk</div>
+                        </th>
+                        <th class="table-header-txt" scope="col" style="width:15%">
+                            <div class="slds-truncate slds-align_absolute-center" title="">{selectionColumnName}</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template if:true={renderRecords} for:each={serviceRecommendations} for:item="record">
+                        <tr key={record.RecordType} class="slds-hint-parent">
+                            <th data-label="Items" scope="row">
+                                <div class="slds-truncate" title={record.RecordType}>
+                                    <a href="#" tabindex="-1">{record.RecordType}</a>
+                                </div>
+                            </th>
+                            <td data-label="Risk">
+                                <div class="slds-truncate" style="text-align: center;">
+
+                                </div>
+                            </td>
+                            <td data-label="Estimate">
+                                <div class="slds-truncate" style="text-align: center;">
+
+                                </div>
+                            </td>
+                        </tr>
+                        <template for:each={record.Items} for:item="item">
+                            <tr key={item.Id} class="slds-hint-parent">
+                                <th data-label="Items" scope="row" style="border-right: 1px solid #dddbda;">
+                                    <div class="slds-truncate slds-p-left_large" title={item.Name}>
+                                        <span>{item.Name}</span>
+                                    </div>
+                                </th>
+
+                                <td if:true={item.IsRed} data-label="Risk" style="height: 50px;"
+                                    class="slds-align_absolute-center">
+                                    <span class="slds-badge slds-theme_error">
+                                        <span style="margin: auto;">Critical</span>
+                                    </span>
+                                </td>
+                                <td if:true={item.IsAmber} data-label="Risk" style="height: 50px;"
+                                    class="slds-align_absolute-center">
+                                    <span class="slds-badge slds-theme_warning">
+                                        <span style="margin: auto;">Moderate</span>
+                                    </span>
+                                </td>
+                                <td if:true={item.IsGreen} data-label="Risk" style="height: 50px;"
+                                    class="slds-align_absolute-center">
+                                    <span class="slds-badge slds-theme_success">
+                                        <span style="margin: auto;">Low</span>
+                                    </span>
+                                </td>
+
+                                <td if:true={item.IsNone} data-label="Risk" style="height: 50px;"
+                                    class="slds-align_absolute-center">
+                                    <span class="slds-badge slds-theme_warning">
+                                        <span style="margin: auto;">Moderate</span>
+                                    </span>
+                                </td>
+
+                                <td if:true={item.IsPresent}
+                                    style="text-align: center;border-left: 1px solid #dddbda; border-right: 1px solid #dddbda;">
+                                    <lightning-button-icon class="circle-button" icon-name="utility:check"
+                                        variant="brand" value="false" id={item.RecommendationId}
+                                        onclick={addOrRemoveRelatedObject} alternative-text="Settings">
+                                    </lightning-button-icon>
+                                </td>
+                                <td if:false={item.IsPresent}
+                                    style="text-align: center;border-left: 1px solid #dddbda; border-right: 1px solid #dddbda;">
+                                    <div class="grey slds-truncate">
+                                        <lightning-button-icon-stateful value="true" id={item.RecommendationId}
+                                            icon-name="utility:none" size="medium" onclick={addOrRemoveRelatedObject}>
+                                        </lightning-button-icon-stateful>
+                                    </div>
+                                </td>
+                            </tr>
+                        </template>
+                    </template>
+                </tbody>
+            </table>
+            <div>
+                <footer if:true={renderRecords} class="slds-card__footer">
+                    <div slot="footer" style="text-align: right;">
+                        <lightning-button if:true={renderRecords} label="Cancel" variant="neutral" onclick={refresh}>
+                        </lightning-button>
+                        <lightning-button if:true={renderRecords} class="slds-p-left_small" label="Save" variant="brand"
+                            onclick={handleSave}>
+                        </lightning-button>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </article>
+</template>

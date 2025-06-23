@@ -1,0 +1,35 @@
+<template>
+    <c-header-card title="Product Catalog" icon-name="custom:custom17" show-page-header="true"
+    show-header-border="true" show-footer="false">
+        <lightning-layout vertical-align="top" horizontal-align="spread">
+            <lightning-layout-item size="8" flexibility="auto" padding="around-small">
+                <lightning-card>
+                    <lightning-combobox name="progress" label="Image" value={selectedImage} options={selectOptions}
+                        onchange={handleImageChange}></lightning-combobox>
+                    <div class="slds-m-top_x-small">
+                    <img src={downloadUrl} alt="SalesforceCodex- Image Map" usemap="#maptest">
+                    
+
+                    <template if:true={maps}>
+                        <map name="maptest">
+                            <template for:each={maps} for:item="map">
+                                <area key={map.Id} data-item={map.Id} title={map.Id} shape='rect' coords={map.dmpl__Coordinate__c}
+                                    href='' target="_blank" class="area" onclick={handleMap}>
+                            </template>
+                        </map>
+                    </template>
+                    </div>
+                </lightning-card>
+            </lightning-layout-item>
+            <!-- <lightning-layout-item size="4" flexibility="auto" padding="around-small">
+                <lightning-card title="Show Detail" icon-name="action:record">
+                    <template if:true={detail}>
+                        <div>
+                            {detail}
+                        </div>
+                    </template>
+                </lightning-card>
+            </lightning-layout-item> -->
+        </lightning-layout>
+    </c-header-card>
+</template>

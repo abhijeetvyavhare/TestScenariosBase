@@ -1,0 +1,172 @@
+<template>
+    <c-header-card title={title} icon-name="custom:custom17" is-collapsed={getIsPanelCollapsed} show-page-header
+        show-header-border show-footer={getFooterDataAvailable}>
+        <lightning-button-group slot="actions">
+            <lightning-button-stateful label-when-off="Show" label-when-on="Hide" selected={isPanelVisible}
+                onclick={handlePanelVisibility}>
+            </lightning-button-stateful>
+            <template if:true={isScanButtinAvailable}>
+                <lightning-button-icon-stateful icon-name="utility:scan" variant="border-filled"
+                    selected={isScanPanelVisible} onclick={handleScanPanelVisibility} alternative-text="Scan">
+                </lightning-button-icon-stateful>
+            </template>
+            <template if:true={showImportOption}>
+                <lightning-button-icon icon-name="utility:upload" variant="border-filled"
+                     onclick={handleImportClick} alternative-text="Import">
+                </lightning-button-icon>
+            </template>
+        </lightning-button-group>
+
+        <div if:false={isLoaded}>
+            <lightning-spinner variant="brand" alternative-text="Loading" size="medium"></lightning-spinner>
+        </div>
+        <template if:true={getHostError}>
+            <div class="slds-var-p-horizontal_small slds-text-color_error">
+                {getHostError}
+            </div>
+        </template>
+        <div if:true={isLoaded} class="slds-var-p-horizontal_small">
+            <lightning-record-edit-form id="lightning-record-form" density="comfy" data-my-id='line'
+                object-api-name={getChildObjectApiName} onsuccess={handleSuccess} onload={handleLoad}
+                onerror={handleError} record-type-id={childRecordTypeId}>
+                <lightning-messages> </lightning-messages>
+                <div class="slds-hide">
+                    <lightning-input-field field-name={getParentFieldName} value={recordId}></lightning-input-field>
+                    <template if:true={showCustomItemLookup}>
+                        <lightning-input-field field-name='dmpl__ItemId__c'></lightning-input-field>
+                    </template>
+                </div>
+                <lightning-layout multiple-rows>
+                    <template if:true={isPanelVisible}>
+                        <template if:true={getIsDesktop}>
+                            <template if:true={showCustomItemLookup}>
+                                <lightning-layout-item flexibility="auto">
+                                    <c-dmpl-lookup 
+                                        class="dmpl-customInput"
+                                        label='Item'
+                                        name='dmpl__ItemId__c'
+                                        onsearch={handleSearch}
+                                        onfocusacquired={handleSearchFocus}
+                                        onselectionchange={handleSelectionChange}>
+                                    </c-dmpl-lookup>
+                                </lightning-layout-item>
+                            </template>
+                            <template if:true={getFieldsetFields} for:each={getFieldsetFields} for:item="field">
+                                <lightning-layout-item key={field.apiName} flexibility="auto">
+                                    <lightning-input-field 
+                                        id={field.apiName} 
+                                        field-name={field.apiName}
+                                        required={field.required} 
+                                        disabled={field.disabled}
+                                        onchange={handleFieldChange}>
+                                    </lightning-input-field>
+                                </lightning-layout-item>
+                            </template>
+                            <lightning-layout-item padding="horizontal-small" class="slds-p-top_large"
+                                flexibility="auto, no-grow">
+                                <lightning-button variant="brand" type="submit" name="add" label="Add"
+                                    disabled={isSubmitDisabled}></lightning-button>
+                            </lightning-layout-item>
+                        </template>
+                    </template>
+                    <template if:true={isPanelVisible}>
+                        <template if:false={getIsDesktop}>
+                            <template if:true={showCustomItemLookup}>
+                                <lightning-layout-item flexibility="auto">
+                                    <c-dmpl-lookup 
+                                        class="dmpl-customInput"
+                                        label='Item'
+                                        name='dmpl__ItemId__c'
+                                        onsearch={handleSearch}
+                                        onfocusacquired={handleSearchFocus}
+                                        onselectionchange={handleSelectionChange}>
+                                    </c-dmpl-lookup>
+                                </lightning-layout-item>
+                            </template>
+                            <template if:true={getFieldsetFields} for:each={getFieldsetFields} for:item="field">
+                                <lightning-layout-item size={getDisplayGridColumns} small-device-size="12"
+                                    medium-device-size="6" large-device-size={getDisplayGridColumns}
+                                    key={field.apiName}>
+                                    <lightning-input-field 
+                                        id={field.apiName} 
+                                        field-name={field.apiName}
+                                        required={field.required} 
+                                        disabled={field.disabled}
+                                        onchange={handleFieldChange}>
+                                    </lightning-input-field>
+                                </lightning-layout-item>
+                            </template>
+                            <lightning-layout-item padding="horizontal-small" class="slds-p-top_large"
+                                size={getDisplayGridColumns} small-device-size="12" medium-device-size="6"
+                                large-device-size={getDisplayGridColumns}>
+                                <lightning-button variant="brand" type="submit" name="add" label="Add"
+                                    disabled={isSubmitDisabled}></lightning-button>
+                            </lightning-layout-item>
+                        </template>
+                    </template>
+                    <template if:true={isScanPanelVisible}>
+                        <template if:true={getScanFieldsetFields} for:each={getScanFieldsetFields} for:item="field">
+                            <lightning-layout-item flexibility="grow" key={field.apiName}>
+                                <lightning-input-field id={field.apiName} field-name={field.apiName}
+                                    variant="label-stacked" onchange={handleFieldChange}>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                        </template>
+                        <template if:true={isCameraAvailable}>
+                            <lightning-layout-item flexibility="no-grow" padding="horizontal-small"
+                                class="slds-p-top_medium">
+                                <lightning-button variant="brand" name="camera" label="Camera"
+                                    onclick={handleBeginScanClick}>
+                                </lightning-button>
+                            </lightning-layout-item>
+                        </template>
+                    </template>
+                </lightning-layout>
+            </lightning-record-edit-form>
+        </div>
+        <div slot="footer">
+            <lightning-layout vertical-align="center" multiple-rows if:true={getStockDataAvailable}>
+                <template if:true={getMyBranchStock} for:each={getMyBranchStock} for:item="stock">
+                    <lightning-layout-item key={stock.BranchName} flexibility="auto, no-grow" padding="around-small">
+                        <c-dmpl-tile if:true={showMRP} heading={stock.QuantityAvailable} sub-heading={customLabel.availableLabel}
+                            left-top-label={customLabel.inHandLabel} left-top-value={stock.QuantityInHand}
+                            right-top-label={stock.SKUName}
+                             right-bottom-label={stock.MRP} right-bottom-value="MRP">
+                        </c-dmpl-tile>
+                        <c-dmpl-tile if:false={showMRP} heading={stock.QuantityAvailable} sub-heading={customLabel.availableLabel}
+                            left-top-label={customLabel.inHandLabel} left-top-value={stock.QuantityInHand}
+                            left-bottom-label={stock.BranchName} right-top-label={stock.SKUName}>
+                        </c-dmpl-tile>
+                    </lightning-layout-item>
+                </template>
+                <template if:true={getOtherBranchStock} for:each={getOtherBranchStock} for:item="stock">
+                    <lightning-layout-item key={stock.BranchName} flexibility="auto, no-grow" padding="around-small">
+                        <c-dmpl-tile heading={stock.QuantityAvailable} sub-heading={customLabel.availableLabel}
+                            left-top-label={customLabel.inHandLabel} left-top-value={stock.QuantityInHand}
+                            left-bottom-label={stock.BranchName} right-bottom-label={stock.SKUName}>
+                        </c-dmpl-tile>
+                    </lightning-layout-item>
+                </template>
+                <template if:true={getAlternateItems} for:each={getAlternateItems} for:item="stock">
+                    <lightning-layout-item key={stock.BranchName} flexibility="auto, no-grow" padding="around-small">
+                        <c-dmpl-tile heading={stock.QuantityAvailable} sub-heading={customLabel.availableLabel}
+                            left-top-label={customLabel.inHandLabel} left-top-value={stock.QuantityInHand}
+                            left-bottom-label={stock.BranchName} right-bottom-label={stock.SKUName}>
+                        </c-dmpl-tile>
+                    </lightning-layout-item>
+
+                </template>
+            </lightning-layout>
+        </div>
+        <c-alternate-item-modal-cmp header={header}>
+            {content}
+            <div slot="footer">
+                <lightning-button label="Cancel" variant="neutral" onclick={hideAlternateItemsDialog}>
+                </lightning-button>
+                <lightning-button class="slds-p-left_small" label="Save" variant="brand"
+                    onclick={handleAlternateItemSave}>
+                </lightning-button>
+            </div>
+        </c-alternate-item-modal-cmp>
+    </c-header-card>
+</template>

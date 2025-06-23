@@ -1,0 +1,342 @@
+<template>
+  <ol class="slds-setup-assistant">
+    <template if:true={templateData} for:each={templateData} for:item="group">
+      <li key={group.groupBy} class="slds-setup-assistant__item">
+        <article class="slds-setup-assistant__step">
+          <div class={group.contentClass}>
+            <template if:false={isMobileView}>
+              <button class="slds-button slds-button_icon slds-m-right_x-small slds-m-top_x-small" title="Toggle"
+                aria-controls="step-1-summary-action" aria-expanded="true" name={group.groupBy}
+                onclick={handleExpandClick}>
+                <lightning-icon class="slds-button__icon slds-summary-detail__action-icon" icon-name="utility:switch"
+                  alternative-text="Toggle" size="xx-small" title="xx-small size"></lightning-icon>
+                <span class="slds-assistive-text">Toggle</span>
+              </button>
+            </template>
+            <div class="slds-container_fluid">
+              <div class="slds-summary-detail__title">
+                <div class="slds-setup-assistant__step-summary">
+                  <div class="slds-media">
+                    <div class="slds-media__figure">
+                      <template if:false={isMobileView}>
+                        <div class="slds-progress-ring slds-progress-ring_active-step slds-progress-ring_large">
+                          <div class="slds-progress-ring__content">{group.lineSequence}</div>
+                        </div>
+                      </template>
+                    </div>
+                    <div class="slds-media__body slds-m-top_x-small">
+                      <div class="slds-media">
+                        <div class="slds-setup-assistant__step-summary-content slds-media__body">
+                          <h3 class="slds-setup-assistant__step-summary-title slds-text-heading_small">
+                            <button class="slds-button slds-button_reset" name={group.groupBy}
+                              onclick={handleExpandClick}>{group.groupBy}</button>
+                          </h3>
+                          <p>{group.groupBy}</p>
+                        </div>
+                        <div class="slds-media__figure slds-media__figure_reverse">
+                          <p class="slds-text-align_right slds-text-color_weak">.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <template if:true={isMobileView}>
+                <div aria-hidden="false" class="slds-summary-detail__content">
+                  <ul class="slds-welcome-mat__tiles">
+                    <template if:true={group.records} for:each={group.records} for:item="activity">
+                      <li class="slds-welcome-mat__tile" key={activity.id}>
+                        <div class="slds-box slds-box_link slds-media">
+                          <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center">
+                            <div class="slds-welcome-mat__tile-figure">
+                              <template if:true={activity.isBoolean}>
+                                <lightning-icon icon-name="standard:answer_best" alternative-text="Schemes Applied"
+                                  size="large" title="large size">
+                                </lightning-icon>
+                              </template>
+                              <template if:true={activity.isText}>
+                                <lightning-icon icon-name="standard:text" alternative-text="Schemes Applied"
+                                  size="large" title="large size">
+                                </lightning-icon>
+                              </template>
+                              <template if:true={activity.isNumeric}>
+                                <lightning-icon icon-name="standard:number_input" alternative-text="Schemes Applied"
+                                  size="large" title="large size">
+                                </lightning-icon>
+                              </template>
+                              <template if:true={activity.isDate}>
+                                <lightning-icon icon-name="standard:date_input" alternative-text="Schemes Applied"
+                                  size="large" title="large size">
+                                </lightning-icon>
+                              </template>
+                              <template if:true={activity.isDecimal}>
+                                <lightning-icon icon-name="standard:number_input" alternative-text="Schemes Applied"
+                                  size="large" title="large size">
+                                </lightning-icon>
+                              </template>
+                              <template if:true={activity.isCurrency}>
+                                <lightning-icon icon-name="standard:currency" alternative-text="Schemes Applied"
+                                  size="large" title="large size">
+                                </lightning-icon>
+                              </template>
+                              <template if:true={activity.isDateTime}>
+                                <lightning-icon icon-name="standard:date_time" alternative-text="Schemes Applied"
+                                  size="large" title="large size">
+                                </lightning-icon>
+                              </template>
+                              <template if:true={activity.isTime}>
+                                <lightning-icon icon-name="standard:business_hours" alternative-text="Schemes Applied"
+                                  size="large" title="large size">
+                                </lightning-icon>
+                              </template>
+                              <template if:true={activity.isPhone}>
+                                <lightning-icon icon-name="standard:call" alternative-text="Schemes Applied"
+                                  size="large" title="large size">
+                                </lightning-icon>
+                              </template>
+                              <template if:true={activity.isURL}>
+                                <lightning-icon icon-name="standard:link" alternative-text="Schemes Applied"
+                                  size="large" title="large size">
+                                </lightning-icon>
+                              </template>
+                              <template if:true={activity.isEmail}>
+                                <lightning-icon icon-name="standard:email" alternative-text="Schemes Applied"
+                                  size="large" title="large size">
+                                </lightning-icon>
+                              </template>
+                              <template if:true={activity.isPhoto}>
+                                <lightning-icon icon-name="standard:photo" alternative-text="Schemes Applied"
+                                  size="large" title="large size">
+                                </lightning-icon>
+                              </template>
+                              <template if:true={activity.isPicklistValue}>
+                                <lightning-icon icon-name="standard:marketing_actions"
+                                  alternative-text="Schemes Applied" size="large" title="large size">
+                                </lightning-icon>
+                              </template>
+                            </div>
+                          </div>
+                          <div class="slds-media__body">
+                            <div class="slds-welcome-mat__tile-body">
+                              <h3 class="slds-welcome-mat__tile-description">{activity.name}</h3>
+                              <div class="slds-truncate slds-p-left_xx-small" title={activity.name}>
+                                <template if:true={activity.isPicklistValue}>
+                                  <div class="slds-col slds-p-top_x-small">
+                                    <lightning-radio-group name={activity.id} label={activity.name}
+                                      data-record-id={activity.id} variant="label-hidden"
+                                      options={activity.picklistValues} class="dmpl-radio"
+                                      onchange={handleTextChange}
+                                      value={activity.textValue} type="button"></lightning-radio-group>
+                                  </div>
+                                </template>
+                                <template if:true={activity.isBoolean}>
+                                  <div class="slds-col slds-p-top_x-small">
+                                    <lightning-input class="visitInput"
+                                      data-record-id={activity.id} onchange={handleBooleanChange}
+                                      checked={activity.booleanValue}
+                                      value={activity.booleanValue} variant="label-hidden"
+                                      type="toggle"></lightning-input>
+                                  </div>
+                                </template>
+                                <template if:true={activity.isText}>
+                                  <div class="slds-col slds-p-top_x-small">
+                                    <lightning-input class="visitInput" value={activity.textValue}
+                                      data-record-id={activity.id}
+                                      oncommit={handleTextChange} variant="label-hidden" type="text"></lightning-input>
+                                  </div>
+                                </template>
+                                <template if:true={activity.isNumeric}>
+                                  <div class="slds-col slds-p-top_x-small">
+                                    <lightning-input class="visitInput" data-record-id={activity.id}
+                                      value={activity.numericValue} oncommit={handleNumericChange}
+                                      variant="label-hidden"
+                                      type="number"></lightning-input>
+                                  </div>
+                                </template>
+                                <template if:true={activity.isDate}>
+                                  <div class="slds-col slds-p-top_x-small">
+                                    <lightning-input class="visitInput" data-record-id={activity.id}
+                                      value={activity.dateValue} oncommit={handleDateChange}
+                                      variant="label-hidden" style="width:100%"
+                                      type="date"></lightning-input>
+                                  </div>
+                                </template>
+                                <template if:true={activity.isDecimal}>
+                                  <div class="slds-col slds-p-top_x-small">
+                                    <lightning-input class="visitInput" data-record-id={activity.id}
+                                      value={activity.decimalValue} oncommit={handleDecimalChange}
+                                      variant="label-hidden" type="number"
+                                      step=".0001"></lightning-input>
+                                  </div>
+                                </template>
+                                <template if:true={activity.isCurrency}>
+                                  <div class="slds-col slds-p-top_x-small">
+                                    <lightning-input class="visitInput" data-record-id={activity.id}
+                                      value={activity.currencyValue} oncommit={handleCurrencyChange}
+                                      variant="label-hidden" type="number"
+                                      formatter="currency" step=".01"></lightning-input>
+                                  </div>
+                                </template>
+                                <template if:true={activity.isDateTime}>
+                                  <div class="slds-col slds-p-top_x-small">
+                                    <lightning-input class="visitInput" data-record-id={activity.id}
+                                      value={activity.dateTimeValue} oncommit={handleDateTimeChange}
+                                      variant="label-hidden"
+                                      type="datetime"></lightning-input>
+                                  </div>
+                                </template>
+                                <template if:true={activity.isTime}>
+                                  <div class="slds-col slds-p-top_x-small">
+                                    <lightning-input class="visitInput" data-record-id={activity.id}
+                                      value={activity.timeValue} oncommit={handleTimeChange}
+                                      variant="label-hidden"
+                                      type="time"></lightning-input>
+                                  </div>
+                                </template>
+                                <template if:true={activity.isPhone}>
+                                  <div class="slds-col slds-p-top_x-small">
+                                    <lightning-input class="visitInput" data-record-id={activity.id}
+                                    value={activity.phoneValue} oncommit={handlePhoneChange} 
+                                    variant="label-hidden" type="tel"
+                                    pattern="[0-9]{10}"></lightning-input>
+                                  </div>
+                                </template>
+                                <template if:true={activity.isURL}>
+                                  <div class="slds-col slds-p-top_x-small">
+                                    <lightning-input class="visitInput" data-record-id={activity.id}
+                                    value={activity.urlValue} oncommit={handleUrlChange} 
+                                    variant="label-hidden" type="url"></lightning-input>
+                                  </div>
+                                </template>
+                                <template if:true={activity.isEmail}>
+                                  <div class="slds-col slds-p-top_x-small">
+                                    <lightning-input class="visitInput" data-record-id={activity.id}
+                                    value={activity.emailValue} 
+                                    oncommit={handleEmailChange} variant="label-hidden" type="email"></lightning-input>
+                                  </div>
+                                </template>
+                                <template if:true={activity.isPhoto}>
+                                  <lightning-input type="file" class="visitInput" name="fileUploader" accept={acceptedFormats}
+                                  data-record-id={activity.id} record-id={recordId} onchange={handleUploadFinished} label={activity.textValue}>
+                                  </lightning-input>
+                                </template>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    </template>
+                  </ul>
+                </div>
+              </template>
+              <template if:false={isMobileView}>
+                <div aria-hidden="false" class="slds-summary-detail__content">
+                  <div class="slds-setup-assistant__step-detail">
+                    <div class="slds-progress slds-progress_vertical slds-progress_success">
+                      <ol class="slds-progress__list slds-progress__list-bordered">
+                        <template if:true={group.records} for:each={group.records} for:item="activity">
+                          <li class="slds-progress__item" key={activity.id}>
+                            <div class="slds-progress__marker"></div>
+                            <div class="slds-progress__item_content slds-grid slds-grid_align-spread"
+                              style="border-bottom:none">
+                              <div class="slds-size_1-of-4">{activity.name}</div>
+                              <div class="slds-grid slds-grid_align-end slds-size_3-of-4">
+                                <div class="slds-form-element">
+                                  <template if:true={activity.isPicklistValue}>
+                                    <div class="slds-col slds-p-top_x-small">
+                                      <lightning-radio-group name={activity.id} label={activity.name}
+                                        variant="label-hidden" options={activity.picklistValues} class="dmpl-radio"
+                                        data-record-id={activity.id} type="button"
+                                        onchange={handleTextChange}></lightning-radio-group>
+                                    </div>
+                                  </template>
+                                  <template if:true={activity.isBoolean}>
+                                    <lightning-input class="visitInput" value={activity.booleanValue}
+                                    checked={activity.booleanValue}
+                                      variant="label-hidden" type="toggle"
+                                      name={activity.id} data-record-id={activity.id}
+                                      onchange={handleBooleanChange}></lightning-input>
+                                  </template>
+                                  <template if:true={activity.isText}>
+                                    <lightning-input class="visitInput" value={activity.textValue}
+                                      variant="label-hidden" type="text"
+                                      data-record-id={activity.id} oncommit={handleTextChange}></lightning-input>
+                                  </template>
+                                  <template if:true={activity.isNumeric}>
+                                    <lightning-input class="visitInput" value={activity.numericValue}
+                                      variant="label-hidden" type="number"
+                                      data-record-id={activity.id} oncommit={handleNumericChange}></lightning-input>
+                                  </template>
+                                  <template if:true={activity.isDate}>
+                                    <lightning-input class="visitInput" value={activity.dateValue}
+                                      variant="label-hidden" type="date"
+                                      data-record-id={activity.id} oncommit={handleDateChange}></lightning-input>
+                                  </template>
+                                  <template if:true={activity.isDecimal}>
+                                    <lightning-input class="visitInput" value={activity.decimalValue}
+                                      variant="label-hidden" type="number"
+                                      oncommit={handleDecimalChange} data-record-id={activity.id}
+                                      step=".0001"></lightning-input>
+                                  </template>
+                                  <template if:true={activity.isCurrency}>
+                                    <lightning-input class="visitInput" value={activity.currencyValue}
+                                      variant="label-hidden" type="number"
+                                      formatter="currency" data-record-id={activity.id} oncommit={handleCurrencyChange}
+                                      step=".01"></lightning-input>
+                                  </template>
+                                  <template if:true={activity.isDateTime}>
+                                    <lightning-input class="visitInput" value={activity.dateTimeValue}
+                                      variant="label-hidden" type="datetime"
+                                      data-record-id={activity.id} oncommit={handleDateTimeChange}></lightning-input>
+                                  </template>
+                                  <template if:true={activity.isTime}>
+                                    <lightning-input class="visitInput" value={activity.timeValue}
+                                      variant="label-hidden" type="time"
+                                      data-record-id={activity.id} oncommit={handleTimeChange}></lightning-input>
+                                  </template>
+                                  <template if:true={activity.isPhone}>
+                                    <lightning-input class="visitInput" value={activity.phoneValue} variant="label-hidden" type="tel" pattern="[0-9]{10}"
+                                    data-record-id={activity.id}  oncommit={handlePhoneChange}></lightning-input>
+                                  </template>
+                                  <template if:true={activity.isURL}>
+                                    <lightning-input class="visitInput" value={activity.urlValue} variant="label-hidden" type="url"
+                                    data-record-id={activity.id} oncommit={handleUrlChange}></lightning-input>
+                                  </template>
+                                  <template if:true={activity.isEmail}>
+                                    <lightning-input class="visitInput" value={activity.emailValue} variant="label-hidden" type="email"
+                                    data-record-id={activity.id} oncommit={handleEmailChange}></lightning-input>
+                                  </template>
+
+                                  <template if:true={activity.isPhoto}>
+                                    <lightning-input class="visitInput" type="file" name="fileUploader" accept={acceptedFormats}
+                                    data-record-id={activity.id} record-id={recordId} onchange={handleUploadFinished} label={activity.textValue}>
+                                    </lightning-input>
+                                  </template>
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+                        </template>
+                      </ol>
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+        </article>
+      </li>
+    </template>
+  </ol>
+  <div
+    class="slds-grid slds-border_top slds-m-horizontal_medium slds-grid_align-center visitActionPanel slds-grid_vertical">
+    <template if:true={canEndVisit}>
+      <div class="slds-col slds-m-vertical_medium slds-align_absolute-center">
+        <div class="slds-col slds-p-horizontal_x-small">
+          <lightning-button class="visitActionButton" variant="brand" label="End Visit" title="End Visit"
+            onclick={handleEndVisitClick}></lightning-button>
+        </div>
+      </div>
+    </template>
+  </div>
+</template>

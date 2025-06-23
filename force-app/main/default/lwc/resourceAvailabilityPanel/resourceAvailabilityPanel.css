@@ -1,0 +1,75 @@
+.weekday {
+    flex: 1;
+    background-color: #f0f0f0;
+}
+
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.dmpl-present{
+    background-color: #F4FBE6;
+}
+.dmpl-absent{
+    background-color: #FFD7D7;
+}
+.dmpl-weekend{
+    background-color: #F3F3F3;
+}
+.dmpl-holiday{
+    background-color: #D7EDFF;
+}
+.dmpl-leave{
+    background-color: #FFFDC1;
+}
+.dmpl-half-day{
+    background-color: #f3def3;
+}
+.dmpl-default{
+    background-color: #ffffff;
+}
+.green-utility-icon {
+    --sds-c-icon-color-foreground-default: #F4FBE6;
+}
+
+.red-utility-icon {
+    --sds-c-icon-color-foreground-default: #FFD7D7;
+}
+
+.blue-utility-icon {
+    --sds-c-icon-color-foreground-default: #D7EDFF;
+}
+
+.gray-utility-icon {
+    --sds-c-icon-color-foreground-default: #F3F3F3;
+}
+
+.purple-utility-icon {
+    --sds-c-icon-color-foreground-default: #f3def3;
+}
+
+.yellow-utility-icon {
+    --sds-c-icon-color-foreground-default: #FFFDC1;
+}
+.dmpl-cal-box>div{
+    min-height:45px;
+    max-height: 45px;
+}
+.slds-align-items {
+    align-items: center;
+}
+.slds-align-end{
+    justify-content: end;
+}
+.scroll-container {
+    max-width: 100%; 
+    overflow-x: auto; 
+    white-space: nowrap;
+    scrollbar-width: none;
+    -ms-overflow-style: none; 
+}
+
+.scroll-container::-webkit-scrollbar {
+    display: none; 
+}

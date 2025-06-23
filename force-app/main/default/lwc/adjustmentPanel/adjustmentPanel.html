@@ -1,0 +1,70 @@
+<template>
+	<lightning-quick-action-panel dmpl-adjustment_grid header="Adjustments">
+		<div class="slds-grid">
+			<div class="slds-col slds-size_9-of-12">
+				<c-header-card title="Open Documents" icon-name="standard:calibration" show-page-header hide-body-margin
+					show-header-border>
+					<lightning-input slot="actions" type="search" variant="label-hidden" onchange={handleSearch}
+					placeholder="search numbers..."></lightning-input>
+					<c-dmpl-datatable key-field="Id" suppress-bottom-bar hide-checkbox-column
+						oncellchange={handleCellChange} columns={adjustmentColumns} onselectedrec={handleSelectedRec}
+						draft-values={draftValues} data={adjustmentData}>
+					</c-dmpl-datatable>
+				</c-header-card>
+			</div>
+			<div class="slds-col slds-size_3-of-12 slds-m-left_small slds-p-right_small">
+				<c-header-card title="Adjustments" icon-name="standard:calibration" show-page-header
+					show-header-border>
+					<div class="slds-p-horizontal_medium slds-m-bottom_x-small">
+						<ul class="slds-has-dividers_around-space">
+							<li class="slds-item">
+								<article class="slds-tile slds-tile_board">
+									<h3 class="slds-tile__title slds-truncate" title="Document Amount">
+										Document Amount
+									</h3>
+									<div class="slds-tile__detail">
+										<p class="slds-text-heading_medium">
+											<lightning-formatted-number value={documentAmount} format-style="currency">
+											</lightning-formatted-number>
+										</p>
+									</div>
+								</article>
+							</li>
+							<li class="slds-item">
+								<article class="slds-tile slds-tile_board">
+									<h3 class="slds-tile__title slds-truncate" title="Adjusted Amount">
+										Adjusted Amount
+									</h3>
+									<div class="slds-tile__detail">
+										<p class="slds-text-heading_medium">
+											<lightning-formatted-number value={adjustedAmount} format-style="currency">
+											</lightning-formatted-number>
+										</p>
+									</div>
+								</article>
+							</li>
+							<li class="slds-item">
+								<article class="slds-tile slds-tile_board">
+									<h3 class="slds-tile__title slds-truncate" title="Open Amount">
+										Open Amount
+									</h3>
+									<div class="slds-tile__detail">
+										<p class="slds-text-heading_medium">
+											<lightning-formatted-number value={openAmount} format-style="currency">
+											</lightning-formatted-number>
+										</p>
+									</div>
+								</article>
+							</li>
+						</ul>
+					</div>
+				</c-header-card>
+			</div>
+		</div>
+		<div slot="footer">
+			<lightning-button variant="neutral" onclick={handleClose} label="Cancel"></lightning-button>
+			<lightning-button variant="brand" label="Save" onclick={handleSave} type="submit"
+				class="slds-m-left_x-small" disabled={isLoading}></lightning-button>
+		</div>
+	</lightning-quick-action-panel>
+</template>
