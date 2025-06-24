@@ -11,6 +11,8 @@ public with sharing class PriceListHandler_Test {
         dmpl__PriceListRules__c priceListRule = PriceListDataHelper.createPriceListRule(priceList, item, sku);
         dmpl__Item__c  item1 = TestDataHelpers.createItem('Item 1','Product',true,false,false,'675654',false);
         dmpl__Item__c item3 = TestDataHelpers.createItem('Item 3','Charge Item',true, false, false ,'765434',true);
+        Account partnerAccount1 = TestDataHelpers.createPartnerAccount('Partner 1', false, true, false, true, 'MG Road', 'Bengaluru', 'Karnataka', 'India', '560001', '56 Industrial Layout', 'Bengaluru', 'Karnataka', 'India', '560095','9876543210');
+        dmpl__Branch__c branch1=TestDataHelpers.createBranch('Branch 1', partnerAccount1.Id, true, true, false, true);
         
     }
     
@@ -101,25 +103,34 @@ public with sharing class PriceListHandler_Test {
     @isTest
     static void createPriceListWithPriceListNamePositive(){
         Test.startTest();
-        dmpl__PriceList__c priceList = PriceListDataHelper.createPriceList('T7',true);
+        dmpl__Branch__c branch1=TestDataHelpers.getBranch('Branch 1');
+        Account partnerAccount1 = TestDataHelpers.getPartnerAccount('Partner 1');
+        dmpl__PriceList__c priceList = PriceListDataHelper.createPriceList('T7',true,partnerAccount1.Id,branch1.Id);
         dmpl__PriceList__c fetchedpriceList = PriceListDataHelper.getPriceList(priceList.Id);
         Test.stopTest();
         System.assertEquals('T7', fetchedPriceList.Name, 'Price List Name should be T7.');
         System.assertEquals(true, fetchedPriceList.dmpl__IsActive__c, 'Price List should be active.');
+        System.assertEquals(branch1.Id, fetchedPriceList.dmpl__BranchId__c, 'Price List should be active.');
+        System.assertEquals(partnerAccount1.Id, fetchedPriceList.dmpl__PartnerAccountId__c, 'Price List should be active.');
+        
     }
     
     //Price List with Price List Name(Edit)
     @isTest
     static void updatePriceListWithPriceListNamePositive(){
         Test.startTest();
-        dmpl__PriceList__c priceList = PriceListDataHelper.createPriceList('T7',true);
+        dmpl__Branch__c branch1=TestDataHelpers.getBranch('Branch 1');
+        Account partnerAccount1 = TestDataHelpers.getPartnerAccount('Partner 1');
+        dmpl__PriceList__c priceList = PriceListDataHelper.createPriceList('T7',true,partnerAccount1.Id,branch1.Id);
         dmpl__PriceList__c fetchedpriceList = PriceListDataHelper.getPriceList(priceList.Id);
         fetchedpriceList.Name = 'T9';
         Update fetchedpriceList;
         dmpl__PriceList__c updatedpriceList = PriceListDataHelper.getPriceList(fetchedpriceList.Id);
         Test.stopTest();
-        System.assertEquals('T9', fetchedPriceList.Name, 'Price List Name should be T9.');
-        System.assertEquals(true, fetchedPriceList.dmpl__IsActive__c, 'Price List should be active.');
+        System.assertEquals('T9', updatedpriceList.Name, 'Price List Name should be T9.');
+        System.assertEquals(true, updatedpriceList.dmpl__IsActive__c, 'Price List should be active.');
+        System.assertEquals(branch1.Id, updatedpriceList.dmpl__BranchId__c, 'Price List should be active.');
+        System.assertEquals(partnerAccount1.Id, updatedpriceList.dmpl__PartnerAccountId__c, 'Price List should be active.');
         
     }
     
@@ -128,7 +139,10 @@ public with sharing class PriceListHandler_Test {
     static void createPriceListWithoutPriceListNameNegative(){
         try{
             Test.startTest();
-            dmpl__PriceList__c priceList = PriceListDataHelper.createPriceList('',true);
+            dmpl__Branch__c branch1=TestDataHelpers.getBranch('Branch 1');
+            Account partnerAccount1 = TestDataHelpers.getPartnerAccount('Partner 1');
+            dmpl__PriceList__c priceList = PriceListDataHelper.createPriceList('',true,partnerAccount1.Id,branch1.Id);
+            
             Test.stopTest();
         } catch (DmlException e) {
             exceptionThrown = true;
@@ -142,25 +156,146 @@ public with sharing class PriceListHandler_Test {
     @isTest
     static void createPriceListWithisActivePositive(){
         Test.startTest();
-        dmpl__PriceList__c priceList = PriceListDataHelper.createPriceList('T7',true);
+        dmpl__Branch__c branch1=TestDataHelpers.getBranch('Branch 1');
+        Account partnerAccount1 = TestDataHelpers.getPartnerAccount('Partner 1');
+        dmpl__PriceList__c priceList = PriceListDataHelper.createPriceList('T7',true,partnerAccount1.Id,branch1.Id);
+        
         dmpl__PriceList__c fetchedpriceList = PriceListDataHelper.getPriceList(priceList.Id);
         Test.stopTest();
         System.assertEquals('T7', fetchedPriceList.Name, 'Price List Name should be T7.');
         System.assertEquals(true, fetchedPriceList.dmpl__IsActive__c, 'Price List should be active.');
+        System.assertEquals(branch1.Id, fetchedPriceList.dmpl__BranchId__c, 'Price List should be active.');
+        System.assertEquals(partnerAccount1.Id, fetchedPriceList.dmpl__PartnerAccountId__c, 'Price List should be active.');
+        
     }
     
     //Price List with Is Active(Edit)
     @isTest
     static void updatePriceListWithPriceListNamePositive(){
         Test.startTest();
-        dmpl__PriceList__c priceList = PriceListDataHelper.createPriceList('T7',true);
+        dmpl__Branch__c branch1=TestDataHelpers.getBranch('Branch 1');
+        Account partnerAccount1 = TestDataHelpers.getPartnerAccount('Partner 1');
+        dmpl__PriceList__c priceList = PriceListDataHelper.createPriceList('T7',true,partnerAccount1.Id,branch1.Id);
         dmpl__PriceList__c fetchedpriceList = PriceListDataHelper.getPriceList(priceList.Id);
         fetchedpriceList.dmpl__IsActive__c = false;
         Update fetchedpriceList;
         dmpl__PriceList__c updatedpriceList = PriceListDataHelper.getPriceList(fetchedpriceList.Id);
         Test.stopTest();
+        System.assertEquals('T7', updatedpriceList.Name, 'Price List Name should be T7.');
+        System.assertEquals(false, updatedpriceList.dmpl__IsActive__c, 'Price List should be active.');
+        System.assertEquals(branch1.Id, updatedpriceList.dmpl__BranchId__c, 'Price List should be active.');
+        System.assertEquals(partnerAccount1.Id, updatedpriceList.dmpl__PartnerAccountId__c, 'Price List should be active.');
+        
+    }
+    
+    
+    //Price List with Partner Account(New)
+    static void createPriceListWithPartnerAccountPositive(){
+        Test.startTest();
+        dmpl__Branch__c branch1=TestDataHelpers.getBranch('Branch 1');
+        Account partnerAccount1 = TestDataHelpers.getPartnerAccount('Partner 1');
+        dmpl__PriceList__c priceList = PriceListDataHelper.createPriceList('T7',true,partnerAccount1.Id,branch1.Id);
+        
+        dmpl__PriceList__c fetchedpriceList = PriceListDataHelper.getPriceList(priceList.Id);
+        Test.stopTest();
         System.assertEquals('T7', fetchedPriceList.Name, 'Price List Name should be T7.');
-        System.assertEquals(false, fetchedPriceList.dmpl__IsActive__c, 'Price List should be active.');
+        System.assertEquals(true, fetchedPriceList.dmpl__IsActive__c, 'Price List should be active.');
+        System.assertEquals(branch1.Id, fetchedPriceList.dmpl__BranchId__c, 'Price List should be active.');
+        System.assertEquals(partnerAccount1.Id, fetchedPriceList.dmpl__PartnerAccountId__c, 'Price List should be active.');
+        
+    }
+    
+    
+    //Price List with Partner Account(Edit)
+    @isTest
+    static void updatePriceListWithPriceListPartnerAccountPositive(){
+        Test.startTest();
+        dmpl__Branch__c branch1=TestDataHelpers.getBranch('Branch 1');
+        Account partnerAccount1 = TestDataHelpers.getPartnerAccount('Partner 1');
+        Account partnerAccount3 = TestDataHelpers.createPartnerAccount('Partner 3', false, true, false, true, '78 Nehru Nagar Road', 'Chennai', 'Tamil Nadu', 'India', '600042', '78 Nehru Nagar Road', 'Chennai', 'Tamil Nadu', 'India', '600042', '91-9123456789');
+        dmpl__PriceList__c priceList = PriceListDataHelper.createPriceList('T7',true,partnerAccount1.Id,branch1.Id);
+        dmpl__PriceList__c fetchedpriceList = PriceListDataHelper.getPriceList(priceList.Id);
+        fetchedpriceList.dmpl__PartnerAccountId__c = partnerAccount3.Id;
+        Update fetchedpriceList;
+        dmpl__PriceList__c updatedpriceList = PriceListDataHelper.getPriceList(fetchedpriceList.Id);
+        Test.stopTest();
+        System.assertEquals('T7', updatedpriceList.Name, 'Price List Name should be T7.');
+        System.assertEquals(true, updatedpriceList.dmpl__IsActive__c, 'Price List should be active.');
+        System.assertEquals(branch1.Id, updatedpriceList.dmpl__BranchId__c, 'Price List should be active.');
+        System.assertEquals(partnerAccount3.Id, updatedpriceList.dmpl__PartnerAccountId__c, 'Price List should be active.');
+        
+    }
+    
+    //Price List without Partner Account(new)
+    @isTest
+    static void createPriceListWithoutPartnerAccountNegative(){
+        try{
+            Test.startTest();
+            dmpl__Branch__c branch1=TestDataHelpers.getBranch('Branch 1');
+            Account partnerAccount1 = TestDataHelpers.getPartnerAccount('Partner 1');
+            dmpl__PriceList__c priceList = PriceListDataHelper.createPriceList('T1',true,null,branch1.Id);
+            
+            Test.stopTest();
+        } catch (DmlException e) {
+            exceptionThrown = true;
+        }
+        
+        System.assertEquals(true, exceptionThrown, 'Exception should be thrown when Price List partner account is empty.');
+        
+    }
+    
+    //Price List with branch(New)
+    static void createPriceListWithBranchPositive(){
+        Test.startTest();
+        dmpl__Branch__c branch1=TestDataHelpers.getBranch('Branch 1');
+        Account partnerAccount1 = TestDataHelpers.getPartnerAccount('Partner 1');
+        dmpl__PriceList__c priceList = PriceListDataHelper.createPriceList('T7',true,partnerAccount1.Id,branch1.Id);
+        
+        dmpl__PriceList__c fetchedpriceList = PriceListDataHelper.getPriceList(priceList.Id);
+        Test.stopTest();
+        System.assertEquals('T7', fetchedPriceList.Name, 'Price List Name should be T7.');
+        System.assertEquals(true, fetchedPriceList.dmpl__IsActive__c, 'Price List should be active.');
+        System.assertEquals(branch1.Id, fetchedPriceList.dmpl__BranchId__c, 'Price List should be active.');
+        System.assertEquals(partnerAccount1.Id, fetchedPriceList.dmpl__PartnerAccountId__c, 'Price List should be active.');
+        
+    }
+    
+    
+    //Price List with branch(Edit)
+    @isTest
+    static void updatePriceListWithPriceListBranchPositive(){
+        Test.startTest();
+        dmpl__Branch__c branch1=TestDataHelpers.getBranch('Branch 1');
+        Account partnerAccount1 = TestDataHelpers.getPartnerAccount('Partner 1');
+        Account partnerAccount3 = TestDataHelpers.createPartnerAccount('Partner 3', false, true, false, true, '78 Nehru Nagar Road', 'Chennai', 'Tamil Nadu', 'India', '600042', '78 Nehru Nagar Road', 'Chennai', 'Tamil Nadu', 'India', '600042', '91-9123456789');
+        dmpl__Branch__c branch3 = TestDataHelpers.createBranch('Branch 3', partnerAccount3.Id, false, true, true, false);
+        dmpl__PriceList__c priceList = PriceListDataHelper.createPriceList('T7',true,partnerAccount1.Id,branch1.Id);
+        dmpl__PriceList__c fetchedpriceList = PriceListDataHelper.getPriceList(priceList.Id);
+        fetchedpriceList.dmpl__BranchId__c = branch3.Id;
+        Update fetchedpriceList;
+        dmpl__PriceList__c updatedpriceList = PriceListDataHelper.getPriceList(fetchedpriceList.Id);
+        Test.stopTest();
+        System.assertEquals('T7', updatedpriceList.Name, 'Price List Name should be T7.');
+        System.assertEquals(true, updatedpriceList.dmpl__IsActive__c, 'Price List should be active.');
+        System.assertEquals(branch3.Id, updatedpriceList.dmpl__BranchId__c, 'Price List should be active.');
+        System.assertEquals(partnerAccount1.Id, updatedpriceList.dmpl__PartnerAccountId__c, 'Price List should be active.');
+        
+    }
+    //Price List without Branch(new)
+    @isTest
+    static void createPriceListWithoutBranchNegative(){
+        try{
+            Test.startTest();
+            dmpl__Branch__c branch1=TestDataHelpers.getBranch('Branch 1');
+            Account partnerAccount1 = TestDataHelpers.getPartnerAccount('Partner 1');
+            dmpl__PriceList__c priceList = PriceListDataHelper.createPriceList('T7',true,partnerAccount1.Id,null);
+            
+            Test.stopTest();
+        } catch (DmlException e) {
+            exceptionThrown = true;
+        }
+        
+        System.assertEquals(true, exceptionThrown, 'Exception should be thrown when Price List branch is empty.');
         
     }
     

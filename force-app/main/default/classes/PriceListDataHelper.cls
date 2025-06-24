@@ -21,12 +21,14 @@ public with sharing class PriceListDataHelper {
 
     public static dmpl__PriceList__c createPriceList(
         String name, 
-        Boolean isActive) {
+        Boolean isActive,
+        Id partnerAccountId,
+        Id branchId) {
         return (dmpl__PriceList__c) TestFactory.createSObject(
             new dmpl__PriceList__c(
                 Name = name,
-                dmpl__PartnerAccountId__c = partnerAccount.Id,
-                dmpl__BranchId__c = branch.Id,
+                dmpl__PartnerAccountId__c = partnerAccountId,
+                dmpl__BranchId__c = branchId,
                 dmpl__PriceListType__c = 'Sale Price',
                 dmpl__IsActive__c = isActive,
                 dmpl__IsDefault__c = false,
