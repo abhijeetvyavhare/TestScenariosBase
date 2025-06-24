@@ -58,6 +58,27 @@ public with sharing class PriceListDataHelper {
         );
     }
 
+
+    public static dmpl__PriceListRules__c createPriceListRule(
+        Id priceListId,
+        Id itemId,
+        Integer Price,
+        Date effectiveDatefrom,
+        Date effectiveDateto
+    ) {
+        return (dmpl__PriceListRules__c) TestFactory.createSObject(
+            new dmpl__PriceListRules__c(
+                dmpl__PriceListId__c = priceListId,
+                dmpl__ItemId__c = itemId,
+                dmpl__DateEffectiveFrom__c = effectiveDatefrom,
+                dmpl__DateEffectiveTill__c = effectiveDateto,
+                dmpl__Price__c = Price,
+                dmpl__Price2__c = 95.1234
+            ),
+            true
+        );
+    }
+
     public static dmpl__PriceList__c getPriceList() {
         return [SELECT 
                 Id, 
