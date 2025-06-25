@@ -151,7 +151,7 @@ public with sharing class BranchTestDataHelper {
         ];
     }
 
-    public static dmpl__BranchDateSlotResult__c getPostalCode(Id PostalCodeId) {
+    public static dmpl__PostalCode__c getPostalCode(Id PostalCodeId) {
         return [SELECT 
                 Id, 
                 Name

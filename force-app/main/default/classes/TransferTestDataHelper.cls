@@ -38,8 +38,8 @@ public with sharing class TransferTestDataHelper {
         Integer quantity) {
         return (dmpl__TransferInwardLine__c) TestFactory.createSObject(
             new dmpl__TransferInwardLine__c(
-                dmpl__TransferId__c = transfer.Id,
-                dmpl__BranchId__c = branch.Id,
+                dmpl__TransferId__c = transferId,
+                dmpl__BranchId__c = branchId,
                 dmpl__ItemId__c = itemId,
                 dmpl__Quantity__c = quantity
                 
