@@ -114,7 +114,7 @@ public with sharing class ResourceDataHelper {
 		return [SELECT Id, Name, dmpl__ResourceId__c, dmpl__FromDate__c FROM dmpl__ResourceBusinessHours__c LIMIT 1];
 	}
 	public static dmpl__ResourceBusinessHours__c getResourceBusinessHours(Id id){
-		return [SELECT Id, Name, dmpl__ResourceId__c, dmpl__FromDate__c FROM dmpl__ResourceBusinessHours__c WHERE Id = :id LIMIT 1];
+		return [SELECT Id, Name, dmpl__ResourceId__c, dmpl__FromDate__c,dmpl__ToDate__c FROM dmpl__ResourceBusinessHours__c WHERE Id = :id LIMIT 1];
 	}
 	
 	public static dmpl__PartnerResource__c CreatePartnerResources(
@@ -157,5 +157,40 @@ public with sharing class ResourceDataHelper {
 	
 	public static dmpl__ResourceAssignmentRule__c getResourceAssignmentRule(Id id){
 		return [SELECT Id, Name, dmpl__PartnerResourceId__c, dmpl__FieldName__c, dmpl__FieldValue__c, dmpl__Operation__c, dmpl__SequenceNumber__c, dmpl__AssignmentType__c FROM dmpl__ResourceAssignmentRule__c WHERE Id = :id LIMIT 1];
+	}
+
+	public static dmpl__ResourceLeave__c createResourceLeave(
+		Id resourceId,
+		Id typeId,
+		Integer Balance
+	){
+		return (dmpl__ResourceLeave__c) TestFactory.createSObject(
+            new dmpl__ResourceLeave__c(
+				dmpl__LeaveTypeId__c = type.Id,
+				dmpl__Available__c = 10,
+				dmpl__Balance__c = Balance,
+				dmpl__ResourceId__c = resource.Id
+        	),
+            true
+        );
+	}
+
+	public static dmpl__LeaveType__c getLeaveType(){
+		return [SELECT Id, Name, dmpl__EntitlementType__c, dmpl__Type__c FROM dmpl__LeaveType__c LIMIT 1];
+	}
+
+	public static dmpl__ResourceBusinessHours__c createResourceBusinessHours(
+		Id resourceId,
+		Date dateFrom,
+		Date dateTo
+		){
+		return (dmpl__ResourceBusinessHours__c) TestFactory.createSObject(
+            new dmpl__ResourceBusinessHours__c(
+				dmpl__ResourceId__c = resourceId,
+				dmpl__FromDate__c = dateFrom,
+				dmpl__ToDate__c = dateTo
+			),
+			true
+        );
 	}
 }
