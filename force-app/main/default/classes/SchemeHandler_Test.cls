@@ -3,13 +3,13 @@ public with sharing class SchemeHandler_Test {
     @TestSetup
     static void createRequiredData() {
         
-		Account partnerAccount1 = TestDataHelpers.createPartnerAccount('Partner 1', false, true, false, true, 'MG Road', 'Bengaluru', 'Karnataka', 'India', '560001', '56 Industrial Layout', 'Bengaluru', 'Karnataka', 'India', '560095','9876543210');
+		Account partnerAccount1 = TestDataHelpers.createPartnerAccount('Partner 1', false, true, false, true, '45 Residency Road', 'Pune', 'Maharashtra', 'India', '411001', '22 Commerce Avenue', 'Pune', 'Maharashtra', 'India', '411038','91-99665544433');
         Account partnerAccount2 = TestDataHelpers.createPartnerAccount('Partner 2', false, true, false, true, '45 Residency Road', 'Pune', 'Maharashtra', 'India', '411001', '22 Commerce Avenue', 'Pune', 'Maharashtra', 'India', '411038','91-99665544433');
-        Account partnerAccount3 = TestDataHelpers.createPartnerAccount('Partner 3', false, true, false, true, '78 Nehru Nagar Road', 'Chennai', 'Tamil Nadu', 'India', '600042', '78 Nehru Nagar Road', 'Chennai', 'Tamil Nadu', 'India', '600042', '91-9123456789');
-		Account partnerAccount4 = TestDataHelpers.createPartnerAccount('Partner 4', false, true, false, true, '12 Industrial Zone', 'Hyderabad','Telangana', 'India', '500032', '12 Industrial Zone', 'Hyderabad', 'Telangana', 'India','500032','9876012345');
+        Account partnerAccount3 = TestDataHelpers.createPartnerAccount('Partner 3', false, true, false, true, '78 Nehru Nagar Road', 'Chandigarh', 'Tamil Nadu', 'India', '600042', '78 Nehru Nagar Road', 'Chennai', 'Tamil Nadu', 'India', '600042', '91-9123456789');
+		Account partnerAccount4 = TestDataHelpers.createPartnerAccount('Partner 4', false, true, false, true, '12 Industrial Zone', 'Mumbai','Telangana', 'India', '500032', '12 Industrial Zone', 'Hyderabad', 'Telangana', 'India','500032','9876012345');
         Account customerAccount1 = TestDataHelpers.createCustomerAccount('Customer 1', true, false, false, true, 'MG Road', 'Pune', 'Maharashtra', 'India', '411001', 'Ring Rd', 'Nagpur', 'Maharashtra', 'India', '440001','9876543210', 'Created');
-        Account customerAccount4 = TestDataHelpers.createCustomerAccount('Customer 4', true, false, false, true, 'SG Highway', 'Ahmedabad', 'GJ', 'India', '380054', 'C G Road', 'Ahmedabad', 'GJ', 'India', '380009','9988776655', 'Created');
-        Account supplierAccount1 = TestDataHelpers.createSupplierAccount('Supplier 1', 'SG Highway', 'Ahmedabad', 'GJ', 'India', '380054', 'C G Road', 'Ahmedabad', 'GJ', 'India', '380009','9988776655');
+        Account customerAccount4 = TestDataHelpers.createCustomerAccount('Customer 4', true, false, false, true, 'SG Highway', 'New Delhi	', 'GJ', 'India', '380054', 'C G Road', 'New Delhi	', 'GJ', 'India', '380009','9988776655', 'Created');
+        Account supplierAccount1 = TestDataHelpers.createSupplierAccount('Supplier 1', 'SG Highway', 'New Delhi	', 'GJ', 'India', '380054', 'C G Road', 'New Delhi	', 'GJ', 'India', '380009','9988776655');
         
 		dmpl__Branch__c branch1 = TestDataHelpers.createBranch('Branch 1', partnerAccount1.Id, true, true, false, true);
         dmpl__Branch__c branch3 = TestDataHelpers.createBranch('Branch 3', partnerAccount3.Id, false, true, true, false);
@@ -1651,6 +1651,7 @@ public with sharing class SchemeHandler_Test {
         String conditionType = 'Item Quantity';
         Decimal conditionValue = 10;
         Decimal uomQuantity = 0;
+		Decimal uomQuantity1 = 0;
         dmpl__Item__c item = TestDataHelpers.getItem('Item 1');
 		dmpl__ItemGroup__c itemGroup = null;
         String conditionOperator = 'Equals';
@@ -1659,7 +1660,7 @@ public with sharing class SchemeHandler_Test {
 
 		dmpl__SchemeCondition__c schemeCondition;
 		try{
-			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
+			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity, uomQuantity1,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
 		}catch(Exception e){
 			System.Assert.isTrue(schemeCondition != null, 'Scheme Condition must create! >> ' + e.getMessage());
 		}
@@ -1670,6 +1671,7 @@ public with sharing class SchemeHandler_Test {
 		System.assertEquals(conditionType, schemeCondition.dmpl__ConditionType__c, 'Condition Type should match the input conditionType');
 		System.assertEquals(conditionValue, schemeCondition.dmpl__ConditionValue__c, 'Condition Value should match the input conditionValue');
 		System.assertEquals(uomQuantity, schemeCondition.dmpl__UOMQuantity__c, 'UOM Quantity should match the input uomQuantity');
+		System.assertEquals(uomQuantity1, schemeCondition.dmpl__UOMQuantity1__c, 'UOM Quantity should match the input uomQuantity');
 		System.assertEquals(item?.Id, schemeCondition.dmpl__ItemId__c, 'Item ID should match the input itemId');
 		System.assertEquals(itemGroup?.Id, schemeCondition.dmpl__ItemGroupId__c, 'Item Group ID should match the input itemGroupId');
 		System.assertEquals(conditionOperator, schemeCondition.dmpl__ConditionOperator__c, 'Condition Operator should match the input conditionOperator');
@@ -1686,6 +1688,7 @@ public with sharing class SchemeHandler_Test {
         String conditionType = 'Value';
         Decimal conditionValue = 12;
         Decimal uomQuantity = 0;
+		Decimal uomQuantity1 = 0;
         dmpl__Item__c item = TestDataHelpers.getItem('Item 1');
 		dmpl__ItemGroup__c itemGroup = null;
         String conditionOperator = 'Equals';
@@ -1694,7 +1697,7 @@ public with sharing class SchemeHandler_Test {
 
 		dmpl__SchemeCondition__c schemeCondition;
 		try{
-			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
+			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity, uomQuantity1,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
 		}catch(Exception e){
 			System.Assert.isTrue(schemeCondition != null, 'Scheme Condition must create! >> ' + e.getMessage());
 		}
@@ -1705,6 +1708,7 @@ public with sharing class SchemeHandler_Test {
 		System.assertEquals(conditionType, schemeCondition.dmpl__ConditionType__c, 'Condition Type should match the input conditionType');
 		System.assertEquals(conditionValue, schemeCondition.dmpl__ConditionValue__c, 'Condition Value should match the input conditionValue');
 		System.assertEquals(uomQuantity, schemeCondition.dmpl__UOMQuantity__c, 'UOM Quantity should match the input uomQuantity');
+		System.assertEquals(uomQuantity1, schemeCondition.dmpl__UOMQuantity1__c, 'UOM Quantity should match the input uomQuantity');
 		System.assertEquals(item?.Id, schemeCondition.dmpl__ItemId__c, 'Item ID should match the input itemId');
 		System.assertEquals(itemGroup?.Id, schemeCondition.dmpl__ItemGroupId__c, 'Item Group ID should match the input itemGroupId');
 		System.assertEquals(conditionOperator, schemeCondition.dmpl__ConditionOperator__c, 'Condition Operator should match the input conditionOperator');
@@ -1714,28 +1718,23 @@ public with sharing class SchemeHandler_Test {
 	}
 
 	@isTest 
-	static void createSchemeConditionWithCaseQuantityPositive(){}
-
-	@isTest 
-	static void createSchemeConditionWithPieceQuantityPositive(){}
-
-	@isTest 
-	static void createSchemeConditionWithConditoinTypeAsItemGroupPositive(){
+	static void createSchemeConditionWithCaseQuantityPositive(){
 		Test.startTest();
 		dmpl__Scheme__c scheme = SchemeDataHelper.getScheme('Scheme 20');
         dmpl__SchemeLine__c schemeLine = SchemeDataHelper.getSchemeLine(scheme.Id);
-        String conditionType = 'Item Group Quantity';
-        Decimal conditionValue = 0;
-        Decimal uomQuantity = 0;
-        dmpl__Item__c item = null;
-		dmpl__ItemGroup__c itemGroup = TestDataHelpers.getItemGroup('Item Group 2');
+        String conditionType = 'Value';
+        Decimal conditionValue = 12;
+        Decimal uomQuantity = 2;
+		Decimal uomQuantity1 = 0;
+        dmpl__Item__c item = TestDataHelpers.getItem('Item 1');
+		dmpl__ItemGroup__c itemGroup = null;
         String conditionOperator = 'Equals';
-        Decimal conditionQuantity = 0;
+        Decimal conditionQuantity = 12;
         Decimal sequenceNumber = 1;
 
 		dmpl__SchemeCondition__c schemeCondition;
 		try{
-			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
+			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity, uomQuantity1,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
 		}catch(Exception e){
 			System.Assert.isTrue(schemeCondition != null, 'Scheme Condition must create! >> ' + e.getMessage());
 		}
@@ -1746,6 +1745,81 @@ public with sharing class SchemeHandler_Test {
 		System.assertEquals(conditionType, schemeCondition.dmpl__ConditionType__c, 'Condition Type should match the input conditionType');
 		System.assertEquals(conditionValue, schemeCondition.dmpl__ConditionValue__c, 'Condition Value should match the input conditionValue');
 		System.assertEquals(uomQuantity, schemeCondition.dmpl__UOMQuantity__c, 'UOM Quantity should match the input uomQuantity');
+		System.assertEquals(uomQuantity1, schemeCondition.dmpl__UOMQuantity1__c, 'UOM Quantity should match the input uomQuantity');
+		System.assertEquals(item?.Id, schemeCondition.dmpl__ItemId__c, 'Item ID should match the input itemId');
+		System.assertEquals(itemGroup?.Id, schemeCondition.dmpl__ItemGroupId__c, 'Item Group ID should match the input itemGroupId');
+		System.assertEquals(conditionOperator, schemeCondition.dmpl__ConditionOperator__c, 'Condition Operator should match the input conditionOperator');
+		System.assertEquals(conditionQuantity, schemeCondition.dmpl__ConditionQuantity__c, 'Condition Quantity should match the input conditionQuantity');
+		System.assertEquals(sequenceNumber, schemeCondition.dmpl__SequenceNumber__c, 'Sequence Number should match the input sequenceNumber');
+		Test.stopTest();
+	}
+
+	@isTest 
+	static void createSchemeConditionWithPieceQuantityPositive(){
+		Test.startTest();
+		dmpl__Scheme__c scheme = SchemeDataHelper.getScheme('Scheme 20');
+        dmpl__SchemeLine__c schemeLine = SchemeDataHelper.getSchemeLine(scheme.Id);
+        String conditionType = 'Value';
+        Decimal conditionValue = 12;
+        Decimal uomQuantity = 2;
+		Decimal uomQuantity1 = 0;
+        dmpl__Item__c item = TestDataHelpers.getItem('Item 1');
+		dmpl__ItemGroup__c itemGroup = null;
+        String conditionOperator = 'Equals';
+        Decimal conditionQuantity = 12;
+        Decimal sequenceNumber = 1;
+
+		dmpl__SchemeCondition__c schemeCondition;
+		try{
+			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity, uomQuantity1,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
+		}catch(Exception e){
+			System.Assert.isTrue(schemeCondition != null, 'Scheme Condition must create! >> ' + e.getMessage());
+		}
+		schemeCondition =  SchemeDataHelper.getSchemeConditionbyId(schemeCondition.Id);
+
+		System.assertEquals(scheme?.Id, schemeCondition.dmpl__SchemeId__c, 'Scheme ID should match the input schemeId');
+		System.assertEquals(schemeLine?.Id, schemeCondition.dmpl__SchemeLineId__c, 'Scheme Line ID should match the input schemeLineId');
+		System.assertEquals(conditionType, schemeCondition.dmpl__ConditionType__c, 'Condition Type should match the input conditionType');
+		System.assertEquals(conditionValue, schemeCondition.dmpl__ConditionValue__c, 'Condition Value should match the input conditionValue');
+		System.assertEquals(uomQuantity, schemeCondition.dmpl__UOMQuantity__c, 'UOM Quantity should match the input uomQuantity');
+		System.assertEquals(uomQuantity1, schemeCondition.dmpl__UOMQuantity1__c, 'UOM Quantity should match the input uomQuantity');
+		System.assertEquals(item?.Id, schemeCondition.dmpl__ItemId__c, 'Item ID should match the input itemId');
+		System.assertEquals(itemGroup?.Id, schemeCondition.dmpl__ItemGroupId__c, 'Item Group ID should match the input itemGroupId');
+		System.assertEquals(conditionOperator, schemeCondition.dmpl__ConditionOperator__c, 'Condition Operator should match the input conditionOperator');
+		System.assertEquals(conditionQuantity, schemeCondition.dmpl__ConditionQuantity__c, 'Condition Quantity should match the input conditionQuantity');
+		System.assertEquals(sequenceNumber, schemeCondition.dmpl__SequenceNumber__c, 'Sequence Number should match the input sequenceNumber');
+		Test.stopTest();
+	}
+
+	@isTest 
+	static void createSchemeConditionWithConditoinTypeAsItemGroupPositive(){
+		Test.startTest();
+		dmpl__Scheme__c scheme = SchemeDataHelper.getScheme('Scheme 20');
+        dmpl__SchemeLine__c schemeLine = SchemeDataHelper.getSchemeLine(scheme.Id);
+        String conditionType = 'Item Group Quantity';
+        Decimal conditionValue = 0;
+        Decimal uomQuantity = 0;
+		Decimal uomQuantity1 = 0;
+        dmpl__Item__c item = null;
+		dmpl__ItemGroup__c itemGroup = TestDataHelpers.getItemGroup('Item Group 2');
+        String conditionOperator = 'Equals';
+        Decimal conditionQuantity = 0;
+        Decimal sequenceNumber = 1;
+
+		dmpl__SchemeCondition__c schemeCondition;
+		try{
+			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity, uomQuantity1,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
+		}catch(Exception e){
+			System.Assert.isTrue(schemeCondition != null, 'Scheme Condition must create! >> ' + e.getMessage());
+		}
+		schemeCondition =  SchemeDataHelper.getSchemeConditionbyId(schemeCondition.Id);
+
+		System.assertEquals(scheme?.Id, schemeCondition.dmpl__SchemeId__c, 'Scheme ID should match the input schemeId');
+		System.assertEquals(schemeLine?.Id, schemeCondition.dmpl__SchemeLineId__c, 'Scheme Line ID should match the input schemeLineId');
+		System.assertEquals(conditionType, schemeCondition.dmpl__ConditionType__c, 'Condition Type should match the input conditionType');
+		System.assertEquals(conditionValue, schemeCondition.dmpl__ConditionValue__c, 'Condition Value should match the input conditionValue');
+		System.assertEquals(uomQuantity, schemeCondition.dmpl__UOMQuantity__c, 'UOM Quantity should match the input uomQuantity');
+		System.assertEquals(uomQuantity1, schemeCondition.dmpl__UOMQuantity1__c, 'UOM Quantity should match the input uomQuantity');
 		System.assertEquals(item?.Id, schemeCondition.dmpl__ItemId__c, 'Item ID should match the input itemId');
 		System.assertEquals(itemGroup?.Id, schemeCondition.dmpl__ItemGroupId__c, 'Item Group ID should match the input itemGroupId');
 		System.assertEquals(conditionOperator, schemeCondition.dmpl__ConditionOperator__c, 'Condition Operator should match the input conditionOperator');
@@ -1762,6 +1836,7 @@ public with sharing class SchemeHandler_Test {
         String conditionType = 'Item Group Value';
         Decimal conditionValue = 0;
         Decimal uomQuantity = 0;
+		Decimal uomQuantity1 = 0;
         dmpl__Item__c item = null;
 		dmpl__ItemGroup__c itemGroup = TestDataHelpers.getItemGroup('Item Group 2');
         String conditionOperator = 'Equals';
@@ -1770,7 +1845,7 @@ public with sharing class SchemeHandler_Test {
 
 		dmpl__SchemeCondition__c schemeCondition;
 		try{
-			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
+			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity, uomQuantity1,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
 		}catch(Exception e){
 			System.Assert.isTrue(schemeCondition != null, 'Scheme Condition must create! >> ' + e.getMessage());
 		}
@@ -1781,6 +1856,7 @@ public with sharing class SchemeHandler_Test {
 		System.assertEquals(conditionType, schemeCondition.dmpl__ConditionType__c, 'Condition Type should match the input conditionType');
 		System.assertEquals(conditionValue, schemeCondition.dmpl__ConditionValue__c, 'Condition Value should match the input conditionValue');
 		System.assertEquals(uomQuantity, schemeCondition.dmpl__UOMQuantity__c, 'UOM Quantity should match the input uomQuantity');
+		System.assertEquals(uomQuantity1, schemeCondition.dmpl__UOMQuantity1__c, 'UOM Quantity should match the input uomQuantity');
 		System.assertEquals(item?.Id, schemeCondition.dmpl__ItemId__c, 'Item ID should match the input itemId');
 		System.assertEquals(itemGroup?.Id, schemeCondition.dmpl__ItemGroupId__c, 'Item Group ID should match the input itemGroupId');
 		System.assertEquals(conditionOperator, schemeCondition.dmpl__ConditionOperator__c, 'Condition Operator should match the input conditionOperator');
@@ -1797,15 +1873,16 @@ public with sharing class SchemeHandler_Test {
         String conditionType = 'Value';
         Decimal conditionValue = 0;
         Decimal uomQuantity = 0;
+		Decimal uomQuantity1 = 0;
         dmpl__Item__c item = null;
 		dmpl__ItemGroup__c itemGroup = null;
-        String conditionOperator = 'Greater Than or Equal';
+        String conditionOperator = 'Greater Than Or Equal';
         Decimal conditionQuantity = 0;
         Decimal sequenceNumber = 1;
 
 		dmpl__SchemeCondition__c schemeCondition;
 		try{
-			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
+			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity, uomQuantity1,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
 		}catch(Exception e){
 			System.Assert.isTrue(schemeCondition != null, 'Scheme Condition must create! >> ' + e.getMessage());
 		}
@@ -1816,6 +1893,7 @@ public with sharing class SchemeHandler_Test {
 		System.assertEquals(conditionType, schemeCondition.dmpl__ConditionType__c, 'Condition Type should match the input conditionType');
 		System.assertEquals(conditionValue, schemeCondition.dmpl__ConditionValue__c, 'Condition Value should match the input conditionValue');
 		System.assertEquals(uomQuantity, schemeCondition.dmpl__UOMQuantity__c, 'UOM Quantity should match the input uomQuantity');
+		System.assertEquals(uomQuantity1, schemeCondition.dmpl__UOMQuantity1__c, 'UOM Quantity should match the input uomQuantity');
 		System.assertEquals(item?.Id, schemeCondition.dmpl__ItemId__c, 'Item ID should match the input itemId');
 		System.assertEquals(itemGroup?.Id, schemeCondition.dmpl__ItemGroupId__c, 'Item Group ID should match the input itemGroupId');
 		System.assertEquals(conditionOperator, schemeCondition.dmpl__ConditionOperator__c, 'Condition Operator should match the input conditionOperator');
@@ -1832,6 +1910,7 @@ public with sharing class SchemeHandler_Test {
         String conditionType = 'Value';
         Decimal conditionValue = 0;
         Decimal uomQuantity = 0;
+		Decimal uomQuantity1 = 0;
         dmpl__Item__c item = null;
 		dmpl__ItemGroup__c itemGroup = null;
         String conditionOperator = 'Equals';
@@ -1840,7 +1919,7 @@ public with sharing class SchemeHandler_Test {
 
 		dmpl__SchemeCondition__c schemeCondition;
 		try{
-			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
+			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity, uomQuantity1,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
 		}catch(Exception e){
 			System.Assert.isTrue(schemeCondition != null, 'Scheme Condition must create! >> ' + e.getMessage());
 		}
@@ -1851,6 +1930,7 @@ public with sharing class SchemeHandler_Test {
 		System.assertEquals(conditionType, schemeCondition.dmpl__ConditionType__c, 'Condition Type should match the input conditionType');
 		System.assertEquals(conditionValue, schemeCondition.dmpl__ConditionValue__c, 'Condition Value should match the input conditionValue');
 		System.assertEquals(uomQuantity, schemeCondition.dmpl__UOMQuantity__c, 'UOM Quantity should match the input uomQuantity');
+		System.assertEquals(uomQuantity1, schemeCondition.dmpl__UOMQuantity1__c, 'UOM Quantity should match the input uomQuantity');
 		System.assertEquals(item?.Id, schemeCondition.dmpl__ItemId__c, 'Item ID should match the input itemId');
 		System.assertEquals(itemGroup?.Id, schemeCondition.dmpl__ItemGroupId__c, 'Item Group ID should match the input itemGroupId');
 		System.assertEquals(conditionOperator, schemeCondition.dmpl__ConditionOperator__c, 'Condition Operator should match the input conditionOperator');
@@ -1867,15 +1947,16 @@ public with sharing class SchemeHandler_Test {
         String conditionType = 'Value';
         Decimal conditionValue = 0;
         Decimal uomQuantity = 0;
+		Decimal uomQuantity1 = 0;
         dmpl__Item__c item = null;
 		dmpl__ItemGroup__c itemGroup = null;
-        String conditionOperator = 'Does not Equals';
+        String conditionOperator = 'Does Not Equal';
         Decimal conditionQuantity = 0;
         Decimal sequenceNumber = 1;
 
 		dmpl__SchemeCondition__c schemeCondition;
 		try{
-			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
+			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity, uomQuantity1,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
 		}catch(Exception e){
 			System.Assert.isTrue(schemeCondition != null, 'Scheme Condition must create! >> ' + e.getMessage());
 		}
@@ -1886,6 +1967,7 @@ public with sharing class SchemeHandler_Test {
 		System.assertEquals(conditionType, schemeCondition.dmpl__ConditionType__c, 'Condition Type should match the input conditionType');
 		System.assertEquals(conditionValue, schemeCondition.dmpl__ConditionValue__c, 'Condition Value should match the input conditionValue');
 		System.assertEquals(uomQuantity, schemeCondition.dmpl__UOMQuantity__c, 'UOM Quantity should match the input uomQuantity');
+		System.assertEquals(uomQuantity1, schemeCondition.dmpl__UOMQuantity1__c, 'UOM Quantity should match the input uomQuantity');
 		System.assertEquals(item?.Id, schemeCondition.dmpl__ItemId__c, 'Item ID should match the input itemId');
 		System.assertEquals(itemGroup?.Id, schemeCondition.dmpl__ItemGroupId__c, 'Item Group ID should match the input itemGroupId');
 		System.assertEquals(conditionOperator, schemeCondition.dmpl__ConditionOperator__c, 'Condition Operator should match the input conditionOperator');
@@ -1902,6 +1984,7 @@ public with sharing class SchemeHandler_Test {
         String conditionType = 'Value';
         Decimal conditionValue = 0;
         Decimal uomQuantity = 0;
+		Decimal uomQuantity1 = 0;
         dmpl__Item__c item = null;
 		dmpl__ItemGroup__c itemGroup = null;
         String conditionOperator = 'Greater Than';
@@ -1910,7 +1993,7 @@ public with sharing class SchemeHandler_Test {
 
 		dmpl__SchemeCondition__c schemeCondition;
 		try{
-			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
+			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity, uomQuantity1,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
 		}catch(Exception e){
 			System.Assert.isTrue(schemeCondition != null, 'Scheme Condition must create! >> ' + e.getMessage());
 		}
@@ -1921,6 +2004,7 @@ public with sharing class SchemeHandler_Test {
 		System.assertEquals(conditionType, schemeCondition.dmpl__ConditionType__c, 'Condition Type should match the input conditionType');
 		System.assertEquals(conditionValue, schemeCondition.dmpl__ConditionValue__c, 'Condition Value should match the input conditionValue');
 		System.assertEquals(uomQuantity, schemeCondition.dmpl__UOMQuantity__c, 'UOM Quantity should match the input uomQuantity');
+		System.assertEquals(uomQuantity1, schemeCondition.dmpl__UOMQuantity1__c, 'UOM Quantity should match the input uomQuantity');
 		System.assertEquals(item?.Id, schemeCondition.dmpl__ItemId__c, 'Item ID should match the input itemId');
 		System.assertEquals(itemGroup?.Id, schemeCondition.dmpl__ItemGroupId__c, 'Item Group ID should match the input itemGroupId');
 		System.assertEquals(conditionOperator, schemeCondition.dmpl__ConditionOperator__c, 'Condition Operator should match the input conditionOperator');
@@ -1937,6 +2021,7 @@ public with sharing class SchemeHandler_Test {
         String conditionType = 'Value';
         Decimal conditionValue = 0;
         Decimal uomQuantity = 0;
+		Decimal uomQuantity1 = 0;
         dmpl__Item__c item = null;
 		dmpl__ItemGroup__c itemGroup = null;
         String conditionOperator = 'Less Than';
@@ -1945,7 +2030,7 @@ public with sharing class SchemeHandler_Test {
 
 		dmpl__SchemeCondition__c schemeCondition;
 		try{
-			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
+			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity, uomQuantity1,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
 		}catch(Exception e){
 			System.Assert.isTrue(schemeCondition != null, 'Scheme Condition must  create! >> ' + e.getMessage());
 		}
@@ -1956,6 +2041,7 @@ public with sharing class SchemeHandler_Test {
 		System.assertEquals(conditionType, schemeCondition.dmpl__ConditionType__c, 'Condition Type should match the input conditionType');
 		System.assertEquals(conditionValue, schemeCondition.dmpl__ConditionValue__c, 'Condition Value should match the input conditionValue');
 		System.assertEquals(uomQuantity, schemeCondition.dmpl__UOMQuantity__c, 'UOM Quantity should match the input uomQuantity');
+		System.assertEquals(uomQuantity1, schemeCondition.dmpl__UOMQuantity1__c, 'UOM Quantity should match the input uomQuantity');
 		System.assertEquals(item?.Id, schemeCondition.dmpl__ItemId__c, 'Item ID should match the input itemId');
 		System.assertEquals(itemGroup?.Id, schemeCondition.dmpl__ItemGroupId__c, 'Item Group ID should match the input itemGroupId');
 		System.assertEquals(conditionOperator, schemeCondition.dmpl__ConditionOperator__c, 'Condition Operator should match the input conditionOperator');
@@ -1972,15 +2058,16 @@ public with sharing class SchemeHandler_Test {
         String conditionType = 'Value';
         Decimal conditionValue = 0;
         Decimal uomQuantity = 0;
+		Decimal uomQuantity1 = 0;
         dmpl__Item__c item = null;
 		dmpl__ItemGroup__c itemGroup = null;
-        String conditionOperator = 'Less Than or Equal';
+        String conditionOperator = 'Less Than Or Equal';
         Decimal conditionQuantity = 0;
         Decimal sequenceNumber = 1;
 
 		dmpl__SchemeCondition__c schemeCondition;
 		try{
-			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
+			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity, uomQuantity1,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
 		}catch(Exception e){
 			System.Assert.isTrue(schemeCondition != null, 'Scheme Condition must  create! >> ' + e.getMessage());
 		}
@@ -1991,6 +2078,7 @@ public with sharing class SchemeHandler_Test {
 		System.assertEquals(conditionType, schemeCondition.dmpl__ConditionType__c, 'Condition Type should match the input conditionType');
 		System.assertEquals(conditionValue, schemeCondition.dmpl__ConditionValue__c, 'Condition Value should match the input conditionValue');
 		System.assertEquals(uomQuantity, schemeCondition.dmpl__UOMQuantity__c, 'UOM Quantity should match the input uomQuantity');
+		System.assertEquals(uomQuantity1, schemeCondition.dmpl__UOMQuantity1__c, 'UOM Quantity should match the input uomQuantity');
 		System.assertEquals(item?.Id, schemeCondition.dmpl__ItemId__c, 'Item ID should match the input itemId');
 		System.assertEquals(itemGroup?.Id, schemeCondition.dmpl__ItemGroupId__c, 'Item Group ID should match the input itemGroupId');
 		System.assertEquals(conditionOperator, schemeCondition.dmpl__ConditionOperator__c, 'Condition Operator should match the input conditionOperator');
@@ -2004,18 +2092,19 @@ public with sharing class SchemeHandler_Test {
 		Test.startTest();
 		dmpl__Scheme__c scheme = SchemeDataHelper.getScheme('Scheme 20');
         dmpl__SchemeLine__c schemeLine = SchemeDataHelper.getSchemeLine(scheme.Id);
-        String conditionType = 'Item Group';
+        String conditionType = 'Item Group Value';
         Decimal conditionValue = 0;
         Decimal uomQuantity = 0;
+		Decimal uomQuantity1 = 0;
         dmpl__Item__c item = TestDataHelpers.getItem('Item 1');
 		dmpl__ItemGroup__c itemGroup = null;
-        String conditionOperator = 'Greater Than or Equal';
+        String conditionOperator = 'Greater Than Or Equal';
         Decimal conditionQuantity = 0;
         Decimal sequenceNumber = 1;
 
 		dmpl__SchemeCondition__c schemeCondition;
 		try{
-			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
+			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity, uomQuantity1,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
 		}catch(Exception e){
 			System.Assert.isTrue(schemeCondition != null, 'Scheme Condition must  create! >> ' + e.getMessage());
 		}
@@ -2026,6 +2115,7 @@ public with sharing class SchemeHandler_Test {
 		System.assertEquals(conditionType, schemeCondition.dmpl__ConditionType__c, 'Condition Type should match the input conditionType');
 		System.assertEquals(conditionValue, schemeCondition.dmpl__ConditionValue__c, 'Condition Value should match the input conditionValue');
 		System.assertEquals(uomQuantity, schemeCondition.dmpl__UOMQuantity__c, 'UOM Quantity should match the input uomQuantity');
+		System.assertEquals(uomQuantity1, schemeCondition.dmpl__UOMQuantity1__c, 'UOM Quantity should match the input uomQuantity');
 		System.assertEquals(item?.Id, schemeCondition.dmpl__ItemId__c, 'Item ID should match the input itemId');
 		System.assertEquals(itemGroup?.Id, schemeCondition.dmpl__ItemGroupId__c, 'Item Group ID should match the input itemGroupId');
 		System.assertEquals(conditionOperator, schemeCondition.dmpl__ConditionOperator__c, 'Condition Operator should match the input conditionOperator');
@@ -2039,18 +2129,19 @@ public with sharing class SchemeHandler_Test {
 		Test.startTest();
 		dmpl__Scheme__c scheme = SchemeDataHelper.getScheme('Scheme 20');
         dmpl__SchemeLine__c schemeLine = SchemeDataHelper.getSchemeLine(scheme.Id);
-        String conditionType = 'Item Group';
+        String conditionType = 'Item Group Value';
         Decimal conditionValue = 0;
         Decimal uomQuantity = 0;
+		Decimal uomQuantity1 = 0;
         dmpl__Item__c item = null;
 		dmpl__ItemGroup__c itemGroup = TestDataHelpers.getItemGroup('Item Group 2');
-        String conditionOperator = 'Greater Than or Equal';
+        String conditionOperator = 'Greater Than Or Equal';
         Decimal conditionQuantity = 0;
         Decimal sequenceNumber = 1;
 
 		dmpl__SchemeCondition__c schemeCondition;
 		try{
-			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
+			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity, uomQuantity1,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
 		}catch(Exception e){
 			System.Assert.isTrue(schemeCondition != null, 'Scheme Condition must create! >> ' + e.getMessage());
 		}
@@ -2061,6 +2152,7 @@ public with sharing class SchemeHandler_Test {
 		System.assertEquals(conditionType, schemeCondition.dmpl__ConditionType__c, 'Condition Type should match the input conditionType');
 		System.assertEquals(conditionValue, schemeCondition.dmpl__ConditionValue__c, 'Condition Value should match the input conditionValue');
 		System.assertEquals(uomQuantity, schemeCondition.dmpl__UOMQuantity__c, 'UOM Quantity should match the input uomQuantity');
+		System.assertEquals(uomQuantity1, schemeCondition.dmpl__UOMQuantity1__c, 'UOM Quantity should match the input uomQuantity');
 		System.assertEquals(item?.Id, schemeCondition.dmpl__ItemId__c, 'Item ID should match the input itemId');
 		System.assertEquals(itemGroup?.Id, schemeCondition.dmpl__ItemGroupId__c, 'Item Group ID should match the input itemGroupId');
 		System.assertEquals(conditionOperator, schemeCondition.dmpl__ConditionOperator__c, 'Condition Operator should match the input conditionOperator');
@@ -2077,6 +2169,7 @@ public with sharing class SchemeHandler_Test {
         String conditionType = 'Item Group';
         Decimal conditionValue = 0;
         Decimal uomQuantity = 0;
+		Decimal uomQuantity1 = 0;
         dmpl__Item__c item = null;
 		dmpl__ItemGroup__c itemGroup = TestDataHelpers.getItemGroup('Item Group 2');
         String conditionOperator = 'Greater Than or Equal';
@@ -2085,7 +2178,7 @@ public with sharing class SchemeHandler_Test {
 
 		dmpl__SchemeCondition__c schemeCondition;
 		try{
-			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
+			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity, uomQuantity1,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
 			System.Assert.isTrue(schemeCondition == null, 'Scheme Condition can\'t be created as Sequence number is not added');
 		}catch(Exception e){
 			System.Assert.isTrue(schemeCondition == null, 'Scheme Condition must not create! >> ' + e.getMessage());
@@ -2102,6 +2195,7 @@ public with sharing class SchemeHandler_Test {
         String conditionType = null;
         Decimal conditionValue = 0;
         Decimal uomQuantity = 0;
+		Decimal uomQuantity1 = 0;
         dmpl__Item__c item = null;
 		dmpl__ItemGroup__c itemGroup = TestDataHelpers.getItemGroup('Item Group 2');
         String conditionOperator = 'Greater Than or Equal';
@@ -2110,7 +2204,7 @@ public with sharing class SchemeHandler_Test {
 
 		dmpl__SchemeCondition__c schemeCondition;
 		try{
-			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
+			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity, uomQuantity1,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
 			System.Assert.isTrue(schemeCondition == null, 'Scheme Condition can\'t be created as Condition Type is not added ');
 		}catch(Exception e){
 			System.Assert.isTrue(schemeCondition == null, 'Scheme Condition must not create! >> ' + e.getMessage());
@@ -2127,6 +2221,7 @@ public with sharing class SchemeHandler_Test {
         String conditionType = 'Less Than or Equal';
         Decimal conditionValue = 0;
         Decimal uomQuantity = 0;
+		Decimal uomQuantity1 = 0;
         dmpl__Item__c item = null;
 		dmpl__ItemGroup__c itemGroup = TestDataHelpers.getItemGroup('Item Group 2');
         String conditionOperator = null;
@@ -2135,7 +2230,7 @@ public with sharing class SchemeHandler_Test {
 
 		dmpl__SchemeCondition__c schemeCondition;
 		try{
-			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
+			schemeCondition =  SchemeDataHelper.createSchemeCondition(scheme?.Id,schemeLine?.Id,conditionType,conditionValue,uomQuantity, uomQuantity1,item?.Id,itemGroup?.Id,conditionOperator,conditionQuantity,sequenceNumber);
 			System.Assert.isTrue(schemeCondition == null, 'Scheme Condition can\'t be created as Condition Operator is not added');
 		}catch(Exception e){
 			System.Assert.isTrue(schemeCondition == null, 'Scheme Condition must not create! >> ' + e.getMessage());

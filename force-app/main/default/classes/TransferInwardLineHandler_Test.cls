@@ -2,9 +2,6 @@
 public with sharing class TransferInwardLineHandler_Test {
     @TestSetup
     static void createRequiredData() {
-        Account partnerAccount1 = TestDataHelpers.createPartnerAccount('Partner 1', false, true, false, true, 'MG Road', 'Bengaluru', 'Karnataka', 'India', '560001', '56 Industrial Layout', 'Bengaluru', 'Karnataka', 'India', '560095','9876543210');
-        dmpl__Branch__c branch1=TestDataHelpers.createBranch('Branch 1', partnerAccount1.Id, true, true, false, true);
-        dmpl__Item__c  item1 = TestDataHelpers.createItem('Item 1','Product',true,false,false,'675654',false);
         Account partnerAccount = TestDataHelpers.createPartnerAccount();
         dmpl__Branch__c branch = TestDataHelpers.createBranch(partnerAccount);
         dmpl__Transfer__c transfer = TransferTestDataHelper.createTransfer(partnerAccount,branch);
@@ -53,7 +50,6 @@ public with sharing class TransferInwardLineHandler_Test {
         dmpl__TransferInwardLine__c nonDeletedLine = TransferTestDataHelper.getTransferInwardLine();
         System.assertNotEquals(null, nonDeletedLine, 'TransferInwardLine should still exist after failed delete');
     }
-    
     //Transfer Inwards with Branch(New)
     @isTest
     static void  createTransferInwardLineWithBranchPositive(){
@@ -206,7 +202,7 @@ public with sharing class TransferInwardLineHandler_Test {
     }
     
     //Transfer Inwards with Quantity(New)
-     @isTest
+    @isTest
     static void  createTransferInwardLineWithQuantityPositive(){
         Test.startTest();
         dmpl__Branch__c branch1=TestDataHelpers.getBranch('Branch 1');
@@ -214,10 +210,10 @@ public with sharing class TransferInwardLineHandler_Test {
         dmpl__Transfer__c transfer = TransferTestDataHelper.getTransfer();
         dmpl__TransferInwardLine__c inwardLine = TransferTestDataHelper.createTransferInwardLine(
             transfer.Id,
-            branch1.Id,
-            item1.Id,
-            1000
-        );
+        branch1.Id,
+        item1.Id,
+        1000
+            );
         dmpl__TransferInwardLine__c fetchedInwardLine = TransferTestDataHelper.getTransferInwardLine(inwardLine.Id);
         Test.stopTest();
         System.assertNotEquals(null, fetchedInwardLine, 'Transfer Inward Line should be created');
@@ -226,7 +222,7 @@ public with sharing class TransferInwardLineHandler_Test {
         System.assertEquals(item1.Id, fetchedInwardLine.dmpl__ItemId__c, 'Item ID should match');
         System.assertEquals(1000, fetchedInwardLine.dmpl__Quantity__c, 'Quantity should be 1000');
     }
-
+    
     //Transfer Inwards with Quantity(Edit)
     static void  updateTransferInwardLineWithQuantityPositive(){
         Test.startTest();
@@ -253,7 +249,7 @@ public with sharing class TransferInwardLineHandler_Test {
         System.assertEquals(item3.Id, updatedInwardLine.dmpl__ItemId__c, 'Item ID should match');
         System.assertEquals(2000, updatedInwardLine.dmpl__Quantity__c, 'Quantity should be 1000');
     }
-
+    
     //Transfer Inwards without Quantity(New)
     @isTest
     static void createTransferInwardLineWithoutQuantityNegative() {

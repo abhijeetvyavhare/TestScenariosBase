@@ -71,7 +71,7 @@ public with sharing class BranchPostalCodeHandler_Test {
         System.assertEquals('T1', updatedPostalCode.Name, 'Postal code Name should be Pune');
     }
 
-    //Postal Code Result with Postal Code(new)
+    //Postal Code Result without Postal Code(new)
     @isTest
     static void createPostalCodeWithPostalCodeNameNegative(){
         Boolean exceptionThrown = false;

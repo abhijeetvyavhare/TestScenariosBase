@@ -1,6 +1,6 @@
 @isTest
 public with sharing class PlaceHandler_Test {
-    @TestSetup
+	@TestSetup
     static void createRequiredData() {
         dmpl__Place__c place = PlaceDataHelper.createPlace();
     }
@@ -33,22 +33,22 @@ public with sharing class PlaceHandler_Test {
     static void deletePlace() {
         dmpl__Place__c place = PlaceDataHelper.getPlace();
         System.assertNotEquals(null, place, 'Place should exist before deletion.');
-        
+    
         Id placeId = place.Id;
-        
+    
         delete place;
-        
+    
         dmpl__Place__c deletedPlace;
-        
+    
         try {
             deletedPlace = PlaceDataHelper.getPlace(placeId);
         } catch (Exception e) {
             deletedPlace = null;
         }
-        
+    
         System.assertEquals(null, deletedPlace, 'Place should be marked as deleted.');
     }
-    
+   
     //Place with name(New)
     @isTest
     static void createPlaceWithNamePositive(){
@@ -95,7 +95,7 @@ public with sharing class PlaceHandler_Test {
         System.assertEquals('State', fetchedPlace.dmpl__PlaceType__c, 'Place type should be City.');
     }
 
-    //Place with Place Type(New)
+    //Place with Place Type(Edit)
     @isTest
     static void updatePlaceWithPlaceTypePositive(){
         dmpl__Place__c place = PlaceDataHelper.createPlace('Kerala','State');
