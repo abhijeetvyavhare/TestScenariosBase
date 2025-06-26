@@ -58,7 +58,7 @@ public with sharing class TransferInwardLineHandler_Test {
         dmpl__Item__c  item1 = TestDataHelpers.getItem('Item 1');
         dmpl__Transfer__c transfer = TransferTestDataHelper.getTransfer();
         dmpl__TransferInwardLine__c inwardLine = TransferTestDataHelper.createTransferInwardLine(
-            transfer.Id,
+        transfer.Id,
         branch1.Id,
         item1.Id,
         1000

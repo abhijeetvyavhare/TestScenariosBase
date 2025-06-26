@@ -16,7 +16,7 @@ public with sharing class PriceListHandler_Test {
         dmpl__SKU__c sku = TestDataHelpers.createSKU(item);
         dmpl__PriceListRules__c priceListRule = PriceListDataHelper.createPriceListRule(priceList, item, sku);
     }
-
+    
     @isTest
     static void createPriceListPositive() {
         dmpl__PriceList__c priceList = PriceListDataHelper.getPriceList();
@@ -24,7 +24,7 @@ public with sharing class PriceListHandler_Test {
         System.assertEquals(true, priceList.dmpl__IsActive__c, 'Price List should be active');
         System.assertEquals(true, priceList.dmpl__IsDefault__c, 'Price List should be default');
     }
-
+    
     @isTest
     static void createPriceListRulePositive() {
         dmpl__PriceListRules__c priceListRule = PriceListDataHelper.getPriceListRule();
@@ -33,7 +33,7 @@ public with sharing class PriceListHandler_Test {
         System.assertEquals(System.today(), priceListRule.dmpl__DateEffectiveFrom__c, 'Date effective from should be today');
         System.assertEquals(Date.today().addYears(1), priceListRule.dmpl__DateEffectiveTill__c, 'Date effective till should be 1 year from today');
     }
-
+    
     @isTest
     static void updatePriceListRulePositive() {
         dmpl__PriceListRules__c priceListRule = PriceListDataHelper.getPriceListRule();
@@ -45,14 +45,14 @@ public with sharing class PriceListHandler_Test {
         Test.stopTest();
         
         dmpl__PriceListRules__c updatedPriceListRule = PriceListDataHelper.getPriceListRule(priceListRule.Id);
-        System.assertEquals(Date.today() + 1, priceListRule.dmpl__DateEffectiveFrom__c, 'DateEffectiveFrom mismatch'); 
+        System.assertEquals(Date.today() + 1, priceListRule.dmpl__DateEffectiveFrom__c, 'DateEffectiveFrom mismatch');
         System.assertEquals(Date.today() + 2, priceListRule.dmpl__DateEffectiveTill__c, 'DateEffectiveTill mismatch');
     }
-
-    @isTest 
+    
+    @isTest
     static void updatePriceListPositive() {
         dmpl__PriceList__c priceList = PriceListDataHelper.getPriceList();
-
+        
         Test.startTest();
         priceList.dmpl__PriceListType__c = PriceListHelper.PRICELIST_TYPE_PURCHASE;
         priceList.dmpl__IsActive__c = false;
@@ -60,46 +60,46 @@ public with sharing class PriceListHandler_Test {
         priceList.Name = 'Updated Price List';
         update priceList;
         Test.stopTest();
-
+        
         dmpl__PriceList__c updatedPriceList = PriceListDataHelper.getPriceList(priceList.Id);
         System.assertEquals(PriceListHelper.PRICELIST_TYPE_PURCHASE, updatedPriceList.dmpl__PriceListType__c, 'Price List type should be updated to Purchase Price');
         System.assertEquals(false, updatedPriceList.dmpl__IsActive__c, 'Price List should be inactive');
         System.assertEquals(false, updatedPriceList.dmpl__IsDefault__c, 'Price List should not be default');
         System.assertEquals('Updated Price List', updatedPriceList.Name, 'Price List name should be updated');
     }
-
-    @isTest
-	static void deletePriceListRule() {
-    	dmpl__PriceListRules__c priceListRule = PriceListDataHelper.getPriceListRule();
-
-    	Test.startTest();
-    	delete priceListRule;
-    	Test.stopTest();
-
-    	try {
-        	dmpl__PriceListRules__c deletedPriceListRule = PriceListDataHelper.getPriceListRule(priceListRule.Id);
-        	System.assertEquals(null, deletedPriceListRule.Id, 'Price List Rule should be deleted');
-    	} catch (QueryException e) {
-        	System.assert(true, 'Expected exception on querying deleted Price List Rule');
-    	}
-	}
-
-    @isTest
-	static void deletePriceList() {
-    	dmpl__PriceList__c priceList = PriceListDataHelper.getPriceList();
-
-    	Test.startTest();
-    	delete priceList;
-    	Test.stopTest();
     
-    	try {
-        	dmpl__PriceList__c deletedPriceList = PriceListDataHelper.getPriceList(priceList.Id);
-        	System.assertEquals(null, deletedPriceList.Id, 'Price List Rule should be deleted');
-    	} catch (QueryException e) {
-        	System.assert(true, 'Expected exception on querying deleted price list');
-    	}
-	}
-
+    @isTest
+    static void deletePriceListRule() {
+        dmpl__PriceListRules__c priceListRule = PriceListDataHelper.getPriceListRule();
+        
+        Test.startTest();
+        delete priceListRule;
+        Test.stopTest();
+        
+        try {
+            dmpl__PriceListRules__c deletedPriceListRule = PriceListDataHelper.getPriceListRule(priceListRule.Id);
+            System.assertEquals(null, deletedPriceListRule.Id, 'Price List Rule should be deleted');
+        } catch (QueryException e) {
+            System.assert(true, 'Expected exception on querying deleted Price List Rule');
+        }
+    }
+    
+    @isTest
+    static void deletePriceList() {
+        dmpl__PriceList__c priceList = PriceListDataHelper.getPriceList();
+        
+        Test.startTest();
+        delete priceList;
+        Test.stopTest();
+        
+        try {
+            dmpl__PriceList__c deletedPriceList = PriceListDataHelper.getPriceList(priceList.Id);
+            System.assertEquals(null, deletedPriceList.Id, 'Price List Rule should be deleted');
+        } catch (QueryException e) {
+            System.assert(true, 'Expected exception on querying deleted price list');
+        }
+    }
+    
     //Price List with Price List Name(New)
     @isTest
     static void createPriceListWithPriceListNamePositive(){
@@ -139,7 +139,7 @@ public with sharing class PriceListHandler_Test {
     @isTest
     static void createPriceListWithoutPriceListNameNegative(){
         Boolean exceptionThrown = false;
-
+        
         try{
             Test.startTest();
             dmpl__Branch__c branch1=TestDataHelpers.getBranch('Branch 1');
@@ -235,7 +235,7 @@ public with sharing class PriceListHandler_Test {
     @isTest
     static void createPriceListWithoutPartnerAccountNegative(){
         Boolean exceptionThrown = false;
-
+        
         try{
             Test.startTest();
             dmpl__Branch__c branch1=TestDataHelpers.getBranch('Branch 1');
@@ -293,7 +293,7 @@ public with sharing class PriceListHandler_Test {
     @isTest
     static void createPriceListWithoutBranchNegative(){
         Boolean exceptionThrown = false;
-
+        
         try{
             Test.startTest();
             dmpl__Branch__c branch1=TestDataHelpers.getBranch('Branch 1');
@@ -308,7 +308,7 @@ public with sharing class PriceListHandler_Test {
         System.assertEquals(true, exceptionThrown, 'Exception should be thrown when Price List branch is empty.');
         
     }
-      
+    
     //Price List Rule with Item(New)
     @isTest
     static void createPriceListRuleWithItemPositive(){
@@ -352,6 +352,7 @@ public with sharing class PriceListHandler_Test {
     //Price List Rule without Item(New)
     @isTest
     static void createPriceListRuleWithoutItemNegative(){
+        
         Boolean exceptionThrown = false;
         Test.startTest();
         dmpl__Branch__c branch1=TestDataHelpers.getBranch('Branch 1');
@@ -410,7 +411,7 @@ public with sharing class PriceListHandler_Test {
     
     //Price List Rule without price(New)
     @isTest
-    static void updatePriceListRuleWithoutPriceNegative(){
+    static void createPriceListRuleWithoutPriceNegative(){
         Boolean exceptionThrown = false;
         
         Test.startTest();
@@ -527,7 +528,7 @@ public with sharing class PriceListHandler_Test {
             fetchedrule.dmpl__PriceListId__c = priceList1.Id;
             Update fetchedrule;
         }catch(exception e){
-
+            
             exceptionThrown = true;
         }
         
@@ -600,20 +601,20 @@ public with sharing class PriceListHandler_Test {
     
     //Price List Rule with Date Effective To same as Date Effective From(New)
     @isTest
-    static void createPriceListRuleWithDateEffectiveToSameAsDateEffectiveFromNegative(){
+    static void createPriceListRuleWithDateEffectiveToSameAsDateEffectiveFromPositive(){
         Boolean exceptionThrown = false;
         Test.startTest();
         dmpl__Item__c  item1 = TestDataHelpers.getItem('Item 1');
         dmpl__Branch__c branch1=TestDataHelpers.getBranch('Branch 1');
         Account partnerAccount1 = TestDataHelpers.getPartnerAccount('Partner 1');
         dmpl__PriceList__c priceList = PriceListDataHelper.createPriceList('T7',true,partnerAccount1.Id,branch1.Id);
-        try{
-            dmpl__PriceListRules__c rule = PriceListDataHelper.createPriceListRule(priceList.Id,item1.Id,1000,Date.today(),Date.today());
-        } catch (DmlException e) {
-            exceptionThrown = true; 
-        }
+        dmpl__PriceListRules__c rule = PriceListDataHelper.createPriceListRule(priceList.Id,item1.Id,1000,Date.today(),Date.today());
+        dmpl__PriceListRules__c fetchedrule = PriceListDataHelper.getPriceListRule(rule.Id);
         Test.stopTest();
-        
-        System.assertEquals(true, exceptionThrown, 'Exception should be thrown when Date Effective till is same Date Effective From .');
+        System.assertEquals(item1.Id, fetchedRule.dmpl__ItemId__c, 'Item should match.');
+        System.assertEquals(priceList.Id, fetchedRule.dmpl__PriceListId__c, 'Price List should match.');
+        System.assertEquals(Date.today(), fetchedRule.dmpl__DateEffectiveFrom__c, 'Effective From date should match.');
+        System.assertEquals(Date.today(), fetchedRule.dmpl__DateEffectiveTill__c, 'Effective From date should match.');
+        System.assertEquals(1000, fetchedRule.dmpl__Price__c, 'Price should be 1000.');
     }
 }

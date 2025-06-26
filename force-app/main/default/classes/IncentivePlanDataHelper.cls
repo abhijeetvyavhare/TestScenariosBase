@@ -457,7 +457,7 @@ public with sharing class IncentivePlanDataHelper {
     public static dmpl__IncentiveCompensationLine__c getCompensationLine(Id lineId) {
         return [
             SELECT Id, dmpl__CompensationId__c, dmpl__IncentivePlanId__c, dmpl__IncentivePeriodId__c, dmpl__ItemId__c, dmpl__SKUId__c,
-                   dmpl__IncentiveAmount__c, dmpl__Status__c
+                   dmpl__IncentiveAmount__c, dmpl__Status__c,dmpl__SchemeId__c
             FROM dmpl__IncentiveCompensationLine__c
             WHERE Id = :lineId
             LIMIT 1
