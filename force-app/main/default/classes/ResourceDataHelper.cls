@@ -166,10 +166,10 @@ public with sharing class ResourceDataHelper {
 	){
 		return (dmpl__ResourceLeave__c) TestFactory.createSObject(
             new dmpl__ResourceLeave__c(
-				dmpl__LeaveTypeId__c = type.Id,
+				dmpl__LeaveTypeId__c = typeId,
 				dmpl__Available__c = 10,
 				dmpl__Balance__c = Balance,
-				dmpl__ResourceId__c = resource.Id
+				dmpl__ResourceId__c = resourceId
         	),
             true
         );

@@ -16,6 +16,11 @@ public with sharing class ItemDataHelper {
             true
         );
     }
+	public static dmpl__Item__c createItem(String name) {
+        return (dmpl__Item__c) TestFactory.createSObject(
+            new dmpl__Item__c(Name = name), true
+        );
+    }
 
     public static dmpl__Item__c updateItem(
         dmpl__Item__c item
@@ -42,6 +47,8 @@ public with sharing class ItemDataHelper {
             LIMIT 1
         ];
     }
+
+
 
     public static dmpl__ItemUnitOfMeasure__c createItemUnitOfMeasure(
         dmpl__Item__c item,
@@ -106,6 +113,24 @@ public with sharing class ItemDataHelper {
         );
     }
 
+    public static dmpl__ItemLotType__c  createItemLotType(
+        dmpl__Item__c item,
+        String name,
+        Decimal mrp,
+        Id ExternalItemCode
+    ) {
+        return (dmpl__ItemLotType__c) TestFactory.createSObject(
+            new dmpl__ItemLotType__c(
+                Name = name,
+                dmpl__ItemId__c = item.Id,
+                dmpl__MRP__c  = mrp,
+                dmpl__ExternalItemCode__c = ExternalItemCode    
+            ),
+            'ItemLotTypeDefaults',
+            true
+        );
+    }
+
     public static dmpl__ItemLotType__c updateItemLotType(
         dmpl__ItemLotType__c itemLotType,
         String newName,
@@ -130,13 +155,26 @@ public with sharing class ItemDataHelper {
     ) {
         return [
             SELECT Id, Name, dmpl__ItemId__c, IsDeleted, 
-                   dmpl__IsSample__c, dmpl__IsSaleable__c, dmpl__IsPromo__c
+                   dmpl__IsSample__c, dmpl__IsSaleable__c, dmpl__IsPromo__c, dmpl__MRP__c,dmpl__ExternalItemCode__c
             FROM dmpl__ItemLotType__c
             WHERE dmpl__ItemId__c = :itemId
             LIMIT 1
         ];
     }
     
+    public static dmpl__ItemLotType__c getItemLotType(
+       dmpl__ItemLotType__c itemLotType 
+    ) {
+        return [
+            SELECT Id, Name, dmpl__ItemId__c, IsDeleted, 
+                   dmpl__IsSample__c, dmpl__IsSaleable__c, dmpl__IsPromo__c,dmpl__MRP__c,dmpl__ExternalItemCode__c
+            FROM dmpl__ItemLotType__c
+            WHERE Id = :itemLotType.Id
+            LIMIT 1
+        ];
+    }
+    
+
     public static dmpl__ItemFeature__c createItemFeature(
         dmpl__Item__c item,
         String name,
@@ -676,4 +714,35 @@ public with sharing class ItemDataHelper {
             LIMIT 1
         ];
     }
+    
+    public static dmpl__ItemImageDetail__c createItemImageDetail(
+        String name,
+        Id itemId,
+        Id itemComponentId,
+        Id componentItemId,
+        String detail
+        ) {
+        return (dmpl__ItemImageDetail__c) TestFactory.createSObject(
+            new dmpl__ItemImageDetail__c(
+                Name = name,
+                dmpl__ComponentItemId__c = componentItemId,
+                dmpl__ItemId__c = itemId,
+                dmpl__ItemComponentId__c = itemComponentId,
+                dmpl__Detail__c = detail
+            ),
+            'ItemImageDetailDefaults',
+            true
+        );
+    }
+
+     public static dmpl__ItemImageDetail__c getItemImageDetail(dmpl__ItemImageDetail__c imageid) {
+        return [
+            SELECT Id, dmpl__ItemId__c, Name, dmpl__LinkUrl__c,dmpl__ComponentItemId__c,dmpl__ItemComponentId__c,dmpl__Detail__c
+            FROM dmpl__ItemImageDetail__c
+            WHERE Id = :imageid.Id
+            LIMIT 1
+        ];
+    }
+    
+
 }

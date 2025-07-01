@@ -185,18 +185,18 @@ public with sharing class ResourceAvailabilityHandler_Test {
     
     //Record with active BranchId Assigned to Resource
     @isTest
-    static void createAvailabilityDataWithTypeAndAttendanceTimePositive() {
+    static void createAvailabilityDataWithActiveBranchPositive() {
         
         Test.startTest();
         dmpl__ResourceAvailability__c resourceAvailability = ResourceAvailabilityDataHelper.getResourceAvailability();
         dmpl__Resource__c resource = ResourceDataHelper.getResource();
-        dmpl__Branch__c branch = TestDataHelpers.createBranch(partnerAccount);
+        dmpl__Branch__c branch = TestDataHelpers.getBranch();
         DateTime attendanceTime = DateTime.now();
         
         dmpl__ResourceAvailabilityData__c availabilityData = ResourceAvailabilityDataHelper.createResourceAvailabilityData(
             resource.Id,
         resourceAvailability.Id,
-        branch.Id,
+    branch.Id,
         'Check-In',
         attendanceTime
             );
@@ -241,12 +241,12 @@ public with sharing class ResourceAvailabilityHandler_Test {
     
     //Multiple Entries for the Same Resource on Same Day with Different Types
     @isTest
-    static void createAvailabilityDataWithTypeAndAttendanceTimePositive() {
+    static void createAvailabilityDataWithMultipleEntriesforSameResourcePositive() {
         
         Test.startTest();
         dmpl__ResourceAvailability__c resourceAvailability = ResourceAvailabilityDataHelper.getResourceAvailability();
         dmpl__Resource__c resource = ResourceDataHelper.getResource();
-        dmpl__Branch__c branch = TestDataHelpers.createBranch(partnerAccount);
+        dmpl__Branch__c branch = TestDataHelpers.getBranch();
         DateTime attendanceTime = DateTime.now();
         DateTime checkOutTime = DateTime.now().addHours(3);
         
@@ -258,7 +258,7 @@ public with sharing class ResourceAvailabilityHandler_Test {
         attendanceTime
             );
         
-        dmpl__ResourceAvailabilityData__c fetchedAvailabilityData2 = ResourceAvailabilityDataHelper.createResourceAvailabilityData(
+        dmpl__ResourceAvailabilityData__c availabilityData2 = ResourceAvailabilityDataHelper.createResourceAvailabilityData(
             resource.Id,
         resourceAvailability.Id,
         branch.Id,
@@ -283,12 +283,12 @@ public with sharing class ResourceAvailabilityHandler_Test {
     
     //Time updated When Record is Edited
     @isTest
-    static void createAvailabilityDataWithTypeAndAttendanceTimePositive() {
+    static void updateAvailabilityDataWithAttendanceTimePositive() {
         
         Test.startTest();
         dmpl__ResourceAvailability__c resourceAvailability = ResourceAvailabilityDataHelper.getResourceAvailability();
         dmpl__Resource__c resource = ResourceDataHelper.getResource();
-        dmpl__Branch__c branch = TestDataHelpers.createBranch(partnerAccount);
+        dmpl__Branch__c branch = TestDataHelpers.getBranch();
         DateTime attendanceTime = DateTime.now();
         DateTime checkOutTime = DateTime.now().addHours(3);
         
@@ -321,10 +321,11 @@ public with sharing class ResourceAvailabilityHandler_Test {
         
         Test.startTest();
         dmpl__Resource__c resource = ResourceDataHelper.getResource();
-        dmpl__Branch__c branch = TestDataHelpers.createBranch(partnerAccount);
+        dmpl__Branch__c branch = TestDataHelpers.getBranch();
         DateTime attendanceTime = DateTime.now();
+        dmpl__ResourceAvailabilityData__c availabilityData;
         try{
-            dmpl__ResourceAvailabilityData__c availabilityData = ResourceAvailabilityDataHelper.createResourceAvailabilityData(
+             availabilityData = ResourceAvailabilityDataHelper.createResourceAvailabilityData(
                 resource.Id,
             null,
             branch.Id,
@@ -334,6 +335,6 @@ public with sharing class ResourceAvailabilityHandler_Test {
         }catch(Exception e){}
         Test.stopTest();
         
-        System.assertEquals(null, fetchedAvailabilityData, 'Availability data should not be created missing resource availability');
+        System.assertEquals(null, availabilityData, 'Availability data should not be created missing resource availability');
     }
 }

@@ -204,7 +204,7 @@ public with sharing class ResourceHandler_Test {
         Test.stopTest();
         System.assertNotEquals(null, fetchedLeave, 'Fetched leave record should not be null');
         System.assertEquals(resource.Id, fetchedLeave.dmpl__ResourceId__c, 'Resource ID should match');
-        System.assertEquals(type.Id, fetchedLeave.dmpl__LeaveType__c, 'Leave Type should match');
+        System.assertEquals(type.Id, fetchedLeave.dmpl__LeaveTypeId__c, 'Leave Type should match');
         System.assertNotEquals(null, fetchedLeave.Name, 'Name should not be null');
         System.assertEquals(3, fetchedLeave.dmpl__Balance__c, 'Leave balance should be 3');
     }
@@ -217,8 +217,9 @@ public with sharing class ResourceHandler_Test {
         dmpl__Resource__c resource = ResourceDataHelper.getResource();
         resource.dmpl__IsActive__c = false;
         update resource;
+         dmpl__ResourceLeave__c leave;
         try{
-            dmpl__ResourceLeave__c leave = ResourceDataHelper.createResourceLeave(resource.Id,type.Id,3);
+             leave = ResourceDataHelper.createResourceLeave(resource.Id,type.Id,3);
         }
         catch(Exception e){}
         Test.stopTest();
@@ -236,14 +237,14 @@ public with sharing class ResourceHandler_Test {
         Test.stopTest();
         System.assertNotEquals(null, fetchedLeave, 'Fetched leave record should not be null');
         System.assertEquals(resource.Id, fetchedLeave.dmpl__ResourceId__c, 'Resource ID should match');
-        System.assertEquals(type.Id, fetchedLeave.dmpl__LeaveType__c, 'Leave Type should match');
+        System.assertEquals(type.Id, fetchedLeave.dmpl__LeaveTypeId__c, 'Leave Type should match');
         System.assertNotEquals(null, fetchedLeave.Name, 'Name should not be null');
         System.assertEquals(3, fetchedLeave.dmpl__Balance__c, 'Leave balance should be 3');
     }
     
     //Resource with Multiple Leave Records for Different Leave Types
     @isTest
-    static void craeteResourceLeaveRecordWithLeaveTypePositive(){
+    static void craeteResourceLeaveRecordWithMultipleLeaveRecordsPositive(){
         Test.startTest();
         dmpl__LeaveType__c type1 = ResourceDataHelper.getLeaveType();
         dmpl__LeaveType__c type2 = ResourceDataHelper.createLeaveType();
@@ -258,17 +259,17 @@ public with sharing class ResourceHandler_Test {
         Test.stopTest();
         System.assertNotEquals(null, fetchedLeave1, 'Fetched leave record should not be null');
         System.assertEquals(resource.Id, fetchedLeave1.dmpl__ResourceId__c, 'Resource ID should match');
-        System.assertEquals(type1.Id, fetchedLeave1.dmpl__LeaveType__c, 'Leave Type should match');
+        System.assertEquals(type1.Id, fetchedLeave1.dmpl__LeaveTypeId__c, 'Leave Type should match');
         System.assertNotEquals(null, fetchedLeave1.Name, 'Name should not be null');
         System.assertEquals(3, fetchedLeave1.dmpl__Balance__c, 'Leave balance should be 3');
         System.assertNotEquals(null, fetchedLeave2, 'Fetched leave record should not be null');
         System.assertEquals(resource.Id, fetchedLeave2.dmpl__ResourceId__c, 'Resource ID should match');
-        System.assertEquals(type2.Id, fetchedLeave2.dmpl__LeaveType__c, 'Leave Type should match');
+        System.assertEquals(type2.Id, fetchedLeave2.dmpl__LeaveTypeId__c, 'Leave Type should match');
         System.assertNotEquals(null, fetchedLeave2.Name, 'Name should not be null');
         System.assertEquals(3, fetchedLeave2.dmpl__Balance__c, 'Leave balance should be 3');
         System.assertNotEquals(null, fetchedLeave3, 'Fetched leave record should not be null');
         System.assertEquals(resource.Id, fetchedLeave3.dmpl__ResourceId__c, 'Resource ID should match');
-        System.assertEquals(type3.Id, fetchedLeave3.dmpl__LeaveType__c, 'Leave Type should match');
+        System.assertEquals(type3.Id, fetchedLeave3.dmpl__LeaveTypeId__c, 'Leave Type should match');
         System.assertNotEquals(null, fetchedLeave3.Name, 'Name should not be null');
         System.assertEquals(3, fetchedLeave3.dmpl__Balance__c, 'Leave balance should be 3');
         
@@ -278,9 +279,11 @@ public with sharing class ResourceHandler_Test {
     @isTest
     static void craeteResourceLeaveRecordWithoutResourceIdNegative(){
         Test.startTest();
+        dmpl__Resource__c resource = ResourceDataHelper.getResource();
         dmpl__LeaveType__c type = ResourceDataHelper.getLeaveType();
+        dmpl__ResourceLeave__c leave;
         try{
-            dmpl__ResourceLeave__c leave = ResourceDataHelper.createResourceLeave(null,type.Id,3);
+            leave = ResourceDataHelper.createResourceLeave(null,type.Id,3);
         }
         catch(Exception e){}
         Test.stopTest();
@@ -292,8 +295,11 @@ public with sharing class ResourceHandler_Test {
     static void craeteResourceLeaveRecordWithLeaveNegativeBalanceNegative(){
         Test.startTest();
         dmpl__LeaveType__c type = ResourceDataHelper.getLeaveType();
+        dmpl__Resource__c resource = ResourceDataHelper.getResource();
+
+         dmpl__ResourceLeave__c leave;
         try{
-            dmpl__ResourceLeave__c leave = ResourceDataHelper.createResourceLeave(resource.Id,type.Id,-4);
+             leave = ResourceDataHelper.createResourceLeave(resource.Id,type.Id,-4);
         }
         catch(Exception e){}
         Test.stopTest();
@@ -343,14 +349,16 @@ public with sharing class ResourceHandler_Test {
     }
     
     //ToDate Earlier Than FromDate (invalid date range)
+    @isTest
     static void createRecordCreatedWithToDateEarlierThanFromDateNegative() {
         dmpl__Resource__c resource = ResourceDataHelper.getResource();
         Date fromDate = Date.today().addDays(-5);
         Date toDate = Date.today();
         
         Test.startTest();
+         dmpl__ResourceBusinessHours__c businessHours;
         try{
-            dmpl__ResourceBusinessHours__c businessHours = ResourceDataHelper.createResourceBusinessHours(
+             businessHours = ResourceDataHelper.createResourceBusinessHours(
                 resource.Id,
             fromDate,
             toDate
@@ -362,13 +370,15 @@ public with sharing class ResourceHandler_Test {
     }
     
     //FromDate or ToDate Not Provided (null value where required)
+    @isTest
     static void createRecordCreatedWithoutToDateNegative() {
         dmpl__Resource__c resource = ResourceDataHelper.getResource();
         Date fromDate = Date.today().addDays(-5);
         
         Test.startTest();
+        dmpl__ResourceBusinessHours__c businessHours;
         try{
-            dmpl__ResourceBusinessHours__c businessHours = ResourceDataHelper.createResourceBusinessHours(
+             businessHours = ResourceDataHelper.createResourceBusinessHours(
                 resource.Id,
             fromDate,
             null
@@ -380,16 +390,18 @@ public with sharing class ResourceHandler_Test {
     }
     
     //Record Created for Inactive ResourceId
+     @isTest
     static void createRecordCreatedWithInactiveResourceNegative() {
         Date fromDate = Date.today();
-        Date toDate = fromDate..addDays(10);
+        Date toDate = fromDate.addDays(10);
         
         Test.startTest();
         dmpl__Resource__c resource = ResourceDataHelper.getResource();
 		resource.dmpl__IsActive__c = false;
         update resource;
+        dmpl__ResourceBusinessHours__c businessHours;
         try{
-            dmpl__ResourceBusinessHours__c businessHours = ResourceDataHelper.createResourceBusinessHours(
+             businessHours = ResourceDataHelper.createResourceBusinessHours(
                 resource.Id,
             fromDate,
             toDate

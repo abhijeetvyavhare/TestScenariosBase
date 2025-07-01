@@ -43,7 +43,7 @@ public with sharing class ResourceAvailabilityDataHelper {
 	}
 
 	public static dmpl__ResourceAvailabilityData__c getResourceAvailabilityData(Id id){
-		return [SELECT Id, Name, dmpl__ResourceId__c, dmpl__Type__c, dmpl__AttendenceTime__c, dmpl__Time__c,dmpl__ResourceAvailabilityId__c FROM dmpl__ResourceAvailabilityData__c WHERE Id = :id LIMIT 1 ];
+		return [SELECT Id, Name, dmpl__ResourceId__c, dmpl__Type__c, dmpl__AttendenceTime__c, dmpl__Time__c,dmpl__ResourceAvailabilityId__c,dmpl__BranchId__c FROM dmpl__ResourceAvailabilityData__c WHERE Id = :id LIMIT 1 ];
 	}
 
 	public static dmpl__ResourceAvailabilityCheckIn__c createResourceAvailabilityCheckIn(
@@ -72,15 +72,15 @@ public with sharing class ResourceAvailabilityDataHelper {
 		Id resourceAvailabilityId,
 		Id branchId,
 		String type,
-		DateTime dateTime
+		DateTime dateTimevar
 	){
 		return (dmpl__ResourceAvailabilityData__c) TestFactory.createSObject(
 			new dmpl__ResourceAvailabilityData__c (
 				dmpl__Type__c = type,
                 dmpl__ResourceId__c = resourceId,
-                dmpl__AttendenceTime__c = dateTime,
+                dmpl__AttendenceTime__c = dateTimevar,
                 dmpl__ResourceAvailabilityId__c = resourceAvailabilityId,
-				dmpl__Time__c = dateTime,
+				dmpl__Time__c = dateTimevar,
 				dmpl__BranchId__c = branchId
 			),
 			true

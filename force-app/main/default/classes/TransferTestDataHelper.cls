@@ -33,12 +33,14 @@ public with sharing class TransferTestDataHelper {
 
     public static dmpl__TransferInwardLine__c createTransferInwardLine(
         Id transferId,
+        Id outwardId,
         Id branchId,
         Id itemId,
         Integer quantity) {
         return (dmpl__TransferInwardLine__c) TestFactory.createSObject(
             new dmpl__TransferInwardLine__c(
                 dmpl__TransferId__c = transferId,
+                dmpl__TransferOutwardLineId__c = outwardId,
                 dmpl__BranchId__c = branchId,
                 dmpl__ItemId__c = itemId,
                 dmpl__Quantity__c = quantity
@@ -79,6 +81,7 @@ public with sharing class TransferTestDataHelper {
     public static dmpl__TransferOutwardLine__c getTransferOutwardLine() {
         return [
             SELECT 
+            Id,
                 dmpl__TransferId__c,
                 dmpl__Quantity__c,
                 dmpl__UnitCost__c,
