@@ -46,6 +46,13 @@ private class GoodsReceiptHandler_Test {
         dmpl__TaxGroupRule__c taxGroupRule12Item6 = TestDataHelpers.createTaxGroupRule('Within State',taxGroupGST12Global.Id,item6.Id,null,null,null);
         dmpl__TaxGroupRule__c taxGroupRuleItem1 = TestDataHelpers.createTaxGroupRule('Within State',taxGroupGST12Global.Id,item1.Id,null,null,null);
         
+        dmpl__StorageLocation__c storageLocation2 = TestDataHelpers.createStorageLocation(
+            'Storage Location 2',
+        branch1.Id,
+        true,
+        'Warehouse'
+            );
+        
         
         
     }
@@ -931,6 +938,227 @@ private class GoodsReceiptHandler_Test {
         System.assertEquals(5, FetchedGoodsReceiptLine.dmpl__ClaimableQuantity__c, 'Claimable Quantity should be 5');
         System.assertEquals(null, FetchedGoodsReceipt.dmpl__ShipmentId__c, 'Claimable Quantity should be 5');
         System.assertEquals(null, FetchedGoodsReceiptLine.dmpl__ShipmentLineId__c, 'Claimable Quantity should be 5');
+        
+    }
+    
+    //Goods Receipt line with received qty > supplier quantity (New)
+    @isTest
+    static void createGoodsReceiptLineWithReceviedQuantityGreaterThanSupplierQuantiyPositive(){
+        Test.startTest();
+        Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+        dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+        Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+        dmpl__Item__c  item1 = TestDataHelpers.getItem('Item 1');
+        dmpl__GoodsReceipt__c goodsReceipt = GoodRecieptsTestDataHelpers.createGoodsReceipt(partner, branch, null, supplier);
+        dmpl__GoodsReceiptLine__c goodsReceiptLine = GoodRecieptsTestDataHelpers.createGoodsReceiptLine(
+            goodsReceipt.Id,
+        Item1.Id,
+        null,
+        null,
+        10  ,
+        12,
+        null,
+        10,
+        1500
+            );
+        
+        dmpl__GoodsReceipt__c fetchedGoodsReceipt = GoodRecieptsTestDataHelpers.getGoodsReceipt(goodsReceipt.Id);
+        dmpl__GoodsReceiptLine__c FetchedGoodsReceiptLine = GoodRecieptsTestDataHelpers.getGoodsReceiptLine(goodsReceiptLine.Id);
+        Test.stopTest();
+        System.assertEquals(partner.Id, fetchedGoodsReceipt.dmpl__PartnerAccountId__c, 'Partner should match');
+        System.assertEquals(branch.Id, fetchedGoodsReceipt.dmpl__BranchId__c, 'Branch should match');
+        System.assertEquals(supplier.Id, fetchedGoodsReceipt.dmpl__SupplierAccountId__c, 'Supplier should match');
+        System.assertEquals(Date.today(), fetchedGoodsReceipt.dmpl__DocumentDate__c, 'Document Date should be today');
+        System.assertEquals('Draft', fetchedGoodsReceipt.dmpl__Status__c, 'Status should be Draft');
+        
+        System.assertEquals(goodsReceipt.Id, FetchedGoodsReceiptLine.dmpl__GoodsReceiptId__c, 'Goods Receipt ID should match');
+        System.assertEquals(item1.Id, FetchedGoodsReceiptLine.dmpl__ItemId__c, 'Item should match');
+        System.assertEquals(10, FetchedGoodsReceiptLine.dmpl__OrderedQuantity__c, 'Ordered Quantity should be 10');
+        System.assertEquals(12, FetchedGoodsReceiptLine.dmpl__ReceivedQuantity__c, 'Received Quantity should be 12');
+        System.assertEquals(2, FetchedGoodsReceiptLine.dmpl__ExcessQuantity__c, 'Excess Quantity should be 2');
+        System.assertEquals(1500, FetchedGoodsReceiptLine.dmpl__UnitCost__c, 'Unit Cost should be 1500');
+        
+    }
+    
+    //Goods Receipt line with received qty < supplier quantity (New)
+    @isTest
+    static void createGoodsReceiptLineWithReceviedQuantityLessThanSupplierQuantiyPositive(){
+        Test.startTest();
+        Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+        dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+        Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+        dmpl__Item__c  item1 = TestDataHelpers.getItem('Item 1');
+        dmpl__GoodsReceipt__c goodsReceipt = GoodRecieptsTestDataHelpers.createGoodsReceipt(partner, branch, null, supplier);
+        dmpl__GoodsReceiptLine__c goodsReceiptLine = GoodRecieptsTestDataHelpers.createGoodsReceiptLine(
+            goodsReceipt.Id,
+        Item1.Id,
+        null,
+        null,
+        10  ,
+        8,
+        null,
+        10,
+        1500
+            );
+        
+        dmpl__GoodsReceipt__c fetchedGoodsReceipt = GoodRecieptsTestDataHelpers.getGoodsReceipt(goodsReceipt.Id);
+        dmpl__GoodsReceiptLine__c FetchedGoodsReceiptLine = GoodRecieptsTestDataHelpers.getGoodsReceiptLine(goodsReceiptLine.Id);
+        Test.stopTest();
+        System.assertEquals(partner.Id, fetchedGoodsReceipt.dmpl__PartnerAccountId__c, 'Partner Account should match');
+        System.assertEquals(branch.Id, fetchedGoodsReceipt.dmpl__BranchId__c, 'Branch should match');
+        System.assertEquals(supplier.Id, fetchedGoodsReceipt.dmpl__SupplierAccountId__c, 'Supplier Account should match');
+        System.assertEquals(Date.today(), fetchedGoodsReceipt.dmpl__DocumentDate__c, 'Document Date should be today');
+        System.assertEquals('Draft', fetchedGoodsReceipt.dmpl__Status__c, 'Status should be Draft');
+        
+        System.assertEquals(goodsReceipt.Id, FetchedGoodsReceiptLine.dmpl__GoodsReceiptId__c, 'Goods Receipt ID should match');
+        System.assertEquals(item1.Id, FetchedGoodsReceiptLine.dmpl__ItemId__c, 'Item should match');
+        System.assertEquals(10, FetchedGoodsReceiptLine.dmpl__OrderedQuantity__c, 'Ordered Quantity should be 10');
+        System.assertEquals(8, FetchedGoodsReceiptLine.dmpl__ReceivedQuantity__c, 'Received Quantity should be 8');
+        System.assertEquals(2, FetchedGoodsReceiptLine.dmpl__ShortageQuantity__c, 'Shortage Quantity should be 2');
+        System.assertEquals(2, FetchedGoodsReceiptLine.dmpl__ClaimableQuantity__c, 'Claimable Quantity should be 2');
+        System.assertEquals(1500, FetchedGoodsReceiptLine.dmpl__UnitCost__c, 'Unit Cost should be 1500');
+        
+    }
+    
+    //Goods Receipt line with received qty > supplier quantity (Edit)
+    @isTest
+    static void updateGoodsReceiptLineWithReceviedQuantityGreaterThanSupplierQuantiyPositive(){
+        Test.startTest();
+        Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+        dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+        Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+        dmpl__Item__c  item1 = TestDataHelpers.getItem('Item 1');
+        dmpl__GoodsReceipt__c goodsReceipt = GoodRecieptsTestDataHelpers.createGoodsReceipt(partner, branch, null, supplier);
+        dmpl__GoodsReceiptLine__c goodsReceiptLine = GoodRecieptsTestDataHelpers.createGoodsReceiptLine(
+            goodsReceipt.Id,
+        Item1.Id,
+        null,
+        null,
+        10  ,
+        12,
+        null,
+        10,
+        1500
+            );
+        goodsReceiptLine.dmpl__ReceivedQuantity__c = 15;
+        update goodsReceiptLine;
+        
+        dmpl__GoodsReceipt__c fetchedGoodsReceipt = GoodRecieptsTestDataHelpers.getGoodsReceipt(goodsReceipt.Id);
+        dmpl__GoodsReceiptLine__c FetchedGoodsReceiptLine = GoodRecieptsTestDataHelpers.getGoodsReceiptLine(goodsReceiptLine.Id);
+        Test.stopTest();
+        
+        System.assertEquals(partner.Id, fetchedGoodsReceipt.dmpl__PartnerAccountId__c, 'Partner Account should match');
+        System.assertEquals(branch.Id, fetchedGoodsReceipt.dmpl__BranchId__c, 'Branch should match');
+        System.assertEquals(supplier.Id, fetchedGoodsReceipt.dmpl__SupplierAccountId__c, 'Supplier Account should match');
+        System.assertEquals(Date.today(), fetchedGoodsReceipt.dmpl__DocumentDate__c, 'Document Date should be today');
+        System.assertEquals('Draft', fetchedGoodsReceipt.dmpl__Status__c, 'Status should be Draft');
+        
+        System.assertEquals(goodsReceipt.Id, FetchedGoodsReceiptLine.dmpl__GoodsReceiptId__c, 'Goods Receipt ID should match');
+        System.assertEquals(item1.Id, FetchedGoodsReceiptLine.dmpl__ItemId__c, 'Item should match');
+        System.assertEquals(10, FetchedGoodsReceiptLine.dmpl__OrderedQuantity__c, 'Ordered Quantity should be 10');
+        System.assertEquals(15, FetchedGoodsReceiptLine.dmpl__ReceivedQuantity__c, 'Received Quantity should be 15');
+        System.assertEquals(5, FetchedGoodsReceiptLine.dmpl__ExcessQuantity__c, 'Excess Quantity should be 5');
+        System.assertEquals(1500, FetchedGoodsReceiptLine.dmpl__UnitCost__c, 'Unit Cost should be 1500');
+        
+    }
+    
+    //Goods Receipt line with received qty < supplier quantity (Edit)
+    @isTest
+    static void updateGoodsReceiptLineWithReceviedQuantityLessThanSupplierQuantiyPositive(){
+        Test.startTest();
+        Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+        dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+        Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+        dmpl__Item__c  item1 = TestDataHelpers.getItem('Item 1');
+        dmpl__GoodsReceipt__c goodsReceipt = GoodRecieptsTestDataHelpers.createGoodsReceipt(partner, branch, null, supplier);
+        dmpl__GoodsReceiptLine__c goodsReceiptLine = GoodRecieptsTestDataHelpers.createGoodsReceiptLine(
+            goodsReceipt.Id,
+        Item1.Id,
+        null,
+        null,
+        10  ,
+        8,
+        null,
+        10,
+        1500
+            );
+        goodsReceiptLine.dmpl__ReceivedQuantity__c = 7;
+        update goodsReceiptLine;
+        
+        dmpl__GoodsReceipt__c fetchedGoodsReceipt = GoodRecieptsTestDataHelpers.getGoodsReceipt(goodsReceipt.Id);
+        dmpl__GoodsReceiptLine__c FetchedGoodsReceiptLine = GoodRecieptsTestDataHelpers.getGoodsReceiptLine(goodsReceiptLine.Id);
+        Test.stopTest();
+        
+        System.assertEquals(partner.Id, fetchedGoodsReceipt.dmpl__PartnerAccountId__c, 'Partner should match');
+        System.assertEquals(branch.Id, fetchedGoodsReceipt.dmpl__BranchId__c, 'Branch should match');
+        System.assertEquals(supplier.Id, fetchedGoodsReceipt.dmpl__SupplierAccountId__c, 'Supplier should match');
+        System.assertEquals(Date.today(), fetchedGoodsReceipt.dmpl__DocumentDate__c, 'Document Date should be today');
+        System.assertEquals('Draft', fetchedGoodsReceipt.dmpl__Status__c, 'Status should be Draft');
+        System.assertEquals(goodsReceipt.Id, FetchedGoodsReceiptLine.dmpl__GoodsReceiptId__c, 'Goods Receipt ID should match');
+        System.assertEquals(item1.Id, FetchedGoodsReceiptLine.dmpl__ItemId__c, 'Item ID should match');
+        System.assertEquals(10, FetchedGoodsReceiptLine.dmpl__OrderedQuantity__c, 'Ordered Quantity should be 10');
+        System.assertEquals(7, FetchedGoodsReceiptLine.dmpl__ReceivedQuantity__c, 'Received Quantity should be 7');
+        System.assertEquals(3, FetchedGoodsReceiptLine.dmpl__ShortageQuantity__c, 'Shortage Quantity should be 3');
+        System.assertEquals(3, FetchedGoodsReceiptLine.dmpl__ClaimableQuantity__c, 'Claimable Quantity should be 3');
+        System.assertEquals(1500, FetchedGoodsReceiptLine.dmpl__UnitCost__c, 'Unit Cost should be 1500');
+        
+    }
+    
+    //Goods Receipt line with storage location (New)
+    @isTest
+    static void craeteGoodsReceiptLineWithStorageLocationReferencePositive(){
+        Test.startTest();
+        Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+        dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+        Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+        dmpl__Item__c  item1 = TestDataHelpers.getItem('Item 1');
+        dmpl__Shipment__c shipment  = ShipmentTestDataHelper.createShipment(
+            Date.Today(),
+        partner.Id,
+        branch.Id,
+        null,
+        null
+            );
+        
+        dmpl__ShipmentLine__c shipmentLine = ShipmentTestDataHelper.createShipmentLine(
+            item1,
+        shipment,
+        null,
+        null
+            );
+        
+        dmpl__GoodsReceipt__c goodsReceipt = GoodRecieptsTestDataHelpers.createGoodsReceipt(partner, branch, null, supplier);
+        dmpl__GoodsReceiptLine__c goodsReceiptLine = GoodRecieptsTestDataHelpers.createGoodsReceiptLine(
+            goodsReceipt.Id,
+        Item1.Id,
+        null,
+        null,
+        1000,
+        1000,
+        0,
+        1000,
+        1500
+            );
+        
+        dmpl__StorageLocation__c storageLocation2 = TestDataHelpers.getStorageLocation('Storage Location 2');
+        goodsReceiptLine.dmpl__StorageLocationId__c = storageLocation2.Id;
+        Update goodsReceiptLine;
+        
+        dmpl__GoodsReceipt__c fetchedGoodsReceipt = GoodRecieptsTestDataHelpers.getGoodsReceipt(goodsReceipt.Id);
+        dmpl__GoodsReceiptLine__c FetchedGoodsReceiptLine = GoodRecieptsTestDataHelpers.getGoodsReceiptLine(goodsReceiptLine.Id);
+        Test.stopTest();
+        System.assertEquals(partner.Id, fetchedGoodsReceipt.dmpl__PartnerAccountId__c, 'Partner Account should match');
+        System.assertEquals(branch.Id, fetchedGoodsReceipt.dmpl__BranchId__c, 'Branch should match');
+        System.assertEquals(supplier.Id, fetchedGoodsReceipt.dmpl__SupplierAccountId__c, 'Supplier Account should match');
+        System.assertEquals(Date.today(), fetchedGoodsReceipt.dmpl__DocumentDate__c, 'Document Date should be today');
+        System.assertEquals('Draft', fetchedGoodsReceipt.dmpl__Status__c, 'Status should be Draft');
+        
+        System.assertEquals(item1.Id, FetchedGoodsReceiptLine.dmpl__ItemId__c, 'Item should match');
+        System.assertEquals(1000, FetchedGoodsReceiptLine.dmpl__OrderedQuantity__c, 'Ordered Quantity should be 50');
+        System.assertEquals(1000, FetchedGoodsReceiptLine.dmpl__ReceivedQuantity__c, 'Received Quantity should be 50');
+        System.assertEquals(0, FetchedGoodsReceiptLine.dmpl__DamagedQuantity__c, 'Damaged Quantity should be 5');
+        System.assertEquals(0, FetchedGoodsReceiptLine.dmpl__ClaimableQuantity__c, 'Claimable Quantity should be 5');
+        System.assertEquals(storageLocation2.Id, FetchedGoodsReceiptLine.dmpl__StorageLocationId__c, 'Claimable Quantity should be 5');
         
     }
 }

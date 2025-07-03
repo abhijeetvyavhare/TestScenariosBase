@@ -166,7 +166,9 @@ public class GoodRecieptsTestDataHelpers {
                 dmpl__ItemId__c,
                 dmpl__DamagedQuantity__c,
                 dmpl__ClaimableQuantity__c,
-                dmpl__ShipmentLineId__c
+                dmpl__ShipmentLineId__c,
+                dmpl__ShortageQuantity__c,
+                dmpl__ExcessQuantity__c
             FROM dmpl__GoodsReceiptLine__c 
             WHERE Id =: id
             LIMIT 1
