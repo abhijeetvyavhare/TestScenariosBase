@@ -8,16 +8,16 @@ public class GoodRecieptsTestDataHelpers {
         ) {
         return (dmpl__GoodsReceipt__c)TestFactory.createSObject(
             new dmpl__GoodsReceipt__c(
-                dmpl__PartnerAccountId__c = partnerAccount.Id,
-                dmpl__BranchId__c = branch.Id,
-                dmpl__PurchaseOrderId__c = purchaseOrder.Id,
+                dmpl__PartnerAccountId__c = partnerAccount?.Id,
+                dmpl__BranchId__c = branch?.Id,
+                dmpl__PurchaseOrderId__c = purchaseOrder?.Id,
                 dmpl__ReceivedTime__c = date.today(),
                 dmpl__DocumentDate__c = date.today(),
                 dmpl__PerformReceive__c = true,
                 dmpl__PerformInspection__c = true,
                 dmpl__PerformInspectionComplete__c = true,
                 dmpl__IsInspectionCompleted__c = true,
-                dmpl__SupplierAccountId__c = supplierAccount.Id,
+                dmpl__SupplierAccountId__c = supplierAccount?.Id,
                 dmpl__SupplierInvoiceDate__c = date.today(),
                 dmpl__SupplierInvoiceNumber__c = 'Test-SupplierInvoiceNumber',
                 dmpl__SupplierDispatchDate__c = date.today(),
@@ -53,12 +53,13 @@ public class GoodRecieptsTestDataHelpers {
         ];
     }
 
-    public static List<dmpl__GoodsReceipt__c> getGoodsReceipt(Id id) {
+    public static dmpl__GoodsReceipt__c getGoodsReceipt(Id id) {
         return [
             SELECT 
                 Id, 
                 name,
                 dmpl__DocumentDate__c,
+                dmpl__ShipmentId__c,
                 dmpl__BranchId__c,
                 dmpl__PartnerAccountId__c,
                 dmpl__IsClaimed__c,
@@ -70,9 +71,11 @@ public class GoodRecieptsTestDataHelpers {
                 dmpl__PerformInspection__c,
                 dmpl__PerformInspectionComplete__c,
                 dmpl__PerformPopulateChecklist__c,
-                dmpl__PerformAllocation__c
+                dmpl__PerformAllocation__c,
+                dmpl__SupplierAccountId__c
             FROM dmpl__GoodsReceipt__c 
             WHERE Id =: id
+            Limit 1
         ];
     }
 
@@ -91,6 +94,33 @@ public class GoodRecieptsTestDataHelpers {
                 dmpl__SupplierQuantity__c = 1
             ),
             'GoodReceiptLineDefaults',
+            true
+        );
+    }
+
+      public static dmpl__GoodsReceiptLine__c createGoodsReceiptLine(
+        Id goodReceiptId,
+        Id itemId,
+        Id skuId,
+        Id purchaseorderLineId,
+        Integer orderedQuantity,
+        Integer recievedQuantity,
+        Integer DamagedQuantity,
+        Integer supplierQuantity,
+        Integer unitCost
+    ) {
+        return (dmpl__GoodsReceiptLine__c)TestFactory.createSObject(
+            new dmpl__GoodsReceiptLine__c(
+                dmpl__GoodsReceiptId__c = goodReceiptId,
+                dmpl__ItemId__c = itemId,
+                dmpl__SKUId__c = skuId,
+                dmpl__PurchaseOrderLineId__c = purchaseorderLineId,
+                dmpl__OrderedQuantity__c = orderedQuantity,
+                dmpl__DamagedQuantity__c =  DamagedQuantity,
+                dmpl__ReceivedQuantity__c = recievedQuantity,
+                dmpl__SupplierQuantity__c = supplierQuantity,
+                dmpl__UnitCost__c = unitCost
+            ),
             true
         );
     }
@@ -116,11 +146,12 @@ public class GoodRecieptsTestDataHelpers {
         ];
     }
 
-    public static List<dmpl__GoodsReceiptLine__c> getGoodReceiptLine(Id id) {
+    public static dmpl__GoodsReceiptLine__c getGoodsReceiptLine(Id id) {
         return [
             SELECT 
                 Id, 
                 name,
+                dmpl__GoodsReceiptId__c,
                 dmpl__PurchaseOrderLineId__r.dmpl__FulfillmentOrderLineId__c,
                 dmpl__ItemLotId__c,
                 dmpl__ReceivedQuantity__c,
@@ -131,7 +162,11 @@ public class GoodRecieptsTestDataHelpers {
                 dmpl__PurchaseOrderLineId__c,
             	dmpl__OrderedQuantity__c,
                 dmpl__SupplierQuantity__c,
-                dmpl__InvoiceQuantity__c
+                dmpl__InvoiceQuantity__c,
+                dmpl__ItemId__c,
+                dmpl__DamagedQuantity__c,
+                dmpl__ClaimableQuantity__c,
+                dmpl__ShipmentLineId__c
             FROM dmpl__GoodsReceiptLine__c 
             WHERE Id =: id
             LIMIT 1

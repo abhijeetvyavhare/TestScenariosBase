@@ -15,10 +15,25 @@ public with sharing class TransferTestDataHelper {
         );
     }
 
+    public static dmpl__Transfer__c createTransfer(Account partnerAccount,dmpl__Branch__c fromBranch,dmpl__Branch__c toBranch) {
+        return (dmpl__Transfer__c) TestFactory.createSObject(
+            new dmpl__Transfer__c(
+                dmpl__PartnerAccountId__c = partnerAccount.Id,
+                dmpl__BranchId__c = fromBranch.Id,
+                dmpl__ToBranchId__c = toBranch.Id,
+                dmpl__PerformInwardPosting__c = false,
+                dmpl__PerformInwardReceive__c = false,
+                dmpl__TransferTime__c = Date.today()  
+            ),
+            //'TransferDefaults',
+            true
+        );
+    }
+
     public static dmpl__Transfer__c getTransfer() {
         return [
             SELECT 
-            Id,
+				Id,
                 dmpl__PartnerAccountId__c,
                 dmpl__BranchId__c,
                 dmpl__ToBranchId__c,
@@ -31,6 +46,23 @@ public with sharing class TransferTestDataHelper {
         
     }
 
+    public static dmpl__TransferInwardLine__c createTransferInwardLine(
+        Id transferId,
+        Id branchId,
+        Id itemId,
+        Integer quantity) {
+        return (dmpl__TransferInwardLine__c) TestFactory.createSObject(
+            new dmpl__TransferInwardLine__c(
+                dmpl__TransferId__c = transferId,
+                dmpl__BranchId__c = branchId,
+                dmpl__ItemId__c = itemId,
+                dmpl__Quantity__c = quantity
+                
+            ),
+            'TransferInwardLineDefaults',
+            true
+        );
+    }
     public static dmpl__TransferInwardLine__c createTransferInwardLine(
         Id transferId,
         Id outwardId,
@@ -81,16 +113,33 @@ public with sharing class TransferTestDataHelper {
     public static dmpl__TransferOutwardLine__c getTransferOutwardLine() {
         return [
             SELECT 
-            Id,
+				Id,
                 dmpl__TransferId__c,
                 dmpl__Quantity__c,
                 dmpl__UnitCost__c,
-                dmpl__ItemId__c              
+                dmpl__ItemId__c,
+				dmpl__PendingInwardQuantity__c,
+				dmpl__ItemLotId__c,
+				dmpl__TransferType__c
             FROM dmpl__TransferOutwardLine__c 
             LIMIT 1
         ];
-        
-        
+    }
+    public static dmpl__TransferOutwardLine__c getTransferOutwardLine(Id recordId) {
+        return [
+            SELECT 
+				Id,
+                dmpl__TransferId__c,
+                dmpl__Quantity__c,
+                dmpl__UnitCost__c,
+                dmpl__ItemId__c,
+				dmpl__PendingInwardQuantity__c,
+				dmpl__ItemLotId__c,
+				dmpl__TransferType__c
+            FROM dmpl__TransferOutwardLine__c 
+			WHERE Id = :recordId
+            LIMIT 1
+        ];
     }
 
     public static dmpl__TransferInwardLine__c getTransferInwardLine() {
@@ -140,6 +189,63 @@ public with sharing class TransferTestDataHelper {
             FROM dmpl__TransferLine__c LIMIT 1
         ];
         
+    }
+
+	public static dmpl__TransferLine__c getTransferLine(Id id) {
+        return [
+            SELECT 
+				Id,
+				dmpl__ItemId__c,
+				dmpl__ItemLotId__c,
+				dmpl__TransferType__c,
+				dmpl__Quantity__c,
+                dmpl__TransferId__c
+            FROM dmpl__TransferLine__c WHERE id = :id LIMIT 1
+        ];
+        
+    }
+
+	public static dmpl__TransferOutwardLine__c createTransferOutwardLine(
+		Id transferId,
+		Id itemId,
+		Id itemLotId,
+		String transferType,
+		Decimal quantity
+	) {
+        return (dmpl__TransferOutwardLine__c) TestFactory.createSObject(
+            new dmpl__TransferOutwardLine__c(
+				dmpl__TransferId__c = transferId,
+                dmpl__ItemId__c = itemId,
+				dmpl__ItemLotId__c = itemLotId,
+				dmpl__TransferType__c = transferType,
+				dmpl__Quantity__c  = quantity
+            ),
+            true
+        );
+    }
+    public static dmpl__TransferOutwardLine__c createTransferOutwardLine(
+		Id transferId,
+		Id itemId,
+		Id skuId,
+		Decimal quantity,
+        Decimal unitCost,
+        Id storageLocationId,
+        Id requisitionId,
+        Id requisitionLineId
+	) {
+        return (dmpl__TransferOutwardLine__c) TestFactory.createSObject(
+            new dmpl__TransferOutwardLine__c(
+				dmpl__TransferId__c = transferId,
+                dmpl__ItemId__c = itemId,
+				dmpl__SKUId__c = skuId,
+				dmpl__Quantity__c  = quantity,
+                dmpl__UnitCost__c = unitCost,
+                dmpl__StorageLocationId__c = storageLocationId,
+                dmpl__RequisitionId__c = requisitionId,
+                dmpl__RequisitionLineId__c = requisitionLineId
+            ),
+            true
+        );
     }
 
 }

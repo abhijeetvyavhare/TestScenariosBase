@@ -74,8 +74,25 @@ public class PurchaseOrderTestDataHelpers {
         dmpl__PerformReleaseInvoice__c,
         dmpl__PerformReleaseReceipt__c,
         dmpl__PerformKPICalculation__c,
+        dmpl__PriceListId__c,
         dmpl__SupplierAccountId__c,
-        dmpl__TransactionType__c
+        dmpl__TransactionType__c,
+        dmpl__BillingStreet__c,
+        dmpl__BillingCity__c,
+        dmpl__BillingState__c,
+        dmpl__BillingPostalCode__c,
+        dmpl__BillingCountry__c,
+        dmpl__ShippingStreet__c,
+        dmpl__ShippingCity__c,
+        dmpl__ShippingState__c,
+        dmpl__ShippingPostalCode__c,
+        dmpl__ShippingCountry__c,
+        dmpl__TotalLineBaseAmount__c,
+        dmpl__TotalSchemeDiscountAmount__c,
+        dmpl__TotalDiscountAmount__c,
+        dmpl__TotalLineTaxAmount__c,
+        dmpl__OpenAmount__c,
+        dmpl__TotalTaxAmount__c
         FROM dmpl__PurchaseOrder__c
         WHERE ID =: purchaseOrder
                 LIMIT 1];
@@ -114,12 +131,12 @@ public class PurchaseOrderTestDataHelpers {
         ){
         return (dmpl__PurchaseOrderLine__c)TestFactory.createSObject(
             new  dmpl__PurchaseOrderLine__c(
-                dmpl__ItemId__c = listofitem.Id,
-                dmpl__SKUId__c = sku.Id,
-                dmpl__PurchaseOrderId__c = purchaseOrder.Id,
+                dmpl__ItemId__c = listofitem?.Id,
+                dmpl__SKUId__c = sku?.Id,
+                dmpl__PurchaseOrderId__c = purchaseOrder?.Id,
                 dmpl__Quantity__c = 1,
                 dmpl__UnitCost__c = 100,
-                dmpl__TaxGroupId__c = taxGroup.Id,
+                dmpl__TaxGroupId__c = taxGroup?.Id,
                 dmpl__SchemeDiscount__c = 2,
                 dmpl__SchemeDiscountAmount__c = 4,
                 dmpl__DiscountAmount__c = 100
@@ -144,7 +161,19 @@ public class PurchaseOrderTestDataHelpers {
         dmpl__PurchaseOrderId__r.dmpl__SupplierAccountId__c,
         dmpl__PendingQuantity__c,
         dmpl__PurchaseOrderId__r.dmpl__BranchId__c,
-        dmpl__PurchaseOrderId__r.dmpl__PartnerAccountId__c
+        dmpl__PurchaseOrderId__r.dmpl__PartnerAccountId__c,
+        dmpl__Tax1__c,
+        dmpl__Tax1Name__c,
+        dmpl__Tax1Type__c,
+        dmpl__Tax1Rate__c,
+        dmpl__Tax2__c,
+        dmpl__Tax2Name__c,
+        dmpl__Tax2Type__c,
+        dmpl__Tax2Rate__c,
+        dmpl__BaseAmount__c,
+        dmpl__GrossAmount__c,
+        dmpl__TaxAmount__c,
+        dmpl__NetDiscount__c
         FROM dmpl__PurchaseOrderLine__c LIMIT 1];
     }
     
@@ -163,7 +192,20 @@ public class PurchaseOrderTestDataHelpers {
         dmpl__PurchaseOrderId__r.dmpl__SupplierAccountId__c,
         dmpl__PendingQuantity__c,
         dmpl__PurchaseOrderId__r.dmpl__BranchId__c,
-        dmpl__PurchaseOrderId__r.dmpl__PartnerAccountId__c
+        dmpl__PurchaseOrderId__r.dmpl__PartnerAccountId__c,
+         dmpl__Tax1__c,
+        dmpl__Tax1Name__c,
+        dmpl__Tax1Type__c,
+        dmpl__Tax1Rate__c,
+        dmpl__Tax2__c,
+        dmpl__Tax2Name__c,
+        dmpl__Tax2Type__c,
+        dmpl__Tax2Rate__c,
+        dmpl__BaseAmount__c,
+        dmpl__GrossAmount__c,
+        dmpl__TaxAmount__c,
+        dmpl__NetSchemeDiscount__c,
+        dmpl__NetDiscount__c
         FROM dmpl__PurchaseOrderLine__c 
         WHERE Id =: purchaseOrderLine
         LIMIT 1];
@@ -312,6 +354,43 @@ public static dmpl__PurchaseOrderRequisition__c getPurchaseOrderRequisition(Id r
         LIMIT 1
     ];
 }
+public static dmpl__PurchaseOrder__c createPurchaseOrder(
+        Account partnerAccount,
+        dmpl__Branch__c branch, 
+        Account supplierAccount,
+        dmpl__PriceList__c PriceList,
+        dmpl__DiscountGroup__c discountGroup
+        ) {
+        return  (dmpl__PurchaseOrder__c)TestFactory.createSObject(
+            new dmpl__PurchaseOrder__c(
+                dmpl__BranchId__c = branch?.Id,
+                dmpl__PartnerAccountId__c = branch?.dmpl__PartnerAccountId__c,
+                dmpl__SupplierAccountId__c = supplierAccount?.Id,
+                dmpl__PriceListId__c=PriceList?.Id,
+                dmpl__DiscountGroupId__c=discountGroup?.Id,
+                dmpl__PurchaseOrderType__c = 'Part PO',
+                dmpl__DocumentDate__c = date.today(),
+                dmpl__Remarks__c = 'Test-Remarks',
+                dmpl__PerformReleaseInvoice__c =false,
+                dmpl__IsInvoiceReleased__c = false
+            ),
+            'PurchaseOrderDefaults',
+            true
+        );
+    }
+    public static dmpl__PurchaseOrderLine__c createPurchaseOrderLine(
+        Id purchaseOrderId,
+        Id itemId,
+        Integer quantity
+        ) {
+        return  (dmpl__PurchaseOrderLine__c)TestFactory.createSObject(
+            new dmpl__PurchaseOrderLine__c(
+                dmpl__PurchaseOrderId__c=purchaseOrderId != null ? purchaseOrderId : null,
+                dmpl__ItemId__c=itemId!= null ? itemId : null,
+                dmpl__Quantity__c=quantity
+            ),
+            true
+        );
 
-
+}
 }

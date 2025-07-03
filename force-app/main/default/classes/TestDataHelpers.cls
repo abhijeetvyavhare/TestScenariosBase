@@ -164,40 +164,6 @@ public class TestDataHelpers {
         FROM dmpl__Item__c LIMIT 1];
     }
     
-    public static dmpl__Item__c createItem(
-        String Name,
-        String ItemType,
-        Boolean IsActive,
-        Boolean IsPackage,
-        Boolean IsSKURequired,
-        String ItemCode,
-        Boolean IsDiscontinued
-    ){
-        return (dmpl__Item__c) TestFactory.createSObject(
-            new dmpl__Item__c(
-                Name=Name,
-                dmpl__ItemType__c = ItemType,
-                dmpl__IsActive__c = IsActive,
-                dmpl__IsPackage__c = IsPackage,
-                dmpl__IsSKURequired__c = IsSKURequired,
-                dmpl__ItemCode__c = ItemCode,
-                dmpl__IsDiscontinued__c =IsDiscontinued
-               
-            ),
-            'ItemDefaults',
-            true    
-        );
-    }
-    
-    public static dmpl__Item__c getItem(String Name){
-        return[
-            SELECT Id, Name, dmpl__ItemType__c, dmpl__IsActive__c, dmpl__IsPackage__c, dmpl__IsSKURequired__c, dmpl__ItemCode__c, dmpl__IsDiscontinued__c
-            FROM dmpl__Item__c
-            WHERE Name = :name
-            LIMIT 1
-        ];
-    }
-    
     public static dmpl__Item__c createItem1() {
         return (dmpl__Item__c) TestFactory.createSObject(
             new dmpl__Item__c(Name = 'Item1',dmpl__TrackInventory__c=true,dmpl__ItemType__c='Service Contract'),
@@ -646,7 +612,7 @@ public class TestDataHelpers {
     public static dmpl__ResourceAssignmentRule__c createAssignmentRule(dmpl__PartnerResource__c partnerResource) {
         return (dmpl__ResourceAssignmentRule__c) TestFactory.createSObject(
             new dmpl__ResourceAssignmentRule__c(dmpl__PartnerResourceId__c=partnerResource.Id,
-                                        dmpl__FieldName__c='dmpl__Remarks__c',	
+                                        dmpl__FieldName__c='dmpl__Remarks__c',  
                                         dmpl__FieldValue__c='Test Remarks',
                                         dmpl__Operation__c='equals',
                                         dmpl__SequenceNumber__c=12,
@@ -844,7 +810,7 @@ public class TestDataHelpers {
                 dmpl__ShippingPostalCode__c = shippingPostalCode,
                 Phone = phone
             ),
-            // 'PartnerAccountDefaults',
+           // 'PartnerAccountDefaults',
             true
         );
     }
@@ -953,7 +919,7 @@ public class TestDataHelpers {
     }
  
  
-	  public static dmpl__ContactAddress__c createContactAddress(
+      public static dmpl__ContactAddress__c createContactAddress(
         String Name,
         String street,
         String city,
@@ -1021,6 +987,35 @@ public class TestDataHelpers {
         );
     }
 
+     public static dmpl__Branch__c createBranch(
+        String name,    
+        Id partnerAccountId,
+        Boolean isActive,
+        Boolean allowService,
+        Boolean isHomeDeliveryAvailable,
+        Boolean isPickupDropAvailable,
+        Boolean allowSales,
+        Boolean allowPurchase,
+        Boolean allowInventory
+        
+    ) {
+        return (dmpl__Branch__c) TestFactory.createSObject(
+            new dmpl__Branch__c(
+                Name = name,
+                dmpl__PartnerAccountId__c = partnerAccountId,
+                dmpl__IsActive__c = isActive,
+                dmpl__AllowService__c = allowService,
+                dmpl__IsHomeDeliveryAvailable__c = isHomeDeliveryAvailable,
+                dmpl__IsPickupDropAvailable__c = isPickupDropAvailable,
+                dmpl__AllowSales__c = allowSales,
+                dmpl__AllowPurchase__c = allowPurchase,
+                dmpl__AllowInventory__c = allowInventory
+            ),
+            'BranchDefaults',
+            true
+        );
+    }
+
     /**
      * @description      Gets a Branch object with additional fields
      * @return          `dmpl__Branch__c`
@@ -1032,6 +1027,9 @@ public class TestDataHelpers {
                 Name, 
                 dmpl__PartnerAccountId__c,
                 dmpl__IsActive__c,
+                dmpl__AllowService__c,
+                dmpl__IsHomeDeliveryAvailable__c,
+                dmpl__IsPickupDropAvailable__c,
                 dmpl__AllowSales__c,
                 dmpl__AllowPurchase__c,
                 dmpl__AllowInventory__c
@@ -1186,8 +1184,7 @@ public class TestDataHelpers {
         Boolean IsPackage,
         Boolean IsSKURequired,
         String ItemCode,
-        Boolean IsDiscontinued,
-        Boolean trackInventory
+        Boolean IsDiscontinued
     ){
         return (dmpl__Item__c) TestFactory.createSObject(
             new dmpl__Item__c(
@@ -1197,8 +1194,7 @@ public class TestDataHelpers {
                 dmpl__IsPackage__c = IsPackage,
                 dmpl__IsSKURequired__c = IsSKURequired,
                 dmpl__ItemCode__c = ItemCode,
-                dmpl__IsDiscontinued__c =IsDiscontinued,
-                dmpl__TrackInventory__c = trackInventory
+                dmpl__IsDiscontinued__c =IsDiscontinued
                
             ),
             'ItemDefaults',
@@ -1206,7 +1202,14 @@ public class TestDataHelpers {
         );
     }
     
-    
+    public static dmpl__Item__c getItem(String Name){
+        return[
+            SELECT Id, Name, dmpl__ItemType__c, dmpl__IsActive__c, dmpl__IsPackage__c, dmpl__IsSKURequired__c, dmpl__ItemCode__c, dmpl__IsDiscontinued__c
+            FROM dmpl__Item__c
+            WHERE Name = :name
+            LIMIT 1
+        ];
+    }
     
     public static dmpl__ItemUnitOfMeasure__c ItemUnitOfMeasure(
         String Name,
@@ -1558,38 +1561,6 @@ public class TestDataHelpers {
         ];
     }
 
-    public static dmpl__ItemAlternate__c createItemAlternate(
-        Id itemId,
-        Id alternateItemId,
-        String alternateType,
-        Date effectiveFromDate
-    ) {
-        return (dmpl__ItemAlternate__c) TestFactory.createSObject(
-            new dmpl__ItemAlternate__c(
-                dmpl__ItemId__c = itemId,
-                dmpl__AlternateItemId__c = alternateItemId,
-                dmpl__AlternateType__c = alternateType,
-                dmpl__EffectiveFromDate__c = effectiveFromDate
-            ),
-            'ItemAlternateDefaults',
-            true
-        );
-    }
-
-    public static dmpl__ItemAlternate__c getItemAlternate(Id itemId) {
-        return [
-            SELECT Id,
-                dmpl__ItemId__c,
-                dmpl__AlternateItemId__c,
-                dmpl__AlternateItemName__c,
-                dmpl__AlternateType__c,
-                dmpl__EffectiveFromDate__c
-            FROM dmpl__ItemAlternate__c
-            WHERE dmpl__ItemId__c = :itemId
-            LIMIT 1
-        ];
-    }
-
     public static Asset createAsset(String name, Id accountId, Id itemId) {
         return (Asset) TestFactory.createSObject(
             new Asset(
@@ -1630,22 +1601,6 @@ public class TestDataHelpers {
         );
     }
 
-    public static dmpl__StorageLocation__c createStorageLocation(
-        String locationName,
-        dmpl__Branch__c branch,
-        String locationType
-    ) {
-        return (dmpl__StorageLocation__c) TestFactory.createSObject(
-            new dmpl__StorageLocation__c(
-                Name = locationName,
-                dmpl__BranchId__c = branch != null ? branch.Id : null,
-                dmpl__LocationType__c = locationType != null ? locationType : null
-            ),
-            //'StorageLocationDefaults',
-            true
-        );
-    }
-
     public static dmpl__StorageLocation__c getStorageLocation(String name) {
         return [
             SELECT Id, Name, dmpl__BranchId__c, dmpl__IsActive__c, dmpl__LocationType__c
@@ -1654,4 +1609,58 @@ public class TestDataHelpers {
             LIMIT 1
         ];
     }
+
+
+
+
+     public static dmpl__ItemConsumptionSchedule__c createItemConsumptionSchedule(Id item,String name){
+        {
+        return (dmpl__ItemConsumptionSchedule__c) TestFactory.createSObject(
+            new dmpl__ItemConsumptionSchedule__c(
+                Name = name,
+                dmpl__ItemId__c = item,
+                dmpl__IsActive__c = True
+            ),
+            true
+        );
+       }
+     }
+
+    public static dmpl__ItemConsumptionSchedule__c getItemConsumptionSchedule(Id item){
+          return [
+            SELECT Id, Name ,dmpl__IsActive__c ,dmpl__PartnerAccountId__c
+            FROM dmpl__ItemConsumptionSchedule__c
+            WHERE Id = :item
+            LIMIT 1
+        ];
+    }
+
+
+     public static dmpl__ItemConsumptionRate__c createItemConsumptionRate(Id itemCS,String name){
+        {
+        return (dmpl__ItemConsumptionRate__c) TestFactory.createSObject(
+            new dmpl__ItemConsumptionRate__c(
+                Name = name,
+                dmpl__ItemConsumptionSchedule__c = itemCS
+            ),
+            true
+        );
+       }
+     }
+
+     public static dmpl__ItemConsumptionRate__c getItemConsumptionRate(Id itemSR){
+          return [
+            SELECT Id, Name ,dmpl__ItemConsumptionSchedule__c
+            FROM dmpl__ItemConsumptionRate__c
+            WHERE Id = :itemSR
+            LIMIT 1
+        ];
+    }
+
+
+
+
+
+    
+   
 }
