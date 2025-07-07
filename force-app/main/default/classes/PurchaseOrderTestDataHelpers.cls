@@ -43,10 +43,16 @@ public class PurchaseOrderTestDataHelpers {
         Name,
         dmpl__DocumentDate__c,
         dmpl__DiscountGroupId__c,
+        dmpl__TotalAmount__c,
         dmpl__BranchId__c,
         dmpl__PartnerAccountId__c,
         dmpl__TotalLineGrossAmount__c,
         dmpl__TaxGroupId__c,
+        dmpl__TotalLineAmount__c,
+        dmpl__TotalLineBaseAmount__c,
+        dmpl__TotalOrderAmount__c,
+        dmpl__TotalTaxAmount__c,
+        dmpl__OpenAmount__c,
         dmpl__TCSEligibleAmount__c,
         dmpl__RepairOrderId__c,
         dmpl__Status__c,
@@ -67,7 +73,9 @@ public class PurchaseOrderTestDataHelpers {
         dmpl__BranchId__c,
         dmpl__PartnerAccountId__c,
         dmpl__TotalLineGrossAmount__c,
+        dmpl__TotalLineAmount__c,
         dmpl__TaxGroupId__c,
+        dmpl__TotalOrderAmount__c,
         dmpl__TCSEligibleAmount__c,
         dmpl__RepairOrderId__c,
         dmpl__Status__c,
@@ -91,7 +99,9 @@ public class PurchaseOrderTestDataHelpers {
         dmpl__TotalSchemeDiscountAmount__c,
         dmpl__TotalDiscountAmount__c,
         dmpl__TotalLineTaxAmount__c,
+        dmpl__TotalAmount__c,
         dmpl__OpenAmount__c,
+        
         dmpl__TotalTaxAmount__c
         FROM dmpl__PurchaseOrder__c
         WHERE ID =: purchaseOrder
@@ -181,6 +191,7 @@ public class PurchaseOrderTestDataHelpers {
         return [SELECT 
         id, 
         Name,
+        dmpl__SchemeLineId__c,
         dmpl__PurchaseOrderId__c,
         dmpl__ItemId__c,
         dmpl__SKUId__c,
@@ -205,7 +216,8 @@ public class PurchaseOrderTestDataHelpers {
         dmpl__GrossAmount__c,
         dmpl__TaxAmount__c,
         dmpl__NetSchemeDiscount__c,
-        dmpl__NetDiscount__c
+        dmpl__NetDiscount__c,
+        dmpl__SchemeDiscountAmount__c
         FROM dmpl__PurchaseOrderLine__c 
         WHERE Id =: purchaseOrderLine
         LIMIT 1];
@@ -393,4 +405,23 @@ public static dmpl__PurchaseOrder__c createPurchaseOrder(
         );
 
 }
+
+
+    public static dmpl__PurchaseOrderLine__c createPurchaseOrderLine(
+            Id purchaseOrderId,
+            Id itemId,
+            Id taxGroupId,
+            Integer quantity
+            ) {
+            return  (dmpl__PurchaseOrderLine__c)TestFactory.createSObject(
+                new dmpl__PurchaseOrderLine__c(
+                    dmpl__PurchaseOrderId__c=purchaseOrderId != null ? purchaseOrderId : null,
+                    dmpl__ItemId__c=itemId!= null ? itemId : null,
+                    dmpl__Quantity__c=quantity,
+                    dmpl__TaxGroupId__c = taxGroupId
+                ),
+                true
+            );
+
+    }
 }
