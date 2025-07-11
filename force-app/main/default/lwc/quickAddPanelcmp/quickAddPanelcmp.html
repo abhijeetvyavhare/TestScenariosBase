@@ -52,7 +52,7 @@
                                 </lightning-layout-item>
                             </template>
                             <template if:true={getFieldsetFields} for:each={getFieldsetFields} for:item="field">
-                                <lightning-layout-item key={field.apiName} flexibility="auto">
+                                <lightning-layout-item key={field.apiName} flexibility="auto" class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
                                     <lightning-input-field 
                                         id={field.apiName} 
                                         field-name={field.apiName}
@@ -62,8 +62,7 @@
                                     </lightning-input-field>
                                 </lightning-layout-item>
                             </template>
-                            <lightning-layout-item padding="horizontal-small" class="slds-p-top_large"
-                                flexibility="auto, no-grow">
+                            <lightning-layout-item padding="horizontal-small" class="slds-p-top_large slds-grid slds-grid_align-end slds-grow slds-p-horizontal_x-small" flexibility="auto">
                                 <lightning-button variant="brand" type="submit" name="add" label="Add"
                                     disabled={isSubmitDisabled}></lightning-button>
                             </lightning-layout-item>
@@ -145,7 +144,7 @@
                             left-top-label={customLabel.inHandLabel} left-top-value={stock.QuantityInHand}
                             left-bottom-label={stock.BranchName} right-bottom-label={stock.SKUName}>
                         </c-dmpl-tile>
-                    </lightning-layout-item>
+                    </lightning-layout-item> 
                 </template>
                 <template if:true={getAlternateItems} for:each={getAlternateItems} for:item="stock">
                     <lightning-layout-item key={stock.BranchName} flexibility="auto, no-grow" padding="around-small">
@@ -154,9 +153,97 @@
                             left-bottom-label={stock.BranchName} right-bottom-label={stock.SKUName}>
                         </c-dmpl-tile>
                     </lightning-layout-item>
-
                 </template>
             </lightning-layout>
+            <div class="slds-grid slds-wrap slds-gutters slds-gutters_xx-small">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4 slds-m-bottom_x-small">
+                    <div class="slds-box slds-box_x-small">
+                        <template if:true={getAlternateItems}>
+                            <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-spread">
+                                <h5 class="slds-text-body_regular slds-text-align_left">Alternate</h5>
+                                <template if:true={showAlternateItemsExpanded}>
+                                    <lightning-icon icon-name="utility:chevronup" class="slds-text-link_reset" alternative-text="Up" size="xx-small" data-value="Alternate" onclick={handleCardsToggle}></lightning-icon>
+                                </template>
+                                <template if:false={showAlternateItemsExpanded}>
+                                    <lightning-icon icon-name="utility:chevrondown" class="slds-text-link_reset" alternative-text="Down" size="xx-small" data-value="Alternate" onclick={handleCardsToggle}></lightning-icon>
+                                </template>
+                            </div>
+                        </template>
+                        <template if:true={getAlternateItems}>
+                            <div>
+                                <c-dmpl-card selectable="true" show-type="true"></c-dmpl-card>
+                                <c-dmpl-card selectable="true" show-type="true"></c-dmpl-card>
+                            </div>
+                            <template if:true={showAlternateItemsExpanded}>
+                                <div>
+                                    <c-dmpl-card selectable="true" show-type="true"></c-dmpl-card>
+                                </div>
+                            </template>
+                        </template>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4 slds-m-bottom_x-small">
+                    <div class="slds-box slds-box_x-small">
+                        <template if:true={getMyBranchStock}>
+                            <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-spread">
+                                <h5 class="slds-text-body_regular slds-text-align_left">Stock</h5>
+                                <template if:true={showStocksExpanded}>
+                                    <lightning-icon icon-name="utility:chevronup" class="slds-text-link_reset" alternative-text="Up" size="xx-small" data-value="Stock" onclick={handleCardsToggle}></lightning-icon>
+                                </template>
+                                <template if:false={showStocksExpanded}>
+                                    <lightning-icon icon-name="utility:chevrondown" class="slds-text-link_reset" alternative-text="Down" size="xx-small" data-value="Stock" onclick={handleCardsToggle}></lightning-icon>
+                                </template>
+                            </div>
+                        </template>
+                        <template if:true={getMyBranchStock}>
+                            <div>
+                                <c-dmpl-card show-mrp="true"></c-dmpl-card>
+                                <c-dmpl-card show-mrp="true"></c-dmpl-card>
+                            </div>
+                            <template if:true={showStocksExpanded}>
+                                <div>
+                                    <c-dmpl-card show-mrp="true"></c-dmpl-card>
+                                </div>
+                            </template>
+                        </template>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                    <div class="slds-box slds-box_x-small">
+                        <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-spread slds-m-bottom_x-small">
+                            <h5 class="slds-text-body_regular slds-text-align_left">Scheme Recommendations</h5>
+                            <template if:true={showSchemesExpanded}>
+                                <lightning-icon icon-name="utility:chevronup" class="slds-text-link_reset" alternative-text="Up" size="xx-small" data-value="Schemes" onclick={handleCardsToggle}></lightning-icon>
+                            </template>
+                            <template if:false={showSchemesExpanded}>
+                                <lightning-icon icon-name="utility:chevrondown" class="slds-text-link_reset" alternative-text="Down" size="xx-small" data-value="Schemes" onclick={handleCardsToggle}></lightning-icon>
+                            </template>
+                        </div>
+                        <div>
+                            <h5 class="slds-body-text_regular slds-text-align_left slds-m-bottom_xx-small">UM QPS APRIL NORTH</h5>
+                            <template for:each={getSchemesData} for:item="scheme">
+                                <div class="slds-grid slds-grid_vertical-align-center slds-text-link_reset" key={scheme.id} data-id={scheme.id} onclick={handleSelectScheme}>
+                                    <template if:true={scheme.isSelected}>
+                                        <lightning-icon icon-name="utility:success" class="slds-text-link_reset dmpl-color-green" alternative-text="success" size="xx-small"></lightning-icon>
+                                    </template>
+                                    <template if:false={scheme.isSelected}>
+                                        <lightning-icon icon-name="utility:quote" class="slds-text-link_reset dmpl-color-green" alternative-text="quote" size="xx-small"></lightning-icon>
+                                    </template>
+                                    <p class="slds-text-body_regular slds-text-align_left slds-m-left_xx-small">{scheme.scheme}</p>
+                                </div>
+                            </template>
+                            <template if:true={showSchemesExpanded}>
+                                <template for:each={getSchemesData} for:item="scheme">
+                                    <div class="slds-grid slds-grid_vertical-align-center slds-text-link_reset" key={scheme.id} data-id={scheme.id} onclick={handleSelectScheme}>
+                                        <lightning-icon icon-name="utility:quote" class="slds-text-link_reset dmpl-color-green" alternative-text="quote" size="xx-small"></lightning-icon>
+                                        <p class="slds-text-body_regular slds-text-align_left slds-m-left_xx-small">{scheme.scheme}</p>
+                                    </div>
+                                </template>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <c-alternate-item-modal-cmp header={header}>
             {content}

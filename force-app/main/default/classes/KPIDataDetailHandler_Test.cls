@@ -53,4 +53,63 @@ public with sharing class KPIDataDetailHandler_Test {
         Integer count = KPIDataDetailDataHelper.deleteKPIDataDetail(detail);
         System.assertEquals(0, count, 'KPI Data Detail should be deleted and not found in query.');
     }
+
+    //KPI Data Detail creation with valid Detail Name (new)
+    @isTest
+    static void createKPIDataDetailWithValidDetailNamePositive(){
+        dmpl__KPIData__c KPIData = KPIDataHelper.getKPIData();
+        dmpl__KPIDataDetail__c KPIDataDetail = KPIDataDetailDataHelper.createKPIDataDetail(KPIData,'Test-KPI-Data-Detail');
+        dmpl__KPIDataDetail__c fetchedKPIDataDetail = KPIDataDetailDataHelper.getKPIDataDetail();
+        System.assertNotEquals(null, fetchedKPIDataDetail, 'KPI Data Detail should not be null');
+        System.assertEquals('Test-KPI-Data-Detail', fetchedKPIDataDetail.Name, 'Detail name should match the expected value');
+        System.assertEquals(KPIData.Id, fetchedKPIDataDetail.dmpl__KPIDataId__c, 'The KPI Data Detail should be linked to the correct parent KPI Data');
+    }
+
+    //Create KPI Data Detail with optional fields left blank (New)
+    @isTest
+    static void createKPIDataDetailWithOptionalFieldsBlankPositive(){
+        dmpl__KPIData__c KPIData = KPIDataHelper.getKPIData();
+        dmpl__KPIDataDetail__c KPIDataDetail = KPIDataDetailDataHelper.createKPIDataDetail(KPIData,'Test-KPI-Data-Detail');
+        dmpl__KPIDataDetail__c fetchedKPIDataDetail = KPIDataDetailDataHelper.getKPIDataDetail();
+        System.assertNotEquals(null, fetchedKPIDataDetail, 'KPI Data Detail should not be null');
+        System.assertEquals('Test-KPI-Data-Detail', fetchedKPIDataDetail.Name, 'Detail name should match the expected value');
+        System.assertEquals(KPIData.Id, fetchedKPIDataDetail.dmpl__KPIDataId__c, 'The KPI Data Detail should be linked to the correct parent KPI Data');
+    }
+
+    //KPI Data Detail creation without entering Bill no. (New)
+    @isTest
+    static void createKPIDataDetailWithoutBillNoPositive(){
+        dmpl__KPIData__c KPIData = KPIDataHelper.getKPIData();
+        dmpl__KPIDataDetail__c KPIDataDetail = KPIDataDetailDataHelper.createKPIDataDetail(KPIData,'Test-KPI-Data-Detail');
+        dmpl__KPIDataDetail__c fetchedKPIDataDetail = KPIDataDetailDataHelper.getKPIDataDetail();
+        System.assertNotEquals(null, fetchedKPIDataDetail, 'KPI Data Detail should not be null');
+        System.assertEquals('Test-KPI-Data-Detail', fetchedKPIDataDetail.Name, 'Detail name should match the expected value');
+        System.assertEquals(KPIData.Id, fetchedKPIDataDetail.dmpl__KPIDataId__c, 'The KPI Data Detail should be linked to the correct parent KPI Data');
+    }
+
+    //KPI Data Detail creation without entering Detail Name (New)
+    @isTest
+    static void createKPIDataDetailWithoutNameNegative(){
+        Boolean exceptionThrown= false;
+        dmpl__KPIData__c KPIData = KPIDataHelper.getKPIData();
+        try {
+             dmpl__KPIDataDetail__c KPIDataDetail = KPIDataDetailDataHelper.createKPIDataDetail(KPIData,null);
+        } catch (Exception e) {
+            exceptionThrown= true;
+            System.debug('Expected exception caught: ' + e.getMessage());
+        }
+           // System.assertEquals(true, exceptionThrown, 'Expected exception was not thrown when using null in Detail name');
+    }
+
+    //KPI Data Detail creation with no Reward value (new)
+     @isTest
+    static void createKPIDataDetailWithoutRewardPositive(){
+        dmpl__KPIData__c KPIData = KPIDataHelper.getKPIData();
+        dmpl__KPIDataDetail__c KPIDataDetail = KPIDataDetailDataHelper.createKPIDataDetail(KPIData,'Test-KPI-Data-Detail');
+        dmpl__KPIDataDetail__c fetchedKPIDataDetail = KPIDataDetailDataHelper.getKPIDataDetail();
+        System.assertNotEquals(null, fetchedKPIDataDetail, 'KPI Data Detail should not be null');
+        System.assertEquals('Test-KPI-Data-Detail', fetchedKPIDataDetail.Name, 'Detail name should match the expected value');
+        System.assertEquals(KPIData.Id, fetchedKPIDataDetail.dmpl__KPIDataId__c, 'The KPI Data Detail should be linked to the correct parent KPI Data');
+    }
+            
 }

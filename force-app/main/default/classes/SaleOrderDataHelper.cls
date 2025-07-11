@@ -1,6 +1,8 @@
 @isTest
 public with sharing class SaleOrderDataHelper {
-    public static dmpl__SaleOrder__c createSaleOrder(
+
+
+        public static dmpl__SaleOrder__c createSaleOrder(
         Account customerAccount,
         dmpl__Branch__c branch,
         dmpl__ContactAddress__c contactAddress,
@@ -25,6 +27,33 @@ public with sharing class SaleOrderDataHelper {
             true
         );
     }
+    
+    public static dmpl__SaleOrder__c createSaleOrderById(
+        Account customerAccount,
+        dmpl__Branch__c branch,
+        dmpl__ContactAddress__c contactAddress,
+        dmpl__PriceList__c priceList
+    ) {
+        return (dmpl__SaleOrder__c) TestFactory.createSObject(
+            new dmpl__SaleOrder__c(
+                dmpl__AccountId__c                  = customerAccount != null ? customerAccount.Id : null,
+                dmpl__PartnerAccountId__c           = branch != null ? branch.dmpl__PartnerAccountId__c : null,
+                dmpl__BranchId__c                   = branch != null ? branch.Id : null,
+                dmpl__DocumentDate__c               = Date.today(),
+                dmpl__Status__c                     = 'Draft',
+                dmpl__RequiredDate__c               = Date.today(),
+                dmpl__PriceListId__c                = priceList != null ? priceList.Id : null,
+                dmpl__BookingAmount__c              = 100,
+                dmpl__PromisedDate__c               = Date.today(),
+                dmpl__PerformReleaseFulfilment__c   = false,
+                dmpl__PerformReleaseInvoice__c      = false,
+                dmpl__PerformReleaseDelivery__c     = false
+            ),
+            'SaleOrderDefaults',
+            true
+        );
+    }
+
 
     public static dmpl__SaleOrder__c createSaleOrder(
         Id customerAccountId,
@@ -384,6 +413,24 @@ public with sharing class SaleOrderDataHelper {
             LIMIT 1
         ];
     }
+
+    public static dmpl__SaleOrderLine__c createSaleOrderLineById(
+    Id saleOrderId,
+    Id itemId,
+    Integer quantity,
+    Id skuId
+) {
+    return (dmpl__SaleOrderLine__c) TestFactory.createSObject(
+        new dmpl__SaleOrderLine__c(
+            dmpl__SaleOrderId__c = saleOrderId != null ? saleOrderId : null,
+            dmpl__ItemId__c      = itemId != null ? itemId : null,
+            dmpl__Quantity__c    = quantity,
+            dmpl__SKUId__c       = skuId != null ? skuId : null
+        ),
+        true
+    );
+}
+
 
     public static List<dmpl__SaleOrderLine__c> getSaleOrderLines(Id saleOrderId) {
         return [

@@ -2,9 +2,10 @@ import { LightningElement, api, wire } from 'lwc';
 import { getRecord } from 'lightning/uiRecordApi';
 import getQueueStatus from '@salesforce/apex/InterfaceServiceProviderController.getQueueStatus';
 import FORCEREFRESHMC from '@salesforce/messageChannel/ForceReset__c';
+import { RefreshEvent } from 'lightning/refresh';
 import {subscribe, unsubscribe, MessageContext} from 'lightning/messageService';
 import LightningModal from 'lightning/modal';
-import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
 
 export default class DmplNotification extends LightningModal {
     @api recordId;
@@ -89,8 +90,16 @@ export default class DmplNotification extends LightningModal {
     }
     
     handleClose() {
-        getRecordNotifyChange([{ "recordId": this.recordId }]);
-        eval("$A.get('e.force:refreshView').fire();");
+        notifyRecordUpdateAvailable([{ "recordId": this.recordId }]);
+        this.refreshStdComponents();
         this.close('okay');
+    }
+
+    refreshStdComponents(){
+        try{
+            eval("$A.get('e.force:refreshView').fire();");
+        }catch(e){
+            this.dispatchEvent(new RefreshEvent());
+        }
     }
 }

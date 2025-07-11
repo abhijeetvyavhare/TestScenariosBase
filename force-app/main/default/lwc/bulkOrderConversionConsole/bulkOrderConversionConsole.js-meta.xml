@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>63.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+        <target>lightning__Tab</target>
+    </targets>
+    <masterLabel>Bulk Order Conversion</masterLabel>
+    <targetConfigs>
+        <targetConfig targets="lightning__AppPage">
+            <property name="objectApiName" label="Object API Name" type="String"/>
+            <property name="filterFieldSetName" label="Filter Field Set Name" type="String"/>
+            <property name="relatedObjectApiName" label="Related Object API Name" type="String"/>
+            <property name="relatedObjectFieldSetName" label="Related Object Field Set Name" type="String"/>
+            <property name="bulkActionTypeName" label="Bulk Action Type Title" type="String" default="Select Bulk Action Type"/>
+            <property name="editProcessName" label="Edit Process Title" type="String" default="Edit and Process"/>
+            <property name="summaryName" label="Summary Title" type="String" default="Summary"/>
+        </targetConfig>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="objectApiName" label="Object API Name" type="String"/>
+            <property name="filterFieldSetName" label="Filter Field Set Name" type="String"/>
+            <property name="relatedObjectApiName" label="Related Object API Name" type="String"/>
+            <property name="relatedObjectFieldSetName" label="Related Object Field Set Name" type="String"/>
+            <property name="bulkActionTypeName" label="Bulk Action Type Title" type="String" default="Select Bulk Action Type"/>
+            <property name="editProcessName" label="Edit Process Title" type="String" default="Edit and Process"/>
+            <property name="summaryName" label="Summary Title" type="String" default="Summary"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

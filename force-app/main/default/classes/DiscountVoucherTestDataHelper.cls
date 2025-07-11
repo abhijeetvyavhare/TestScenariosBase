@@ -43,4 +43,32 @@ public with sharing class DiscountVoucherTestDataHelper {
             LIMIT 1
         ];
     }
+
+    public static dmpl__DiscountVoucher__c createDiscountVoucherById(
+        Account partnerAccount,
+        Account customerAccount,
+        dmpl__Branch__c branch
+    ){
+        return (dmpl__DiscountVoucher__c)TestFactory.createSObject(
+            new dmpl__DiscountVoucher__c(
+                dmpl__PartnerAccountId__c =partnerAccount.Id,
+                dmpl__AccountId__c=customerAccount.Id,
+                dmpl__BranchId__c = branch != null ? branch.Id : null
+                ),
+            true
+        );
+    }
+    public static dmpl__DiscountVoucher__c getDiscountVoucherById(Id id){
+        return [
+            SELECT 
+                Id,
+                Name,
+                dmpl__PartnerAccountId__c,
+                dmpl__AccountId__c,
+                dmpl__BranchId__c
+            FROM dmpl__DiscountVoucher__c
+            WHERE Id = :id 
+            LIMIT 1
+        ];
+    }
 }

@@ -1,6 +1,7 @@
 import { LightningElement, api, track, wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { publish, MessageContext } from 'lightning/messageService';
+import { RefreshEvent } from 'lightning/refresh';
 import { deleteRecord } from 'lightning/uiRecordApi';
 import LightningConfirm from 'lightning/confirm';
 import FORCEREFRESHMC from '@salesforce/messageChannel/ForceReset__c';
@@ -227,7 +228,15 @@ export default class IncentiveBuilderLineRowcmp extends LightningElement {
     }
 
     beginRefresh() {
-        eval("$A.get('e.force:refreshView').fire();");
+        this.refreshStdComponents();
         publish(this.messageContext, FORCEREFRESHMC);
      }
+
+    refreshStdComponents(){
+        try{
+            eval("$A.get('e.force:refreshView').fire();");
+        }catch(e){
+            this.dispatchEvent(new RefreshEvent());
+        }
+    }
 }

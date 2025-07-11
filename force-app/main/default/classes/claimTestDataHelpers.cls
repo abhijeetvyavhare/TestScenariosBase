@@ -86,6 +86,5 @@ public with sharing class claimTestDataHelpers {
         Id,
         Name
         FROM dmpl__ClaimReconciliation__c LIMIT 1];
-    }
-
+    }    
 }

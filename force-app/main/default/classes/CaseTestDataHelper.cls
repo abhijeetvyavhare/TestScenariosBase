@@ -73,4 +73,34 @@ public class CaseTestDataHelper {
             LIMIT 1
         ];
     }
+
+    public static dmpl__Case__c CreateCaseById(
+        Account partnerAccount,
+        Account customerAccount,
+        dmpl__Branch__c branch,
+        Asset asset 
+    ) {
+        dmpl__Case__c caseRecord = new dmpl__Case__c(
+            dmpl__PartnerAccountId__c = partnerAccount != null ? partnerAccount.Id : null,
+            dmpl__AccountId__c       = customerAccount != null ? customerAccount.Id : null,
+            dmpl__BranchId__c        = branch != null ? branch.Id : null,
+            dmpl__AssetId__c         = asset != null ? asset.Id : null);
+
+            return (dmpl__Case__c) TestFactory.createSObject(caseRecord, true);
+    }
+    public static dmpl__Case__c getCaseById(Id id) {
+        return [
+            SELECT 
+                Id,
+                Name,
+                dmpl__PartnerAccountId__c,
+                dmpl__AccountId__c,
+                dmpl__BranchId__c,
+                dmpl__AssetId__c,
+                dmpl__DocumentDate__c
+            FROM dmpl__Case__c
+            WHERE Id = :id
+            LIMIT 1];
+    }
+
 }

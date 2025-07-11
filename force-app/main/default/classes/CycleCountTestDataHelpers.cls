@@ -64,7 +64,7 @@ public class CycleCountTestDataHelpers {
         dmpl__PerformReleaseAdjustment__c,
         dmpl__PerformFinishCounting__c,
         dmpl__LockInventory__c
-        FROM dmpl__InventoryCycleCount__c where id= :cycleCountId LIMIT 1];
+        FROM dmpl__InventoryCycleCount__c WHERE id= :cycleCountId LIMIT 1];
     }
 
     public static dmpl__InventoryCycleCountLine__c createCycleCountLine(
@@ -91,17 +91,33 @@ public class CycleCountTestDataHelpers {
 
     public static dmpl__InventoryCycleCountLine__c getCycleCountLine(){
         return [SELECT 
-        id,
-        name,
-        dmpl__PickedQuantity__c
+				id,
+				name,
+				dmpl__PickedQuantity__c,
+				dmpl__CycleCountId__c,
+				dmpl__ItemId__c,
+				dmpl__ItemLotTypeId__c,
+				dmpl__OnHandQuantity__c,
+				dmpl__DiscrepencyQuantity__c,
+				dmpl__ExpectedQuantity__c,
+				dmpl__DiscrepancyCostValue__c,
+				dmpl__UnitCost__c
         FROM dmpl__InventoryCycleCountLine__c LIMIT 1];
     }
     
     public static dmpl__InventoryCycleCountLine__c getCycleCountLine(Id cycleCountLineId){
         return [SELECT 
-        id,
-        name,
-        dmpl__PickedQuantity__c
+				id,
+				name,
+				dmpl__PickedQuantity__c,
+				dmpl__CycleCountId__c,
+				dmpl__ItemId__c,
+				dmpl__ItemLotTypeId__c,
+				dmpl__OnHandQuantity__c,
+				dmpl__DiscrepencyQuantity__c,
+				dmpl__ExpectedQuantity__c,
+				dmpl__DiscrepancyCostValue__c,
+				dmpl__UnitCost__c
         FROM dmpl__InventoryCycleCountLine__c where id= :cycleCountLineId LIMIT 1];
     }
     
@@ -139,5 +155,47 @@ public class CycleCountTestDataHelpers {
         dmpl__Operation__c,
         dmpl__CycleCountId__c
         FROM dmpl__InventoryCycleCountRule__c where id= :cycleCountRuleId LIMIT 1];
+    }
+
+
+	 public static dmpl__InventoryCycleCount__c createCycleCount(
+		Id partnerAccountId,
+        Id branchId,
+        Id itemGroupId,
+		Id storageLocationId,
+		String CountQuantityType
+    ) {
+        return (dmpl__InventoryCycleCount__c)TestFactory.createSObject(
+            new dmpl__InventoryCycleCount__c(
+                dmpl__PartnerAccountId__c = partnerAccountId,
+                dmpl__BranchId__c = branchId,                                              
+                dmpl__ItemGroupId__c = itemGroupId,
+				dmpl__StorageLocationId__c = storageLocationId,
+				dmpl__CountQuantityType__c = CountQuantityType
+                ),
+                'InventoryCycleCountDefaults',
+                true
+        );
+    }
+
+	public static dmpl__InventoryCycleCountLine__c createCycleCountLine(
+        Id cycleCountId,
+        Id itemId,
+		Id itemLotTypeId,
+	Decimal recordedQuantity,
+        Decimal onHandQuantity,
+		Decimal unitCost
+    ){
+        return (dmpl__InventoryCycleCountLine__c)TestFactory.createSObject(
+            new dmpl__InventoryCycleCountLine__c(
+                dmpl__CycleCountId__c = cycleCountId,
+                dmpl__ItemId__c = itemId,
+				dmpl__ItemLotTypeId__c = itemLotTypeId,
+                dmpl__RecordedQuantity__c = recordedQuantity,
+                dmpl__OnHandQuantity__c = onHandQuantity ,
+				dmpl__UnitCost__c = unitCost
+        		),
+                true
+        );
     }
 }

@@ -41,6 +41,7 @@ public class GoodRecieptsTestDataHelpers {
                 dmpl__IsClaimed__c,
                 dmpl__Status__c,
                 dmpl__IsBillGenerated__c,
+                dmpl__PurchaseOrderId__c,
                 dmpl__PerformReceive__c,
                 dmpl__IsInspectionCompleted__c,
                 dmpl__PerformReceiveAsync__c,
@@ -69,6 +70,7 @@ public class GoodRecieptsTestDataHelpers {
                 dmpl__IsInspectionCompleted__c,
                 dmpl__PerformReceiveAsync__c,
                 dmpl__PerformInspection__c,
+                dmpl__PurchaseOrderId__c,
                 dmpl__PerformInspectionComplete__c,
                 dmpl__PerformPopulateChecklist__c,
                 dmpl__PerformAllocation__c,
@@ -212,6 +214,7 @@ public class GoodRecieptsTestDataHelpers {
                 dmpl__PartnerAccountId__c = shipment.dmpl__PartnerAccountId__c,
                 dmpl__SupplierAccountId__c = shipment.dmpl__SupplierAccountId__c,
                 dmpl__PurchaseOrderId__c = shipment.dmpl__PurchaseOrderId__c,
+                dmpl__ShipmentId__c=shipment.Id,
                 dmpl__ReceivedTime__c = Date.today(),
                 dmpl__DocumentDate__c = Date.today(),
                 dmpl__SupplierInvoiceDate__c = Date.today(),
@@ -247,6 +250,36 @@ public class GoodRecieptsTestDataHelpers {
                 dmpl__InvoiceQuantity__c = shipmentLine.dmpl__Quantity__c
             ),
             'GoodsReceiptLineDefaluts',
+            true
+        );
+    }
+    public static dmpl__GoodsReceipt__c createGoodsReceipt(
+        Account partnerAccount,
+        dmpl__Branch__c branch,
+        dmpl__PurchaseOrder__c purchaseOrder,
+        Account supplierAccount,
+        Date Docdate
+        ) {
+        return (dmpl__GoodsReceipt__c)TestFactory.createSObject(
+            new dmpl__GoodsReceipt__c(
+                dmpl__PartnerAccountId__c = partnerAccount?.Id,
+                dmpl__BranchId__c = branch?.Id,
+                dmpl__PurchaseOrderId__c = purchaseOrder?.Id,
+                dmpl__ReceivedTime__c = date.today(),
+                dmpl__DocumentDate__c = Docdate,
+                dmpl__PerformReceive__c = true,
+                dmpl__PerformInspection__c = true,
+                dmpl__PerformInspectionComplete__c = true,
+                dmpl__IsInspectionCompleted__c = true,
+                dmpl__SupplierAccountId__c = supplierAccount?.Id,
+                dmpl__SupplierInvoiceDate__c = date.today(),
+                dmpl__SupplierInvoiceNumber__c = 'Test-SupplierInvoiceNumber',
+                dmpl__SupplierDispatchDate__c = date.today(),
+                dmpl__TransporterName__c = 'Test-TransporterName',
+                dmpl__TransporterRefrenceNumber__c = 'Test-TransporterRefrenceNumber',
+                dmpl__TransporterContactNumber__c = '7575555555'
+            ),
+            'GoodsReceiptDefaults',
             true
         );
     }

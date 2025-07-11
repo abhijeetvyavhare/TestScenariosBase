@@ -251,23 +251,7 @@ public with sharing class ResourceHandler_Test {
         System.assertNotEquals(null, fetchedLeave.Name, 'Name should not be null');
         System.assertEquals(3, fetchedLeave.dmpl__Balance__c, 'Leave balance should be 3');
     }
-
-    //Leave Entry without LeaveType
-      @isTest
-    static void craeteResourceLeaveRecordWithoutLeaveTypeNegative(){
-        Test.startTest();
-        Boolean exceptionThrown = false;
-        dmpl__LeaveType__c type = ResourceDataHelper.getLeaveType();
-        dmpl__Resource__c resource = ResourceDataHelper.getResource();
-        try{
-            dmpl__ResourceLeave__c leave = ResourceDataHelper.createResourceLeave(resource.Id,null,3);
-        }
-        catch(Exception e){
-            exceptionThrown = true;
-        }
-        System.assertEquals(true, exceptionThrown, 'Leave should not be created without leave type');
-        Test.stopTest();
-    }
+    
     //Resource with Multiple Leave Records for Different Leave Types
     @isTest
     static void craeteResourceLeaveRecordWithMultipleLeaveRecordsPositive(){

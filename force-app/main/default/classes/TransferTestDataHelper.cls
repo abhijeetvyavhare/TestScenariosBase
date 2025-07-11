@@ -18,9 +18,9 @@ public with sharing class TransferTestDataHelper {
     public static dmpl__Transfer__c createTransfer(Account partnerAccount,dmpl__Branch__c fromBranch,dmpl__Branch__c toBranch) {
         return (dmpl__Transfer__c) TestFactory.createSObject(
             new dmpl__Transfer__c(
-                dmpl__PartnerAccountId__c = partnerAccount.Id,
-                dmpl__BranchId__c = fromBranch.Id,
-                dmpl__ToBranchId__c = toBranch.Id,
+                dmpl__PartnerAccountId__c = partnerAccount?.Id,
+                dmpl__BranchId__c = fromBranch?.Id,
+                dmpl__ToBranchId__c = toBranch?.Id,
                 dmpl__PerformInwardPosting__c = false,
                 dmpl__PerformInwardReceive__c = false,
                 dmpl__TransferTime__c = Date.today()  
@@ -41,6 +41,23 @@ public with sharing class TransferTestDataHelper {
                 dmpl__PerformInwardReceive__c,
                 dmpl__TransferTime__c 
             FROM dmpl__Transfer__c 
+            LIMIT 1
+        ];
+        
+    }
+
+    public static dmpl__Transfer__c getTransfer(dmpl__Transfer__c transfer) {
+        return [
+            SELECT 
+				Id,
+                dmpl__PartnerAccountId__c,
+                dmpl__BranchId__c,
+                dmpl__ToBranchId__c,
+                dmpl__PerformInwardPosting__c,
+                dmpl__PerformInwardReceive__c,
+                dmpl__TransferTime__c 
+            FROM dmpl__Transfer__c 
+            WHERE Id  =:transfer.Id
             LIMIT 1
         ];
         

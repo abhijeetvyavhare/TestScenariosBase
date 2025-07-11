@@ -7,11 +7,12 @@ import opportunityLabel from '@salesforce/label/c.LeadConvertPanel_OpportunityLa
 import headerLabel from '@salesforce/label/c.LeadConvertPanel_HeaderLabel'
 import getFieldsByFieldSetName from '@salesforce/apex/MetadataController.getFieldsByFieldSetName';
 import convertLead from '@salesforce/apex/ServiceLeadController.convertLead';
-import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { publish, MessageContext } from 'lightning/messageService';
 import FORCEREFRESHMC from '@salesforce/messageChannel/ForceReset__c';
 import { reduceErrors } from 'c/utils';
+import { RefreshEvent } from 'lightning/refresh';
 import getLeadConvertStatus from '@salesforce/apex/ServiceLeadController.getLeadConvertStatus';
 import getAllFieldMappings from '@salesforce/apex/RecordFormController.getAllFieldMappings';
 import getFieldMappingsData from '@salesforce/apex/RecordFormController.getFieldMappingsData';
@@ -346,14 +347,22 @@ export default class LeadConvertPanel extends LightningElement {
             data : payload
         }).then(response => {
             this.showMessage('Saved Successfully!');
-            getRecordNotifyChange(new Array({ "recordId": this.recordId }));
-            eval("$A.get('e.force:refreshView').fire();");
+            notifyRecordUpdateAvailable([{ "recordId": this.recordId }]);
+            this.refreshStdComponents();
             publish(this.messageContext, FORCEREFRESHMC, {});
             this.handleClose();
         }).catch(error => {
             this.showError(error);
         });
         this.isWorking = false;
+    }
+    
+    refreshStdComponents(){
+        try{
+            eval("$A.get('e.force:refreshView').fire();");
+        }catch(e){
+            this.dispatchEvent(new RefreshEvent());
+        }
     }
 
     showError(error) {

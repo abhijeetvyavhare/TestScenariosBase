@@ -16,6 +16,24 @@ public with sharing class KPIConfigurationDataHelper {
         );
     }
 
+    public static dmpl__KPIConfiguration__c createKPIConfiguration(
+        String kpiName,
+        String memberType,
+        String dateFieldName,
+        boolean isActive
+    ) {
+        return (dmpl__KPIConfiguration__c) TestFactory.createSObject(
+            new dmpl__KPIConfiguration__c(
+                Name = kpiName != null ? kpiName : null,
+                dmpl__MemberType__c = memberType != null ? memberType : null,
+                dmpl__DateFieldName__c = dateFieldName != null ? dateFieldName : null,
+                dmpl__IsActive__c = isActive != null ? isActive : null
+            ),
+            // 'KPIConfigurationDefaults',
+            true
+        );
+    }
+
     public static dmpl__KPIConfiguration__c getKPIConfiguration() {
         return [
             SELECT Id, Name, dmpl__MemberType__c, dmpl__DateFieldName__c, dmpl__IsActive__c

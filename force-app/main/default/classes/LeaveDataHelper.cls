@@ -70,6 +70,14 @@ public with sharing class LeaveDataHelper {
             LIMIT 1
         ];
     }
+    public static dmpl__LeaveType__c getLeaveType(String name) {
+        return [
+            SELECT Name, dmpl__EntitlementType__c, dmpl__Type__c, OwnerId, CreatedById
+            FROM dmpl__LeaveType__c
+            WHERE Name = :name
+            LIMIT 1
+        ];
+    }
 
 	public static dmpl__LeaveRequest__c createLeaveRequest(dmpl__Resource__c resource, dmpl__LeaveType__c leaveType) {
         return (dmpl__LeaveRequest__c) TestFactory.createSObject(
@@ -131,4 +139,19 @@ public with sharing class LeaveDataHelper {
             LIMIT 1
         ];
     }
+
+	public static dmpl__LeaveType__c createLeaveType(
+		String name,
+		String entitlementType,
+		String type
+	){
+		return (dmpl__LeaveType__c) TestFactory.createSObject(
+            new dmpl__LeaveType__c(
+				Name=name,
+				dmpl__EntitlementType__c = entitlementType,
+				dmpl__Type__c = type
+        	),
+            true
+        );
+	}
 }

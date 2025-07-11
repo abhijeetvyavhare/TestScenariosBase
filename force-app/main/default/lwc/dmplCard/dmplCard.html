@@ -1,0 +1,35 @@
+<template>
+    <div class="slds-grid slds-grid_vertical slds-border_bottom slds-m-top_x-small">
+        <template lwc:if={selectable}>
+            <div class="slds-grid slds-grid_vertical-align-center slds-m-bottom_xx-small">
+                <input type="radio" id="radio" value="radio" name="options" checked="" />
+                <h5 class="slds-body-text_regular slds-text-align_left slds-m-left_x-small">HECNL175-F0</h5>
+            </div>
+        </template>
+        <template lwc:else>
+            <h5 class="slds-body-text_regular slds-text-align_left slds-m-bottom_xx-small">HECNL175-F0</h5>
+        </template>
+        <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-start slds-gutters_xx-small slds-m-bottom_x-small">
+            <template lwc:if={showType}>
+                <div class="slds-col slds-size_1-of-3 slds-grid slds-grid_vertical slds-grid_align-start">
+                    <label class="slds-text-title slds-text-align_left">Type</label>
+                    <p class="slds-text-body_small slds-text-align_left slds-truncate">Superseded</p>
+                </div>
+            </template>
+            <div class="slds-col slds-size_1-of-3 slds-grid slds-grid_vertical slds-grid_align-start">
+                <label class="slds-text-title slds-text-align_left">In Hand</label>
+                <p class="slds-text-body_small slds-text-align_left">110</p>
+            </div>
+            <div class="slds-col slds-size_1-of-3 slds-grid slds-grid_vertical slds-grid_align-start">
+                <label class="slds-text-title slds-text-align_left">Available</label>
+                <p class="slds-text-body_small slds-text-align_left">100</p>
+            </div>
+            <template lwc:if={showMrp}>
+                <div class="slds-col slds-size_1-of-3 slds-grid slds-grid_vertical slds-grid_align-start">
+                    <label class="slds-text-title slds-text-align_left">MRP</label>
+                    <p class="slds-text-body_small slds-text-align_left">239</p>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

@@ -114,7 +114,7 @@ public with sharing class ResourceDataHelper {
 		return [SELECT Id, Name, dmpl__ResourceId__c, dmpl__FromDate__c FROM dmpl__ResourceBusinessHours__c LIMIT 1];
 	}
 	public static dmpl__ResourceBusinessHours__c getResourceBusinessHours(Id id){
-		return [SELECT Id, Name, dmpl__ResourceId__c, dmpl__FromDate__c,dmpl__ToDate__c FROM dmpl__ResourceBusinessHours__c WHERE Id = :id LIMIT 1];
+		return [SELECT Id, Name, dmpl__ResourceId__c, dmpl__FromDate__c FROM dmpl__ResourceBusinessHours__c WHERE Id = :id LIMIT 1];
 	}
 	
 	public static dmpl__PartnerResource__c CreatePartnerResources(
@@ -158,39 +158,34 @@ public with sharing class ResourceDataHelper {
 	public static dmpl__ResourceAssignmentRule__c getResourceAssignmentRule(Id id){
 		return [SELECT Id, Name, dmpl__PartnerResourceId__c, dmpl__FieldName__c, dmpl__FieldValue__c, dmpl__Operation__c, dmpl__SequenceNumber__c, dmpl__AssignmentType__c FROM dmpl__ResourceAssignmentRule__c WHERE Id = :id LIMIT 1];
 	}
-
-	public static dmpl__ResourceLeave__c createResourceLeave(
-		Id resourceId,
-		Id typeId,
-		Integer Balance
+	public static dmpl__Resource__c createServiceAdvisor(
+		Account partnerAccount,
+		dmpl__Branch__c branch
 	){
-		return (dmpl__ResourceLeave__c) TestFactory.createSObject(
-            new dmpl__ResourceLeave__c(
-				dmpl__LeaveTypeId__c = typeId,
-				dmpl__Available__c = 10,
-				dmpl__Balance__c = Balance,
-				dmpl__ResourceId__c = resourceId
-        	),
+		return (dmpl__Resource__c) TestFactory.createSObject(
+            new dmpl__Resource__c(
+                dmpl__IsActive__c = true,
+				Name='Service Advisor',
+				dmpl__ResourceType__c='Service Advisor',
+				dmpl__DefaultPartnerAccountId__c = partnerAccount.Id,
+                dmpl__DefaultBranchId__c = branch.Id
+            ),
+			// 'ResourceSkillDefaults',
             true
         );
 	}
-
-	public static dmpl__LeaveType__c getLeaveType(){
-		return [SELECT Id, Name, dmpl__EntitlementType__c, dmpl__Type__c FROM dmpl__LeaveType__c LIMIT 1];
+	public static dmpl__Resource__c getServiceAdvisor(String name){
+		return[select Id,Name, dmpl__Type__c FROM dmpl__Resource__c where Name=:name and dmpl__ResourceType__c='Service Advisor' LIMIT 1];
 	}
-
-	public static dmpl__ResourceBusinessHours__c createResourceBusinessHours(
-		Id resourceId,
-		Date dateFrom,
-		Date dateTo
-		){
-		return (dmpl__ResourceBusinessHours__c) TestFactory.createSObject(
-            new dmpl__ResourceBusinessHours__c(
-				dmpl__ResourceId__c = resourceId,
-				dmpl__FromDate__c = dateFrom,
-				dmpl__ToDate__c = dateTo
-			),
-			true
+	public static dmpl__Resource__c createServiceAdvisor(){
+		return (dmpl__Resource__c) TestFactory.createSObject(
+            new dmpl__Resource__c(
+                dmpl__IsActive__c = true,
+				Name='Service Advisor',
+				dmpl__ResourceType__c='Service Advisor'
+            ),
+			// 'ResourceSkillDefaults',
+            true
         );
 	}
 }

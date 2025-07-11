@@ -18,6 +18,54 @@ public with sharing class VisitPlanTestDataHelpers {
         );
     }
 
+    public static dmpl__VisitRouteStop__c CreateVisitRouteStopWithoutPurpose(Account act, dmpl__VisitRoute__c route) {
+        return (dmpl__VisitRouteStop__c) TestFactory.createSObject(
+            new dmpl__VisitRouteStop__c(
+                dmpl__AllowedGeofencingTolerance__c = 10,
+                dmpl__AccountId__c = act.Id,
+                dmpl__StartTime__c = time.newInstance(5, 20, 30, 60),
+                dmpl__EndTime__c = time.newInstance(25, 10, 50, 10),
+                dmpl__VisitRouteId__c = route.Id,
+                dmpl__SequenceNumber__c = 1,
+                dmpl__WeekNumbers__c = '2',
+                dmpl__DayNumbers__c = '5'
+            ),
+            //'VisitRouteStopDefaults',
+            true
+        );
+    }
+
+    public static dmpl__VisitRouteStop__c CreateVisitRouteStopWithTaskTemplate(Account act, dmpl__VisitRoute__c route, dmpl__VisitTaskTemplate__c template) {
+        return (dmpl__VisitRouteStop__c) TestFactory.createSObject(
+            new dmpl__VisitRouteStop__c(
+                dmpl__AllowedGeofencingTolerance__c = 10,
+                dmpl__AccountId__c = act.Id,
+                dmpl__StartTime__c = time.newInstance(5, 20, 30, 60),
+                dmpl__EndTime__c = time.newInstance(25, 10, 50, 10),
+                dmpl__VisitPurpose__c = 'Order Capture',
+                dmpl__VisitRouteId__c = route.Id,
+                dmpl__VisitTaskTemplateId__c = template.Id,
+                dmpl__SequenceNumber__c = 1,
+                dmpl__WeekNumbers__c = '2',
+                dmpl__DayNumbers__c = '5'
+            ),
+            //'VisitRouteStopDefaults',
+            true
+        );
+    }
+    public static dmpl__VisitRouteStop__c CreateVisitRouteStopWithNameOnly(String stopName, dmpl__VisitRoute__c route) {
+        return (dmpl__VisitRouteStop__c) TestFactory.createSObject(
+            new dmpl__VisitRouteStop__c(
+                Name = stopName,
+                dmpl__VisitRouteId__c = route.Id
+            ),
+            //'VisitRouteStopDefaults',
+            true
+        );
+    }
+
+
+
     public static dmpl__VisitRouteStop__c getVisitRouteStop() {
         return [
             SELECT Id, Name, dmpl__AllowedGeofencingTolerance__c, dmpl__AccountId__c, dmpl__StartTime__c,
@@ -127,8 +175,20 @@ public with sharing class VisitPlanTestDataHelpers {
         ];
     }
 
-    public static dmpl__VisitTaskTemplate__c CreateVisitTaskTemplate() {
+   public static dmpl__VisitTaskTemplate__c CreateVisitTaskTemplate(String name) {
         return (dmpl__VisitTaskTemplate__c) TestFactory.createSObject(
+            new dmpl__VisitTaskTemplate__c(
+                dmpl__Description__c = 'Visit Task Template1',
+                dmpl__Duration__c = 10,
+                Name = name
+            ),
+            true
+        );
+    }
+    
+    public static dmpl__VisitTaskTemplate__c CreateVisitTaskTemplate()
+    {
+        return (dmpl__VisitTaskTemplate__c)TestFactory.createSObject(
             new dmpl__VisitTaskTemplate__c(
                 dmpl__Description__c = 'Visit Task Template1',
                 dmpl__Duration__c = 10,
@@ -138,7 +198,7 @@ public with sharing class VisitPlanTestDataHelpers {
             true
         );
     }
-
+    
     public static dmpl__VisitTaskTemplate__c getVisitTaskTemplate() {
         return [
             SELECT Id, Name, dmpl__Description__c, dmpl__Duration__c
@@ -254,7 +314,7 @@ public with sharing class VisitPlanTestDataHelpers {
                 dmpl__RoutingPriority__c = 'Shortest Distance',
                 dmpl__WeekNumbers__c = '2',
                 dmpl__DayNumbers__c = '5',
-                dmpl__VisitTaskTemplateId__c = taskTemplate.Id
+                dmpl__VisitTaskTemplateId__c= taskTemplate.Id
             ),
             'VisitRouteDefaults',
             true
@@ -277,9 +337,7 @@ public with sharing class VisitPlanTestDataHelpers {
                 Name = planName,
                 dmpl__VisitPurpose__c = visitPurpose,
                 dmpl__PlanStartDate__c = startDate,
-                dmpl__BranchId__c = branch.Id,
-                dmpl__VisitTaskTemplateId__c = 'Order Capturing',
-                dmpl__VisitRouteId__c = ''
+                dmpl__BranchId__c = branch.Id
             ),
             true
         );

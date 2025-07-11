@@ -2,20 +2,42 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>52.0</apiVersion>
     <isExposed>true</isExposed>
+    <masterLabel>Document Selector Panel</masterLabel>
+
     <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__RecordPage</target>
         <target>lightning__RecordAction</target>
+        <target>lightningCommunity__Page</target>
         <target>lightningCommunity__Default</target>
     </targets>
-    <masterLabel>
-        Document Selector Panel
-    </masterLabel>
+
     <targetConfigs>
         <targetConfig targets="lightning__RecordAction">
             <actionType>ScreenAction</actionType>
         </targetConfig>
+
+        <targetConfig targets="lightning__RecordPage">
+            <property name="recordId" type="String" default="{!recordId}"/>
+            <property name="objectApiName" type="String" default=""/>
+            <supportedFormFactors>
+                <supportedFormFactor type="Small"/>
+                <supportedFormFactor type="Large"/>
+            </supportedFormFactors>
+        </targetConfig>
+
+        <targetConfig targets="lightning__AppPage">
+            <property name="recordId" type="String" default="{!recordId}"/>
+            <property name="objectApiName" type="String" default=""/>
+            <supportedFormFactors>
+                <supportedFormFactor type="Small"/>
+                <supportedFormFactor type="Large"/>
+            </supportedFormFactors>
+        </targetConfig>
+
         <targetConfig targets="lightningCommunity__Default">
-            <property name="recordId" type="String" default="{!recordId}"></property>
-            <property name="objectApiName" type="String" default=""></property>
+            <property name="recordId" type="String" default="{!recordId}"/>
+            <property name="objectApiName" type="String" default=""/>
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>

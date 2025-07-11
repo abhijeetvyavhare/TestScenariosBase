@@ -21,6 +21,21 @@ public with sharing class KPIDataHelper {
             true
         );
     }
+
+    
+    public static dmpl__KPIData__c createKPIData(
+        Id kpiConfig,
+        String name
+    ) {
+        return (dmpl__KPIData__c) TestFactory.createSObject(
+            new dmpl__KPIData__c(
+                Name = name,
+                dmpl__KPIConfigurationId__c = kpiConfig,
+                dmpl__DocumentDate__c = Date.today()
+            ),
+            true
+        );
+    }
     
     public static dmpl__KPIData__c getKPIData() {
         return [ 

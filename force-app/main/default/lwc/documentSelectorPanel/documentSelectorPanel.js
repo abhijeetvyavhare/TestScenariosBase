@@ -3,8 +3,9 @@ import { getRecord } from "lightning/uiRecordApi";
 import { NavigationMixin } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { CloseActionScreenEvent } from 'lightning/actions';
-import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
 import { refreshApex } from '@salesforce/apex';
+import { RefreshEvent } from 'lightning/refresh';
 import { reduceErrors } from 'c/utils';
 import getCreateRelatedSettings from '@salesforce/apex/DocumentSelectorController.getCreateRelatedSettings';
 import getFieldsByFieldSetName from '@salesforce/apex/MetadataController.getFieldsByFieldSetName';
@@ -151,10 +152,10 @@ export default class DocumentSelectorPanel extends NavigationMixin(LightningElem
                 objectApiName: this.childRecordApiName,
                 fieldSetName: this.recordFieldsetName
             }).then(result => {
-                console.log('result '+result);
+                console.log('result ', JSON.stringify(result));
                 this.rawFieldsetResult = result;
                 let columns = (Array.from(result).map(v => {
-                    return { label: v.label,sortable: "true", fieldName: v.apiName.replace('.', '_'), hideDefaultActions: true }
+                    return { label: v.label,sortable: "true", fieldName: v.apiName.replace('.', '_'), hideDefaultActions: true, ...(screen.width <= 480 ? { initialWidth: 140 } : {}) }
                 }));
                 this.allChildObjectColumns = columns.slice();
                 columns.push({ label: 'Release?', fieldName: 'isSelected', type: 'toggleButton', initialWidth: 75, hideLabel: true, hideDefaultActions: true, typeAttributes: { rowId: { fieldName: 'Id' } } });
@@ -422,9 +423,9 @@ export default class DocumentSelectorPanel extends NavigationMixin(LightningElem
             if (result?.status == 'success') {
                 var messsage = '';
                 this.createRelatedResult = result;
-                getRecordNotifyChange([{ "recordId": this.recordId }]);
+                notifyRecordUpdateAvailable([{ "recordId": this.recordId }]);
                 if(result?.documentId){
-                    getRecordNotifyChange([{ "recordId": result.documentId }]);
+                    notifyRecordUpdateAvailable([{ "recordId": result.documentId }]);
                     this[NavigationMixin.GenerateUrl]({
                         type: 'standard__recordPage',
                         attributes: {
@@ -443,7 +444,7 @@ export default class DocumentSelectorPanel extends NavigationMixin(LightningElem
                     messsage = this.createRelatedResult.heading;
                 }
                 this.moveWizard('next');
-                eval("$A.get('e.force:refreshView').fire();");
+                this.refreshStdComponents();
                 this.dispatchEvent(new CustomEvent('recordsaved', { "detail": this.createRelatedResult }));
                 this.showMessage(messsage);
                 this.isSaveDisabled = this.noChildObjectsData;
@@ -455,8 +456,8 @@ export default class DocumentSelectorPanel extends NavigationMixin(LightningElem
                 }
             } else if (result?.status == 'queued'){
                 this.showMessage('Your action was queued for execution. Please check back in sometime.');
-                getRecordNotifyChange([{ "recordId": this.recordId }]);
-                eval("$A.get('e.force:refreshView').fire();");
+                notifyRecordUpdateAvailable([{ "recordId": this.recordId }]);
+                this.refreshStdComponents();
                 this.isSaveDisabled = this.noChildObjectsData;
                 this.isWorking = false;
                 this.handleClose();
@@ -474,6 +475,14 @@ export default class DocumentSelectorPanel extends NavigationMixin(LightningElem
             this.isSaveDisabled = this.noChildObjectsData;
             this.isWorking = false;
             this.showError(error);
+        }
+    }
+
+    refreshStdComponents(){
+        try{
+            eval("$A.get('e.force:refreshView').fire();");
+        }catch(e){
+            this.dispatchEvent(new RefreshEvent());
         }
     }
 

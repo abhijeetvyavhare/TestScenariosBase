@@ -67,5 +67,41 @@ public class CampaignTestDataHelpers {
             limit 1];
     }
 
-		
+    public static dmpl__ServiceCampaign__c createServiceCampaign(
+        String name,
+        String dynamicMemberTypeValue,
+        Id parentServiceCampaignId,
+        Id itemServiceContractId,
+        String RuleCriteria,
+        String Type,
+        Date startDate,
+        Date endDate
+
+
+    ) {
+        return (dmpl__ServiceCampaign__c) TestFactory.createSObject(
+            new dmpl__ServiceCampaign__c(
+                Name = name,
+                dmpl__DynamicMemberType__c = dynamicMemberTypeValue,
+                dmpl__ParentServiceCampaignId__c = parentServiceCampaignId,
+                dmpl__ItemServiceContractId__c = itemServiceContractId,
+                dmpl__RuleSuccessCriteria__c= RuleCriteria,
+                dmpl__Type__c=Type,
+                dmpl__StartDate__c=startDate,
+                dmpl__EndDate__c=endDate
+            ),
+            //'ServiceCampaignDefaults',
+            true
+        );
+    }
+
+    public static dmpl__ServiceCampaign__c getServiceCampaignById(Id recordId) {
+    return [
+        SELECT Id, Name, dmpl__DynamicMemberType__c, dmpl__ParentServiceCampaignId__c,
+               dmpl__ItemServiceContractId__c, dmpl__StartDate__c, dmpl__EndDate__c,dmpl__RuleSuccessCriteria__c,dmpl__Type__c
+        FROM dmpl__ServiceCampaign__c
+        WHERE Id = :recordId
+        LIMIT 1
+    ];
+}
 }

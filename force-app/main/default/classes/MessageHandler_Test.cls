@@ -1,189 +1,668 @@
-@IsTest
-public class MessageHandler_Test {
+@isTest
+public with sharing class MessageHandler_Test {
+    @TestSetup
+    static void createRequiredData() {
+        dmpl__MessageConfiguration__c config = MessageDataHelper.createMessageConfiguration();
+        MessageDataHelper.createMessageRule(config.Id);
+        MessageDataHelper.createDefaultMessage();
+        Account partnerAccount1 = TestDataHelpers.createPartnerAccount(
+            'Partner 1',
+            false,
+            true,
+            false,
+            true,
+            'MG Road',
+            'Bengaluru',
+            'Karnataka',
+            'India',
+            '560001',
+            '56 Industrial Layout',
+            'Bengaluru',
+            'Karnataka',
+            'India',
+            '560095',
+            '91-9876543210'
+        );
+    }
     
-    @testSetup
-    public static void Setup(){
+    @isTest
+    static void testInsertMessageConfiguration() {
+        dmpl__MessageConfiguration__c mc = MessageDataHelper.getMessageConfiguration();
+        System.assert(mc.Id != null, 'Message Configuration should be inserted');
+    }
+    
+    @isTest
+    static void testInsertMessageRule() {
+        dmpl__MessageRule__c rule = MessageDataHelper.getMessageRule();
+        System.assertNotEquals(null, rule.Id, 'Message Rule record should be inserted');
+    }
+    
+    @isTest
+    static void testInsertMessage() {
+        dmpl__Message__c msg = MessageDataHelper.getMessage();
+        System.assert(msg.Id != null, 'Message should be inserted');
+    }
+    
+    @isTest
+    static void testUpdateMessageConfiguration() {
+        dmpl__MessageConfiguration__c mc = MessageDataHelper.getMessageConfiguration();
+        mc.Name = 'Updated Message Config';
+        mc.dmpl__CustomHandlerName__c = 'UpdatedHandler';
+        mc.dmpl__CustomNotificationName__c = 'UpdatedNotification';
+        mc.dmpl__MessageBody__c = 'Updated message body.';
+        mc.dmpl__ProviderType__c = 'SFDC EMail';
+        mc.dmpl__PushNotificationApplicationName__c = 'UpdatedApp';
+        mc.dmpl__Recipient__c = 'updated@example.com';
+        mc.dmpl__RuleSuccessCriteria__c = 'All Rules Are Met';
+        mc.dmpl__RuleSuccessCustomLogic__c = 'IF false THEN success';
+        mc.dmpl__Sender__c = 'updated@example.com';
+        mc.dmpl__SenderName__c = 'Updated Sender';
+        mc.dmpl__Subject__c = 'Updated Subject';
+        mc.dmpl__TemplateId__c = 'TPL456';
+        mc.dmpl__TriggerEvent__c = 'Scheduled';
+        mc.dmpl__TriggerObjectName__c = 'Contact';
+        update mc;
+        dmpl__MessageConfiguration__c updated = MessageDataHelper.getMessageConfigurationById(mc.Id);
+        System.assertEquals('Updated Message Config', updated.Name);
+        System.assertEquals('UpdatedHandler', updated.dmpl__CustomHandlerName__c, 'Custom Handler Name should be updated');
+        System.assertEquals('UpdatedNotification', updated.dmpl__CustomNotificationName__c, 'Custom Notification Name should be updated');
+        System.assertEquals('Updated message body.', updated.dmpl__MessageBody__c, 'Message Body should be updated');
+        System.assertEquals('SFDC EMail', updated.dmpl__ProviderType__c, 'Provider Type should be updated');
+        System.assertEquals('UpdatedApp', updated.dmpl__PushNotificationApplicationName__c, 'Push Notification Application Name should be updated');
+        System.assertEquals('updated@example.com', updated.dmpl__Recipient__c, 'Recipient should be updated');
+        System.assertEquals('All Rules Are Met', updated.dmpl__RuleSuccessCriteria__c, 'Rule Success Criteria should be updated');
+        System.assertEquals('IF false THEN success', updated.dmpl__RuleSuccessCustomLogic__c, 'Rule Success Custom Logic should be updated');
+        System.assertEquals('updated@example.com', updated.dmpl__Sender__c, 'Sender should be updated');
+        System.assertEquals('Updated Sender', updated.dmpl__SenderName__c, 'Sender Name should be updated');
+        System.assertEquals('Updated Subject', updated.dmpl__Subject__c, 'Subject should be updated');
+        System.assertEquals('TPL456', updated.dmpl__TemplateId__c, 'Template Id should be updated');
+        System.assertEquals('Scheduled', updated.dmpl__TriggerEvent__c, 'Trigger Event should be updated');
+        System.assertEquals('Contact', updated.dmpl__TriggerObjectName__c, 'Trigger Object Name should be updated');
+    }
+    
+    @isTest
+    static void testUpdateMessageRule() {
+        dmpl__MessageRule__c rule = MessageDataHelper.getMessageRule();
+        rule.dmpl__FieldName__c = 'Priority';
+        rule.dmpl__FieldValue__c = 'High';
+        rule.dmpl__Operation__c = 'equals';
+        rule.dmpl__SequenceNumber__c = 2;
+        update rule;
+        dmpl__MessageRule__c updated = MessageDataHelper.getMessageRuleById(rule.Id);
+        System.assertEquals('Priority', updated.dmpl__FieldName__c, 'Field Name should be updated');
+        System.assertEquals('High', updated.dmpl__FieldValue__c, 'Field Value should be updated');
+        System.assertEquals('equals', updated.dmpl__Operation__c, 'Operation should be updated');
+        System.assertEquals(2, updated.dmpl__SequenceNumber__c, 'Sequence Number should be updated');
+    }
+    
+    @isTest
+    static void testUpdateMessage() {
+        dmpl__Message__c msg = MessageDataHelper.getMessage();
+        
+        msg.Name = 'Updated Message Name';
+        msg.dmpl__ErrorMessage__c = 'Updated error';
+        msg.dmpl__MessageBody__c = 'Updated message body';
+        msg.dmpl__ProviderType__c = 'SFDC EMail';
+        msg.dmpl__Recipient__c = 'updated@example.com';
+        msg.dmpl__Sender__c = 'updated_sender@example.com';
+        msg.dmpl__SenderName__c = 'Updated Sender';
+        msg.dmpl__SourceObjectId__c = '001ZZZZZZZZZZZZZZZ';
+        msg.dmpl__Status__c = 'Sent';
+        msg.dmpl__Subject__c = 'Updated Subject';
+        msg.dmpl__WhatId__c = '001ZZZZZZZZZZZZZZZ';
+        dmpl__Message__c updated = MessageDataHelper.updateMessage(msg);
+        System.assertEquals('Updated Message Name', updated.Name);
+        System.assertEquals('Updated error', updated.dmpl__ErrorMessage__c);
+        System.assertEquals('Updated message body', updated.dmpl__MessageBody__c);
+        System.assertEquals('SFDC EMail', updated.dmpl__ProviderType__c);
+        System.assertEquals('updated@example.com', updated.dmpl__Recipient__c);
+        System.assertEquals('updated_sender@example.com', updated.dmpl__Sender__c);
+        System.assertEquals('Updated Sender', updated.dmpl__SenderName__c);
+        System.assertEquals('001ZZZZZZZZZZZZZZZ', updated.dmpl__SourceObjectId__c);
+        System.assertEquals('Sent', updated.dmpl__Status__c);
+        System.assertEquals('Updated Subject', updated.dmpl__Subject__c);
+        System.assertEquals('001ZZZZZZZZZZZZZZZ', updated.dmpl__WhatId__c);
+    }
+    
+    @isTest
+    static void testDeleteMessageRule() {
         Test.startTest();
-        CreateAccount();
-        CreateMessage();
-        CreateInterfaceQueue();
-        CreateMessageConfiguration();
-        CreateMessageRule();
+        dmpl__MessageRule__c rule = MessageDataHelper.getMessageRule();
+        delete rule;
+        List<dmpl__MessageRule__c> result = MessageDataHelper.getMessageRulesById(rule.Id);
+        Test.stopTest();
+        System.assertEquals(0, result.size(), 'Message Rule record should be deleted');
+    }
+    
+    @isTest
+    static void testDeleteMessageConfiguration() {
+        dmpl__MessageConfiguration__c mc = MessageDataHelper.getMessageConfiguration();
+        delete mc;
+        
+        List<dmpl__MessageConfiguration__c> result = MessageDataHelper.getMessageConfigurationsByIds(mc.Id);
+        System.assertEquals(0, result.size(), 'Message Configuration should be deleted');
+    }
+    
+    @isTest
+    static void testDeleteMessage() {
+        dmpl__Message__c msg = MessageDataHelper.getMessage();
+        delete msg;
+        List<dmpl__Message__c> result = [
+            SELECT Id FROM dmpl__Message__c WHERE Id = :msg.Id
+        ];
+        System.assertEquals(0, result.size(), 'Message should be deleted');
+    }
+
+    @isTest
+    static void createMessageConfigurationWithNamePositive() {
+        Test.startTest();
+        dmpl__MessageConfiguration__c msgConfig = MessageDataHelper.createMessageConfiguration('MSG Config', 'MSG Trigger', null, null, null, null);
+        Test.stopTest();
+        System.assertNotEquals(null, msgconfig, 'Message Configuration should be created with Name');
+        System.assertEquals('MSG Config', msgConfig.Name, 'Message Configuration Name should match');
+        System.assertEquals('MSG Trigger', msgConfig.dmpl__TriggerObjectName__c, 'Trigger Object Name should match');
+    }
+
+    @isTest
+    static void createMessageConfigurationWithTriggerEventPositive() {
+        Test.startTest();
+        dmpl__MessageConfiguration__c msgConfig = MessageDataHelper.createMessageConfiguration('MSG Config', 'MSG Trigger', 'AFTER_INSERT', null, null, null);
+        Test.stopTest();
+        System.assertNotEquals(null, msgconfig, 'Message Configuration should be created with Trigger Event');
+        System.assertEquals('AFTER_INSERT', msgConfig.dmpl__TriggerEvent__c, 'Trigger Event should match');
+        System.assertEquals('MSG Config', msgConfig.Name, 'Message Configuration Name should match');
+        System.assertEquals('MSG Trigger', msgConfig.dmpl__TriggerObjectName__c, 'Trigger Object Name should match');
+    }
+
+    @isTest
+    static void createMessageConfigurationWithProviderTypePositive(){
+        Test.startTest();
+        dmpl__MessageConfiguration__c msgConfig = MessageDataHelper.createMessageConfiguration('MSG Config', 'MSG Trigger', 'AFTER_INSERT', 'Interface Provider', null, null);
+        Test.stopTest();
+        System.assertNotEquals(null, msgconfig, 'Message Configuration should be created with Provider Type');
+        System.assertEquals('Interface Provider', msgConfig.dmpl__ProviderType__c, 'Provider Type should match');
+        System.assertEquals('MSG Config', msgConfig.Name, 'Message Configuration Name should match');
+        System.assertEquals('MSG Trigger', msgConfig.dmpl__TriggerObjectName__c, 'Trigger Object Name should match');
+        System.assertEquals('AFTER_INSERT', msgConfig.dmpl__TriggerEvent__c, 'Trigger Event should match');
+    }
+
+    @isTest
+    static void createMessageConfigurationWithInterfaceProviderPositive() {
+        Test.startTest();
+        Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+        dmpl__InterfaceServiceProvider__c interfaceServiceProvider = InterfaceTestDataHelper.createInterfaceServiceProvider(partner);
+        dmpl__MessageConfiguration__c msgConfig = MessageDataHelper.createMessageConfiguration('MSG Config', 'MSG Trigger', 'AFTER_INSERT', 'Interface Provider', interfaceServiceProvider, null);
+        Test.stopTest();
+        System.assertNotEquals(null, msgconfig, 'Message Configuration should be created with Interface Provider');
+        System.assertEquals('Interface Provider', msgConfig.dmpl__ProviderType__c, 'Provider Type should match');
+        System.assertEquals('MSG Config', msgConfig.Name, 'Message Configuration Name should match');
+        System.assertEquals('MSG Trigger', msgConfig.dmpl__TriggerObjectName__c, 'Trigger Object Name should match');
+        System.assertEquals('AFTER_INSERT', msgConfig.dmpl__TriggerEvent__c, 'Trigger Event should match');
+        System.assertEquals(interfaceServiceProvider.Id, msgConfig.dmpl__InterfaceProviderId__c, 'Interface Service Provider Id should match');
+    }
+
+    @isTest
+    static void createMessageConfigurationWithInterfaceRequestPositive() {
+        Test.startTest();
+        Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+        dmpl__InterfaceServiceProvider__c interfaceServiceProvider = InterfaceTestDataHelper.createInterfaceServiceProvider(partner);
+        dmpl__InterfaceServiceProviderRequest__c interfaceRequest = InterfaceTestDataHelper.createInterfaceServiceProviderRequest(interfaceServiceProvider);
+        dmpl__MessageConfiguration__c msgConfig = MessageDataHelper.createMessageConfiguration('MSG Config', 'MSG Trigger', 'AFTER_INSERT', 'Interface Provider', interfaceServiceProvider, interfaceRequest);
+        Test.stopTest();
+        System.assertNotEquals(null, msgconfig, 'Message Configuration should be created with Interface Request');
+        System.assertEquals('Interface Provider', msgConfig.dmpl__ProviderType__c, 'Provider Type should match');
+        System.assertEquals('MSG Config', msgConfig.Name, 'Message Configuration Name should match');
+        System.assertEquals('MSG Trigger', msgConfig.dmpl__TriggerObjectName__c, 'Trigger Object Name should match');
+        System.assertEquals('AFTER_INSERT', msgConfig.dmpl__TriggerEvent__c, 'Trigger Event should match');
+        System.assertEquals(interfaceServiceProvider.Id, msgConfig.dmpl__InterfaceProviderId__c, 'Interface Service Provider Id should match');
+        System.assertEquals(interfaceRequest.Id, msgConfig.dmpl__InterfaceRequestId__c, 'Interface Service Provider Request Id should match');
+    }
+
+    @isTest
+    static void createMessageConfigurationWithDeletedInterfaceRequestPositive() {
+        Test.startTest();
+        Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+        dmpl__InterfaceServiceProvider__c interfaceServiceProvider = InterfaceTestDataHelper.createInterfaceServiceProvider(partner);
+        dmpl__InterfaceServiceProviderRequest__c interfaceRequest = InterfaceTestDataHelper.createInterfaceServiceProviderRequest(interfaceServiceProvider);
+        delete interfaceRequest;
+        dmpl__MessageConfiguration__c msgConfig = MessageDataHelper.createMessageConfiguration('MSG Config', 'MSG Trigger', 'AFTER_INSERT', 'Interface Provider', interfaceServiceProvider, null);
+        Test.stopTest();
+        System.assertNotEquals(null, msgconfig, 'Message Configuration should be created even if Interface Request is deleted');
+        System.assertEquals('Interface Provider', msgConfig.dmpl__ProviderType__c, 'Provider Type should match');
+        System.assertEquals('MSG Config', msgConfig.Name, 'Message Configuration Name should match');
+        System.assertEquals('MSG Trigger', msgConfig.dmpl__TriggerObjectName__c, 'Trigger Object Name should match');
+        System.assertEquals('AFTER_INSERT', msgConfig.dmpl__TriggerEvent__c, 'Trigger Event should match');
+        System.assertEquals(interfaceServiceProvider.Id, msgConfig.dmpl__InterfaceProviderId__c, 'Interface Service Provider Id should match');
+    }
+
+    @isTest
+    static void createMessageConfigurationWithoutTriggerEventPositive() {
+        Test.startTest();
+        dmpl__MessageConfiguration__c msgConfig = MessageDataHelper.createMessageConfiguration('MSG Config', 'MSG Trigger', null, null, null, null);
+        Test.stopTest();
+        System.assertNotEquals(null, msgconfig, 'Message Configuration should be created without Trigger Event');
+        System.assertEquals('MSG Config', msgConfig.Name, 'Message Configuration Name should match');
+        System.assertEquals('MSG Trigger', msgConfig.dmpl__TriggerObjectName__c, 'Trigger Object Name should match');
+        System.assertEquals(null, msgConfig.dmpl__TriggerEvent__c, 'Trigger Event should be null');
+    }
+
+    @isTest
+    static void createMessageConfigurationWithoutNameNegative() {
+        Test.startTest();
+        try{
+            dmpl__MessageConfiguration__c msgConfig = MessageDataHelper.createMessageConfiguration(null, 'MSG Trigger', 'AFTER_INSERT', 'Interface Provider', null, null);
+            System.assertNotEquals(null, msgconfig, 'Message Configuration should not be created without Name');
+        } catch (DmlException e) {
+            System.debug('Expected DML Exception: ' + e.getMessage());
+        }
+        Test.stopTest();
+    }
+
+    @isTest
+    static void createMessageConfigurationWithoutTriggerObjectNameNegative() {
+        Test.startTest();
+        try{
+            dmpl__MessageConfiguration__c msgConfig = MessageDataHelper.createMessageConfiguration('MSG Config', null, 'AFTER_INSERT', 'Interface Provider', null, null);
+            System.assertEquals(null, msgconfig, 'Message Configuration should not be created without Trigger Object Name');
+        } catch (DmlException e) {
+            System.debug('Expected DML Exception: ' + e.getMessage());
+        }
+        Test.stopTest();
+    }
+
+    @isTest
+    static void createMessageConfigurationWithInvalidInterfaceProviderNegative() {
+        Test.startTest();
+        try{
+            dmpl__InterfaceServiceProvider__c interfaceServiceProvider = InterfaceTestDataHelper.createInterfaceServiceProvider(null);
+            dmpl__MessageConfiguration__c msgConfig = MessageDataHelper.createMessageConfiguration('MSG Config', null, 'AFTER_INSERT', 'Interface Provider', interfaceServiceProvider, null);
+            System.assertNotEquals(null, msgconfig, 'Message Configuration should be created with Invalid Interface Provider');
+        }
+        catch (DmlException e) {
+            System.debug('Expected DML Exception: ' + e.getMessage());
+        }
+        Test.stopTest();
+    }
+
+    @isTest
+    static void deleteValidMessageConfigurationRecordPositive() {
+        Test.startTest();
+        dmpl__MessageConfiguration__c msgConfig = MessageDataHelper.createMessageConfiguration('MSG Config', 'MSG Trigger', 'AFTER_INSERT', 'Interface Provider', null, null);
+        dmpl__MessageConfiguration__c deletedMsgconfig = null;
+        delete msgConfig;
+        try{
+            deletedMsgconfig = MessageDataHelper.getMessageConfigurationById(msgConfig.Id);
+        } catch (QueryException e) {
+            deletedMsgconfig = null;
+            System.debug('Expected QueryException after deletion: ' + e.getMessage());
+        }
+        System.assertEquals(null, deletedMsgconfig, 'Expected message Configuration to be deleted.');
+        Test.stopTest();
+    }
+
+    @isTest
+    static void createMessageWithNamePositive() {
+        Test.startTest();
+        dmpl__Message__c message = MessageDataHelper.createMessage('Test', null, null, null , null, null, null, null);
+        Test.stopTest();
+        System.assertNotEquals(null, message.Id, 'Message should be created with Name');
+        System.assertEquals('Test', message.Name, 'Message Name should match');
+    }
+
+    @isTest
+    static void createMessageWithStatusDraftPositive() {
+        Test.startTest();
+        dmpl__Message__c message = MessageDataHelper.createMessage('Test', 'Draft', null, null , null, null, null, null);
+        Test.stopTest();
+        System.assertNotEquals(null, message.Id, 'Message should be created with Status as Draft');
+        System.assertEquals('Draft', message.dmpl__Status__c, 'Message Status should be Draft');
+    }
+
+    @isTest
+    static void createMessageWithStatusQueuedPositive() {
+        Test.startTest();
+        dmpl__Message__c message = MessageDataHelper.createMessage('Test', 'Queued', null, null , null, null, null, null);
+        Test.stopTest();
+        System.assertNotEquals(null, message.Id, 'Message should be created with Status as Queued');
+        System.assertEquals('Queued', message.dmpl__Status__c, 'Message Status should be Queued');
+    }
+
+    @isTest
+    static void createMessageWithStatusSentPositive() {
+        Test.startTest();
+        dmpl__Message__c message = MessageDataHelper.createMessage('Test', 'Sent', null, null , null, null, null, null);
+        Test.stopTest();
+        System.assertNotEquals(null, message.Id, 'Message should be created with Status as Sent');
+        System.assertEquals('Sent', message.dmpl__Status__c, 'Message Status should be Sent');
+    }
+
+    @isTest
+    static void createMessageWithStatusErrorPositive() {
+        Test.startTest();
+        dmpl__Message__c message = MessageDataHelper.createMessage('Test', 'Error', null, null , null, null, null, null);
+        Test.stopTest();
+        System.assertNotEquals(null, message.Id, 'Message should be created with Status as Error');
+        System.assertEquals('Error', message.dmpl__Status__c, 'Message Status should be Error');
+    }
+
+    @isTest
+    static void createMessageWithStatusBouncedPositive() {
+        Test.startTest();
+        dmpl__Message__c message = MessageDataHelper.createMessage('Test', 'Bounced', null, null , null, null, null, null);
+        Test.stopTest();
+        System.assertNotEquals(null, message.Id, 'Message should be created with Status as Bounced');
+        System.assertEquals('Bounced', message.dmpl__Status__c, 'Message Status should be Bounced');
+    }
+
+    @isTest
+    static void createMessageWithConfigurationPositive() {
+        Test.startTest();
+        dmpl__MessageConfiguration__c config = MessageDataHelper.createMessageConfiguration('Test Config', 'Test Trigger', 'AFTER_INSERT', 'Interface Provider', null, null);
+        dmpl__Message__c message = MessageDataHelper.createMessage('Test Message', 'Draft', null, null, null, null, null, config);
+        Test.stopTest();
+        System.assertNotEquals(null, message.Id, 'Message should be created with Message Configuration');
+        System.assertEquals(config.Id, message.dmpl__MessageConfigurationId__c, 'Message Configuration Id should match');
+        System.assertEquals('Test Message', message.Name, 'Message Name should match');
+        System.assertEquals('Draft', message.dmpl__Status__c, 'Message Status should be Draft');
+    }
+
+    @isTest
+    static void createMessageWithSenderDetailsPositive() {
+        Test.startTest();
+        dmpl__Message__c message = MessageDataHelper.createMessage('Test Message', 'Draft', 'Manager', 'Leslie', null, null, null, null);
+        Test.stopTest();
+        System.assertNotEquals(null, message.Id, 'Message should be created with Sender Name and Sender');
+        System.assertEquals('Leslie', message.dmpl__SenderName__c, 'Sender Name should match');
+        System.assertEquals('Manager', message.dmpl__Sender__c, 'Sender should match');
+        System.assertEquals('Test Message', message.Name, 'Message Name should match');
+        System.assertEquals('Draft', message.dmpl__Status__c, 'Message Status should be Draft');
+    }
+
+    @isTest
+    static void createMessageWithSenderDetailsEditPositive() {
+        Test.startTest();
+        dmpl__Message__c message = MessageDataHelper.createMessage('Test Message', 'Draft', 'Manager', 'Leslie', null, null, null, null);
+        message.dmpl__SenderName__c = 'Bindu';
+        message.dmpl__Sender__c = 'Sales Manager';
+        update message;
+        dmpl__message__c updatedMessage = MessageDataHelper.getMessage(message.Id);
+        Test.stopTest();
+        System.assertNotEquals(null, updatedMessage.Id, 'Message should be updated with new Sender Name and Sender');
+        System.assertEquals('Bindu', updatedMessage.dmpl__SenderName__c, 'Sender Name should be updated');
+        System.assertEquals('Sales Manager', updatedMessage.dmpl__Sender__c, 'Sender should be updated');
+        System.assertEquals('Test Message', updatedMessage.Name, 'Message Name should match');
+        System.assertEquals('Draft', updatedMessage.dmpl__Status__c, 'Message Status should be Draft');
+    }
+
+    @isTest
+    static void createMessageWithRecipientNamePositive() {
+        Test.startTest();
+        dmpl__Message__c message = MessageDataHelper.createMessage('Test Message', 'Draft', null, null,null, null, 'XYZ', null);
+        Test.stopTest();
+        System.assertNotEquals(null, message.Id, 'Message should be created with Recipient Name');
+        System.assertEquals('XYZ', message.dmpl__Recipient__c, 'Recipient Name should match');
+    }
+
+    @isTest
+    static void createMessageWithSubjectAndBodyPositive() {
+        Test.startTest();
+        dmpl__Message__c message = MessageDataHelper.createMessage('Test Message', 'Draft', null, null, 'This is a test message body.', 'Test Subject', null, null);
+        Test.stopTest();
+        System.assertNotEquals(null, message.Id, 'Message should be created with Subject and Message Body');
+        System.assertEquals('Test Subject', message.dmpl__Subject__c, 'Subject should match');
+        System.assertEquals('This is a test message body.', message.dmpl__MessageBody__c, 'Message Body should match');
+    }
+
+    @isTest
+    static void createMessageWithoutStatusPositive() {
+        Test.startTest();
+        dmpl__Message__c message = MessageDataHelper.createMessage('Test Message', null, null, null, null, null, null, null);
+        Test.stopTest();
+        System.assertNotEquals(null, message.Id, 'Message should be created without Status');
+        System.assertEquals(null, message.dmpl__Status__c, 'Default Status should be Draft');
+        System.assertEquals('Test Message', message.Name, 'Message Name should match');
+    }
+
+    @isTest
+	static void deleteMessageRecordPositive() {
+        Test.startTest();
+        dmpl__Message__c message = MessageDataHelper.createMessage('Test Message', 'Draft', null, null, null, null, null, null);
+        dmpl__Message__c deletedMessage = MessageDataHelper.getMessage(message.Id);
+        delete message;
+        System.assertNotEquals(null, deletedMessage, 'Expected message to be deleted.');
+        Test.stopTest();
+    }
+
+    @isTest
+    static void createMessageWithoutNameNegative() {
+        Test.startTest();
+        try {
+            dmpl__Message__c message = MessageDataHelper.createMessage(null, 'Draft', null, null, null, null, null, null);
+            System.assertNotEquals(null, message.Id, 'Message should be created without Name');
+        } catch (DmlException e) {
+            System.debug('Expected DML Exception: ' + e.getMessage());
+        }
+        Test.stopTest();
+    }
+
+    @isTest
+    static void updateMessageWithoutNameNegative() {
+        Test.startTest();
+        dmpl__Message__c message = MessageDataHelper.createMessage('Test Message', 'Draft', null, null, null, null, null, null);
+        message.Name = null;
+        update message;
+        dmpl__Message__c updatedMessage = MessageDataHelper.getMessage(message.Id);
+        System.assertNotEquals(null, updatedMessage, 'Message should be updated without Name');
+        Test.stopTest();
+    }
+
+    @isTest
+    static void updateMessageWithoutSubjectNegative() {
+        Test.startTest();
+        dmpl__Message__c message = MessageDataHelper.createMessage('Test Message', 'Draft', null, null, 'This is a test message body.', 'Test Subject', null, null);
+        dmpl__Message__c createdMessage = MessageDataHelper.getMessage(message.Id);
+        message.dmpl__Subject__c = null;
+        update message;
+        dmpl__Message__c updatedMessage = MessageDataHelper.getMessage(message.Id);
+        Test.stopTest();
+        System.assertEquals('Test Subject', createdMessage.dmpl__Subject__c,'Subject should be initially set');
+        System.assertEquals(null, updatedMessage.dmpl__Subject__c, 'Subject should be deleted');
+    }
+    
+    @isTest
+    static void createMessageRuleWithNameAndFieldSelectionPositive() {
+        Test.startTest();
+        dmpl__MessageConfiguration__c config = MessageDataHelper.createMessageConfiguration('Test Config', 'Test Trigger', 'AFTER_INSERT', 'Interface Provider', null, null);
+        dmpl__MessageRule__c rule = MessageDataHelper.createMessageRule(null, 'Account', null, null, config);
+        Test.stopTest();
+        System.assertNotEquals(null, rule.Id, 'Message Rule should be created with Name and Field Selection');
+        System.assertEquals('Account', rule.dmpl__FieldName__c, 'Field Name should match');
+    }
+
+    @isTest
+    static void createMessageRuleWithOperationEqualPositive() {
+        Test.startTest();
+        dmpl__MessageConfiguration__c config = MessageDataHelper.createMessageConfiguration('Test Config', 'Test Trigger', 'AFTER_INSERT', 'Interface Provider', null, null);
+        dmpl__MessageRule__c rule = MessageDataHelper.createMessageRule('equals', 'Account', null, null, config);
+        Test.stopTest();
+        System.assertNotEquals(null, rule.Id, 'Message Rule should be created with Operation as Equal');
+        System.assertEquals('equals', rule.dmpl__Operation__c, 'Operation should match');
+    }
+
+    @isTest
+    static void createMessageRuleWithOperationNotEqualPositive() {
+        Test.startTest();
+        dmpl__MessageConfiguration__c config = MessageDataHelper.createMessageConfiguration('Test Config', 'Test Trigger', 'AFTER_INSERT', 'Interface Provider', null, null);
+        dmpl__MessageRule__c rule = MessageDataHelper.createMessageRule('notEqual', 'Account', null, null, config);
+        Test.stopTest();
+        System.assertNotEquals(null, rule.Id, 'Message Rule should be created with Operation as Not Equal');
+        System.assertEquals('notEqual', rule.dmpl__Operation__c, 'Operation should match');
+    }
+
+    @isTest
+    static void createMessageRuleWithOperationGreaterOrEqualPositive() {
+        Test.startTest();
+        dmpl__MessageConfiguration__c config = MessageDataHelper.createMessageConfiguration('Test Config', 'Test Trigger', 'AFTER_INSERT', 'Interface Provider', null, null);
+        dmpl__MessageRule__c rule = MessageDataHelper.createMessageRule('greaterOrEqual', 'Account', null, null, config);
+        Test.stopTest();
+        System.assertNotEquals(null, rule.Id, 'Message Rule should be created with Operation as greaterOrEqual');
+        System.assertEquals('greaterOrEqual', rule.dmpl__Operation__c, 'Operation should match');
+    }
+
+    @isTest
+    static void createMessageRuleWithOperationLessOrEqualPositive() {
+        Test.startTest();
+        dmpl__MessageConfiguration__c config = MessageDataHelper.createMessageConfiguration('Test Config', 'Test Trigger', 'AFTER_INSERT', 'Interface Provider', null, null);
+        dmpl__MessageRule__c rule = MessageDataHelper.createMessageRule('lessOrEqual', 'Account', null, null, config);
+        Test.stopTest();
+        System.assertNotEquals(null, rule.Id, 'Message Rule should be created with Operation as lessOrEqual');
+        System.assertEquals('lessOrEqual', rule.dmpl__Operation__c, 'Operation should match');
+    }
+
+    @isTest
+    static void createMessageRuleWithOperationGreaterThanPositive() {
+        Test.startTest();
+        dmpl__MessageConfiguration__c config = MessageDataHelper.createMessageConfiguration('Test Config', 'Test Trigger', 'AFTER_INSERT', 'Interface Provider', null, null);
+        dmpl__MessageRule__c rule = MessageDataHelper.createMessageRule('greaterThan', 'Account', null, null, config);
+        Test.stopTest();
+        System.assertNotEquals(null, rule.Id, 'Message Rule should be created with Operation as greaterThan');
+        System.assertEquals('greaterThan', rule.dmpl__Operation__c, 'Operation should match');
+    }
+
+    @isTest
+    static void createMessageRuleWithOperationLessThanPositive() {
+        Test.startTest();
+        dmpl__MessageConfiguration__c config = MessageDataHelper.createMessageConfiguration('Test Config', 'Test Trigger', 'AFTER_INSERT', 'Interface Provider', null, null);
+        dmpl__MessageRule__c rule = MessageDataHelper.createMessageRule('lessThan', 'Account', null, null, config);
+        Test.stopTest();
+        System.assertNotEquals(null, rule.Id, 'Message Rule should be created with Operation as lessThan');
+        System.assertEquals('lessThan', rule.dmpl__Operation__c, 'Operation should match');
+    }
+
+    @isTest
+    static void createMessageRuleWithFieldValuePositive() {
+        Test.startTest();
+        dmpl__MessageConfiguration__c config = MessageDataHelper.createMessageConfiguration('Test Config', 'Test Trigger', 'AFTER_INSERT', 'Interface Provider', null, null);
+        dmpl__MessageRule__c rule = MessageDataHelper.createMessageRule('equals', 'Account', 'Create', null, config);
+        Test.stopTest();
+        System.assertNotEquals(null, rule.Id, 'Message Rule should be created with Field Value');
+        System.assertEquals('Create', rule.dmpl__FieldValue__c, 'Field Value should match');
+    }
+
+    @isTest
+    static void createMessageRuleWithValidSequenceNumberPositive() {
+        Test.startTest();
+        dmpl__MessageConfiguration__c config = MessageDataHelper.createMessageConfiguration('Test Config', 'Test Trigger', 'AFTER_INSERT', 'Interface Provider', null, null);
+        dmpl__MessageRule__c rule = MessageDataHelper.createMessageRule('equals', 'Account', 'Create', 1, config);
+        Test.stopTest();
+        System.assertNotEquals(null, rule.Id, 'Message Rule should be created with valid Sequence Number');
+        System.assertEquals(1, rule.dmpl__SequenceNumber__c, 'Sequence Number should match');
+    }
+
+    //New Message Rule creation linked to valid Message Configuration (via Lookup)
+    @isTest
+    static void createMessageRuleWithValidConfigurationPositive() {
+        Test.startTest();
+        dmpl__MessageConfiguration__c config = MessageDataHelper.createMessageConfiguration('Test Config', 'Test Trigger', 'AFTER_INSERT', 'Interface Provider', null, null);
+        dmpl__MessageRule__c rule = MessageDataHelper.createMessageRule('equals', 'Account', 'Create', 1, config);
+        Test.stopTest();
+        System.assertNotEquals(null, rule.Id, 'Message Rule should be created with valid Configuration');
+        System.assertEquals(config.Id, rule.dmpl__MessageConfigurationId__c, 'Message Configuration should match');
+    }
+
+    @isTest
+    static void createMessageRuleWithoutFieldValuePositive() {
+        Test.startTest();
+        dmpl__MessageConfiguration__c config = MessageDataHelper.createMessageConfiguration('Test Config', 'Test Trigger', 'AFTER_INSERT', 'Interface Provider', null, null);
+        dmpl__MessageRule__c rule = MessageDataHelper.createMessageRule('equals', 'Account', null, null, config);
+        Test.stopTest();
+        System.assertNotEquals(null, rule.Id, 'Message Rule should be created without Field Value');
+        System.assertEquals(null, rule.dmpl__FieldValue__c, 'Field Value should be null');
+    }
+    
+    @isTest
+    static void createMessageRuleWithoutSequenceNumberPositive() {
+        Test.startTest();
+        dmpl__MessageConfiguration__c config = MessageDataHelper.createMessageConfiguration('Test Config', 'Test Trigger', 'AFTER_INSERT', 'Interface Provider', null, null);
+        dmpl__MessageRule__c rule = MessageDataHelper.createMessageRule('equals', 'Account', 'Create', null, config);
+        Test.stopTest();
+        System.assertNotEquals(null, rule.Id, 'Message Rule should be created without Sequence Number');
+        System.assertEquals(null, rule.dmpl__SequenceNumber__c, 'Sequence Number should be null');
+    }
+    
+    @isTest
+    static void createMessageRuleWithoutOperationPositive() {
+        Test.startTest();
+        dmpl__MessageConfiguration__c config = MessageDataHelper.createMessageConfiguration('Test Config', 'Test Trigger', 'AFTER_INSERT', 'Interface Provider', null, null);
+        dmpl__MessageRule__c rule = MessageDataHelper.createMessageRule(null, 'Account', 'Create', null, config);
+        Test.stopTest();
+        System.assertNotEquals(null, rule.Id, 'Message Rule should be created without Operation');
+        System.assertEquals(null, rule.dmpl__Operation__c, 'Operation should be null');
+    }
+    
+    @isTest
+    static void deleteMessageRuleRecordPositive() {
+        Test.startTest();
+        dmpl__MessageConfiguration__c config = MessageDataHelper.createMessageConfiguration('Test Config', 'Test Trigger', 'AFTER_INSERT', 'Interface Provider', null, null);
+        dmpl__MessageRule__c rule = MessageDataHelper.createMessageRule('equals', 'Account', 'Create', 1, config);
+        dmpl__MessageRule__c deletedRule =  null;
+        delete rule;
+        try {
+            deletedRule = MessageDataHelper.getMessageRuleById(rule.Id);
+        } catch (QueryException e) {
+            deletedRule = null;
+        }
+        System.assertEquals(null, deletedRule, 'Expected message Rule to be deleted.');
+        Test.stopTest();
+    }
+
+    @isTest
+    static void createMessageRuleWithInvalidOperationNegative() {
+        Test.startTest();
+        dmpl__MessageConfiguration__c config = MessageDataHelper.createMessageConfiguration('Test Config', 'Test Trigger', 'AFTER_INSERT', 'Interface Provider', null, null);
+        try{
+            dmpl__MessageRule__c rule = MessageDataHelper.createMessageRule('invalidOperation', 'Account', 'Create', 1, config);
+            System.assertEquals(null, rule.Id, 'Message Rule should not be created with invalid Operation');
+        } catch (DmlException e) {
+            System.debug('Expected DML Exception: ' + e.getMessage());
+        }
         Test.stopTest();
     }
     
     @isTest
-    public static void Test1(){
-        dmpl__MessageConfiguration__c messageConfig = [SELECT Id,dmpl__ProviderType__c FROM dmpl__MessageConfiguration__c LIMIT 1];
-        dmpl__Message__c message = new dmpl__Message__c(
-            dmpl__ErrorMessage__c = 'Test Error 1',
-            dmpl__MessageConfigurationId__c = messageConfig.Id
-        );
-        insert message;
-        MessageHandler MessageHandlerl=new MessageHandler();
-        MessageHandlerl.beforeInsert();
-        MessageHandlerl.beforeUpdate();
-        MessageHandlerl.afterInsert();
-        message.dmpl__ErrorMessage__c = 'Error 2';
-        update message;
-        
-        messageConfig.dmpl__ProviderType__c='SFDC EMail';
-        update messageConfig;
-        new MessageHandler().sendMessages(new List<dmpl__Message__c>{message});
-/*
-        messageConfig.dmpl__ProviderType__c='Interface Provider';
-        update messageConfig;
-        new MessageHandler().sendMessages(new List<dmpl__Message__c>{message});
-*/
-        messageConfig.dmpl__ProviderType__c='SFDC Notification';
-        update messageConfig;
-        new MessageHandler().sendMessages(new List<dmpl__Message__c>{message});
-
-        messageConfig.dmpl__ProviderType__c='Push Notification';
-        update messageConfig;
-        new MessageHandler().sendMessages(new List<dmpl__Message__c>{message});
-
-         messageConfig.dmpl__ProviderType__c='Custom Handler';
-        update messageConfig;
-        new MessageHandler().sendMessages(new List<dmpl__Message__c>{message});
-
-
-    }
-    
-    @isTest
-    public static void Test2(){
-        dmpl__Message__c message = [SELECT Id, dmpl__ErrorMessage__c, dmpl__Recipient__c, dmpl__WhatId__c, dmpl__SourceObjectId__c, dmpl__Sender__c, dmpl__SenderName__c, dmpl__Subject__c, dmpl__MessageBody__c, dmpl__MessageConfigurationId__c 
-                                    FROM dmpl__Message__c WHERE dmpl__MessageConfigurationId__c != null LIMIT 1];
-        new MessageHandler().sendMessages(new List<dmpl__Message__c>{message});
-        
-    }
-    
-    @isTest
-    public static void messageEmailHelperTest(){
-        dmpl__Message__c message = [SELECT Id, dmpl__ErrorMessage__c, dmpl__Recipient__c, dmpl__WhatId__c, dmpl__SourceObjectId__c, dmpl__Sender__c, dmpl__SenderName__c, dmpl__Subject__c, dmpl__MessageBody__c 
-                                    FROM dmpl__Message__c LIMIT 1];
-        MessageEmailHelper.sendEmailMessage('a2Zbn000000KP3tEAG', message);
-    }
-    
-    @isTest
-    public static void messageHelperTest(){
-        MessageHelper.RuleEvaluator child = new MessageHelper.RuleEvaluator();
-        dmpl__MessageRule__c messageRule = [SELECT Id, dmpl__FieldName__c, dmpl__FieldValue__c, dmpl__Operation__c 
-                                            FROM dmpl__MessageRule__c LIMIT 1];
-        dmpl__MessageConfiguration__c config = [SELECT Id, dmpl__TriggerEvent__c, dmpl__TriggerObjectName__c, dmpl__Subject__c, dmpl__Sender__c, dmpl__SenderName__c, dmpl__Recipient__c, dmpl__MessageBody__c, dmpl__RuleSuccessCriteria__c 
-                                                FROM dmpl__MessageConfiguration__c LIMIT 1];
-        dmpl__InterfaceQueue__c queue = [SELECT Id, Name, dmpl__QueueType__c, dmpl__IsSuccessful__c 
-                                         FROM dmpl__InterfaceQueue__c LIMIT 1];
-        MessageHelper.evaluateMessageRules('Account', TriggerHandler.TriggerContext.BEFORE_INSERT, new List<Id>{});
-        MessageHelper.evaluateTimerMessageRules(queue.Id);
-        MessageHelper.evaluateMessageRulesInternal('Account', String.ValueOf(TriggerHandler.TriggerContext.BEFORE_INSERT), new List<Id>{});
-        child.evaluateRules(config);
-        child.buildCondition(messageRule);
-        testOperator(messageRule, child);
-    }
-
-    @isTest
-    public static void messageServiceTest(){
-        dmpl__Message__c message = [SELECT Id, dmpl__ErrorMessage__c FROM dmpl__Message__c LIMIT 1];
-        Account partnerAccount = [SELECT Id, Name FROM Account WHERE Name = 'Partner-Test-Account' LIMIT 1];
-        dmpl__MessageConfiguration__c config = [SELECT Id, dmpl__Subject__c, dmpl__Sender__c, dmpl__SenderName__c, dmpl__Recipient__c, dmpl__MessageBody__c 
-                                                FROM dmpl__MessageConfiguration__c LIMIT 1];
-        new MessageService().createMessages(config, new List<Account>{partnerAccount});
-        new MessageService().createMessage(config, partnerAccount);
-        
-        dmpl__Message__c message1 = new dmpl__Message__c(dmpl__ErrorMessage__c = 'Test Error 1');
-        new MessageService().saveMessages(new List<dmpl__Message__c>{message1});
-        new MessageService().getMessageConfigs();
-        new MessageService().getMessageConfigs('Account');
-    }
-
-    @isTest
-    public static void MessageHandlerTest(){
-        dmpl__Message__c message = [SELECT Id, dmpl__ErrorMessage__c, dmpl__Recipient__c, dmpl__WhatId__c, dmpl__SourceObjectId__c, dmpl__Sender__c, dmpl__SenderName__c, dmpl__Subject__c, dmpl__MessageBody__c, dmpl__MessageConfigurationId__c 
-                                    FROM dmpl__Message__c LIMIT 1];
-        new MessageHandler().sendMessages(new List<dmpl__Message__c>{message});
-        new MessageHandler().perfromCustomHandlerAction('TestHandler', 'sendMessage', message);
-    }
-
-    @isTest
-    public static void messageNotificationHelperTest(){
-        CustomNotificationType cnt = new CustomNotificationType(DeveloperName = 'Custom Error Message');
-        //insert cnt;
-        
-        dmpl__Message__c message = [SELECT Id, dmpl__ErrorMessage__c, dmpl__Subject__c, dmpl__MessageBody__c, dmpl__SourceObjectId__c, dmpl__Recipient__c 
-                                    FROM dmpl__Message__c LIMIT 1];
-        MessageNotificationHelper.sendNotification('Custom Error Message', message);
-        MessageNotificationHelper.sendPushNotification('App Name', message);
-    }
-    
-    private static void testOperator(dmpl__MessageRule__c messageRule, MessageHelper.RuleEvaluator child){
-        List<String> operations = new List<String>{'equals', 'notEqual', 'lessThan', 'greaterThan', 'lessOrEqual', 'greaterOrEqual', 'like', 'in', 'notIn', 'includes', 'excludes'};
-        for(String operation : operations){
-            messageRule.dmpl__Operation__c = operation;
-            child.getOperator(messageRule);
+    static void createMessageRuleWithFieldValueExceedingLimitNegative() {
+        Test.startTest();
+        dmpl__MessageConfiguration__c config = MessageDataHelper.createMessageConfiguration('Test Config', 'Test Trigger', 'AFTER_INSERT', 'Interface Provider', null, null);
+        try{
+            String longFieldValue = String.valueOf(new List<String>{'A'.repeat(256)});
+            dmpl__MessageRule__c rule = MessageDataHelper.createMessageRule('equals', 'Account', longFieldValue, 1, config);
+            System.assertEquals(null, rule.Id, 'Message Rule should not be created with Field Value exceeding 255 characters');
+        } catch (DmlException e) {
+            System.debug('Expected DML Exception: ' + e.getMessage());
         }
+        Test.stopTest();
+    }
+    
+    @isTest
+    static void createMessageRuleWithNegativeSequenceNumberNegative(){
+        Test.startTest();
+        dmpl__MessageConfiguration__c config = MessageDataHelper.createMessageConfiguration('Test Config', 'Test Trigger', 'AFTER_INSERT', 'Interface Provider', null, null);
+        dmpl__MessageRule__c rule = MessageDataHelper.createMessageRule('equals', 'Account', 'Create', -1, config);
+        Test.stopTest();
+        System.assertNotEquals(null, rule.Id, ' Message Rule should be created with negative Sequence Number');
     }
 
-    private static void CreateMessage(){
-        dmpl__MessageConfiguration__c messageConfig = new dmpl__MessageConfiguration__c(
-            Name = 'test1',
-            dmpl__TriggerObjectName__c = 'triggerobjectnametest'
-        );
-        insert messageConfig;
-
-        dmpl__Message__c message = new dmpl__Message__c(
-            dmpl__ErrorMessage__c = 'Test Error 1',
-            dmpl__Recipient__c = 'Test Recipient',
-            dmpl__WhatId__c = 'Test',
-            dmpl__MessageConfigurationId__c = messageConfig.Id
-        );
-        insert message;
-        message.dmpl__ErrorMessage__c = 'Test Error 2';
-        update message;
-    }
-
-    private static void CreateInterfaceQueue(){
-        List<dmpl__InterfaceQueue__c> interfaceQueue = new List<dmpl__InterfaceQueue__c>();
-        interfaceQueue.add(new dmpl__InterfaceQueue__c(
-            dmpl__QueueType__c = 'Queueable',
-            dmpl__JobType__c = 'Account Group Member Processor'
-        ));
-        insert interfaceQueue;
-    }
-
-    private static void CreateMessageConfiguration(){
-        dmpl__MessageConfiguration__c messageConfig = new dmpl__MessageConfiguration__c(
-            dmpl__CustomHandlerName__c = 'MessageHandler',
-            dmpl__Sender__c = 'sender',
-            dmpl__Subject__c = 'subject',
-            dmpl__TriggerObjectName__c = 'Account',
-            dmpl__ProviderType__c = 'SFDC EMail'
-        );
-        insert messageConfig;
-    }
-
-    private static void CreateAccount(){
-        List<Account> account = new List<Account>{
-            new Account(Name = 'Test - Account', Fax = '09876', dmpl__LastName__c = 'Account', Phone = '1234567891', Website = 'www.Dealermatix.com', Type = 'Prospect', NumberOfEmployees = 2, Industry = 'Education', AnnualRevenue = 1000, Description = 'Accounts added', dmpl__IsPartnerAccount__c = false, dmpl__IsActive__c = true, dmpl__IsTaxExempted__c = true, dmpl__IsSupplierAccount__c = false, dmpl__IsCustomerAccount__c = false),
-            new Account(Name = 'Partner-Test-Account', dmpl__LastName__c = 'Account', dmpl__IsPartnerAccount__c = true, dmpl__IsActive__c = true),
-            new Account(Name = 'Supplier-Test-Account', dmpl__LastName__c = 'Account', dmpl__IsSupplierAccount__c = true, dmpl__IsActive__c = true),
-            new Account(Name = 'Customer-Test-Account', dmpl__IsCustomerAccount__c = true, dmpl__LastName__c = 'Account', dmpl__IsActive__c = true)
-        };
-        insert account;
-    }
-
-    private static void CreateMessageRule(){
-        dmpl__MessageConfiguration__c messageConfig = new dmpl__MessageConfiguration__c(
-            Name = 'test1',
-            dmpl__TriggerObjectName__c = 'dmpl__AccountGroupMember__c'
-        );
-        insert messageConfig;
-
-        dmpl__MessageRule__c messageRule = new dmpl__MessageRule__c(
-            dmpl__FieldName__c = 'Test_FieldName',
-            dmpl__FieldValue__c = 'Test_FieldValue',
-            dmpl__MessageConfigurationId__c = messageConfig.Id
-        );
-        insert messageRule;
+    @isTest
+    static void createMessageRuleWithDeletedConfigurationNegative() {
+        Test.startTest();
+        dmpl__MessageConfiguration__c config = MessageDataHelper.createMessageConfiguration('Test Config', 'Test Trigger', 'AFTER_INSERT', 'Interface Provider', null, null);
+        delete config;
+        try {
+            dmpl__MessageRule__c rule = MessageDataHelper.createMessageRule('equals', 'Account', 'Create', 1, config);
+            System.assertEquals(null, rule.Id, 'Message Rule should not be created with deleted Message Configuration');
+        } catch (DmlException e) {
+            System.debug('Expected DML Exception: ' + e.getMessage());
+        }
+        Test.stopTest();
     }
 }

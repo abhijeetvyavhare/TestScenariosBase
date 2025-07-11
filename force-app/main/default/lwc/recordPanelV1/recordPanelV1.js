@@ -1,6 +1,7 @@
 import { LightningElement, api, wire } from 'lwc';
-import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
 import { refreshApex } from '@salesforce/apex';
+import { RefreshEvent } from 'lightning/refresh';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { CurrentPageReference } from 'lightning/navigation';
 import { publish, MessageContext } from 'lightning/messageService';
@@ -119,9 +120,17 @@ export default class RecordPanelV1 extends LightningElement {
         this.fireForceRefreshEvent();
         this.handleReset();
         refreshApex(this.recordId);
-        getRecordNotifyChange(new Array({ "recordId": this.recordId }));
-        eval("$A.get('e.force:refreshView').fire();");
+        notifyRecordUpdateAvailable([{ "recordId": this.recordId }]);
+        this.refreshStdComponents();
         this.fireSavedEvent();
+    }
+
+    refreshStdComponents(){
+        try{
+            eval("$A.get('e.force:refreshView').fire();");
+        }catch(e){
+            this.dispatchEvent(new RefreshEvent());
+        }
     }
 
     @api

@@ -2,9 +2,10 @@ import { LightningElement, api, wire } from 'lwc';
 import getRecommendations from '@salesforce/apex/ServiceRecommendationController.getServiceRecommendations';
 import performAction from '@salesforce/apex/ServiceRecommendationController.performAction';
 import {subscribe, unsubscribe, MessageContext} from 'lightning/messageService';
+import { RefreshEvent } from 'lightning/refresh';
 import FORCEREFRESHMC from '@salesforce/messageChannel/ForceReset__c';
 import { refreshApex } from '@salesforce/apex';
-import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
 import { reduceErrors } from 'c/utils';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
@@ -50,8 +51,16 @@ export default class ServiceRecommendations extends LightningElement {
     
     handleForceRefresh(message) {
         refreshApex(this.recommendations);
-        getRecordNotifyChange(new Array({ "recordId": this.recordId }));
-        eval("$A.get('e.force:refreshView').fire();");
+        notifyRecordUpdateAvailable([{ "recordId": this.recordId }]);
+        this.refreshStdComponents();
+    }
+
+    refreshStdComponents(){
+        try{
+            eval("$A.get('e.force:refreshView').fire();");
+        }catch(e){
+            this.dispatchEvent(new RefreshEvent());
+        }
     }
 
     async handleActionClick(event){

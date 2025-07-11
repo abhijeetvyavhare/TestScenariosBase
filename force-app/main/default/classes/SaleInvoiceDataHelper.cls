@@ -373,4 +373,35 @@ public with sharing class SaleInvoiceDataHelper {
     public static dmpl__ItemAlternate__c getItemAlternate(dmpl__Item__c item, dmpl__Item__c alternateItem) {
         return [SELECT Id, Name, dmpl__ItemId__c, dmpl__AlternateItemId__c, dmpl__AlternateItemName__c,  dmpl__AlternateType__c FROM dmpl__ItemAlternate__c where dmpl__ItemId__c=:item.Id and dmpl__AlternateItemId__c=:alternateItem.Id LIMIT 1];
     }
+
+    public static dmpl__AccountGroup__c createAccountGroup(String name, String groupType, String memberType) {
+        return (dmpl__AccountGroup__c) TestFactory.createSObject(
+            new dmpl__AccountGroup__c(
+                Name = name,
+                dmpl__AccountGroupType__c = groupType,
+                dmpl__DynamicMemberType__c = memberType,
+                dmpl__RuleSuccessCriteria__c ='All Rules Are Met'
+            ),
+            true
+        );
+    }
+
+     public static dmpl__AccountGroupMember__c createAccountGroupMember(Id accountGroupId, Id accountId) {
+        return (dmpl__AccountGroupMember__c) TestFactory.createSObject(
+            new dmpl__AccountGroupMember__c(
+                dmpl__AccountGroupId__c = accountGroupId,
+                dmpl__AccountId__c = accountId
+            ),
+            true
+        );
+    }
+
+    public static dmpl__AccountGroup__c getAccountGroup() {
+        return [SELECT Id, Name, dmpl__AccountGroupType__c, dmpl__DynamicMemberType__c FROM dmpl__AccountGroup__c LIMIT 1];
+    }
+
+    public static dmpl__AccountGroupMember__c getAccountGroupMember() {
+        return [SELECT Id, Name, dmpl__AccountId__c, dmpl__AccountGroupId__c FROM dmpl__AccountGroupMember__c LIMIT 1];
+    }
+
 }

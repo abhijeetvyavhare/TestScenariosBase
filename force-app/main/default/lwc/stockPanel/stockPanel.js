@@ -5,7 +5,8 @@ import { getRelatedListRecords } from 'lightning/uiRelatedListApi';
 import { getObjectInfo } from 'lightning/uiObjectInfoApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { reduceErrors } from 'c/utils';
-import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { RefreshEvent } from 'lightning/refresh';
+import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
 import getBranches from '@salesforce/apex/BranchController.getBranches';
 import getAllBranches from '@salesforce/apex/BranchController.getAllBranches';
 import getStock from '@salesforce/apex/BranchController.getStock';
@@ -341,14 +342,21 @@ export default class StockPanel extends LightningElement {
             this.createRelatedResult.heading = `${this.createRelatedResult.documentLabel} created!`
             this.createRelatedResult.subHeading = `${this.createRelatedResult.documentLabel} created successfully. Click here to navigate to the created document.`
             var messsage = `${this.createRelatedResult.documentLabel} created successfully.`;
-            getRecordNotifyChange([{ "recordId": this.recordId }]);
-            getRecordNotifyChange([{ "recordId": result.documentId }]);
-            eval("$A.get('e.force:refreshView').fire();");
+            notifyRecordUpdateAvailable([{ "recordId": this.recordId }, { "recordId": result.documentId }]);
+            this.refreshStdComponents();
             this.dispatchEvent(new CustomEvent('recordsaved', { "detail": this.createRelatedResult }));
             this.showMessage(messsage);
             this.handleDialogClose();
         } else {
             this.showError(result?.error);
+        }
+    }
+
+    refreshStdComponents(){
+        try{
+            eval("$A.get('e.force:refreshView').fire();");
+        }catch(e){
+            this.dispatchEvent(new RefreshEvent());
         }
     }
 

@@ -13,7 +13,7 @@ export default class DmplVisualPicker extends LightningElement {
     }
 
     get getPickerSize() {
-        return this.isVertical ? 'slds-visual-picker slds-visual-picker_vertical slds-visual-picker_medium' :
+        return this.isVertical ? 'slds-visual-picker slds-visual-picker_vertical slds-visual-picker_medium dmpl-width-100' :
             this.pickerSize == 'small'? "slds-visual-picker slds-visual-picker_small":
             this.pickerSize == 'medium' ? "slds-visual-picker slds-visual-picker_medium":
             this.pickerSize == 'large' ? "slds-visual-picker slds-visual-picker_large":
@@ -22,7 +22,7 @@ export default class DmplVisualPicker extends LightningElement {
 
     get getPickerStyle(){
         return this.isIcon ? "slds-visual-picker__figure slds-visual-picker__icon slds-align_absolute-center":
-            "slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center dmpl-justify_left ";
+            "slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center dmpl-justify_left dmpl-width-100";
     }
 
     get getTitleStyle(){

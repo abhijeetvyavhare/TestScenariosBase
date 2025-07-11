@@ -6,6 +6,8 @@ public with sharing class TransferLineHandler_Test {
         dmpl__Branch__c branch = TestDataHelpers.createBranch(partnerAccount);
         dmpl__Transfer__c transfer = TransferTestDataHelper.createTransfer(partnerAccount,branch);
         dmpl__TransferLine__c transferLine = TransferTestDataHelper.createTransferLine(transfer);
+
+
     }
 
     @isTest
@@ -53,4 +55,6 @@ public with sharing class TransferLineHandler_Test {
         dmpl__TransferLine__c nonDeletedLine = TransferTestDataHelper.getTransferLine();
         System.assertNotEquals(null, nonDeletedLine, 'TransferLine should still exist after failed delete');
     }
+
+	
 }

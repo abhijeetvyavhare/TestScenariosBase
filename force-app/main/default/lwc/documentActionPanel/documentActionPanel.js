@@ -3,7 +3,8 @@ import { getRecord } from "lightning/uiRecordApi";
 import { NavigationMixin } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { CloseActionScreenEvent } from 'lightning/actions';
-import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
+import { RefreshEvent } from 'lightning/refresh';
 import { reduceErrors } from 'c/utils';
 import getDocumentActionSettings from '@salesforce/apex/DocumentActionController.getDocumentActionSettings';
 import getFieldsByFieldSetName from '@salesforce/apex/MetadataController.getFieldsByFieldSetName';
@@ -396,9 +397,8 @@ export default class DocumentActionPanel extends NavigationMixin(LightningElemen
                 this.performActionResult.title = 'Action Performed Successfully!';
                 this.performActionResult.subTitle = 'The request action completed successfully!';
                 this.moveWizard('next');
-                getRecordNotifyChange([{ "recordId": this.recordId }]);
-                getRecordNotifyChange([{ "recordId": result.documentId }]);
-                eval("$A.get('e.force:refreshView').fire();");
+                notifyRecordUpdateAvailable([{ "recordId": this.recordId }, { "recordId": result.documentId }]);
+                this.refreshStdComponents();
                 this.dispatchEvent(new CustomEvent('recordsaved', { "detail": this.performActionResult }));
                 this.isSaveDisabled = this.noChildObjectsData;
                 this.isWorking = false;
@@ -414,6 +414,14 @@ export default class DocumentActionPanel extends NavigationMixin(LightningElemen
             this.isSaveDisabled = this.noChildObjectsData;
             this.isWorking = false;
             this.showError(error);
+        }
+    }
+
+    refreshStdComponents(){
+        try{
+            eval("$A.get('e.force:refreshView').fire();");
+        }catch(e){
+            this.dispatchEvent(new RefreshEvent());
         }
     }
 

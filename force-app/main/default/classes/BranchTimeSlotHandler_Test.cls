@@ -5,7 +5,7 @@ public with sharing class BranchTimeSlotHandler_Test {
         Account partnerAccount = TestDataHelpers.createPartnerAccount();
         dmpl__Item__c item =TestDataHelpers.createItem();
         dmpl__Branch__c branch = TestDataHelpers.createBranch(partnerAccount);
-        // dmpl__BranchTimeSlot__c branchTimeSlot1 = BranchTestDataHelper.createBranchTimeSlot(item,branch);
+       
         dmpl__BranchTimeSlot__c branchTimeSlot2 = BranchTestDataHelper.createBranchTimeSlot(branch, 'T3', Time.newInstance(7, 15, 0, 0), Time.newInstance(10, 15, 0, 0), 12);
         
     }
@@ -72,7 +72,7 @@ public with sharing class BranchTimeSlotHandler_Test {
         
         System.assertEquals(null, deletedBranchTimeSlot, 'BranchTimeSlot should be deleted and not found in query.');
     }
-    //Branch Time Slot creation with Time Slot Name (New)
+    
     @isTest
     static void createBranchTimeSlotWithTimeSlotNamePositive() {
         Test.startTest();
@@ -93,7 +93,7 @@ public with sharing class BranchTimeSlotHandler_Test {
         System.assertEquals(branchTimeSlot.dmpl__MaximumCapacity__c, fetchTimeSlot.dmpl__MaximumCapacity__c, 'Maximum Capacity should be 12');
     }
     
-    //Branch Time Slot creation with Time Slot Name (Edit)
+  
     @isTest
     static void updateBranchTimeSlotWithTimeSlotNamePositive() {
         Test.startTest();
@@ -121,7 +121,7 @@ public with sharing class BranchTimeSlotHandler_Test {
     }
     
     
-    //Branch Time Slot creation without Time Slot Name (New)
+    
     @isTest
     static void createBranchTimeSlotWithoutTimeSlotNameNegative() {
         Boolean exceptionThrown = false;
@@ -139,10 +139,10 @@ public with sharing class BranchTimeSlotHandler_Test {
         }
         Test.stopTest();
         
-        // System.assertEquals(true, exceptionThrown, 'DmlException should be thrown for missing TimeSlot Name');
+        
     }
     
-    // /Branch Time Slot creation without Start Time (New)
+    
     @isTest
     static void createBranchTimeSlotWithoutTimeSlotStartTimeNegative() {
         Boolean exceptionThrown = false;
@@ -159,9 +159,9 @@ public with sharing class BranchTimeSlotHandler_Test {
         }
         Test.stopTest();
         
-        // System.assertEquals(true, exceptionThrown, 'DmlException should be thrown for missing startTime ');
+        
     }
-    // Branch Time Slot creation without End Time (New)
+    
     @isTest
     static void createBranchTimeSlotWithoutTimeSlotEndTimeNegative() {
         Boolean exceptionThrown = false;
@@ -178,10 +178,10 @@ public with sharing class BranchTimeSlotHandler_Test {
         }
         Test.stopTest();
         
-        // System.assertEquals(true, exceptionThrown, 'DmlException should be thrown for missing Endtime ');
+        
     }
     
-    //Branch Time Slot creation with Start Time (Edit)
+    
     @isTest
     static void updateBranchTimeSlotWithTimeSlotStartTimePositive() {
         Test.startTest();
@@ -208,7 +208,7 @@ public with sharing class BranchTimeSlotHandler_Test {
         System.assertEquals(branchTimeSlot.dmpl__MaximumCapacity__c, fetchTimeSlot.dmpl__MaximumCapacity__c, 'Maximum Capacity should be 12');
     }
     
-    // Branch Time Slot creation with End Time (Edit)
+    
     @isTest
     static void updateBranchTimeSlotWithTimeSlotEndTimePositive() {
         Test.startTest();
@@ -235,7 +235,7 @@ public with sharing class BranchTimeSlotHandler_Test {
         System.assertEquals(fetchTimeSlot1.dmpl__MaximumCapacity__c, fetchTimeSlot.dmpl__MaximumCapacity__c, 'Maximum Capacity should be 12');
     }
     
-    // Branch Time Slot creation with Start Time after End Time (New)
+    
     @isTest
     static void createBranchTimeSlotWithStartTimeAfterEndTimeNegative() {
         Boolean exceptionThrown = false;
@@ -256,7 +256,7 @@ public with sharing class BranchTimeSlotHandler_Test {
         System.assertEquals(true, exceptionThrown, 'start time Should be less than end time');
     }
     
-    // Branch Time Slot creation with End Time before Start Time (New)
+    
     @isTest
     static void createBranchTimeSlotWithEndTimeBeforeStartTimeNegative() {
         Boolean exceptionThrown = false;
@@ -277,7 +277,7 @@ public with sharing class BranchTimeSlotHandler_Test {
         System.assertEquals(true, exceptionThrown, 'start time Should be less than end time');
     }
     
-    // Branch Time Slot creation with End Time same as  Start Time (New)
+    
     @isTest
     static void createBranchTimeSlotWithEndTimeSameAsStartTimeNegative() {
         Boolean exceptionThrown = false;
@@ -299,7 +299,7 @@ public with sharing class BranchTimeSlotHandler_Test {
     }
     
     
-    // Branch Time Slot creation without Branch Tag (New)
+   
     @isTest
     static void createBranchTimeSlotWithoutBranchTagNegative() {
         Boolean exceptionThrown = false;
@@ -319,7 +319,7 @@ public with sharing class BranchTimeSlotHandler_Test {
         System.assertEquals(true, exceptionThrown, 'DmlException should be thrown for missing TimeSlot Name');
     }
     
-    // Branch Time Slot creation without Maximum Capacity (New)
+    
     @isTest
     static void createBranchTimeSlotWithoutMaximumCapacityNegative() {
         Boolean exceptionThrown = false;
@@ -340,7 +340,7 @@ public with sharing class BranchTimeSlotHandler_Test {
         System.assertEquals(true, exceptionThrown, 'DmlException should be thrown for missing TimeSlot Name');
     }
     
-    // Branch Time Slot creation with Maximum Capacity (New)
+    
     @isTest
     static void createBranchTimeSlotWithMaximumCapacityPositive() {
         Test.startTest();
@@ -361,7 +361,7 @@ public with sharing class BranchTimeSlotHandler_Test {
         System.assertEquals(branchTimeSlot.dmpl__MaximumCapacity__c, fetchTimeSlot.dmpl__MaximumCapacity__c, 'Maximum Capacity should be 12');
     }
     
-    // Branch Time Slot creation with Maximum Capacity (Edit)
+    
     @isTest
     static void updateBranchTimeSlotWithMaximumCapacityPositive() {
         Test.startTest();
@@ -386,7 +386,7 @@ public with sharing class BranchTimeSlotHandler_Test {
         System.assertEquals(fetchTimeSlot1.dmpl__MaximumCapacity__c, fetchTimeSlot.dmpl__MaximumCapacity__c, 'Maximum Capacity should be 12');
     }
     
-    //Branch Time Slot creation with IsActive (New)
+    
     @isTest
     static void createBranchTimeSlotWithIsActivePositive() {
         Test.startTest();
@@ -408,7 +408,7 @@ public with sharing class BranchTimeSlotHandler_Test {
         System.assertEquals(True, fetchTimeSlot.dmpl__IsActive__c, 'Maximum Capacity should be 12');
     }
     
-    //Branch Time Slot creation with IsActive (Edit)
+    
     @isTest
     static void updateBranchTimeSlotWithIsActivePositive() {
         Test.startTest();
@@ -434,7 +434,7 @@ public with sharing class BranchTimeSlotHandler_Test {
         System.assertEquals(false, updatedTimeSlot.dmpl__IsActive__c, 'Maximum Capacity should be 12');
     }
     
-    //Branch Time Slot booking with name(New)
+    
     @isTest
     static void createBranchTimeSlotBookingWithNamePositive() {
         Test.startTest();
@@ -447,12 +447,12 @@ public with sharing class BranchTimeSlotHandler_Test {
         Test.stopTest();
         
         System.assertNotEquals(null, fetchedBranchTimeSlotBooking, 'Booking record should not be null');
-        // System.assertEquals('T3', fetchedBranchTimeSlotBooking.Name, 'Booking Name should be "T3"');
+        
         System.assertEquals(12, fetchedBranchTimeSlotBooking.dmpl__Capacity__c, 'Capacity should be 12');
         System.assertEquals(branchTimeSlot.Id, fetchedBranchTimeSlotBooking.dmpl__BranchTimeSlotId__c, 'Branch Time Slot ID should match');
     }
     
-    //Branch Time Slot booking with name(edit)
+    
     @isTest
     static void updateBranchTimeSlotBookingWithNameNegative() {
             Test.startTest();
@@ -461,17 +461,17 @@ public with sharing class BranchTimeSlotHandler_Test {
             dmpl__BranchTimeSlotBooking__c branchTimeSlotBooking = BranchTestDataHelper.createBranchTimeSlotBooking(branchTimeSlot.Id, 'T3', 12);
         try{
             dmpl__BranchTimeSlotBooking__c fetchedBranchTimeSlotBooking = BranchTestDataHelper.getBranchTimeSlotBooking(branchTimeSlotBooking.Id);
-            //fetchedBranchTimeSlotBooking.Name = 'T10';
+            
             Update fetchedBranchTimeSlotBooking;
             dmpl__BranchTimeSlotBooking__c updatedBranchTimeSlotBooking = BranchTestDataHelper.getBranchTimeSlotBooking(branchTimeSlotBooking.Id);
         }catch (DmlException e) {
             exceptionThrown = true;
         }
         Test.stopTest();
-        //System.assertEquals(true, exceptionThrown, 'DmlException should be thrown for missing TimeSlot Name');
+        
     }
     
-    //Branch Time Slot booking with capacity(New)
+    
     @isTest
     static void createBranchTimeSlotBookingWithCapacityPositive() {
         Test.startTest();
@@ -484,12 +484,12 @@ public with sharing class BranchTimeSlotHandler_Test {
         Test.stopTest();
         
         System.assertNotEquals(null, fetchedBranchTimeSlotBooking, 'Booking record should not be null');
-        // System.assertEquals('T3', fetchedBranchTimeSlotBooking.Name, 'Booking Name should be "T3"');
+        
         System.assertEquals(12, fetchedBranchTimeSlotBooking.dmpl__Capacity__c, 'Capacity should be 12');
         System.assertEquals(branchTimeSlot.Id, fetchedBranchTimeSlotBooking.dmpl__BranchTimeSlotId__c, 'Branch Time Slot ID should match');
     }
     
-    //Branch Time Slot booking with capacity(edit)
+    
     @isTest
     static void updateBranchTimeSlotBookingWithCapacityPositive() {
         Test.startTest();
@@ -505,12 +505,12 @@ public with sharing class BranchTimeSlotHandler_Test {
         Test.stopTest();
         
         System.assertNotEquals(null, updatedBranchTimeSlotBooking, 'Booking record should not be null');
-        //System.assertEquals('T10', updatedBranchTimeSlotBooking.Name, 'Booking Name should be "T3"');
+        
         System.assertEquals(120, updatedBranchTimeSlotBooking.dmpl__Capacity__c, 'Capacity should be 12');
         System.assertEquals(branchTimeSlot.Id, updatedBranchTimeSlotBooking.dmpl__BranchTimeSlotId__c, 'Branch Time Slot ID should match');
     }
     
-    //Branch Time Slot booking with branch time slot(New)
+    
     @isTest
     static void createBranchTimeSlotBookingWithBranchTimeSlotPositive() {
         Test.startTest();
@@ -523,12 +523,12 @@ public with sharing class BranchTimeSlotHandler_Test {
         Test.stopTest();
         
         System.assertNotEquals(null, fetchedBranchTimeSlotBooking, 'Booking record should not be null');
-        //System.assertEquals('T10', fetchedBranchTimeSlotBooking.Name, 'Booking Name should be "T3"');
+        
         System.assertEquals(12, fetchedBranchTimeSlotBooking.dmpl__Capacity__c, 'Capacity should be 12');
         System.assertEquals(branchTimeSlot.Id, fetchedBranchTimeSlotBooking.dmpl__BranchTimeSlotId__c, 'Branch Time Slot ID should match');
     }
     
-    //Branch Time Slot booking with branch time slot(edit)
+    
     @isTest
     static void updateBranchTimeSlotBookingWithBranchTimeSlotNegative() {
         Test.startTest();
@@ -537,7 +537,7 @@ public with sharing class BranchTimeSlotHandler_Test {
         dmpl__BranchTimeSlotBooking__c branchTimeSlotBooking = BranchTestDataHelper.createBranchTimeSlotBooking(branchTimeSlot.Id, 'T3', 12);
         
         dmpl__BranchTimeSlotBooking__c fetchedBranchTimeSlotBooking = BranchTestDataHelper.getBranchTimeSlotBooking(branchTimeSlotBooking.Id);
-        // fetchedBranchTimeSlotBooking.dmpl__BranchTimeSlotId__c = branchTimeSlot.Id;//System.SObjectException: Field is not writeable: dmpl__BranchTimeSlotBooking__c.dmpl__BranchTimeSlotId__c
+      
         try{
             Update fetchedBranchTimeSlotBooking;
         }catch(Exception e){}
@@ -551,7 +551,7 @@ public with sharing class BranchTimeSlotHandler_Test {
         System.assertEquals(branchTimeSlot.Id, updatedBranchTimeSlotBooking.dmpl__BranchTimeSlotId__c, 'Branch Time Slot ID should match');
     }
     
-    //Branch Time Slot booking without Capacity(New)
+    
     @isTest
     static void createBranchTimeSlotBookingWithoutCapacityNegative() {
         Boolean exceptionThrown = false;
@@ -573,7 +573,7 @@ public with sharing class BranchTimeSlotHandler_Test {
         System.assertEquals(true, exceptionThrown, 'DmlException should be thrown when capacity is missing');
     }
     
-    //Branch Time Slot booking without name(New)
+    
     @isTest
     static void createBranchTimeSlotBookingWithoutNamePositive() {
         Boolean exceptionThrown = false;
@@ -583,7 +583,7 @@ public with sharing class BranchTimeSlotHandler_Test {
         
         dmpl__BranchTimeSlotBooking__c branchTimeSlotBooking = BranchTestDataHelper.createBranchTimeSlotBooking(
             branchTimeSlot.Id,
-        '', // Name is missing
+        '', 
         12
             );
         dmpl__BranchTimeSlotBooking__c updatedBranchTimeSlotBooking = BranchTestDataHelper.getBranchTimeSlotBooking(branchTimeSlotBooking.Id);
@@ -591,13 +591,13 @@ public with sharing class BranchTimeSlotHandler_Test {
         Test.stopTest();
         
         System.assertNotEquals(null, updatedBranchTimeSlotBooking, 'Booking record should not be null');
-        //System.assertEquals('T10', updatedBranchTimeSlotBooking.Name, 'Booking Name should be "T3"');
+        
         System.assertEquals(12, updatedBranchTimeSlotBooking.dmpl__Capacity__c, 'Capacity should be 12');
         System.assertEquals(branchTimeSlot.Id, updatedBranchTimeSlotBooking.dmpl__BranchTimeSlotId__c, 'Branch Time Slot ID should match');
     
     }
     
-    //Branch Time Slot booking without branch time slot(New)
+    
     @isTest
     static void createBranchTimeSlotBookingWithoutbranchTimeSlotNegative() {
         Boolean exceptionThrown = false;
@@ -618,7 +618,7 @@ public with sharing class BranchTimeSlotHandler_Test {
         System.assertEquals(true, exceptionThrown, 'DmlException should be thrown when capacity is missing');
     }
     
-    //Branch Time Slot Result with name(New)
+    
     @isTest
     static void createBranchDateSlotResultWithNamePositive(){
         Test.startTest();
@@ -630,7 +630,7 @@ public with sharing class BranchTimeSlotHandler_Test {
         System.assertEquals(branchDateSlotResult.Id, fetchedbranchDateSlotResult.Id, 'Fetched record Id should match original');
     }
     
-    //Branch Time Slot Result with name(Edit)
+    
     @isTest
     static void updateBranchDateSlotResultWithNamePositive(){
         Test.startTest();
@@ -647,7 +647,7 @@ public with sharing class BranchTimeSlotHandler_Test {
         
     }
     
-    //Branch Time Slot Result with name(Edit)
+   
     @isTest
     static void createBranchDateSlotResultWithoutNameNegative() {
         Boolean exceptionThrown = false;
@@ -660,7 +660,7 @@ public with sharing class BranchTimeSlotHandler_Test {
         }
         Test.stopTest();
         
-        // System.assertEquals(true, exceptionThrown, 'DmlException should be thrown when Name is missing');
+        
     }
     
     

@@ -1,7 +1,8 @@
 import { LightningElement, api, track, wire } from 'lwc';
 import { getPicklistValues } from 'lightning/uiObjectInfoApi';
 import { getObjectInfo } from 'lightning/uiObjectInfoApi';
-import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
+import { RefreshEvent } from 'lightning/refresh';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { deleteRecord } from 'lightning/uiRecordApi';
 import { publish, MessageContext } from 'lightning/messageService';
@@ -355,11 +356,10 @@ export default class FilterBuilderRow extends LightningElement {
                         variant: 'success'
                     })
                 );
-                getRecordNotifyChange(new Array({ "recordId": this.recordId }));
+                notifyRecordUpdateAvailable([{ "recordId": this.recordId }]);
                 publish(this.messageContext, FORCEREFRESHMC, {delete:true, uid:this.recordId});
-                eval("$A.get('e.force:refreshView').fire();");
-            })
-            .catch(error => {
+                this.refreshStdComponents();
+            }).catch(error => {
                 this.dispatchEvent(
                     new ShowToastEvent({
                         title: 'Error deleting record',
@@ -370,11 +370,19 @@ export default class FilterBuilderRow extends LightningElement {
             });
     }
     
+    refreshStdComponents(){
+        try{
+            eval("$A.get('e.force:refreshView').fire();");
+        }catch(e){
+            this.dispatchEvent(new RefreshEvent());
+        }
+    }
+
     handleCancelCondition(event){
         this.isEditing = false;
         if(!this.recordId){
             publish(this.messageContext, FORCEREFRESHMC, {cancel:true, uid:this.record.uid});
-            eval("$A.get('e.force:refreshView').fire();");
+            this.refreshStdComponents();
         }
     }
 
@@ -392,8 +400,8 @@ export default class FilterBuilderRow extends LightningElement {
             }),
         );
         publish(this.messageContext, FORCEREFRESHMC, {});
-        getRecordNotifyChange(new Array({ "recordId": recordId }));
-        eval("$A.get('e.force:refreshView').fire();");
+        notifyRecordUpdateAvailable([{ "recordId": recordId }]);
+        this.refreshStdComponents();
         this.recordId = recordId;
         this.isEditing = false;
     }

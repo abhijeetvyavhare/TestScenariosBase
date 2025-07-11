@@ -1,0 +1,8 @@
+.slds-tooltip {
+    white-space: nowrap;
+    max-width: 150px;
+    position: absolute;
+    padding: 0.5rem;
+    top: 50%;
+    transform: translate(7%,-50%);
+}

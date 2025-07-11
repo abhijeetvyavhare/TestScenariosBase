@@ -1,5 +1,6 @@
 import { LightningElement, wire, api } from 'lwc';
 import getFieldsByFieldSetName from '@salesforce/apex/MetadataController.getFieldsByFieldSetName';
+import { RefreshEvent } from 'lightning/refresh';
 
 export default class FilterPanel extends LightningElement {
     @api title;
@@ -80,8 +81,16 @@ export default class FilterPanel extends LightningElement {
             }),
         );
         this.handleReset();
-        getRecordNotifyChange(new Array({"recordId": recordId}));
-        eval("$A.get('e.force:refreshView').fire();");
+        notifyRecordUpdateAvailable([{"recordId": recordId}]);
+        this.refreshStdComponents();
+    }
+
+    refreshStdComponents(){
+        try{
+            eval("$A.get('e.force:refreshView').fire();");
+        }catch(e){
+            this.dispatchEvent(new RefreshEvent());
+        }
     }
 
     handleLoad(){

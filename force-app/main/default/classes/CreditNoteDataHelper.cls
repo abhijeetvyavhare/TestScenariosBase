@@ -79,4 +79,46 @@ public with sharing class CreditNoteDataHelper {
             LIMIT 1
         ];
     }
+
+
+    public static dmpl__CreditNote__c createCreditNoteWithDate(Id partnerAccountId, Id branchId,Id AccountId,Date Documentdate) {
+        return (dmpl__CreditNote__c) TestFactory.createSObject(
+            new dmpl__CreditNote__c(
+                dmpl__PartnerAccountId__c = partnerAccountId,
+                dmpl__BranchId__c = branchId,
+                dmpl__AccountId__c=AccountId,
+                dmpl__DocumentDate__c=Documentdate
+                ),
+            'CreditNoteDefaults',
+            true
+        );
+    }
+
+    public static dmpl__CreditNote__c getCreditNoteWithDate(Id creditNoteId) {
+    return [
+        SELECT 
+            Id, 
+            dmpl__PartnerAccountId__c,
+            dmpl__BranchId__c,
+            dmpl__AccountId__c,
+            dmpl__DocumentDate__c,
+            dmpl__Amount__c,
+            dmpl__GLAmount__c,
+            dmpl__OpenAmount__c
+        FROM dmpl__CreditNote__c 
+        WHERE Id=:creditNoteId
+        LIMIT 1
+    ];
+    }
+        public static List<dmpl__CreditNoteLine__c> getCreditNoteLinesAllDetails(Id creditNoteId) {
+        return [
+            SELECT Id, Name, dmpl__Amount__c, dmpl__Description__c, dmpl__ExternalId__c,
+                   dmpl__CreditNoteId__c, dmpl__GLAccountId__c, dmpl__AccountId__c,
+                   dmpl__GeneralLedgerId__c, dmpl__GLAmount__c, dmpl__IsGLPosted__c,
+                   dmpl__IsGLPostingApproved__c, dmpl__BranchId__c, dmpl__PartnerAccountId__c
+            FROM dmpl__CreditNoteLine__c
+            WHERE dmpl__CreditNoteId__c = :creditNoteId
+        ];
+    }
+
 }

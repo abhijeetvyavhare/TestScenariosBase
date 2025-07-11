@@ -32,12 +32,20 @@ private class GoodsReceiptHandler_Test {
         dmpl__Branch__c branch3 = TestDataHelpers.createBranch('Branch 3', partnerAccount1.Id, false, true, true, false);
         dmpl__Branch__c branch4 =TestDataHelpers.createBranch('Branch 4',partnerAccount4.Id,true,true,false,false);
         Account supplierAccount1 = TestDataHelpers.createPartnerAccount('Supplier 1', false, false, true, true, '55 Industrial Park Road', 'Ahmedabad', 'GJ', 'India', '380015', '55 Industrial Park Road', 'Ahmedabad', 'GJ', 'India', '380015', '-9988776564');
-        
+        Account supplierAccount2=TestDataHelpers.createPartnerAccount('Supplier 2',false, false, true, false,'55 Industrial Park Road', 'Ahmedabad', 'GJ', 'India', '380015', '55 Industrial Park Road', 'Ahmedabad', 'GJ', 'India', '380015', '-9988745587');
+
         dmpl__Item__c  item1 = TestDataHelpers.createItem('Item 1','Product',true,false,false,'675654',false);
+        dmpl__Item__c item2 = TestDataHelpers.createItem('Item 2','Product',false,false,false,'654345',false);
+        dmpl__Item__c item3 = TestDataHelpers.createItem('Item 3','Charge Item',true, false, false ,'765434',true);
         dmpl__Item__c item4 = TestDataHelpers.createItem('Item 4','Product',true, false, false ,'765676',true);
         dmpl__Item__c item5 = TestDataHelpers.createItem('Item 5', 'Product', true, false, false, '876543', false);
         dmpl__Item__c item6 = TestDataHelpers.createItem('Item 6', 'Product', true, false, false, '765456', false);
         dmpl__Item__c item7 = TestDataHelpers.createItem('Item 7','Product',true,false,false, '765456',false);
+        dmpl__Item__c item8 = TestDataHelpers.createItem('Item 8','Product',true,false,false, '765456',false);
+        dmpl__Item__c item10 = TestDataHelpers.createItem('Item 10','Product',true,false,true, '765456',false);
+        dmpl__Item__c item13 = TestDataHelpers.createItem('Item 13','Product',true,false,false, '765456',true);
+        dmpl__Item__c item14 = TestDataHelpers.createItem('Item 14', 'Part', true, false, false, '765458', true);
+        dmpl__Item__c item11= TestDataHelpers.createItem('Item 11', 'Product', true, false, false,'765456', false);
         
         dmpl__TaxGroup__c taxGroupGST18partner1 = TestDataHelpers.createTaxGroup('GST 18', false, 'Line Level', partnerAccount1.Id, branch1.Id, null);
         dmpl__TaxGroup__c taxGroupGST12Global = TestDataHelpers.createTaxGroup('GST 12', true, 'Line Level', null, null, null);
@@ -46,6 +54,11 @@ private class GoodsReceiptHandler_Test {
         dmpl__Tax__c taxSGST6 = TestDataHelpers.createTax('SGST', 'SGST', 6, taxGroupGST12Global.Id, 'Tax2');
         dmpl__TaxGroupRule__c taxGroupRule12Item6 = TestDataHelpers.createTaxGroupRule('Within State',taxGroupGST12Global.Id,item6.Id,null,null,null);
         dmpl__TaxGroupRule__c taxGroupRuleItem1 = TestDataHelpers.createTaxGroupRule('Within State',taxGroupGST12Global.Id,item1.Id,null,null,null);
+                
+        dmpl__SKU__c sku1 = TestDataHelpers.createSKU('SKU 1', item7.id, true);
+        dmpl__SKU__c sku2 = TestDataHelpers.createSKU('SKU 2', item8.id, false);
+        dmpl__SKU__c sku4 = TestDataHelpers.createSKU('SKU 4', item11.id, true);
+        
         
         dmpl__StorageLocation__c storageLocation2 = TestDataHelpers.createStorageLocation(
             'Storage Location 2',
@@ -836,6 +849,7 @@ private class GoodsReceiptHandler_Test {
     }
     
     // Goods Receipt line without shipment line reference (New)
+    @isTest
     static void craeteGoodsReceiptLineWithoutShipmentLineReference(){
         Test.startTest();
         Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
@@ -901,7 +915,7 @@ private class GoodsReceiptHandler_Test {
         
         dmpl__GoodsReceipt__c goodsReceipt = GoodRecieptsTestDataHelpers.createGoodsReceipt(partner, branch, null, supplier);
         dmpl__GoodsReceiptLine__c goodsReceiptLine = GoodRecieptsTestDataHelpers.createGoodsReceiptLine(
-            goodsReceipt.Id,
+        goodsReceipt.Id,
         Item1.Id,
         null,
         null,
@@ -1162,4 +1176,913 @@ private class GoodsReceiptHandler_Test {
         System.assertEquals(storageLocation2.Id, FetchedGoodsReceiptLine.dmpl__StorageLocationId__c, 'Claimable Quantity should be 5');
         
     }
+    /////////////
+    // Goods Receipt creation with inactive branch (Edit)
+    @isTest
+    static void updateGoodsReceiptWithInactiveBranchNegative(){
+        Test.startTest();
+        Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+        dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+        Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+        dmpl__GoodsReceipt__c goodsReceipt;
+        try{
+            goodsReceipt = GoodRecieptsTestDataHelpers.createGoodsReceipt(partner, branch, null, supplier);
+        }catch(Exception e){
+            System.Assert.isTrue(false,'Exception not Expected!');
+        }
+        System.assertEquals(partner.Id, goodsReceipt.dmpl__PartnerAccountId__c, 'Partner Account must match');
+        System.assertEquals(branch.Id, goodsReceipt.dmpl__BranchId__c, 'Partner Account must match');
+        System.assertEquals(supplier.Id, goodsReceipt.dmpl__SupplierAccountId__c, 'Partner Account must match');
+        
+        branch = TestDataHelpers.getBranch('Branch 3');
+        try{
+            goodsReceipt.dmpl__BranchId__c = branch?.Id;
+            update goodsReceipt;
+            System.Assert.isTrue(false,'Exception Expected!: update must fail');
+        }catch(Exception e){
+            System.Assert.isTrue(true,'Exception Expected!');
+        }
+        
+        Test.stopTest();
+    }
+
+
+    // Goods Receipt creation with backward Goods Receipt date (New)
+    @isTest
+    static void createGoodsReceiptLineWithBackwardGoodsReceiptDatePositive(){
+        Test.startTest();
+        Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+        dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+        Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+        dmpl__Item__c  item1 = TestDataHelpers.getItem('Item 1');
+        Date backDate = Date.newInstance(2025, 6, 1);
+        
+        
+        
+        dmpl__GoodsReceipt__c goodsReceipt = GoodRecieptsTestDataHelpers.createGoodsReceipt(partner, branch, null, supplier,backDate);
+        dmpl__GoodsReceipt__c fetchedGoodsReceipt = GoodRecieptsTestDataHelpers.getGoodsReceipt(goodsReceipt.Id);
+
+        Test.stopTest();
+        System.assertEquals(partner.Id, fetchedGoodsReceipt.dmpl__PartnerAccountId__c, 'Partner Account should match');
+        System.assertEquals(branch.Id, fetchedGoodsReceipt.dmpl__BranchId__c, 'Branch should match');
+        System.assertEquals(supplier.Id, fetchedGoodsReceipt.dmpl__SupplierAccountId__c, 'Supplier Account should match');
+        System.assertEquals(backDate, fetchedGoodsReceipt.dmpl__DocumentDate__c, 'Document Date should be today');
+        System.assertEquals('Draft', fetchedGoodsReceipt.dmpl__Status__c, 'Status should be Draft');
+    }
+    // Goods Receipt creation with backward Goods Receipt date (Edit)
+    @isTest
+    static void updateGoodsReceiptLineWithBackwardGoodsReceiptDatePositive(){
+        Test.startTest();
+        Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+        dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+        Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+        dmpl__Item__c  item1 = TestDataHelpers.getItem('Item 1');
+        Date backDate = Date.newInstance(2025, 6, 13);
+        Date backDate1 = Date.newInstance(2025, 6, 10);
+        Boolean exceptionThrown=false;
+
+        
+        try{
+            dmpl__GoodsReceipt__c goodsReceipt = GoodRecieptsTestDataHelpers.createGoodsReceipt(partner, branch, null, supplier);
+        goodsReceipt.dmpl__DocumentDate__c=backdate1;
+        update goodsReceipt;
+
+        }
+        catch(Exception e ){
+            exceptionThrown=true;
+        }
+        Test.stopTest();
+        System.assertEquals(true,exceptionThrown,'System should throw exception as document date is not editable');
+    }
+    @isTest
+    static void createGoodsReceiptLineWithPurchaseOrderReferencePositive(){
+    Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+    Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+    dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+    dmpl__Item__c item = TestDataHelpers.getItem('Item 1');
+
+    dmpl__TaxGroup__c taxGroup = TestDataHelpers.getTaxGroup('GST 12');
+    Test.startTest();
+
+    dmpl__PurchaseOrder__c purchaseOrder = PurchaseOrderTestDataHelpers.createPurchaseOrder(partner, branch, supplier, null, null);
+        dmpl__PurchaseOrderLine__c line = PurchaseOrderTestDataHelpers.createPurchaseOrderLine(
+        purchaseOrder.Id,
+        item.Id,
+        15
+    );
+
+    dmpl__GoodsReceipt__c fetchedGoodsReceipt =GoodRecieptsTestDataHelpers.createGoodsReceipt(partner,branch,purchaseOrder,supplier);
+    Test.stopTest();
+    System.assertEquals(partner.Id, fetchedGoodsReceipt.dmpl__PartnerAccountId__c, 'Partner Account should match');
+    System.assertEquals(branch.Id, fetchedGoodsReceipt.dmpl__BranchId__c, 'Branch should match');
+    System.assertEquals(supplier.Id, fetchedGoodsReceipt.dmpl__SupplierAccountId__c, 'Supplier Account should match');
+    System.assertEquals(purchaseOrder.Id,fetchedGoodsReceipt.dmpl__PurchaseOrderId__c, 'Document Date should be today');
+
+    }
+    // Goods Receipt creation without purchase order reference (New)
+    @isTest
+    static void createGoodsReceiptLineWithoutPurchaseOrderReferencePositive(){
+    Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+    Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+    dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+    dmpl__Item__c item = TestDataHelpers.getItem('Item 1');
+    
+    Test.startTest();
+    dmpl__GoodsReceipt__c GRLine =GoodRecieptsTestDataHelpers.createGoodsReceipt(partner,branch,null,supplier);
+    Test.stopTest();
+    }
+    @isTest
+    static void updateGoodsReceiptLineWithPurchaseOrderReferencePositive(){
+    Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+    Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+    dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+    dmpl__Item__c item = TestDataHelpers.getItem('Item 1');
+
+    dmpl__TaxGroup__c taxGroup = TestDataHelpers.getTaxGroup('GST 12');
+    Test.startTest();
+
+    dmpl__GoodsReceipt__c goodReceipt =GoodRecieptsTestDataHelpers.createGoodsReceipt(partner,branch,null,supplier);
+
+    System.assertEquals(null,goodReceipt.dmpl__PurchaseOrderId__c,'Good receipt without purchase order');
+
+    dmpl__PurchaseOrder__c purchaseOrder = PurchaseOrderTestDataHelpers.createPurchaseOrder(partner, branch, supplier, null, null);
+        dmpl__PurchaseOrderLine__c line = PurchaseOrderTestDataHelpers.createPurchaseOrderLine(
+        purchaseOrder.Id,
+        item.Id,
+        15
+    );
+        dmpl__GoodsReceipt__c GoodsReceiptwithPO = GoodRecieptsTestDataHelpers.getGoodsReceipt(goodReceipt.Id);
+        GoodsReceiptwithPO.dmpl__PurchaseOrderId__c=purchaseOrder.Id;
+        update GoodsReceiptwithPO;
+        dmpl__GoodsReceipt__c fetchedGoodsReceipt = GoodRecieptsTestDataHelpers.getGoodsReceipt(GoodsReceiptwithPO.Id);
+    Test.stopTest();
+    System.assertEquals(partner.Id, fetchedGoodsReceipt.dmpl__PartnerAccountId__c, 'Partner Account should match');
+    System.assertEquals(branch.Id, fetchedGoodsReceipt.dmpl__BranchId__c, 'Branch should match');
+    System.assertEquals(supplier.Id, fetchedGoodsReceipt.dmpl__SupplierAccountId__c, 'Supplier Account should match');
+    System.assertEquals(purchaseOrder.Id,fetchedGoodsReceipt.dmpl__PurchaseOrderId__c, 'Purchase order should match');
+    }
+    // Goods Receipt creation without purchase order reference (Edit)
+    @isTest
+    static void updateGoodsReceiptLineWithOUTPurchaseOrderReferencePositive(){
+    Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+    Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+    dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+    dmpl__Item__c item = TestDataHelpers.getItem('Item 1');
+
+    dmpl__TaxGroup__c taxGroup = TestDataHelpers.getTaxGroup('GST 12');
+    Test.startTest();
+
+    dmpl__PurchaseOrder__c purchaseOrder = PurchaseOrderTestDataHelpers.createPurchaseOrder(partner, branch, supplier, null, null);
+        dmpl__PurchaseOrderLine__c line = PurchaseOrderTestDataHelpers.createPurchaseOrderLine(
+        purchaseOrder.Id,
+        item.Id,
+        15
+    );
+
+        dmpl__GoodsReceipt__c goodReceipt =GoodRecieptsTestDataHelpers.createGoodsReceipt(partner,branch,PurchaseOrder,supplier);
+
+        dmpl__GoodsReceipt__c GoodsReceiptwithPO = GoodRecieptsTestDataHelpers.getGoodsReceipt(goodReceipt.Id);
+        GoodsReceiptwithPO.dmpl__PurchaseOrderId__c=null;
+        update GoodsReceiptwithPO;
+        dmpl__GoodsReceipt__c fetchedGoodsReceipt = GoodRecieptsTestDataHelpers.getGoodsReceipt(GoodsReceiptwithPO.Id);
+    Test.stopTest();
+    System.assertEquals(partner.Id, GoodReceipt.dmpl__PartnerAccountId__c, 'Partner Account should match');
+    System.assertEquals(branch.Id, GoodReceipt.dmpl__BranchId__c, 'Branch should match');
+    System.assertEquals(supplier.Id, GoodReceipt.dmpl__SupplierAccountId__c, 'Supplier Account should match');
+    }
+
+ @isTest
+static void updateGoodsReceiptWithNoSupplierAccountPositive() {
+
+    Test.startTest();
+    Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+    dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+    Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+    Boolean exceptionThrown=false;
+
+
+    dmpl__GoodsReceipt__c goodsReceipt = GoodRecieptsTestDataHelpers.createGoodsReceipt(
+        partner,
+        branch,
+        null,
+        supplier        
+    );
+    
+    dmpl__GoodsReceipt__c fetchedGR = GoodRecieptsTestDataHelpers.getGoodsReceipt(goodsReceipt.Id);
+    try{    fetchedGR.dmpl__SupplierAccountId__c = null;
+    update fetchedGR;
+}catch(Exception e){
+    exceptionthrown= true;
+
+}
+System.assertEquals(true,exceptionThrown,'it should throw exception as field suppiler account is not editable after saving ');
+    Test.stopTest();
+}
+// Goods Receipt creation with shipment reference (New)
+@isTest
+static void createGoodsReceiptLineWithShipmentReferencePositive(){
+        Test.startTest();
+        Account partnerAccount1 = TestDataHelpers.getPartnerAccount('Partner 1');
+        Account supplier1 = TestDataHelpers.getSupplierAccount('Supplier 1');
+        dmpl__Branch__c branch1=TestDataHelpers.getBranch('Branch 1');
+        dmpl__Item__c item1 = TestDataHelpers.getItem('Item 1');
+        Date documentDate = System.today();
+        Date shipmentDate = System.today();
+        
+        dmpl__PurchaseOrder__c purchaseOrder = PurchaseOrderTestDataHelpers.createPurchaseOrder(branch1,supplier1);
+        
+        
+        dmpl__Shipment__c shipment  = ShipmentTestDataHelper.createShipment(
+        Date.Today(),
+        partnerAccount1.Id,
+        branch1.Id,
+        supplier1.id,
+        purchaseOrder.Id
+            );
+        dmpl__GoodsReceipt__c goodsReceipt = GoodRecieptsTestDataHelpers.CreateGoodReceiptFromShipment(shipment);
+
+        Test.stopTest();
+    System.assertEquals(partnerAccount1.Id, shipment.dmpl__PartnerAccountId__c, 'Partner Account should match');
+    System.assertEquals(branch1.Id, shipment.dmpl__BranchId__c, 'Branch should match');
+    System.assertEquals(supplier1.Id, shipment.dmpl__SupplierAccountId__c, 'Supplier Account should match');
+    System.assertEquals(shipment.Id,goodsReceipt.dmpl__ShipmentId__c,'shipment should match');
+}
+    @isTest
+    static void createGoodsReceiptWithoutShipmentReferencePositive(){
+        Test.startTest();
+        Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+        dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+        Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+        dmpl__GoodsReceipt__c goodsReceipt = GoodRecieptsTestDataHelpers.createGoodsReceipt(partner, branch, null, supplier);
+
+        System.assertEquals(partner.Id, goodsReceipt.dmpl__PartnerAccountId__c, 'Partner Account must match');
+        System.assertEquals(branch.Id, goodsReceipt.dmpl__BranchId__c, 'Partner Account must match');
+        System.assertEquals(supplier.Id, goodsReceipt.dmpl__SupplierAccountId__c, 'Partner Account must match');
+        Test.stopTest();
+    }
+    @isTest
+    static void updateGoodsReceiptWithShipmentReferencePositive() {
+        Test.startTest();
+        Account partnerAccount1 = TestDataHelpers.getPartnerAccount('Partner 1');
+        Account supplier1 = TestDataHelpers.getSupplierAccount('Supplier 1');
+        dmpl__Branch__c branch1=TestDataHelpers.getBranch('Branch 1');
+        dmpl__Item__c item1 = TestDataHelpers.getItem('Item 1');
+        
+        dmpl__Shipment__c shipment  = ShipmentTestDataHelper.createShipment(
+        Date.Today(),
+        partnerAccount1.Id,
+        branch1.Id,
+        supplier1.id,
+        null
+            );
+        
+        dmpl__ShipmentLine__c shipmentLine = ShipmentTestDataHelper.createShipmentLine(
+        item1,
+        shipment,
+        null,
+        null,
+        1500,
+        1
+            );
+        dmpl__GoodsReceipt__c goodsReceipt = GoodRecieptsTestDataHelpers.createGoodsReceipt(
+        partnerAccount1,
+        branch1,
+        null,
+        supplier1
+        );
+        goodsReceipt.dmpl__ShipmentId__c=shipment.Id;
+        update goodsReceipt;
+
+        System.assertEquals(partnerAccount1.Id, shipment.dmpl__PartnerAccountId__c, 'Partner should match');
+        System.assertEquals(branch1.Id, shipment.dmpl__BranchId__c, 'Branch should match');
+        System.assertEquals(supplier1.Id, shipment.dmpl__SupplierAccountId__c, 'Supplier should match');
+        System.assertEquals(Date.today(), shipment.dmpl__ShipmentDate__c, 'Shipment date should be today');
+        System.assertEquals(shipment.Id,goodsReceipt.dmpl__ShipmentId__c,'shipment should match');
+}
+@isTest
+static void updateGoodsReceiptWithoutShipmentReferencePositive(){
+        Test.startTest();
+        Account partnerAccount1 = TestDataHelpers.getPartnerAccount('Partner 1');
+        Account supplier1 = TestDataHelpers.getSupplierAccount('Supplier 1');
+        dmpl__Branch__c branch1=TestDataHelpers.getBranch('Branch 1');
+        dmpl__Item__c item1 = TestDataHelpers.getItem('Item 1');
+        Date documentDate = System.today();
+        Date shipmentDate = System.today();
+        
+        dmpl__PurchaseOrder__c purchaseOrder = PurchaseOrderTestDataHelpers.createPurchaseOrder(branch1,supplier1);
+        
+        
+        dmpl__Shipment__c shipment  = ShipmentTestDataHelper.createShipment(
+        Date.Today(),
+        partnerAccount1.Id,
+        branch1.Id,
+        supplier1.id,
+        purchaseOrder.Id
+            );
+        dmpl__GoodsReceipt__c goodsReceipt = GoodRecieptsTestDataHelpers.CreateGoodReceiptFromShipment(shipment);
+        goodsReceipt.dmpl__ShipmentId__c=null;
+
+        Test.stopTest();
+    System.assertEquals(partnerAccount1.Id, shipment.dmpl__PartnerAccountId__c, 'Partner Account should match');
+    System.assertEquals(branch1.Id, shipment.dmpl__BranchId__c, 'Branch should match');
+    System.assertEquals(supplier1.Id, shipment.dmpl__SupplierAccountId__c, 'Supplier Account should match');
+    System.assertEquals(null,goodsReceipt.dmpl__ShipmentId__c,'shipment should match');
+}
+@isTest
+static void createGoodsReceiptWithInactiveSupplierPositive() {
+    Test.startTest();
+
+    Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+    dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+    Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+    dmpl__Item__c item = TestDataHelpers.getItem('Item 1');
+    Date today = Date.today();
+
+    dmpl__GoodsReceipt__c goodsReceipt = GoodRecieptsTestDataHelpers.createGoodsReceipt(
+        partner,
+        branch,
+        null, 
+        supplier,
+        today
+    );
+
+    dmpl__GoodsReceiptLine__c goodsReceiptLine = GoodRecieptsTestDataHelpers.createGoodsReceiptLine(
+        goodsReceipt.Id,
+        item.Id,
+        null,       
+        null,       
+        1000,       
+        1000,       
+        0,          
+        1000,       
+        1500        
+        );
+
+    dmpl__GoodsReceipt__c fetchedGR = GoodRecieptsTestDataHelpers.getGoodsReceipt(goodsReceipt.Id);
+    dmpl__GoodsReceiptLine__c fetchedGRLine = GoodRecieptsTestDataHelpers.getGoodsReceiptLine(goodsReceiptLine.Id);
+
+    Test.stopTest();
+
+    System.assertEquals(partner.Id, fetchedGR.dmpl__PartnerAccountId__c, 'Partner Account should be Partner 1');
+    System.assertEquals(branch.Id, fetchedGR.dmpl__BranchId__c, 'Branch should be Branch 1');
+    System.assertEquals(supplier.Id, fetchedGR.dmpl__SupplierAccountId__c, 'Supplier Account should be Supplier 1');
+    System.assertEquals(today, fetchedGR.dmpl__DocumentDate__c, 'Document Date should be Today');
+
+    System.assertEquals(item.Id, fetchedGRLine.dmpl__ItemId__c, 'Item should be Item 1');
+    System.assertEquals(1500, fetchedGRLine.dmpl__UnitCost__c, 'Unit Cost should be 1500');
+    System.assertEquals(1000, fetchedGRLine.dmpl__ReceivedQuantity__c, 'Received Quantity should be 1000');
+    System.assertEquals(1000, fetchedGRLine.dmpl__OrderedQuantity__c, 'Ordered Quantity should be 1000');
+    System.assertEquals(0, fetchedGRLine.dmpl__ShortageQuantity__c, 'Shortage Quantity should be 0');
+    System.assertEquals(0, fetchedGRLine.dmpl__DamagedQuantity__c, 'Damaged Quantity should be 0');
+    System.assertEquals(0, fetchedGRLine.dmpl__ClaimableQuantity__c, 'Claimable Quantity should be 0');
+    System.assertEquals(1000, fetchedGRLine.dmpl__SupplierQuantity__c, 'Supplier Quantity should be 1000');
+}
+// Goods Receipt creation with inactive supplier (Edit)
+@isTest
+    static void updateGoodsReceiptWithInactiveSuppilerNegative(){
+        Test.startTest();
+        Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+        dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+        Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+        dmpl__GoodsReceipt__c goodsReceipt;
+        try{
+            goodsReceipt = GoodRecieptsTestDataHelpers.createGoodsReceipt(partner, branch, null, supplier);
+        }catch(Exception e){
+            System.Assert.isTrue(false,'Exception not Expected!');
+        }
+        System.assertEquals(partner.Id, goodsReceipt.dmpl__PartnerAccountId__c, 'Partner Account must match');
+        System.assertEquals(branch.Id, goodsReceipt.dmpl__BranchId__c, 'Partner Account must match');
+        System.assertEquals(supplier.Id, goodsReceipt.dmpl__SupplierAccountId__c, 'Partner Account must match');
+        
+        supplier = TestDataHelpers.getSupplierAccount('Supplier 2');
+        try{
+            goodsReceipt.dmpl__supplierAccountId__c = supplier?.Id;
+            update goodsReceipt;
+            System.Assert.isTrue(false,'Exception Expected!: update must fail');
+        }catch(Exception e){
+            System.Assert.isTrue(true,'Exception Expected!');
+        }
+        
+        Test.stopTest();
+    }
+
+@isTest
+static void createGoodsReceiptWithRequiredSKUPositive() {
+    Test.startTest();
+
+    Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+    dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+    Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+    dmpl__SKU__c sku = TestDataHelpers.getSKU('SKU 1');
+
+    dmpl__Item__c item = TestDataHelpers.getItem('Item 7');
+    Date today = Date.today();
+
+    dmpl__GoodsReceipt__c goodsReceipt = GoodRecieptsTestDataHelpers.createGoodsReceipt(
+        partner,
+        branch,
+        null, 
+        supplier,
+        today
+    );
+
+    dmpl__GoodsReceiptLine__c goodsReceiptLine = GoodRecieptsTestDataHelpers.createGoodsReceiptLine(
+        goodsReceipt.Id,
+        item.Id,
+        sku.Id,       
+        null,       
+        1000,       
+        1000,       
+        0,          
+        1000,       
+        1500        
+        );
+
+    dmpl__GoodsReceipt__c fetchedGR = GoodRecieptsTestDataHelpers.getGoodsReceipt(goodsReceipt.Id);
+    dmpl__GoodsReceiptLine__c fetchedGRLine = GoodRecieptsTestDataHelpers.getGoodsReceiptLine(goodsReceiptLine.Id);
+
+    Test.stopTest();
+
+    System.assertEquals(partner.Id, fetchedGR.dmpl__PartnerAccountId__c, 'Partner Account should be Partner 1');
+    System.assertEquals(branch.Id, fetchedGR.dmpl__BranchId__c, 'Branch should be Branch 1');
+    System.assertEquals(supplier.Id, fetchedGR.dmpl__SupplierAccountId__c, 'Supplier Account should be Supplier 1');
+    System.assertEquals(today, fetchedGR.dmpl__DocumentDate__c, 'Document Date should be Today');
+
+    System.assertEquals(item.Id, fetchedGRLine.dmpl__ItemId__c, 'Item should be Item 1');
+    System.assertEquals(1500, fetchedGRLine.dmpl__UnitCost__c, 'Unit Cost should be 1500');
+    System.assertEquals(1000, fetchedGRLine.dmpl__ReceivedQuantity__c, 'Received Quantity should be 1000');
+    System.assertEquals(1000, fetchedGRLine.dmpl__OrderedQuantity__c, 'Ordered Quantity should be 1000');
+    System.assertEquals(0, fetchedGRLine.dmpl__ShortageQuantity__c, 'Shortage Quantity should be 0');
+    System.assertEquals(0, fetchedGRLine.dmpl__DamagedQuantity__c, 'Damaged Quantity should be 0');
+    System.assertEquals(0, fetchedGRLine.dmpl__ClaimableQuantity__c, 'Claimable Quantity should be 0');
+    System.assertEquals(1000, fetchedGRLine.dmpl__SupplierQuantity__c, 'Supplier Quantity should be 1000');
+}
+// Goods Receipt line with no required SKU (New)
+@isTest
+static void createGoodsReceiptWithNoRequiredSKUPositive() {
+    Test.startTest();
+
+    Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+    dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+    Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+    dmpl__Item__c item = TestDataHelpers.getItem('Item 1');
+    Date today = Date.today();
+
+    dmpl__GoodsReceipt__c goodsReceipt = GoodRecieptsTestDataHelpers.createGoodsReceipt(
+        partner,
+        branch,
+        null, 
+        supplier,
+        today
+    );
+
+    dmpl__GoodsReceiptLine__c goodsReceiptLine = GoodRecieptsTestDataHelpers.createGoodsReceiptLine(
+        goodsReceipt.Id,
+        item.Id,
+        null,       
+        null,       
+        1000,       
+        1000,       
+        0,          
+        1000,       
+        1500        
+        );
+
+    dmpl__GoodsReceipt__c fetchedGR = GoodRecieptsTestDataHelpers.getGoodsReceipt(goodsReceipt.Id);
+    dmpl__GoodsReceiptLine__c fetchedGRLine = GoodRecieptsTestDataHelpers.getGoodsReceiptLine(goodsReceiptLine.Id);
+
+    Test.stopTest();
+
+    System.assertEquals(partner.Id, fetchedGR.dmpl__PartnerAccountId__c, 'Partner Account should be Partner 1');
+    System.assertEquals(branch.Id, fetchedGR.dmpl__BranchId__c, 'Branch should be Branch 1');
+    System.assertEquals(supplier.Id, fetchedGR.dmpl__SupplierAccountId__c, 'Supplier Account should be Supplier 1');
+    System.assertEquals(today, fetchedGR.dmpl__DocumentDate__c, 'Document Date should be Today');
+
+    System.assertEquals(item.Id, fetchedGRLine.dmpl__ItemId__c, 'Item should be Item 1');
+    System.assertEquals(1500, fetchedGRLine.dmpl__UnitCost__c, 'Unit Cost should be 1500');
+    System.assertEquals(1000, fetchedGRLine.dmpl__ReceivedQuantity__c, 'Received Quantity should be 1000');
+    System.assertEquals(1000, fetchedGRLine.dmpl__OrderedQuantity__c, 'Ordered Quantity should be 1000');
+    System.assertEquals(0, fetchedGRLine.dmpl__ShortageQuantity__c, 'Shortage Quantity should be 0');
+    System.assertEquals(0, fetchedGRLine.dmpl__DamagedQuantity__c, 'Damaged Quantity should be 0');
+    System.assertEquals(0, fetchedGRLine.dmpl__ClaimableQuantity__c, 'Claimable Quantity should be 0');
+    System.assertEquals(1000, fetchedGRLine.dmpl__SupplierQuantity__c, 'Supplier Quantity should be 1000');
+}
+@isTest
+static void createGoodsReceiptWithInactiveItemNegative() {
+    Test.startTest();
+
+    Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+    dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+    Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+    dmpl__Item__c item = TestDataHelpers.getItem('Item 2');
+    Date today = Date.today();
+    Boolean exceptionThrown=false;
+
+    dmpl__GoodsReceipt__c goodsReceipt = GoodRecieptsTestDataHelpers.createGoodsReceipt(
+        partner,
+        branch,
+        null, 
+        supplier,
+        today
+    );
+    try{    
+        dmpl__GoodsReceiptLine__c goodsReceiptLine = GoodRecieptsTestDataHelpers.createGoodsReceiptLine(
+        goodsReceipt.Id,
+        item.Id,
+        null,       
+        null,       
+        1000,       
+        1000,       
+        0,          
+        1000,       
+        1500        
+        );
+    }catch(Exception e){
+        exceptionThrown =true;
+    }
+    Test.stopTest();
+
+    System.assertEquals(true,exceptionThrown, 'Exception to be thrown due to inactive item 2 ');
+}
+@isTest
+static void createGoodsReceiptWithDiscontinuedItemNegative() {
+    Test.startTest();
+
+    Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+    dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+    Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+    dmpl__Item__c item = TestDataHelpers.getItem('Item 4');
+    Date today = Date.today();
+    Boolean exceptionThrown=false;
+
+    dmpl__GoodsReceipt__c goodsReceipt = GoodRecieptsTestDataHelpers.createGoodsReceipt(
+        partner,
+        branch,
+        null, 
+        supplier,
+        today
+    );
+        dmpl__GoodsReceiptLine__c goodsReceiptLine = GoodRecieptsTestDataHelpers.createGoodsReceiptLine(
+        goodsReceipt.Id,
+        item.Id,
+        null,       
+        null,       
+        1000,       
+        1000,       
+        0,          
+        1000,       
+        1500        
+        );
+
+    Test.stopTest();
+    dmpl__GoodsReceipt__c fetchedGR = GoodRecieptsTestDataHelpers.getGoodsReceipt(goodsReceipt.Id);
+    dmpl__GoodsReceiptLine__c fetchedGRLine = GoodRecieptsTestDataHelpers.getGoodsReceiptLine(goodsReceiptLine.Id);
+    System.assertEquals(partner.Id, fetchedGR.dmpl__PartnerAccountId__c, 'Partner Account should be Partner 1');
+    System.assertEquals(branch.Id, fetchedGR.dmpl__BranchId__c, 'Branch should be Branch 1');
+    System.assertEquals(supplier.Id, fetchedGR.dmpl__SupplierAccountId__c, 'Supplier Account should be Supplier 1');
+    System.assertEquals(today, fetchedGR.dmpl__DocumentDate__c, 'Document Date should be Today');
+
+}
+
+    // Goods Receipt line with inactive item (Edit)
+    @isTest
+static void updateGoodsReceiptLineWithInactiveItemNegative() {
+    Test.startTest();
+
+    Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+    dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+    Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+    dmpl__Item__c item1 = TestDataHelpers.getItem('Item 1');
+    dmpl__Item__c item4 = TestDataHelpers.getItem('Item 4');
+    Date today = Date.today();
+    Boolean exceptionThrown=false;
+
+    dmpl__GoodsReceipt__c goodsReceipt = GoodRecieptsTestDataHelpers.createGoodsReceipt(
+        partner,
+        branch,
+        null, 
+        supplier,
+        today
+    );   
+        dmpl__GoodsReceiptLine__c goodsReceiptLine = GoodRecieptsTestDataHelpers.createGoodsReceiptLine(
+        goodsReceipt.Id,
+        item1.Id,
+        null,       
+        null,       
+        1000,       
+        1000,       
+        0,          
+        1000,       
+        1500        
+        );
+        try{
+            goodsReceiptLine.dmpl__ItemId__c=item4.Id;
+            update goodsReceiptLine;
+    }catch(Exception e){
+        exceptionThrown =true;
+    }
+    Test.stopTest();
+
+    System.assertEquals(true,exceptionThrown, 'Exception to be thrown due to inactive item  ');
+}
+// Goods Receipt line with discountinued item (Edit)
+   @isTest
+static void updateGoodsReceiptLineWithDiscontinuedItemNegative() {
+    Test.startTest();
+
+    Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+    dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+    Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+    dmpl__Item__c item1 = TestDataHelpers.getItem('Item 1');
+    dmpl__Item__c item4 = TestDataHelpers.getItem('Item 4');
+    Date today = Date.today();
+    Boolean exceptionThrown=false;
+
+    dmpl__GoodsReceipt__c goodsReceipt = GoodRecieptsTestDataHelpers.createGoodsReceipt(
+        partner,
+        branch,
+        null, 
+        supplier,
+        today
+    );   
+        dmpl__GoodsReceiptLine__c goodsReceiptLine = GoodRecieptsTestDataHelpers.createGoodsReceiptLine(
+        goodsReceipt.Id,
+        item1.Id,
+        null,       
+        null,       
+        1000,       
+        1000,       
+        0,          
+        1000,       
+        1000       
+        );
+        try{
+            goodsReceiptLine.dmpl__ItemId__c=item4.Id;
+            update goodsReceiptLine;
+    }catch(Exception e){
+        exceptionThrown =true;
+    }
+    Test.stopTest();
+
+    System.assertEquals(true,exceptionThrown, 'Exception to be thrown due to discontinued item  ');
+}
+// Goods Receipt line with removing required SKU (Edit)
+   @isTest
+    static void updateGoodsReceiptLineWithRemovingSKUNegative() {
+    Test.startTest();
+
+    Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+    dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+    Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+    dmpl__Item__c item11 = TestDataHelpers.getItem('Item 11');
+    dmpl__Item__c item4 = TestDataHelpers.getItem('Item 4');
+    dmpl__SKU__c sku4 = TestDataHelpers.getSKU('SKU 4');
+    Date today = Date.today();
+    Boolean exceptionThrown=false;
+
+    dmpl__GoodsReceipt__c goodsReceipt = GoodRecieptsTestDataHelpers.createGoodsReceipt(
+        partner,
+        branch,
+        null, 
+        supplier,
+        today
+    );   
+        dmpl__GoodsReceiptLine__c goodsReceiptLine = GoodRecieptsTestDataHelpers.createGoodsReceiptLine(
+        goodsReceipt.Id,
+        item11.Id,
+        sku4.Id,
+        null,
+        1000,       
+        1000,       
+        0,          
+        1000,       
+        1500       
+        );
+        try{
+            goodsReceiptLine.dmpl__SKUId__c=null;
+            update goodsReceiptLine;
+    }catch(Exception e){
+        exceptionThrown =true;
+    }
+    Test.stopTest();
+
+    System.assertEquals(true,exceptionThrown, 'Exception to be thrown while editing since item required sku ');
+}
+
+
+
+
+// Goods Receipt line with no required SKU (Edit)
+@isTest
+static void updateGoodsReceiptLineWithNoRequiredSKUNegative() {
+    Test.startTest();
+
+    Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+    dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+    Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+    dmpl__Item__c item = TestDataHelpers.getItem('Item 7');
+    dmpl__Item__c item3 = TestDataHelpers.getItem('Item 3');
+    dmpl__SKU__c sku1 = TestDataHelpers.getSKU('SKU 1');
+    Date today = Date.today();
+    Boolean exceptionThrown=false;
+    dmpl__GoodsReceipt__c goodsReceipt = GoodRecieptsTestDataHelpers.createGoodsReceipt(
+        partner,
+        branch,
+        null, 
+        supplier,
+        today
+    );
+
+    dmpl__GoodsReceiptLine__c goodsReceiptLine = GoodRecieptsTestDataHelpers.createGoodsReceiptLine(
+        goodsReceipt.Id,
+        item.Id,
+        sku1.Id,       
+        null,       
+        5,       
+        null,       
+        0,          
+        null,       
+        1000        
+        );
+
+    dmpl__GoodsReceipt__c fetchedGR = GoodRecieptsTestDataHelpers.getGoodsReceipt(goodsReceipt.Id);
+    dmpl__GoodsReceiptLine__c fetchedGRLine = GoodRecieptsTestDataHelpers.getGoodsReceiptLine(goodsReceiptLine.Id);
+    try{    fetchedGRLine.dmpl__ItemId__c=item3.Id;
+    fetchedGRLine.dmpl__OrderedQuantity__c=5;
+    update fetchedGRLine;}
+    catch(Exception e){
+        exceptionThrown=true;
+    }
+
+    Test.stopTest();
+    System.assertEquals(true,exceptionThrown,'exception should be thrown since item is not editable once goods receipt is made');
+}
+// Goods Receipt line without storage location (New)
+@isTest
+    static void createGoodsReceiptLineWithoutStorageLocationPositive(){
+        Test.startTest();
+        Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+        dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+        Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+        dmpl__Item__c  item1 = TestDataHelpers.getItem('Item 1');
+        dmpl__GoodsReceipt__c goodsReceipt = GoodRecieptsTestDataHelpers.createGoodsReceipt(partner, branch, null, supplier);
+        dmpl__GoodsReceiptLine__c goodsReceiptLine = GoodRecieptsTestDataHelpers.createGoodsReceiptLine(
+            goodsReceipt.Id,
+        Item1.Id,
+        null,
+        null,
+        1000,
+        1000,
+        0,
+        0,
+        1500
+            );
+        
+        dmpl__GoodsReceipt__c fetchedGoodsReceipt = GoodRecieptsTestDataHelpers.getGoodsReceipt(goodsReceipt.Id);
+        dmpl__GoodsReceiptLine__c FetchedGoodsReceiptLine = GoodRecieptsTestDataHelpers.getGoodsReceiptLine(goodsReceiptLine.Id);
+        Test.stopTest();
+        System.assertEquals(partner.Id, fetchedGoodsReceipt.dmpl__PartnerAccountId__c, 'Partner Account should match');
+        System.assertEquals(branch.Id, fetchedGoodsReceipt.dmpl__BranchId__c, 'Branch should match');
+        System.assertEquals(supplier.Id, fetchedGoodsReceipt.dmpl__SupplierAccountId__c, 'Supplier Account should match');
+        System.assertEquals(Date.today(), fetchedGoodsReceipt.dmpl__DocumentDate__c, 'Document Date should be today');
+        System.assertEquals('Draft', fetchedGoodsReceipt.dmpl__Status__c, 'Status should be Draft');
+        
+        System.assertEquals(item1.Id, FetchedGoodsReceiptLine.dmpl__ItemId__c, 'Item should match');
+        System.assertEquals(1000, FetchedGoodsReceiptLine.dmpl__OrderedQuantity__c, 'Ordered Quantity should be 50');
+        System.assertEquals(1000, FetchedGoodsReceiptLine.dmpl__ReceivedQuantity__c, 'Received Quantity should be 50');
+        System.assertEquals(0, FetchedGoodsReceiptLine.dmpl__DamagedQuantity__c, 'Damaged Quantity should be 5');
+    }
+    // Goods Receipt line with storage location (Edit)
+    @isTest
+    static void updateGoodsReceiptLineWithStorageLocationPositive(){
+        Test.startTest();
+        Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+        dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+        Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+        dmpl__Item__c  item1 = TestDataHelpers.getItem('Item 1');
+        dmpl__StorageLocation__c storageLocation2 = TestDataHelpers.getStorageLocation('Storage Location 2');
+        dmpl__GoodsReceipt__c goodsReceipt = GoodRecieptsTestDataHelpers.createGoodsReceipt(partner, branch, null, supplier);
+        dmpl__GoodsReceiptLine__c goodsReceiptLine = GoodRecieptsTestDataHelpers.createGoodsReceiptLine(
+            goodsReceipt.Id,
+        Item1.Id,
+        null,
+        null,
+        1000,
+        1000,
+        0,
+        0,
+        1500
+            );
+        goodsReceiptLine.dmpl__StorageLocationId__c=storageLocation2.Id;
+        update goodsReceiptLine;
+        System.assertEquals(storageLocation2.Id, goodsReceiptLine.dmpl__StorageLocationId__c, ' storage location should match');
+        
+        dmpl__GoodsReceipt__c fetchedGoodsReceipt = GoodRecieptsTestDataHelpers.getGoodsReceipt(goodsReceipt.Id);
+        dmpl__GoodsReceiptLine__c FetchedGoodsReceiptLine = GoodRecieptsTestDataHelpers.getGoodsReceiptLine(goodsReceiptLine.Id);
+        FetchedGoodsReceiptLine.dmpl__SupplierQuantity__c=1500;
+        FetchedGoodsReceiptLine.dmpl__ReceivedQuantity__c=1500;
+        FetchedGoodsReceiptLine.dmpl__OrderedQuantity__c=1500;
+        update FetchedGoodsReceiptLine;
+    
+
+        Test.stopTest();
+        System.assertEquals(partner.Id, fetchedGoodsReceipt.dmpl__PartnerAccountId__c, 'Partner Account should match');
+        System.assertEquals(branch.Id, fetchedGoodsReceipt.dmpl__BranchId__c, 'Branch should match');
+        System.assertEquals(supplier.Id, fetchedGoodsReceipt.dmpl__SupplierAccountId__c, 'Supplier Account should match');
+        System.assertEquals(Date.today(), fetchedGoodsReceipt.dmpl__DocumentDate__c, 'Document Date should be today');
+        System.assertEquals('Draft', fetchedGoodsReceipt.dmpl__Status__c, 'Status should be Draft');
+        
+        System.assertEquals(item1.Id, FetchedGoodsReceiptLine.dmpl__ItemId__c, 'Item should match');
+        System.assertEquals(1500, FetchedGoodsReceiptLine.dmpl__OrderedQuantity__c, 'Ordered Quantity should be 1500');
+        System.assertEquals(1500, FetchedGoodsReceiptLine.dmpl__ReceivedQuantity__c, 'Received Quantity should be 1500');
+        System.assertEquals(1500, FetchedGoodsReceiptLine.dmpl__SupplierQuantity__c, 'supplier Quantity should be 1500');
+        
+    }
+    // Goods Receipt line without storage location (Edit)
+    @isTest
+    static void updateGoodsReceiptLineWithoutStorageLocationPositive(){
+        Test.startTest();
+        Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+        dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+        Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+        dmpl__Item__c  item1 = TestDataHelpers.getItem('Item 1');
+        dmpl__StorageLocation__c storageLocation2 = TestDataHelpers.getStorageLocation('Storage Location 2');
+        dmpl__GoodsReceipt__c goodsReceipt = GoodRecieptsTestDataHelpers.createGoodsReceipt(partner, branch, null, supplier);
+        dmpl__GoodsReceiptLine__c goodsReceiptLine = GoodRecieptsTestDataHelpers.createGoodsReceiptLine(
+            goodsReceipt.Id,
+        Item1.Id,
+        null,
+        null,
+        1000,
+        1000,
+        0,
+        1000,
+        1500
+            );
+        goodsReceiptLine.dmpl__StorageLocationId__c=storageLocation2.Id;
+        update goodsReceiptLine;
+        System.assertEquals(storageLocation2.Id, goodsReceiptLine.dmpl__StorageLocationId__c, ' storage location should match');
+        
+        dmpl__GoodsReceipt__c fetchedGoodsReceipt = GoodRecieptsTestDataHelpers.getGoodsReceipt(goodsReceipt.Id);
+        dmpl__GoodsReceiptLine__c FetchedGoodsReceiptLine = GoodRecieptsTestDataHelpers.getGoodsReceiptLine(goodsReceiptLine.Id);
+        FetchedGoodsReceiptLine.dmpl__SupplierQuantity__c=1500;
+        FetchedGoodsReceiptLine.dmpl__ReceivedQuantity__c=1500;
+        FetchedGoodsReceiptLine.dmpl__OrderedQuantity__c=1500;
+        update FetchedGoodsReceiptLine;
+    
+
+        Test.stopTest();
+        System.assertEquals(partner.Id, fetchedGoodsReceipt.dmpl__PartnerAccountId__c, 'Partner Account should match');
+        System.assertEquals(branch.Id, fetchedGoodsReceipt.dmpl__BranchId__c, 'Branch should match');
+        System.assertEquals(supplier.Id, fetchedGoodsReceipt.dmpl__SupplierAccountId__c, 'Supplier Account should match');
+        System.assertEquals(Date.today(), fetchedGoodsReceipt.dmpl__DocumentDate__c, 'Document Date should be today');
+        System.assertEquals('Draft', fetchedGoodsReceipt.dmpl__Status__c, 'Status should be Draft');
+        
+        System.assertEquals(item1.Id, FetchedGoodsReceiptLine.dmpl__ItemId__c, 'Item should match');
+        System.assertEquals(1500, FetchedGoodsReceiptLine.dmpl__OrderedQuantity__c, 'Ordered Quantity should be 1500');
+        System.assertEquals(1500, FetchedGoodsReceiptLine.dmpl__ReceivedQuantity__c, 'Received Quantity should be 1500');
+        System.assertEquals(1500, FetchedGoodsReceiptLine.dmpl__SupplierQuantity__c, 'supplier Quantity should be 1500');
+    }
+    // Goods Receipt line without ordered quantity (New)
+    @isTest
+    static void createGoodsReceiptLineWithoutOrderedQuantityPositive(){
+        Test.startTest();
+        Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+        dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+        Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+        dmpl__Item__c  item1 = TestDataHelpers.getItem('Item 1');
+        dmpl__GoodsReceipt__c goodsReceipt = GoodRecieptsTestDataHelpers.createGoodsReceipt(partner, branch, null, supplier);
+        dmpl__GoodsReceiptLine__c goodsReceiptLine = GoodRecieptsTestDataHelpers.createGoodsReceiptLine(
+            goodsReceipt.Id,
+        Item1.Id,
+        null,
+        null,
+        null,
+        1000,
+        0,
+        0,
+        1500
+            );
+        
+        dmpl__GoodsReceipt__c fetchedGoodsReceipt = GoodRecieptsTestDataHelpers.getGoodsReceipt(goodsReceipt.Id);
+        dmpl__GoodsReceiptLine__c FetchedGoodsReceiptLine = GoodRecieptsTestDataHelpers.getGoodsReceiptLine(goodsReceiptLine.Id);
+        Test.stopTest();
+        System.assertEquals(partner.Id, fetchedGoodsReceipt.dmpl__PartnerAccountId__c, 'Partner Account should match');
+        System.assertEquals(branch.Id, fetchedGoodsReceipt.dmpl__BranchId__c, 'Branch should match');
+        System.assertEquals(supplier.Id, fetchedGoodsReceipt.dmpl__SupplierAccountId__c, 'Supplier Account should match');
+        System.assertEquals(Date.today(), fetchedGoodsReceipt.dmpl__DocumentDate__c, 'Document Date should be today');
+        System.assertEquals('Draft', fetchedGoodsReceipt.dmpl__Status__c, 'Status should be Draft');
+        
+        System.assertEquals(item1.Id, FetchedGoodsReceiptLine.dmpl__ItemId__c, 'Item should match');
+        System.assertEquals(null, FetchedGoodsReceiptLine.dmpl__OrderedQuantity__c, 'Ordered Quantity should be 50');
+        System.assertEquals(1000, FetchedGoodsReceiptLine.dmpl__ReceivedQuantity__c, 'Received Quantity should be 50');
+        System.assertEquals(0, FetchedGoodsReceiptLine.dmpl__DamagedQuantity__c, 'Damaged Quantity should be 5');
+    }
+
+
+    
+
+    
+
+
 }

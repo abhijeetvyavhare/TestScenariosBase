@@ -340,6 +340,19 @@ public with sharing class ItemDataHelper {
             true
         );
     }
+	public static dmpl__ItemServiceContractLine__c createItemServiceContractLine(
+        dmpl__ItemServiceContract__c itemServiceContract,
+        dmpl__Item__c componentItem
+    ) {
+        return (dmpl__ItemServiceContractLine__c) TestFactory.createSObject(
+            new dmpl__ItemServiceContractLine__c(
+                dmpl__ItemServiceContractId__c = itemServiceContract.Id,
+                dmpl__ComponentItemId__c = componentItem.Id
+            ),
+            'ItemServiceContractLineDefaults',
+            true
+        );
+    }
 
     public static dmpl__ItemAlternate__c updateItemAlternate(
         dmpl__ItemAlternate__c itemAlternate,
@@ -389,6 +402,26 @@ public with sharing class ItemDataHelper {
                 dmpl__SingleUseContract__c = singleUseContract
             ),
             'ItemServiceContractDefaults',
+            true
+        );
+    }
+
+    public static dmpl__ItemServiceContract__c createItemServiceContract(
+        Id item,
+        String name,
+        Account billingAccount,
+        Integer  fromDays,
+        Date dateEffectiveFrom,
+        String cpTreatment
+    ) {
+        return (dmpl__ItemServiceContract__c) TestFactory.createSObject(
+            new dmpl__ItemServiceContract__c(
+                dmpl__ItemId__c = item,
+                dmpl__BillingAccountId__c = billingAccount?.Id,
+                dmpl__FromDays__c = fromDays,  
+                dmpl__DateEffectiveFrom__c = dateEffectiveFrom,
+                dmpl__ContractPostingTreatment__c = cpTreatment
+            ),
             true
         );
     }
@@ -620,6 +653,55 @@ public with sharing class ItemDataHelper {
         );
     }
 
+public static dmpl__ItemInventoryAttribute__c createItemInventoryAttribute(
+    Id partnerAccountId,
+    Id branchId,
+    Id itemId,
+    String abcCategory,
+    String fsnCategory,
+    Decimal minimumStockLevel,
+    Decimal maximumStockLevel,
+    Decimal reorderLevel,
+    Id skuId
+) {
+    return (dmpl__ItemInventoryAttribute__c) TestFactory.createSObject(
+        new dmpl__ItemInventoryAttribute__c(
+            dmpl__PartnerAccountId__c = partnerAccountId,
+            dmpl__BranchId__c = branchId,
+            dmpl__ItemId__c = itemId,
+            dmpl__ABCCategory__c = abcCategory,
+            dmpl__FSNCategory__c = fsnCategory,
+            dmpl__MinimumStockLevel__c = minimumStockLevel,
+            dmpl__MaximumStockLevel__c = maximumStockLevel,
+			dmpl__MinimumOrderQuantity__c = 10.00,
+			dmpl__MaximumOrderQuantity__c = 500.00,
+            dmpl__ReorderLevel__c = reorderLevel,
+            dmpl__SKUId__c = skuId
+        ),
+        true
+    );
+}
+
+public static dmpl__ItemInventoryAttribute__c getItemInventoryAttribute(dmpl__ItemInventoryAttribute__c itemInventoryAttribute) {
+    return [
+        SELECT 
+            Id,
+            dmpl__PartnerAccountId__c,
+            dmpl__BranchId__c,
+            dmpl__ItemId__c,
+            dmpl__ABCCategory__c,
+            dmpl__FSNCategory__c,
+            dmpl__MinimumStockLevel__c,
+            dmpl__MaximumStockLevel__c,
+            dmpl__ReorderLevel__c,
+            dmpl__SKUId__c
+        FROM dmpl__ItemInventoryAttribute__c
+        WHERE Id = :itemInventoryAttribute.Id
+        LIMIT 1
+    ];
+}
+
+
     public static dmpl__ItemInventoryAttribute__c updateItemInventoryAttribute(
         dmpl__Item__c item
     ) {
@@ -661,6 +743,7 @@ public with sharing class ItemDataHelper {
         );
     }
 
+
     public static dmpl__ItemImageDetail__c updateItemImageDetail(dmpl__Item__c item) {
         return (dmpl__ItemImageDetail__c) TestFactory.createSObject(
             new dmpl__ItemImageDetail__c(
@@ -675,7 +758,7 @@ public with sharing class ItemDataHelper {
 
     public static dmpl__ItemImageDetail__c getItemImageDetail(Id itemId) {
         return [
-            SELECT Id, dmpl__ItemId__c, Name, dmpl__LinkUrl__c
+            SELECT Id, dmpl__ItemId__c, Name, dmpl__LinkUrl__c, dmpl__Shape__c
             FROM dmpl__ItemImageDetail__c
             WHERE dmpl__ItemId__c = :itemId
             LIMIT 1
@@ -720,7 +803,9 @@ public with sharing class ItemDataHelper {
         Id itemId,
         Id itemComponentId,
         Id componentItemId,
-        String detail
+        String shape,
+        String linkUrl,
+        String coordinate
         ) {
         return (dmpl__ItemImageDetail__c) TestFactory.createSObject(
             new dmpl__ItemImageDetail__c(
@@ -728,21 +813,705 @@ public with sharing class ItemDataHelper {
                 dmpl__ComponentItemId__c = componentItemId,
                 dmpl__ItemId__c = itemId,
                 dmpl__ItemComponentId__c = itemComponentId,
-                dmpl__Detail__c = detail
+                dmpl__Shape__c = shape,
+                dmpl__LinkUrl__c = linkUrl,
+                dmpl__Coordinate__c = coordinate
             ),
             'ItemImageDetailDefaults',
             true
         );
     }
 
+
      public static dmpl__ItemImageDetail__c getItemImageDetail(dmpl__ItemImageDetail__c imageid) {
         return [
-            SELECT Id, dmpl__ItemId__c, Name, dmpl__LinkUrl__c,dmpl__ComponentItemId__c,dmpl__ItemComponentId__c,dmpl__Detail__c
+            SELECT Id, dmpl__ItemId__c, Name, dmpl__Shape__c, dmpl__LinkUrl__c,dmpl__ComponentItemId__c,dmpl__ItemComponentId__c,dmpl__Detail__c
             FROM dmpl__ItemImageDetail__c
             WHERE Id = :imageid.Id
             LIMIT 1
         ];
     }
     
+
+    public static dmpl__ItemLot__c createItemLot(
+    Id partnerAccountId,
+    Id branchId,
+    Id itemId,
+    Id skuId,
+    Date dateOfMfg,
+    Date dateOfExpiry,
+    Decimal cost,
+    Decimal unitCost,
+    String serialNumber,
+    String registrationNumber,
+    Date dateOfInward,
+    Date purchaseDate,
+    Decimal quantitySold,
+    Id storageLocationId
+    ) {
+    return (dmpl__ItemLot__c) TestFactory.createSObject(
+        new dmpl__ItemLot__c(
+            dmpl__PartnerAccountId__c = partnerAccountId,
+            dmpl__BranchId__c = branchId,
+            dmpl__ItemId__c = itemId,
+            dmpl__SKUId__c = skuId,
+            dmpl__DateOfMfg__c = dateOfMfg,
+            dmpl__DateOfExpiry__c = dateOfExpiry,
+            dmpl__Cost__c = cost,
+            dmpl__UnitCost__c = unitCost,
+            dmpl__SerialNumber__c = serialNumber,
+            dmpl__RegistrationNumber__c = registrationNumber,
+            dmpl__DateOfInward__c = dateOfInward,
+            dmpl__PurchaseDate__c = purchaseDate,
+            dmpl__QuantitySold__c = quantitySold,
+            dmpl__StorageLocationId__c = storageLocationId
+        ),
+        true
+    );
+    }
+
+    public static dmpl__ItemLot__c getItemLot() {
+        return [SELECT
+        Id,
+        Name,
+        dmpl__ItemLotTypeId__c,
+        dmpl__QuantitySold__c,
+        dmpl__QuantityInHand__c,
+        dmpl__PartnerAccountId__c,
+        dmpl__SKUId__c,
+        dmpl__Cost__c,
+        dmpl__ItemId__c,
+        dmpl__BatchNo__c,
+        dmpl__StorageLocationId__c,
+        dmpl__PurchaseDate__c,
+        dmpl__UnitCost__c,
+        dmpl__BranchId__c,
+        dmpl__QuantityTransferOut__c,
+        dmpl__ComponentNumber__c,
+        dmpl__DateOfMfg__c,
+        dmpl__DateOfInward__c,
+        dmpl__RegistrationNumber__c,
+        dmpl__SupplierInvoiceNumber__c,
+        dmpl__DateOfRegistration__c,
+        dmpl__DateOfExpiry__c,
+        dmpl__QuantityInTransit__c,
+        dmpl__QuantityInPendingDeliveries__c,
+        dmpl__QuantityPicked__c,
+        dmpl__QuantityTransferIn__c,
+        dmpl__QuantityOnAllocation__c,
+        dmpl__QuantityOnInward__c,
+        dmpl__QuantityAdjustedIn__c,
+        dmpl__QuantityAdjustedOut__c,
+        dmpl__QuantityAssembledIn__c,
+        dmpl__QuantityOnFulfillment__c,
+        dmpl__QuantityOnOutward__c,
+        dmpl__SerialNumber__c,
+        dmpl__SaleDate__c
+        FROM dmpl__ItemLot__c LIMIT 1];
+    }
+    public static dmpl__ItemLot__c getItemLot(dmpl__ItemLot__c itemlot) {
+        return [SELECT
+        Id,
+        Name,
+        dmpl__ItemLotTypeId__c,
+        dmpl__QuantitySold__c,
+        dmpl__QuantityInHand__c,
+        dmpl__PartnerAccountId__c,
+        dmpl__SKUId__c,
+        dmpl__Cost__c,
+        dmpl__ItemId__c,
+        dmpl__BatchNo__c,
+        dmpl__StorageLocationId__c,
+        dmpl__PurchaseDate__c,
+        dmpl__UnitCost__c,
+        dmpl__BranchId__c,
+        dmpl__QuantityTransferOut__c,
+        dmpl__ComponentNumber__c,
+        dmpl__DateOfMfg__c,
+        dmpl__DateOfInward__c,
+        dmpl__RegistrationNumber__c,
+        dmpl__SupplierInvoiceNumber__c,
+        dmpl__DateOfRegistration__c,
+        dmpl__DateOfExpiry__c,
+        dmpl__QuantityInTransit__c,
+        dmpl__QuantityInPendingDeliveries__c,
+        dmpl__QuantityPicked__c,
+        dmpl__QuantityTransferIn__c,
+        dmpl__QuantityOnAllocation__c,
+        dmpl__QuantityOnInward__c,
+        dmpl__QuantityAdjustedIn__c,
+        dmpl__QuantityAdjustedOut__c,
+        dmpl__QuantityAssembledIn__c,
+        dmpl__QuantityOnFulfillment__c,
+        dmpl__QuantityOnOutward__c,
+        dmpl__SerialNumber__c,
+        dmpl__SaleDate__c
+        FROM dmpl__ItemLot__c  WHERE Id = :itemlot.Id LIMIT 1];
+    }
+    public static dmpl__ItemLotType__c CreateItemLotType(dmpl__Item__c item )
+    {
+        return (dmpl__ItemLotType__c)TestFactory.createSObject(
+            new dmpl__ItemLotType__c(
+                dmpl__PriceCode__c = 'PC1001',
+                dmpl__VariationCode__c = 'VC1001',
+                dmpl__ItemId__c = item.Id,
+                dmpl__IsPromo__c = false
+            ),
+            true
+        );
+       
+    }
+
+	public static dmpl__ItemMaintenanceSchedule__c createItemMaintenanceSchedule(
+        Id itemId,
+        String skuId,
+        Integer fromDurationDays,
+        Decimal fromUsageHours,
+        Integer toDurationDays,
+        Decimal toUsageHours,
+        Decimal fromUsageReading,
+        Decimal toUsageReading,
+        Integer dueInDays,
+        Decimal dueOnUsage,
+        Decimal dueInUsageHours,
+        Integer numberOfReminders,
+        Integer reminderOffset1,
+        Integer reminderOffset2,
+        Integer reminderOffset3,
+        Integer reminderOffset4,
+        Integer reminderOffset5,
+		Decimal sequence
+    ) {
+        return (dmpl__ItemMaintenanceSchedule__c) TestFactory.createSObject(
+            new dmpl__ItemMaintenanceSchedule__c(
+                dmpl__ItemId__c = itemId,
+				dmpl__SKUId__c = skuId,
+				dmpl__FromDurationDays__c = fromDurationDays,
+				dmpl__FromUsageHours__c = fromUsageHours,
+				dmpl__ToDurationDays__c = toDurationDays,
+				dmpl__ToUsageHours__c = toUsageHours,
+				dmpl__FromUsageReading__c = fromUsageReading,
+				dmpl__ToUsageReading__c = toUsageReading,
+				dmpl__DueInDays__c = dueInDays,
+				dmpl__DueOnUsage__c = dueOnUsage,
+				dmpl__DueinUsageHours__c = dueInUsageHours,
+				dmpl__ReminderDaysOffset1__c = reminderOffset1,
+				dmpl__ReminderDaysOffset2__c = reminderOffset2,
+				dmpl__ReminderDaysOffset3__c = reminderOffset3,
+				dmpl__ReminderDaysOffset4__c = reminderOffset4,
+				dmpl__ReminderDaysOffset5__c = reminderOffset5,
+				dmpl__Numberofreminder__c = numberOfReminders,
+				dmpl__Sequence__c = sequence
+            ),
+            true
+        );
+    }
+	public static dmpl__ItemMaintenanceSchedule__c getItemMaintenanceSchedulebyId(
+        Id id
+    ) {
+        return [
+            SELECT dmpl__Sequence__c,
+                Id, dmpl__ItemId__c, dmpl__SKUId__c, dmpl__FromDurationDays__c,
+                dmpl__FromUsageHours__c, dmpl__ToDurationDays__c, dmpl__ToUsageHours__c,
+                dmpl__FromUsageReading__c, dmpl__ToUsageReading__c, dmpl__DueInDays__c,
+                dmpl__DueOnUsage__c, dmpl__DueinUsageHours__c,
+                dmpl__ReminderDaysOffset1__c, dmpl__ReminderDaysOffset2__c,
+                dmpl__ReminderDaysOffset3__c, dmpl__ReminderDaysOffset4__c,
+                dmpl__ReminderDaysOffset5__c, dmpl__Numberofreminder__c
+            FROM dmpl__ItemMaintenanceSchedule__c 
+            WHERE Id = :id
+            LIMIT 1
+        ];
+    }
+
+	//item
+ 
+    // Scenario 1: Just Name
+    public static dmpl__Item__c itemCreation(String itemName) {
+        return (dmpl__Item__c) TestFactory.createSObject(
+            new dmpl__Item__c(
+                Name = itemName,
+                dmpl__IsActive__c = true
+            ),
+            true
+        );
+    }
+ 
+    // Scenario 2: Name + Item Type
+    public static dmpl__Item__c itemCreation(String itemName, String itemType) {
+        return (dmpl__Item__c) TestFactory.createSObject(
+            new dmpl__Item__c(
+                Name = itemName,
+                dmpl__ItemType__c = itemType,
+                dmpl__IsActive__c = true
+            ),
+            true
+        );
+    }
+ 
+    // Scenario 4 & 5: Name + Item Type + SubType
+    public static dmpl__Item__c itemCreation(String itemName, String itemType, String itemSubType) {
+        return (dmpl__Item__c) TestFactory.createSObject(
+            new dmpl__Item__c(
+                Name = itemName,
+                dmpl__ItemType__c = itemType,
+                dmpl__ItemSubType__c = itemSubType,
+                dmpl__IsActive__c = true
+            ),
+            true
+        );
+    }
+ 
+    // Scenario 6: Name + Primary UOM
+    public static dmpl__Item__c itemCreation(String itemName, String quantityUOM, Boolean isUOMOnly) {
+        return (dmpl__Item__c) TestFactory.createSObject(
+            new dmpl__Item__c(
+                Name = itemName,
+                dmpl__QuantityUnitOfMeasure__c = quantityUOM,
+                dmpl__IsActive__c = true
+            ),
+            true
+        );
+    }
+ 
+    // Scenario 9: Name + Track Inventory flag
+    public static dmpl__Item__c itemCreation(String itemName, Boolean trackInventory) {
+        return (dmpl__Item__c) TestFactory.createSObject(
+            new dmpl__Item__c(
+                Name = itemName,
+                dmpl__TrackInventory__c = trackInventory,
+                dmpl__IsActive__c = true
+            ),
+            true
+        );
+    }
+ 
+    // Fetch created Item
+    public static dmpl__Item__c getItem(String itemName) {
+        return [
+            SELECT Id,
+                   Name,
+                   dmpl__ItemType__c,
+                   dmpl__ItemSubType__c,
+                   dmpl__QuantityUnitOfMeasure__c,
+                   dmpl__TrackInventory__c,
+                   dmpl__Description__c,
+                   dmpl__IsActive__c
+            FROM dmpl__Item__c
+            WHERE Name = :itemName
+            LIMIT 1
+        ];
+    }
+    public static dmpl__Item__c itemCreationWithoutCategories(String itemName) {
+        return (dmpl__Item__c) TestFactory.createSObject(
+            new dmpl__Item__c(
+                Name = itemName,
+                dmpl__ABCCategory__c = null,
+                dmpl__FSNCategory__c = null,
+                dmpl__IsActive__c = true
+            ),
+            true
+        );
+    }
+    public static dmpl__Item__c itemCreationWithoutGTIN(String itemName) {
+        return (dmpl__Item__c) TestFactory.createSObject(
+            new dmpl__Item__c(
+                Name = itemName,
+                dmpl__GTIN__c = null,
+                dmpl__IsActive__c = true
+            ),
+            true
+        );
+    }
+    public static dmpl__Item__c itemCreationWithInactiveStatus(String itemName) {
+        return (dmpl__Item__c) TestFactory.createSObject(
+            new dmpl__Item__c(
+                Name = itemName,
+                dmpl__IsActive__c = false
+            ),
+            true
+        );
+    }
+    public static dmpl__Item__c itemCreationWithIsDiscontinued(String itemName) {
+        return (dmpl__Item__c) TestFactory.createSObject(
+            new dmpl__Item__c(
+                Name = itemName,
+                dmpl__IsDiscontinued__c = true,
+                dmpl__IsActive__c = true
+            ),
+            true
+        );
+    }
+    public static dmpl__Item__c itemCreationWithOnlySoldInPackage(String itemName) {
+        return (dmpl__Item__c) TestFactory.createSObject(
+            new dmpl__Item__c(
+                Name = itemName,
+                dmpl__OnlySoldInPackage__c = true,
+                dmpl__IsActive__c = true
+            ),
+            true
+        );
+    }
+    public static dmpl__Item__c itemCreationWithIsSKURequired(String itemName) {
+        return (dmpl__Item__c) TestFactory.createSObject(
+            new dmpl__Item__c(
+                Name = itemName,
+                dmpl__IsSKURequired__c = true,
+                dmpl__IsActive__c = true
+            ),
+            true
+        );
+    }
+    public static dmpl__Item__c itemCreationWithIsRegistrationRequired(String itemName) {
+        return (dmpl__Item__c) TestFactory.createSObject(
+            new dmpl__Item__c(
+                Name = itemName,
+                dmpl__IsRegistrationRequired__c = true,
+                dmpl__IsActive__c = true
+            ),
+            true
+        );
+    }
+    public static dmpl__Item__c itemCreationWithoutFamilyAndSegment(String itemName) {
+        return (dmpl__Item__c) TestFactory.createSObject(
+            new dmpl__Item__c(
+                Name = itemName,
+                dmpl__ItemFamily__c = null,
+                dmpl__ItemSegment__c = null,
+                dmpl__IsActive__c = true
+            ),
+            true
+        );
+    }
+    public static dmpl__Item__c itemCreationWithFamilyAndSegment(String itemName, String itemFamily, String itemSegment) {
+        return (dmpl__Item__c) TestFactory.createSObject(
+            new dmpl__Item__c(
+                Name = itemName,
+                dmpl__ItemFamily__c = itemFamily,
+                dmpl__ItemSegment__c = itemSegment,
+                dmpl__IsActive__c = true
+            ),
+            true
+        );
+    }
+    public static dmpl__Item__c itemCreationWithAllowService(String itemName) {
+        return (dmpl__Item__c) TestFactory.createSObject(
+            new dmpl__Item__c(
+                Name = itemName,
+                dmpl__AllowService__c = true,
+                dmpl__IsActive__c = true
+            ),
+            true
+        );
+    }
+    public static dmpl__Item__c itemCreationWithTrackLots(String itemName) {
+        return (dmpl__Item__c) TestFactory.createSObject(
+            new dmpl__Item__c(
+                Name = itemName,
+                dmpl__TrackLots__c = true,
+                dmpl__IsActive__c = true
+            ),
+            true
+        );
+    }
+    public static dmpl__Item__c itemCreationWithTrackAsset(String itemName) {
+        return (dmpl__Item__c) TestFactory.createSObject(
+            new dmpl__Item__c(
+                Name = itemName,
+                dmpl__TrackAsset__c = true,
+                dmpl__IsActive__c = true
+            ),
+            true
+        );
+    }
+    public static dmpl__Item__c itemCreationWithoutRFID(String itemName) {
+        return (dmpl__Item__c) TestFactory.createSObject(
+            new dmpl__Item__c(
+                Name = itemName,
+                dmpl__RFID__c = null,
+                dmpl__IsActive__c = true
+            ),
+            true
+        );
+    }
+ 
+    //Item Alias
+   
+    public static dmpl__ItemAlias__c itemAliasCreation(String aliasName, Id itemId) {
+        return (dmpl__ItemAlias__c) TestFactory.createSObject(
+            new dmpl__ItemAlias__c(
+                Name = aliasName,
+                dmpl__ItemId__c = itemId
+            ),
+            true
+        );
+    }
+ 
+    public static dmpl__ItemAlias__c itemAliasCreationWithoutName(Id itemId) {
+        return (dmpl__ItemAlias__c) TestFactory.createSObject(
+            new dmpl__ItemAlias__c(
+                Name = null,
+                dmpl__ItemId__c = itemId
+            ),
+            false
+        );
+    }
+ 
+    public static dmpl__ItemAlias__c getItemAlias(String aliasName) {
+        return [
+            SELECT Id, Name, dmpl__ItemId__c
+            FROM dmpl__ItemAlias__c
+            WHERE Name = :aliasName
+            LIMIT 1
+        ];
+    }
+ 
+    public static dmpl__ItemAlias__c itemAliasWithLotTypeCreation(String aliasName, Id itemId, Id itemLotTypeId) {
+        return (dmpl__ItemAlias__c) TestFactory.createSObject(
+            new dmpl__ItemAlias__c(
+                Name = aliasName,
+                dmpl__ItemId__c = itemId,
+                dmpl__ItemLotTypeId__c = itemLotTypeId
+            ),
+            true
+        );
+    }
+ 
+    public static dmpl__ItemAlias__c itemAliasWithoutLotTypeCreation(String aliasName, Id itemId) {
+        return (dmpl__ItemAlias__c) TestFactory.createSObject(
+            new dmpl__ItemAlias__c(
+                Name = aliasName,
+                dmpl__ItemId__c = itemId,
+                dmpl__ItemLotTypeId__c = null
+            ),
+            true
+        );
+    }
+ 
+    public static dmpl__ItemAlias__c itemAliasWithoutItemCreation(String aliasName) {
+        return (dmpl__ItemAlias__c) TestFactory.createSObject(
+            new dmpl__ItemAlias__c(
+                Name = aliasName,
+                dmpl__ItemId__c = null
+            ),
+            false
+        );
+    }
+ 
+    public static dmpl__ItemAlias__c itemAliasWithItemOnly(String aliasName, Id itemId) {
+        return (dmpl__ItemAlias__c) TestFactory.createSObject(
+            new dmpl__ItemAlias__c(
+                Name = aliasName,
+                dmpl__ItemId__c = itemId
+            ),
+            true
+        );
+    }
+ 
+    public static dmpl__ItemAlias__c itemAliasWithInactiveItem(String aliasName, Id itemId) {
+        return (dmpl__ItemAlias__c) TestFactory.createSObject(
+            new dmpl__ItemAlias__c(
+                Name = aliasName,
+                dmpl__ItemId__c = itemId
+            ),
+            true
+        );
+    }
+ 
+    public static dmpl__ItemAlias__c itemAliasWithDiscontinuedItem(String aliasName, Id itemId) {
+        return (dmpl__ItemAlias__c) TestFactory.createSObject(
+            new dmpl__ItemAlias__c(
+                Name = aliasName,
+                dmpl__ItemId__c = itemId
+            ),
+            true
+        );
+    }
+ 
+    public static dmpl__ItemAlias__c itemAliasWithSKU(String aliasName, Id itemId, Id skuId) {
+        return (dmpl__ItemAlias__c) TestFactory.createSObject(
+            new dmpl__ItemAlias__c(
+                Name = aliasName,
+                dmpl__ItemId__c = itemId,
+                dmpl__SKUId__c = skuId
+            ),
+            true
+        );
+    }
+ 
+    public static dmpl__ItemAlias__c itemAliasWithoutSKU(String aliasName, Id itemId) {
+        return (dmpl__ItemAlias__c) TestFactory.createSObject(
+            new dmpl__ItemAlias__c(
+                Name = aliasName,
+                dmpl__ItemId__c = itemId,
+                dmpl__SKUId__c = null
+            ),
+            true
+        );
+    }
+ 
+    public static dmpl__ItemAlias__c itemAliasWithPartnerAccount(String aliasName, Id itemId, Id partnerAccountId) {
+        return (dmpl__ItemAlias__c) TestFactory.createSObject(
+            new dmpl__ItemAlias__c(
+                Name = aliasName,
+                dmpl__ItemId__c = itemId,
+                dmpl__PartnerAccountId__c = partnerAccountId
+            ),
+            true
+        );
+    }
+ 
+    public static dmpl__ItemAlias__c itemAliasWithoutPartnerAccount(String aliasName, Id itemId) {
+        return (dmpl__ItemAlias__c) TestFactory.createSObject(
+            new dmpl__ItemAlias__c(
+                Name = aliasName,
+                dmpl__ItemId__c = itemId,
+                dmpl__PartnerAccountId__c = null
+            ),
+            true
+        );
+    }
+    //item alternate
+    public static dmpl__ItemAlternate__c createAlternateForInactiveItem(Id itemId, Id alternateItemId) {
+        return (dmpl__ItemAlternate__c) TestFactory.createSObject(
+            new dmpl__ItemAlternate__c(
+                dmpl__ItemId__c = itemId,
+                dmpl__AlternateItemId__c = alternateItemId
+            ),
+            true
+        );
+    }
+
+    public static dmpl__ItemAlternate__c createAlternateForDiscontinuedItem(Id itemId, Id alternateItemId) {
+        return (dmpl__ItemAlternate__c) TestFactory.createSObject(
+            new dmpl__ItemAlternate__c(
+                dmpl__ItemId__c = itemId,
+                dmpl__AlternateItemId__c = alternateItemId
+            ),
+            true
+        );
+    }
+
+    public static dmpl__ItemAlternate__c createAlternateWithoutType(Id itemId, Id alternateItemId) {
+        return (dmpl__ItemAlternate__c) TestFactory.createSObject(
+            new dmpl__ItemAlternate__c(
+                dmpl__ItemId__c = itemId,
+                dmpl__AlternateItemId__c = alternateItemId,
+                dmpl__AlternateType__c = null
+            ),
+            true
+        );
+    }
+
+    public static dmpl__ItemAlternate__c createAlternateWithType(Id itemId, Id alternateItemId, String type) {
+        return (dmpl__ItemAlternate__c) TestFactory.createSObject(
+            new dmpl__ItemAlternate__c(
+                dmpl__ItemId__c = itemId,
+                dmpl__AlternateItemId__c = alternateItemId,
+                dmpl__AlternateType__c = type
+            ),
+            true
+        );
+    }
+
+    public static dmpl__ItemAlternate__c createAlternateWithoutAltItem(Id itemId) {
+        return (dmpl__ItemAlternate__c) TestFactory.createSObject(
+            new dmpl__ItemAlternate__c(
+                dmpl__ItemId__c = itemId,
+                dmpl__AlternateItemId__c = null
+            ),
+            false
+        );
+    }
+
+    public static dmpl__ItemAlternate__c createAlternateOnlyItems(Id itemId, Id altItemId) {
+        return (dmpl__ItemAlternate__c) TestFactory.createSObject(
+            new dmpl__ItemAlternate__c(
+                dmpl__ItemId__c = itemId,
+                dmpl__AlternateItemId__c = altItemId
+            ),
+            true
+        );
+    }
+
+    public static dmpl__ItemAlternate__c createAlternateWithQtyAvailable(Id itemId, Id altItemId, Decimal qty) {
+        return (dmpl__ItemAlternate__c) TestFactory.createSObject(
+            new dmpl__ItemAlternate__c(
+                dmpl__ItemId__c = itemId,
+                dmpl__AlternateItemId__c = altItemId,
+                dmpl__QuantityAvailable__c = qty
+            ),
+            true
+        );
+    }
+
+    public static dmpl__ItemAlternate__c createAlternateWithoutQtyAvailable(Id itemId, Id altItemId) {
+        return (dmpl__ItemAlternate__c) TestFactory.createSObject(
+            new dmpl__ItemAlternate__c(
+                dmpl__ItemId__c = itemId,
+                dmpl__AlternateItemId__c = altItemId,
+                dmpl__QuantityAvailable__c = null
+            ),
+            true
+        );
+    }
+
+    public static dmpl__ItemAlternate__c createAlternateWithoutQtyInHand(Id itemId, Id altItemId) {
+        return (dmpl__ItemAlternate__c) TestFactory.createSObject(
+            new dmpl__ItemAlternate__c(
+                dmpl__ItemId__c = itemId,
+                dmpl__AlternateItemId__c = altItemId,
+                dmpl__QuantityInHand__c = null
+            ),
+            true
+        );
+    }
+
+    public static dmpl__ItemAlternate__c createAlternateWithQtyInHand(Id itemId, Id altItemId, Decimal qtyInHand) {
+        return (dmpl__ItemAlternate__c) TestFactory.createSObject(
+            new dmpl__ItemAlternate__c(
+                dmpl__ItemId__c = itemId,
+                dmpl__AlternateItemId__c = altItemId,
+                dmpl__QuantityInHand__c = qtyInHand
+            ),
+            true
+        );
+    }
+    //item component
+        public static dmpl__ItemComponent__c createItemComponent(
+        dmpl__Item__c item,
+        dmpl__Item__c componentItem,
+        dmpl__ItemFeature__c feature,
+        String packageType,
+        Decimal quantity,
+        String applicableFor,
+        Decimal minQuantity,
+        Decimal maxQuantity,
+        Id skuId,
+        Boolean isBundled,
+        Boolean isMandatory,
+        Boolean isQuantityEditable,
+        Boolean isSelected
+    ) {
+        return (dmpl__ItemComponent__c) TestFactory.createSObject(
+            new dmpl__ItemComponent__c(
+                dmpl__ItemId__c = item != null ? item.Id : null,
+                dmpl__ComponentItemId__c = componentItem != null ? componentItem.Id : null,
+                dmpl__FeatureId__c = feature != null ? feature.Id : null,
+                dmpl__PackageType__c = packageType,
+                dmpl__Quantity__c = quantity,
+                dmpl__ApplicableFor__c = applicableFor,
+                dmpl__MinQuantity__c = minQuantity,
+                dmpl__MaxQuantity__c = maxQuantity,
+                dmpl__SKUId__c = skuId,
+                dmpl__IsBundled__c = isBundled,
+                dmpl__IsMandatory__c = isMandatory,
+                dmpl__IsQuantityEditable__c = isQuantityEditable,
+                dmpl__IsSelected__c = isSelected
+            ),
+            'ItemComponentDefaults',
+            true
+        );
+    }
 
 }

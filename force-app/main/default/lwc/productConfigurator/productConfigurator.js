@@ -1,8 +1,9 @@
 import { LightningElement, api, wire, track } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { CloseActionScreenEvent } from 'lightning/actions';
-import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
 import { refreshApex } from '@salesforce/apex';
+import { RefreshEvent } from 'lightning/refresh';
 import getConfigurableItems from '@salesforce/apex/ProductConfiguratorController.getConfigurableItems';
 import getPackageConfiguration from '@salesforce/apex/ProductConfiguratorController.getPackageConfiguration';
 import applyPackageConfiguration from '@salesforce/apex/ProductConfiguratorController.applyPackageConfiguration';
@@ -183,8 +184,8 @@ export default class ProductConfigurator extends LightningElement {
             var messsage = `Package Configuration applied created successfully.`;
             refreshApex(this.configurableItemsValue);
             refreshApex(this.configurableComponentsValue);
-            getRecordNotifyChange([{ "recordId": this.selectedLineId }].concat(this.draftValues.map(v => { return { "recordId": v.Id } })));
-            eval("$A.get('e.force:refreshView').fire();");
+            notifyRecordUpdateAvailable([{ "recordId": this.selectedLineId }].concat(this.draftValues.map(v => { return { "recordId": v.Id } })));
+            this.refreshStdComponents();
             this.dispatchEvent(new CloseActionScreenEvent());
             this.dispatchEvent(new CustomEvent('recordsaved', { "detail": event.detail }));
             this.dispatchEvent(
@@ -204,5 +205,13 @@ export default class ProductConfigurator extends LightningElement {
                 })
             );
         };
+    }
+    
+    refreshStdComponents(){
+        try{
+            eval("$A.get('e.force:refreshView').fire();");
+        }catch(e){
+            this.dispatchEvent(new RefreshEvent());
+        }
     }
 }

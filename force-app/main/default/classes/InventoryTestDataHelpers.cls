@@ -1,6 +1,6 @@
 @isTest
 public class InventoryTestDataHelpers {
-    public  static dmpl__InventoryStock__c CreateInventoryStock(
+    public  static dmpl__InventoryStock__c createInventoryStock(
         dmpl__Branch__c branch,
         dmpl__Item__c item,
         dmpl__SKU__c sku,
@@ -17,6 +17,27 @@ public class InventoryTestDataHelpers {
                 true
         );
     }
+
+    public  static dmpl__InventoryStock__c createInventoryStock(
+        dmpl__Branch__c branch,
+        dmpl__Item__c item,
+        Account partnerAccount,
+        dmpl__StorageLocation__c storageLocation,
+        dmpl__SKU__c sku 
+        ){
+        return (dmpl__InventoryStock__c)TestFactory.createSObject(
+                new dmpl__InventoryStock__c(
+                  dmpl__PartnerAccountId__c = partnerAccount != null ? partnerAccount.Id : null,
+                  dmpl__BranchId__c = branch != null ? branch.Id : null,
+                  dmpl__ItemId__c = item != null ? item.Id : null,
+                  dmpl__StorageLocationId__c = storageLocation != null ? storageLocation.Id : null,
+                  dmpl__SKUId__c = sku != null ? sku.Id : null
+                ),
+                //'InventoryStockDefaults',
+                true
+        );
+    }
+
 
     public static dmpl__InventoryStock__c getInventoryStock(){
         return [SELECT Id,

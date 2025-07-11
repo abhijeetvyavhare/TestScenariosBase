@@ -1,6 +1,5 @@
 @isTest
-public with sharing class SaleInvoiceLineHandler_Test {
-    
+public with sharing class SaleInvoiceLineHandler_Test {    
     @TestSetup
     static void createRequiredData() {
         Account partnerAccount = TestDataHelpers.createPartnerAccount();

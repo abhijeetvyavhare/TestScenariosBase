@@ -42,6 +42,28 @@ public with sharing class IncentiveTargetDataHelper {
         );
     }
 
+    public static dmpl__IncentiveTarget__c createIncentiveTarget(
+        dmpl__IncentivePlan__c incentivePlan,
+        dmpl__KPIConfiguration__c kpiConfig,
+        dmpl__item__c item,
+        Decimal value,
+        dmpl__SKU__c sku
+    ) {
+        return (dmpl__IncentiveTarget__c) TestFactory.createSObject(
+            new dmpl__IncentiveTarget__c(
+                dmpl__IncentivePlanId__c = incentivePlan != null ? incentivePlan.Id : null,
+                dmpl__KPIConfigurationId__c = kpiConfig != null ? kpiConfig.Id : null,
+                dmpl__ItemId__c = item != null ? item.Id : null,
+                dmpl__Value__c = value != null ? value : null,
+                dmpl__SKUId__c = sku != null ? sku.Id : null
+                
+            ),
+            //'IncentiveTargetDefaults',
+            true
+        );
+    }
+
+
     public static dmpl__IncentiveTarget__c getIncentiveTarget() {
         return [
             SELECT 
@@ -118,6 +140,26 @@ public with sharing class IncentiveTargetDataHelper {
             true
         );
     }
+
+    public static dmpl__IncentiveResourceTarget__c createIncentiveResourceTarget(
+        dmpl__IncentiveTarget__c incentiveTarget,
+        dmpl__KPIConfiguration__c kpiConfig,
+        Decimal value,
+        dmpl__IncentiveResource__c incentiveResource
+        
+    ) {
+        return (dmpl__IncentiveResourceTarget__c) TestFactory.createSObject(
+            new dmpl__IncentiveResourceTarget__c(
+                dmpl__IncentiveTargetId__c = incentiveTarget != null ? incentiveTarget.Id : null,
+                dmpl__KPIConfigurationId__c = kpiConfig != null ? kpiConfig.Id : null,
+                dmpl__Value__c = value != null ? value : null,
+                dmpl__IncentiveResourceId__c = incentiveResource != null ? incentiveResource.Id : null
+            ),
+            //'IncentiveResourceTargetDefaults',
+            true
+        );
+    }
+
 
     public static dmpl__IncentiveResourceTarget__c getIncentiveResourceTarget() {
         return [

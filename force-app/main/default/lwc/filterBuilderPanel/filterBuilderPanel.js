@@ -4,7 +4,7 @@ import { getObjectInfo } from 'lightning/uiObjectInfoApi';
 import { refreshApex } from '@salesforce/apex';
 import {subscribe, unsubscribe, MessageContext} from 'lightning/messageService';
 import FORCEREFRESHMC from '@salesforce/messageChannel/ForceReset__c';
-import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
 import { getRecord } from 'lightning/uiRecordApi';
 
 export default class FilterBuilderPanel extends LightningElement {
@@ -104,7 +104,7 @@ export default class FilterBuilderPanel extends LightningElement {
         }else if(message && message.delete){
             this.records = this.records.filter(v=> v.id!= message.uid).slice();
         }
-        getRecordNotifyChange(new Array({ "recordId": this.recordId }));
+        notifyRecordUpdateAvailable([{ "recordId": this.recordId }]);
         refreshApex(this.relatedListRecords);
     }
 

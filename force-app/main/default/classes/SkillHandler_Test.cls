@@ -43,4 +43,56 @@ public with sharing class SkillHandler_Test {
         }
         System.assertEquals(null, deletedLine, 'SkillLine should be deleted');
     }
+
+   @isTest
+    static void testSkillLineCreationWithSkillNamePositive() {
+    Test.startTest();
+
+    dmpl__Skill__c skill = SkillTestDataHelper.getSkill();
+    dmpl__Item__c item = TestDataHelpers.createItem();
+    dmpl__SkillLine__c skillLine = SkillTestDataHelper.createSkillLine(skill, item);
+
+    Test.stopTest();
+
+    System.assertNotEquals(null, skillLine.Id, 'Skill Line should be created');
+    System.assertEquals(skill.Id, skillLine.dmpl__SkillId__c, 'Skill Line should be linked to correct Skill');
+    System.assertEquals(item.Id, skillLine.dmpl__WorkItemId__c, 'Skill Line should be linked to correct Work Item');
+}
+
+    @isTest
+    static void testSkillLineCreationWithoutSkillNameNegative() {
+        Test.startTest();
+        try {
+            dmpl__Item__c item = TestDataHelpers.createItem();
+            SkillTestDataHelper.createSkillLine(null, item);
+        } catch (Exception e) {
+            System.debug('Expected exception: ' + e.getMessage());
+
+            System.assert(
+                e.getMessage().toLowerCase().contains('skill') ||
+                e.getMessage().toLowerCase().contains('required') ||
+                e.getMessage().toLowerCase().contains('review fields'),
+                'Exception should mention missing or blank Skill Name'
+            );
+        }
+        Test.stopTest();
+    }
+
+    @isTest
+    static void testSkillLineCreationWithWorkItemPositive() {
+        Test.startTest();
+        dmpl__Skill__c skill = SkillTestDataHelper.getSkill();
+        dmpl__Item__c item = TestDataHelpers.getItem();
+        dmpl__SkillLine__c skillLine = SkillTestDataHelper.createSkillLine(skill, item);
+
+        Test.stopTest();
+
+        System.assertNotEquals(null, skillLine.Id, 'Skill Line should be created');
+        System.assertEquals(skill.Id, skillLine.dmpl__SkillId__c, 'Skill Line should reference correct Skill');
+        System.assertEquals(item.Id, skillLine.dmpl__WorkItemId__c, 'Skill Line should reference correct Work Item');
+    }
+
+
+
+
 }

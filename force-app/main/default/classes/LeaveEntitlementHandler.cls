@@ -17,4 +17,6 @@ public with sharing class LeaveEntitlementHandler extends TriggerHandler {
         ResourceLeaveService.createResoureLeavesFromEntitlement(
             triggerNew);
     }
+
+
 }

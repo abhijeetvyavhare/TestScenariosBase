@@ -1647,9 +1647,9 @@ public with sharing class PurchaseOrderHandler_Test {
         15
             );
         purchaseOrderLine.dmpl__UnitCost__c = 1500;
+        update purchaseOrderLine;
         dmpl__PurchaseOrderLine__c fetchedLine = PurchaseOrderTestDataHelpers.getPurchaseOrderLine(purchaseOrderLine.Id);
         dmpl__PurchaseOrder__c fetchedPO = PurchaseOrderTestDataHelpers.getPurchaseOrder(po.Id);
-        update purchaseOrderLine;
         Test.stopTest();
         
         System.assertEquals(1500, fetchedLine.dmpl__UnitCost__c, 'Unit Price should be 1500');

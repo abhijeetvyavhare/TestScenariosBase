@@ -1,28 +1,30 @@
 <template>
     <article class={computedWrapperClassNames}>
             <div class={computedHeaderClassNames}>
-                <header class="slds-media slds-media_center slds-has-flexi-truncate">
-                    <template if:true={hasIcon}>
-                        <div class="slds-media__figure">
-                            <lightning-icon size="small" icon-name={iconName} alternative-text={title} title={title}>
-                            </lightning-icon>
+                <header class="slds-media slds-media_center slds-has-flexi-truncate slds-grid slds-wrap slds-grid-vertical_align-center slds-grid_align-spread">
+                    <div class="slds-col  slds-grid">
+                        <template if:true={hasIcon}>
+                            <div class="slds-media__figure">
+                                <lightning-icon size="small" icon-name={iconName} alternative-text={title} title={title}>
+                                </lightning-icon>
+                            </div>
+                        </template>
+                        <div class="slds-media__body">
+                            <h2 class="slds-card__header-title dmpl-justify-rightt">
+                                <span class="slds-truncate">
+                                    <template if:true={hasStringTitle}>
+                                        <a href="#" class="slds-card__header-link slds-truncate" title={title} onclick={handleTitleClick}>
+                                            {title}
+                                        </a>
+                                    </template>
+                                    <template if:false={hasStringTitle}>
+                                        <slot name="title"></slot>
+                                    </template>
+                                </span>
+                            </h2>
                         </div>
-                    </template>
-                    <div class="slds-media__body">
-                        <h2 class="slds-card__header-title">
-                            <span class="slds-truncate">
-                                <template if:true={hasStringTitle}>
-                                    <a href="#" class="slds-card__header-link slds-truncate" title={title} onclick={handleTitleClick}>
-                                        {title}
-                                    </a>
-                                </template>
-                                <template if:false={hasStringTitle}>
-                                    <slot name="title"></slot>
-                                </template>
-                            </span>
-                        </h2>
                     </div>
-                    <div >
+                    <div class="slds-col 2 slds-grid slds-grid_align-end slds-grid-vertical_align-stretch">
                         <slot name="actions"></slot>
                     </div>
                 </header>

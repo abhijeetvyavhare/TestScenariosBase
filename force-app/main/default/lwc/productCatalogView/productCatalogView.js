@@ -1,8 +1,9 @@
 import { LightningElement, api, wire, track} from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { CloseActionScreenEvent } from 'lightning/actions';
-import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
 import { refreshApex } from '@salesforce/apex';
+import { RefreshEvent } from 'lightning/refresh';
 import getAllImages from '@salesforce/apex/ItemIamgeController.getAllItemWithImages';
 import getImage from '@salesforce/apex/ItemIamgeController.getImage';
 
@@ -108,8 +109,8 @@ export default class ProductCatalogView extends LightningElement {
             var messsage= `Package Configuration applied created successfully.`;
             //refreshApex(this.configurableItemsValue);
             //refreshApex(this.configurableComponentsValue);
-            getRecordNotifyChange(new Array({"recordId": this.recordId}));
-            eval("$A.get('e.force:refreshView').fire();");
+            notifyRecordUpdateAvailable([{"recordId": this.recordId}]);
+            this.refreshStdComponents();
             this.dispatchEvent(new CloseActionScreenEvent());
             this.dispatchEvent(
                 new ShowToastEvent({
@@ -131,4 +132,13 @@ export default class ProductCatalogView extends LightningElement {
             );
         };
     }
+
+    refreshStdComponents(){
+        try{
+            eval("$A.get('e.force:refreshView').fire();");
+        }catch(e){
+            this.dispatchEvent(new RefreshEvent());
+        }
+    }
+
 }

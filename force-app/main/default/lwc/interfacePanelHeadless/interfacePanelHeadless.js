@@ -1,6 +1,6 @@
 import { LightningElement, api } from 'lwc';
 import performAction from '@salesforce/apex/InterfaceServiceProviderController.performAction';
-import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { reduceErrors } from 'c/utils';
 
@@ -39,6 +39,6 @@ export default class InterfacePanelHeadless extends LightningElement {
       }
 
       refreshPage(){
-        getRecordNotifyChange(new Array({ "recordId": this.recordId }));
+        notifyRecordUpdateAvailable([{ "recordId": this.recordId }]);
       }
 }

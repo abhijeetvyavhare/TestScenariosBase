@@ -41,6 +41,7 @@ public with sharing class ServiceRecommendationTestDataHelper {
                 dmpl__QuoteLineId__c,
                 dmpl__RepairOrderLineId__c,
                 dmpl__QuoteId__c,
+                dmpl__Quantity__c,
                 dmpl__ItemId__c,
                 dmpl__ComplaintLineId__c,
                 dmpl__ComplaintItemId__c,
@@ -67,6 +68,8 @@ public with sharing class ServiceRecommendationTestDataHelper {
                 dmpl__QuoteId__c,
                 dmpl__ItemId__c,
                 dmpl__ComplaintLineId__c,
+                dmpl__Quantity__c,
+                dmpl__ChecklistLineId__c,
                 dmpl__ComplaintItemId__c,
                 dmpl__AssetId__c
             FROM dmpl__ServiceRecommendation__c 
@@ -74,4 +77,38 @@ public with sharing class ServiceRecommendationTestDataHelper {
             LIMIT 1
         ];
     }
+        public static dmpl__ServiceRecommendation__c createServiceRecommendationWithChecklistFields(
+        //dmpl__CheckListTemplateLine__c checklistTemplateLine,
+        dmpl__CheckListLines__c checklistLine,
+        Decimal quantity,
+        dmpl__Item__c item,
+        Asset asset
+    ) {
+        return (dmpl__ServiceRecommendation__c) TestFactory.createSObject(
+            new dmpl__ServiceRecommendation__c(
+                // dmpl__ChecklistTemplateLineId__c = checklistTemplateLine != null ? checklistTemplateLine.Id : null,
+                dmpl__ChecklistLineId__c = checklistLine!= null ? checklistLine.Id : null,
+                dmpl__Quantity__c = quantity,
+                dmpl__ItemId__c = item != null ? item.Id : null,
+                dmpl__AssetId__c = asset != null ? asset.Id : null
+            ),
+            'ServiceRecommendationDefaults',
+            true
+        );
+    }
+
+    public static dmpl__ServiceRecommendation__c getServiceRecommendationWithChecklistFields(Id recordId) {
+        return [
+            SELECT
+                Id,
+                dmpl__ChecklistLineId__c,
+                dmpl__Quantity__c,
+                dmpl__ItemId__c,
+                dmpl__AssetId__c
+            FROM dmpl__ServiceRecommendation__c
+            WHERE Id = :recordId
+            LIMIT 1
+        ];
+    }
+
 }

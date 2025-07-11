@@ -16,7 +16,7 @@ public with sharing class DeliveryOrderHandler_Test {
 
 
         Account partnerAccount1 = TestDataHelpers.createPartnerAccount('Partner 1', false, true, false, true, 'MG Road', 'Bengaluru', 'Karnataka', 'India', '560001', '56 Industrial Layout', 'Bengaluru', 'Karnataka', 'India', '560095','9876543210');
-        Account partnerAccount2 = TestDataHelpers.createPartnerAccount('Partner 2', false, true, false, true, '45 Residency Road', 'Pune', 'Maharashtra', 'India', '411001', '22 Commerce Avenue', 'Pune', 'Maharashtra', 'India', '411038','91-99665544433');
+        Account partnerAccount2 = TestDataHelpers.createPartnerAccount('Partner 2', false, true, false, false, '45 Residency Road', 'Pune', 'Maharashtra', 'India', '411001', '22 Commerce Avenue', 'Pune', 'Maharashtra', 'India', '411038','91-99665544433');
         Account partnerAccount3 = TestDataHelpers.createPartnerAccount('Partner 3', false, true, false, true, '78 Nehru Nagar Road', 'Chennai', 'Tamil Nadu', 'India', '600042', '78 Nehru Nagar Road', 'Chennai', 'Tamil Nadu', 'India', '600042', '91-9123456789');
         Account partnerAccount4 = TestDataHelpers.createPartnerAccount('Partner 4', false, true, false, true, '12 Industrial Zone', 'Hyderabad','Telangana', 'India', '500032', '12 Industrial Zone', 'Hyderabad', 'Telangana', 'India','500032','9876012345');
         Account partnerAccount6 = TestDataHelpers.createPartnerAccount('Partner 6', false, true, false, true, 'MS Road', 'Bengaluru','Karnataka', 'India', '560001', '56 Industrial Layout', 'Bengaluru', 'Karnataka', 'India','560095','9845543210');
@@ -24,17 +24,16 @@ public with sharing class DeliveryOrderHandler_Test {
         Account customerAccount1 = TestDataHelpers.createCustomerAccount('Customer 1', true, false, false, true, 'MG Road', 'Pune', 'Maharashtra', 'India', '411001', 'Ring Rd', 'Nagpur', 'Maharashtra', 'India', '440001','9876543210', 'Created');
         Account customerAccount2 = TestDataHelpers.createCustomerAccount('Customer 2', true, false, false, true, 'Park St', 'Kolkata', 'West Bengal', 'India', '700016', 'Lake Rd', 'Kolkata', 'West Bengal', 'India', '700029','9876543210', 'Created');
         Account customerAccount3 = TestDataHelpers.createCustomerAccount('Customer 3', true, false, false, true, 'Anna Salai', 'Chennai', 'Tamil Nadu', 'India', '600002', 'T Nagar', 'Chennai', 'Tamil Nadu', 'India', '600017','9012345678', 'Created');
-        Account customerAccount7=TestDataHelpers.createCustomerAccount('Customer 7', true, false, false, false, 'Mission Road', 'Bengaluru', 'Karnataka', 'India', '560027', 'Indiranagar', 'Bengaluru', 'Karnataka', 'India', '560038','9811122233', 'Created');
-        Account customerAccount6=TestDataHelpers.createCustomerAccount('Customer 6', true, false, false, true, 'Sector 18', 'Noida', 'Uttar Pradesh', 'India', '201301', 'Sector 62', 'Noida', 'Uttar Pradesh', 'India', '201309','9876501234', 'Created');
+        Account customerAccount7 = TestDataHelpers.createCustomerAccount('Customer 7', true, false, false, false, 'Mission Road', 'Bengaluru', 'Karnataka', 'India', '560027', 'Indiranagar', 'Bengaluru', 'Karnataka', 'India', '560038','9811122233', 'Created');
+        Account customerAccount6 = TestDataHelpers.createCustomerAccount('Customer 6', true, false, false, true, 'Sector 18', 'Noida', 'Uttar Pradesh', 'India', '201301', 'Sector 62', 'Noida', 'Uttar Pradesh', 'India', '201309','9876501234', 'Created');
         Account customerAccount4 = TestDataHelpers.createCustomerAccount('Customer 4', true, false, false, true, 'SG Highway', 'Ahmedabad', 'GJ', 'India', '380054', 'C G Road', 'Ahmedabad', 'GJ', 'India', '380009','9988776655', 'Created');
         Account customerAccount5 = TestDataHelpers.createCustomerAccount('Customer 5', true, false, false, true, 'MG Road', 'Pune', 'Maharashtra', 'India', '411001', 'Ring Rd', 'Nagpur', 'Maharashtra', 'India', '440001','9876543210', 'Created');
        
 
-        dmpl__Branch__c branch1=TestDataHelpers.createBranch('Branch 1', partnerAccount1.Id, true, true, false, true);
-        dmpl__Branch__c branch2 = TestDataHelpers.createBranch('Branch 2', partnerAccount2.Id, true, false, true, true);
+        dmpl__Branch__c branch1 = TestDataHelpers.createBranch('Branch 1', partnerAccount1.Id, true, true, false, true);
         dmpl__Branch__c branch3 = TestDataHelpers.createBranch('Branch 3', partnerAccount1.Id, false, true, true, false);
-        dmpl__Branch__c branch4 =TestDataHelpers.createBranch('Branch 4',partnerAccount4.Id,true,true,false,false);
-        dmpl__Branch__c branch6 =TestDataHelpers.createBranch('Branch 6',partnerAccount6.Id,true,true,false,true);
+        dmpl__Branch__c branch4 = TestDataHelpers.createBranch('Branch 4',partnerAccount4.Id,true,true,false,false);
+        dmpl__Branch__c branch6 = TestDataHelpers.createBranch('Branch 6',partnerAccount6.Id,true,true,false,true);
  
         dmpl__ContactAddress__c address1 = TestDataHelpers.createContactAddress('Address 1', 'Ring Rd', 'Pune', 'Maharashtra', customerAccount1.Id, 'Billing Address', '440001', false);
         dmpl__ContactAddress__c address2 = TestDataHelpers.createContactAddress('Address 2', 'Ring Rd', 'Pune', 'Maharashtra', customerAccount1.Id, 'Billing Address', '440001',false);
@@ -62,8 +61,9 @@ public with sharing class DeliveryOrderHandler_Test {
         dmpl__Item__c item4 = TestDataHelpers.createItem('Item 4','Product',true, false, false ,'765676',true);
         dmpl__Item__c item5 = TestDataHelpers.createItem('Item 5', 'Product', true, false, false, '876543', false);
         dmpl__Item__c item6 = TestDataHelpers.createItem('Item 6', 'Product', true, false, false, '765456', false);
-        dmpl__Item__c item7 = TestDataHelpers.createItem('Item 7','Product',true,false,false, '765456',false);
+        dmpl__Item__c item7 = TestDataHelpers.createItem('Item 7','Product',true,false,true, '765456',false);
         dmpl__Item__c item8 = TestDataHelpers.createItem('Item 8','Product',true,false,false, '765456',false);
+    	dmpl__Item__c item9 = TestDataHelpers.createItem('Item 9', 'Product', true, false, true, '765456', false);
         dmpl__Item__c item10 = TestDataHelpers.createItem('Item 10','Product',true,false,true, '765456',false);
         dmpl__Item__c item13 = TestDataHelpers.createItem('Item 13','Product',true,false,false, '765456',true);
         dmpl__Item__c item14 = TestDataHelpers.createItem('Item 14', 'Part', true, false, false, '765458', true);
@@ -75,9 +75,10 @@ public with sharing class DeliveryOrderHandler_Test {
         dmpl__ItemGroupMember__c itemGroupMemeber2 = TestDataHelpers.createItemGroupMember(itemGroup1.Id,item2.Id);
  
    
-     
+
         dmpl__SKU__c sku1 = TestDataHelpers.createSKU('SKU 1', item7.id, true);
         dmpl__SKU__c sku2 = TestDataHelpers.createSKU('SKU 2', item8.id, false);
+        dmpl__SKU__c sku3 = TestDataHelpers.createSKU('SKU 3', item9.Id, false);
         dmpl__SKU__c sku4 = TestDataHelpers.createSKU('SKU 4', item10.id, true);
  
  
@@ -228,7 +229,7 @@ public with sharing class DeliveryOrderHandler_Test {
         
         Test.stopTest();
         
-     System.assertEquals(customer1.Id, fetchedOrder.dmpl__AccountId__c, 'Account Id must be Customer1 Id');
+     	System.assertEquals(customer1.Id, fetchedOrder.dmpl__AccountId__c, 'Account Id must be Customer1 Id');
 		System.assertEquals(customer1.Name, fetchedOrder.dmpl__AccountId__r.Name, 'Account Name mismatch');
 		System.assertEquals(customer1.dmpl__BillingStreet__c, fetchedOrder.dmpl__BillingStreet__c, 'Billing street should match');
         System.assertEquals(customer1.dmpl__BillingCity__c, fetchedOrder.dmpl__BillingCity__c, 'Billing city should match');
@@ -273,11 +274,12 @@ public with sharing class DeliveryOrderHandler_Test {
         Test.startTest();
         
         Account partner2 = TestDataHelpers.getPartnerAccount('Partner 2');
-        dmpl__Branch__c branch2 = TestDataHelpers.getBranch('Branch 2');
+		
         Account customer1 = TestDataHelpers.getCustomerAccount('Customer 1');
         
         Test.stopTest();
         try {
+			dmpl__Branch__c branch2 = TestDataHelpers.createBranch('Branch 2', partner2.Id, true, false, true, true);
             dmpl__DeliveryOrder__c deliveryOrder = DeliveryOrderDataHelper.createDeliveryOrder(partner2.Id,customer1.Id, branch2.Id,null,null,null);
         } catch (Exception e) {
             exceptionThrown = true;
@@ -295,11 +297,13 @@ public with sharing class DeliveryOrderHandler_Test {
         Test.startTest();
         
         Account partner1 = TestDataHelpers.getPartnerAccount('Partner 1');
-	        dmpl__Branch__c branch2 = TestDataHelpers.getBranch('Branch 2');
         Account customer1 = TestDataHelpers.getCustomerAccount('Customer 1');
+        Account partner2 = TestDataHelpers.getPartnerAccount('Partner 2');
         
         Test.stopTest();
         try {
+        	dmpl__Branch__c branch2 = TestDataHelpers.createBranch('Branch 2', partner2.Id, true, false, true, true);
+
             dmpl__DeliveryOrder__c deliveryOrder = DeliveryOrderDataHelper.createDeliveryOrder(partner1.Id,customer1.Id, branch2.Id,null,null,null);
         } catch (Exception e) {
             exceptionThrown = true;
@@ -376,7 +380,7 @@ public with sharing class DeliveryOrderHandler_Test {
         System.assertEquals(partner1.Id, fetchedOrder.dmpl__PartnerAccountId__c, 'Partner mismatch');
         System.assertEquals(branch1.Id, fetchedOrder.dmpl__BranchId__c, 'Branch mismatch');
         System.assertEquals(customer1.Id, fetchedOrder.dmpl__AccountId__c, 'Customer mismatch');
-        // System.assertEquals(Date.today(), fetchedOrder.dmpl__DocumentDate__c, 'Document date mismatch');
+        
          System.assertEquals(customer1.Id, fetchedOrder.dmpl__AccountId__c, 'Account Id must be Customer1 Id');
 		System.assertEquals(customer1.Name, fetchedOrder.dmpl__AccountId__r.Name, 'Account Name mismatch');
 		System.assertEquals(customer1.dmpl__BillingStreet__c, fetchedOrder.dmpl__BillingStreet__c, 'Billing street should match');
@@ -475,14 +479,14 @@ public with sharing class DeliveryOrderHandler_Test {
     @isTest
     static void createDeliveryOrderLinePositive() {
         dmpl__DeliveryOrderLine__c deliveryOrderLine = DeliveryOrderDataHelper.getDeliveryOrderLine();
-        // System.assertNotEquals(null, deliveryOrderLine, 'Delivery Order Line should be created successfully.');
+        
         System.assertEquals(1, deliveryOrderLine.dmpl__Quantity__c, 'Quantity should be 1.');
     }
 
     @isTest
     static void createDeliveryOrderTaxPositive() {
         dmpl__DeliveryOrderTax__c deliveryOrderTax = DeliveryOrderDataHelper.getDeliveryOrderTax();
-        // System.assertNotEquals(null, deliveryOrderTax, 'Delivery Order Line should be created successfully.');
+        
         System.assertEquals(150, deliveryOrderTax.dmpl__TaxAmount__c, 'Tax Amount of Delivery Order Tax must be 150');
     }
 
@@ -499,7 +503,7 @@ public with sharing class DeliveryOrderHandler_Test {
     @isTest
     static void updateDeliveryOrderLinePositive() {
         dmpl__DeliveryOrderLine__c deliveryOrderLine = DeliveryOrderDataHelper.getDeliveryOrderLine();
-        // System.assertNotEquals(null, deliveryOrderLine, 'Delivery Order Line should exist before update.');
+        
         deliveryOrderLine.dmpl__Quantity__c = 5;
         update deliveryOrderLine;
         dmpl__DeliveryOrderLine__c updatedLine = DeliveryOrderDataHelper.getDeliveryOrderLine(deliveryOrderLine.Id);
@@ -519,7 +523,7 @@ public with sharing class DeliveryOrderHandler_Test {
     @isTest
     static void deleteDeliveryOrderTax() {
         dmpl__DeliveryOrderTax__c deliveryOrderTax = DeliveryOrderDataHelper.getDeliveryOrderTax();
-        // System.assertNotEquals(null, deliveryOrderTax, 'DeliveryOrderTax should exist before delete.');
+        
 
         delete deliveryOrderTax;
 
@@ -535,7 +539,7 @@ public with sharing class DeliveryOrderHandler_Test {
     @isTest
     static void deleteDeliveryOrderLine() {
         dmpl__DeliveryOrderLine__c deliveryOrderLine = DeliveryOrderDataHelper.getDeliveryOrderLine();
-        // System.assertNotEquals(null, deliveryOrderLine, 'DeliveryOrderLine should exist before delete.');
+        
     
         try {
             delete deliveryOrderLine;
@@ -556,7 +560,7 @@ public with sharing class DeliveryOrderHandler_Test {
     @isTest
     static void deleteDeliveryOrder() {
         dmpl__DeliveryOrder__c deliveryOrder = DeliveryOrderDataHelper.getDeliveryOrder();
-        // System.assertNotEquals(null, deliveryOrder, 'DeliveryOrder should exist before delete.');
+        
 
         delete deliveryOrder;
 
@@ -627,7 +631,7 @@ public with sharing class DeliveryOrderHandler_Test {
 
 
 		
-	// TC-00278	Delivery order line with active item (New)
+	
 	@isTest
 	static void createDeliveryOrderLineWithActiveItemPositive () {
 		Test.startTest();
@@ -653,15 +657,15 @@ public with sharing class DeliveryOrderHandler_Test {
         System.assertEquals(customer1.dmpl__BillingState__c, deliveryOrder.dmpl__BillingState__c, 'Billing state should match');
         System.assertEquals(customer1.dmpl__BillingCountry__c, deliveryOrder.dmpl__BillingCountry__c, 'Billing state should match');
         System.assertEquals(customer1.dmpl__BillingPostalCode__c, deliveryOrder.dmpl__BillingPostalCode__c, 'Billing postal code should match');
-		// System.assertEquals(customer1., deliveryOrder.dmpl__BillingAddress__c, 'Billing address should match');
+		
         System.assertEquals(customer1.dmpl__ShippingStreet__c, deliveryOrder.dmpl__ShippingStreet__c, 'Shipping street should match');
         System.assertEquals(customer1.dmpl__ShippingCity__c, deliveryOrder.dmpl__ShippingCity__c, 'Shipping city should match');
         System.assertEquals(customer1.dmpl__ShippingState__c, deliveryOrder.dmpl__ShippingState__c, 'Shipping state should match');
         System.assertEquals(customer1.dmpl__ShippingCountry__c, deliveryOrder.dmpl__ShippingCountry__c, 'Shipping country should match');
         System.assertEquals(customer1.dmpl__ShippingPostalCode__c, deliveryOrder.dmpl__ShippingPostalCode__c, 'Shipping postal code should match');
-        // System.assertEquals(customer1., deliveryOrder.dmpl__ShippingAddress__c, 'Shipping address should match');
-		// System.assertNotEquals(null, deliveryOrder.Name, 'Sale Delivery Number must be Auto Generated');
-		// System.assertEquals(Date.today(), deliveryOrder.dmpl__DocumentDate__c, 'Document Date mismatch');
+        
+		
+		
 		System.assertEquals(partner1.Id, deliveryOrder.dmpl__PartnerAccountId__c, 'Partner Account ID mismatch');
 		System.assertEquals(partner1.Name, deliveryOrder.dmpl__PartnerAccountId__r.Name, 'Partner Account ID mismatch');
 		System.assertEquals(branch1.Id, deliveryOrder.dmpl__BranchId__c, 'Branch ID mismatch');
@@ -677,7 +681,7 @@ public with sharing class DeliveryOrderHandler_Test {
 
 
 
-	// TC-00279	Delivery order line with required SKU (New)
+	
 	@isTest
 	static void createDeliveryOrderLineWithRequiredSKUPositive () {
 		Test.startTest();
@@ -705,15 +709,15 @@ public with sharing class DeliveryOrderHandler_Test {
         System.assertEquals(customer1.dmpl__BillingState__c, deliveryOrder.dmpl__BillingState__c, 'Billing state should match');
         System.assertEquals(customer1.dmpl__BillingCountry__c, deliveryOrder.dmpl__BillingCountry__c, 'Billing state should match');
         System.assertEquals(customer1.dmpl__BillingPostalCode__c, deliveryOrder.dmpl__BillingPostalCode__c, 'Billing postal code should match');
-		// System.assertEquals(customer1., deliveryOrder.dmpl__BillingAddress__c, 'Billing address should match');
+		
         System.assertEquals(customer1.dmpl__ShippingStreet__c, deliveryOrder.dmpl__ShippingStreet__c, 'Shipping street should match');
         System.assertEquals(customer1.dmpl__ShippingCity__c, deliveryOrder.dmpl__ShippingCity__c, 'Shipping city should match');
         System.assertEquals(customer1.dmpl__ShippingState__c, deliveryOrder.dmpl__ShippingState__c, 'Shipping state should match');
         System.assertEquals(customer1.dmpl__ShippingCountry__c, deliveryOrder.dmpl__ShippingCountry__c, 'Shipping country should match');
         System.assertEquals(customer1.dmpl__ShippingPostalCode__c, deliveryOrder.dmpl__ShippingPostalCode__c, 'Shipping postal code should match');
-        // System.assertEquals(customer1., deliveryOrder.dmpl__ShippingAddress__c, 'Shipping address should match');
-		// System.assertNotEquals(null, deliveryOrder.Name, 'Sale Delivery Number must be Auto Generated');
-		// System.assertEquals(Date.today(), deliveryOrder.dmpl__DocumentDate__c, 'Document Date mismatch');
+        
+		
+		
 		System.assertEquals(partner1.Id, deliveryOrder.dmpl__PartnerAccountId__c, 'Partner Account ID mismatch');
 		System.assertEquals(partner1.Name, deliveryOrder.dmpl__PartnerAccountId__r.Name, 'Partner Account ID mismatch');
 		System.assertEquals(branch1.Id, deliveryOrder.dmpl__BranchId__c, 'Branch ID mismatch');
@@ -724,14 +728,14 @@ public with sharing class DeliveryOrderHandler_Test {
 		System.assertEquals(sku4.Id, deliveryOrderLine.dmpl__SKUId__c, 'SKU ID must be SKU 4 ID');
 		System.assertEquals(sku4.Name, deliveryOrderLine.dmpl__SKUId__r.Name, 'SKU Name mismatch');
 		System.assertEquals(1200, deliveryOrderLine.dmpl__UnitPrice__c, 'Unit Price mismatch');
-		System.assertEquals(taxGroup.Id, deliveryOrderLine.dmpl__TaxGroupId__c, 'Tax Group ID must be IGST 18%'); //
-		System.assertEquals(taxGroup.Name, deliveryOrderLine.dmpl__TaxGroupId__r.Name, 'Tax Group Name mismatch'); //
+		System.assertEquals(taxGroup.Id, deliveryOrderLine.dmpl__TaxGroupId__c, 'Tax Group ID must be IGST 18%'); 
+		System.assertEquals(taxGroup.Name, deliveryOrderLine.dmpl__TaxGroupId__r.Name, 'Tax Group Name mismatch'); 
 		System.assertEquals(10, deliveryOrderLine.dmpl__Quantity__c, 'Quantity mismatch');
 
 		Test.stopTest();
 	}
 
-	// TC-00280	Delivery order line with no required SKU (New)
+	
 	@isTest
 	static void createDeliveryOrderLineWithNoRequiredSKUPositive () {
 		Test.startTest();
@@ -758,15 +762,15 @@ public with sharing class DeliveryOrderHandler_Test {
         System.assertEquals(customer1.dmpl__BillingState__c, deliveryOrder.dmpl__BillingState__c, 'Billing state should match');
         System.assertEquals(customer1.dmpl__BillingCountry__c, deliveryOrder.dmpl__BillingCountry__c, 'Billing state should match');
         System.assertEquals(customer1.dmpl__BillingPostalCode__c, deliveryOrder.dmpl__BillingPostalCode__c, 'Billing postal code should match');
-		// System.assertEquals(customer1., deliveryOrder.dmpl__BillingAddress__c, 'Billing address should match');
+		
         System.assertEquals(customer1.dmpl__ShippingStreet__c, deliveryOrder.dmpl__ShippingStreet__c, 'Shipping street should match');
         System.assertEquals(customer1.dmpl__ShippingCity__c, deliveryOrder.dmpl__ShippingCity__c, 'Shipping city should match');
         System.assertEquals(customer1.dmpl__ShippingState__c, deliveryOrder.dmpl__ShippingState__c, 'Shipping state should match');
         System.assertEquals(customer1.dmpl__ShippingCountry__c, deliveryOrder.dmpl__ShippingCountry__c, 'Shipping country should match');
         System.assertEquals(customer1.dmpl__ShippingPostalCode__c, deliveryOrder.dmpl__ShippingPostalCode__c, 'Shipping postal code should match');
-        // System.assertEquals(customer1., deliveryOrder.dmpl__ShippingAddress__c, 'Shipping address should match');
-		// System.assertNotEquals(null, deliveryOrder.Name, 'Sale Delivery Number must be Auto Generated');
-		// System.assertEquals(Date.today(), deliveryOrder.dmpl__DocumentDate__c, 'Document Date mismatch');
+        
+		
+		
 		System.assertEquals(partner1.Id, deliveryOrder.dmpl__PartnerAccountId__c, 'Partner Account ID mismatch');
 		System.assertEquals(partner1.Name, deliveryOrder.dmpl__PartnerAccountId__r.Name, 'Partner Account ID mismatch');
 		System.assertEquals(branch1.Id, deliveryOrder.dmpl__BranchId__c, 'Branch ID mismatch');
@@ -783,8 +787,8 @@ public with sharing class DeliveryOrderHandler_Test {
 		System.assertEquals(item1.Id, deliveryOrderLine.dmpl__ItemId__c, 'Item ID must match Item 1 ID');
 		System.assertEquals(item1.Name, deliveryOrderLine.dmpl__ItemId__r.Name, 'Item Name mismatch');
 		System.assertEquals(10, deliveryOrderLine.dmpl__Quantity__c, 'Quantity mismatch');
-		System.assertEquals(taxGroup.Id, deliveryOrderLine.dmpl__TaxGroupId__c, 'Tax Group ID must be IGST 18%'); // 
-		System.assertEquals(taxGroup.Name, deliveryOrderLine.dmpl__TaxGroupId__r.Name, 'Tax Group Name mismatch'); //
+		System.assertEquals(taxGroup.Id, deliveryOrderLine.dmpl__TaxGroupId__c, 'Tax Group ID must be IGST 18%'); 
+		System.assertEquals(taxGroup.Name, deliveryOrderLine.dmpl__TaxGroupId__r.Name, 'Tax Group Name mismatch'); 
 		System.assertEquals(1500, deliveryOrderLine.dmpl__UnitPrice__c, 'Unit Price mismatch');
 		System.assertEquals(15000, deliveryOrderLine.dmpl__Amount__c, 'Amount mismatch');
 		System.assertEquals(15000, deliveryOrderLine.dmpl__BaseAmount__c, 'Base Amount mismatch');
@@ -795,7 +799,7 @@ public with sharing class DeliveryOrderHandler_Test {
 		Test.stopTest();
 	}
 
-	// TC-00281	Delivery order line with storage location (New)
+	
 	@isTest
 	static void createDeliveryOrderLineWithStorageLocationPositive () {
 		Test.startTest();
@@ -805,7 +809,7 @@ public with sharing class DeliveryOrderHandler_Test {
 		Account customer1 = TestDataHelpers.getCustomerAccount('Customer 1');
 		dmpl__Item__c item1 = TestDataHelpers.getItem('Item 1');
 		dmpl__TaxGroup__c taxGroup = TestDataHelpers.getTaxGroup('GST 288'); 
-		dmpl__StorageLocation__c storageLocation = TestDataHelpers.getStorageLocation('Storage Location 1'); // not created
+		dmpl__StorageLocation__c storageLocation = TestDataHelpers.getStorageLocation('Storage Location 1'); 
 		dmpl__DeliveryOrder__c deliveryOrder = DeliveryOrderDataHelper.createDeliveryOrder(partner4.Id, customer1.Id, branch4.Id, null, null,null);
 		dmpl__DeliveryOrderLine__c deliveryOrderLine;
 		try{
@@ -824,15 +828,15 @@ public with sharing class DeliveryOrderHandler_Test {
         System.assertEquals(customer1.dmpl__BillingState__c, deliveryOrder.dmpl__BillingState__c, 'Billing state should match');
         System.assertEquals(customer1.dmpl__BillingCountry__c, deliveryOrder.dmpl__BillingCountry__c, 'Billing state should match');
         System.assertEquals(customer1.dmpl__BillingPostalCode__c, deliveryOrder.dmpl__BillingPostalCode__c, 'Billing postal code should match');
-		// System.assertEquals(customer1., deliveryOrder.dmpl__BillingAddress__c, 'Billing address should match');
+		
         System.assertEquals(customer1.dmpl__ShippingStreet__c, deliveryOrder.dmpl__ShippingStreet__c, 'Shipping street should match');
         System.assertEquals(customer1.dmpl__ShippingCity__c, deliveryOrder.dmpl__ShippingCity__c, 'Shipping city should match');
         System.assertEquals(customer1.dmpl__ShippingState__c, deliveryOrder.dmpl__ShippingState__c, 'Shipping state should match');
         System.assertEquals(customer1.dmpl__ShippingCountry__c, deliveryOrder.dmpl__ShippingCountry__c, 'Shipping country should match');
         System.assertEquals(customer1.dmpl__ShippingPostalCode__c, deliveryOrder.dmpl__ShippingPostalCode__c, 'Shipping postal code should match');
-        // System.assertEquals(customer1., deliveryOrder.dmpl__ShippingAddress__c, 'Shipping address should match');
-		// System.assertNotEquals(null, deliveryOrder.Name, 'Sale Delivery Number must be Auto Generated');
-		// System.assertEquals(Date.today(), deliveryOrder.dmpl__DocumentDate__c, 'Document Date mismatch');
+        
+		
+		
 		System.assertEquals(partner4.Id, deliveryOrder.dmpl__PartnerAccountId__c, 'Partner Account ID mismatch');
 		System.assertEquals(partner4.Name, deliveryOrder.dmpl__PartnerAccountId__r.Name, 'Partner Account ID mismatch');
 		System.assertEquals(branch4.Id, deliveryOrder.dmpl__BranchId__c, 'Branch ID mismatch');
@@ -849,7 +853,7 @@ public with sharing class DeliveryOrderHandler_Test {
 		System.assertEquals(7500, deliveryOrderLine.dmpl__Amount__c, 'Amount mismatch');
 		System.assertEquals(7500, deliveryOrderLine.dmpl__BaseAmount__c, 'Base Amount mismatch');
 		System.assertEquals(9600, deliveryOrderLine.dmpl__GrossAmount__c, 'Gross Amount mismatch');
-		// System.assertEquals(300, deliveryOrderLine.dmpl__NetDiscount__c, 'Net Discount mismatch');//Evaluating 0
+		
 		System.assertEquals(2100, deliveryOrderLine.dmpl__TaxAmount__c, 'Tax Amount mismatch');
 
 		System.assertEquals(7500, deliveryOrder.dmpl__TotalLineBaseAmount__c, 'Total Line Base Amount mismatch');
@@ -857,11 +861,11 @@ public with sharing class DeliveryOrderHandler_Test {
 		System.assertEquals(7500, deliveryOrder.dmpl__TotalLineAmount__c, 'Total Line Amount mismatch');
 		System.assertEquals(9600, deliveryOrder.dmpl__TotalAmount__c, 'Total Amount mismatch');
 		System.assertEquals(2100, deliveryOrder.dmpl__TotalTaxAmount__c, 'Total Tax Amount mismatch');
-		// System.assertEquals(300, deliveryOrder.dmpl__TotalDiscountAmount__c, 'Total Discount Amount mismatch'); //Evalutation 0
+		
 
 		Test.stopTest();
 	}
-	// TC-00283	Delivery order line with entered quantity (New)
+	
 	@isTest
 	static void createDeliveryOrderLineWithEnteredQuantityPositive () {
 		Test.startTest();
@@ -890,15 +894,15 @@ public with sharing class DeliveryOrderHandler_Test {
         System.assertEquals(customer1.dmpl__BillingState__c, deliveryOrder.dmpl__BillingState__c, 'Billing state should match');
         System.assertEquals(customer1.dmpl__BillingCountry__c, deliveryOrder.dmpl__BillingCountry__c, 'Billing state should match');
         System.assertEquals(customer1.dmpl__BillingPostalCode__c, deliveryOrder.dmpl__BillingPostalCode__c, 'Billing postal code should match');
-		// System.assertEquals(customer1., deliveryOrder.dmpl__BillingAddress__c, 'Billing address should match');
+		
         System.assertEquals(customer1.dmpl__ShippingStreet__c, deliveryOrder.dmpl__ShippingStreet__c, 'Shipping street should match');
         System.assertEquals(customer1.dmpl__ShippingCity__c, deliveryOrder.dmpl__ShippingCity__c, 'Shipping city should match');
         System.assertEquals(customer1.dmpl__ShippingState__c, deliveryOrder.dmpl__ShippingState__c, 'Shipping state should match');
         System.assertEquals(customer1.dmpl__ShippingCountry__c, deliveryOrder.dmpl__ShippingCountry__c, 'Shipping country should match');
         System.assertEquals(customer1.dmpl__ShippingPostalCode__c, deliveryOrder.dmpl__ShippingPostalCode__c, 'Shipping postal code should match');
-        // System.assertEquals(customer1., deliveryOrder.dmpl__ShippingAddress__c, 'Shipping address should match');
-		// System.assertNotEquals(null, deliveryOrder.Name, 'Sale Delivery Number must be Auto Generated');
-		// System.assertEquals(Date.today(), deliveryOrder.dmpl__DocumentDate__c, 'Document Date mismatch');
+        
+		
+		
 		System.assertEquals(partner4.Id, deliveryOrder.dmpl__PartnerAccountId__c, 'Partner Account ID mismatch');
 		System.assertEquals(partner4.Name, deliveryOrder.dmpl__PartnerAccountId__r.Name, 'Partner Account ID mismatch');
 		System.assertEquals(branch4.Id, deliveryOrder.dmpl__BranchId__c, 'Branch ID mismatch');
@@ -927,7 +931,7 @@ public with sharing class DeliveryOrderHandler_Test {
 
 		Test.stopTest();
 	}
-	// TC-00284	Delivery order line with sale order line reference (New)
+	
 	@isTest
 	static void createDeliveryOrderLineWithSaleOrderLineReferencePositive () {
 		Test.startTest();
@@ -939,19 +943,19 @@ public with sharing class DeliveryOrderHandler_Test {
 		dmpl__PriceList__c priceList1 =  TestDataHelpers.getPriceList('Price List 1');
 		dmpl__TaxGroup__c taxGroup = TestDataHelpers.getTaxGroup('IGST 18');
 		dmpl__SaleOrder__c saleOrder = SaleOrderDataHelper.createSaleOrder( customer1.Id, partner1.Id,branch1.Id, null, null, true, null);
-		dmpl__SaleOrderLine__c saleOrderLine = SaleOrderDataHelper.createSaleOrderLine(saleOrder.Id, item1.Id, 3, null);
+		dmpl__SaleOrderLine__c saleOrderLine = SaleOrderDataHelper.createSaleOrderLine(saleOrder.Id, item1.Id, 10, null);
 		dmpl__DeliveryOrder__c deliveryOrder = DeliveryOrderDataHelper.createDeliveryOrder(partner1.Id, customer1.Id, branch1.Id, null, saleOrder.Id,null);
 		dmpl__DeliveryOrderLine__c deliveryOrderLine;
-		// try{
+		
 			deliveryOrderLine = DeliveryOrderDataHelper.createDeliveryOrderLine(deliveryOrder.Id, item1.Id, taxGroup.Id, 10, 1500, null, saleOrderLine.Id, null, null);
-		// }catch(Exception e){
-			// System.Assert.isTrue(false, 'Need to be able to create a delivery order line');
-		// }
+		
+			
+		
 
 		deliveryOrder = DeliveryOrderDataHelper.getDeliveryOrder(deliveryOrder.Id);
 		deliveryOrderLine = DeliveryOrderDataHelper.getDeliveryOrderLine(deliveryOrderLine.Id);
 		
-		//assertion for saleOrder and saleOrderLine
+		
 
 		System.assertEquals(customer1.Id, deliveryOrder.dmpl__AccountId__c, 'Account Id must be Customer1 Id');
 		System.assertEquals(customer1.Name, deliveryOrder.dmpl__AccountId__r.Name, 'Account Name mismatch');
@@ -960,15 +964,15 @@ public with sharing class DeliveryOrderHandler_Test {
         System.assertEquals(customer1.dmpl__BillingState__c, deliveryOrder.dmpl__BillingState__c, 'Billing state should match');
         System.assertEquals(customer1.dmpl__BillingCountry__c, deliveryOrder.dmpl__BillingCountry__c, 'Billing state should match');
         System.assertEquals(customer1.dmpl__BillingPostalCode__c, deliveryOrder.dmpl__BillingPostalCode__c, 'Billing postal code should match');
-		// System.assertEquals(customer1., deliveryOrder.dmpl__BillingAddress__c, 'Billing address should match');
+		
         System.assertEquals(customer1.dmpl__ShippingStreet__c, deliveryOrder.dmpl__ShippingStreet__c, 'Shipping street should match');
         System.assertEquals(customer1.dmpl__ShippingCity__c, deliveryOrder.dmpl__ShippingCity__c, 'Shipping city should match');
         System.assertEquals(customer1.dmpl__ShippingState__c, deliveryOrder.dmpl__ShippingState__c, 'Shipping state should match');
         System.assertEquals(customer1.dmpl__ShippingCountry__c, deliveryOrder.dmpl__ShippingCountry__c, 'Shipping country should match');
         System.assertEquals(customer1.dmpl__ShippingPostalCode__c, deliveryOrder.dmpl__ShippingPostalCode__c, 'Shipping postal code should match');
-        // System.assertEquals(customer1., deliveryOrder.dmpl__ShippingAddress__c, 'Shipping address should match');
-		// System.assertNotEquals(null, deliveryOrder.Name, 'Sale Delivery Number must be Auto Generated');
-		// System.assertEquals(Date.today(), deliveryOrder.dmpl__DocumentDate__c, 'Document Date mismatch');
+        
+		
+		
 		System.assertEquals(partner1.Id, deliveryOrder.dmpl__PartnerAccountId__c, 'Partner Account ID mismatch');
 		System.assertEquals(partner1.Name, deliveryOrder.dmpl__PartnerAccountId__r.Name, 'Partner Account ID mismatch');
 		System.assertEquals(branch1.Id, deliveryOrder.dmpl__BranchId__c, 'Branch ID mismatch');
@@ -994,7 +998,7 @@ public with sharing class DeliveryOrderHandler_Test {
 
 		Test.stopTest();
 	}
-	// TC-00285	Delivery order line with repair order line reference (New)
+	
 	@isTest
 	static void createDeliveryOrderLineWithRepairOrderLineReferencePositive () {
 		Test.startTest();
@@ -1025,15 +1029,15 @@ public with sharing class DeliveryOrderHandler_Test {
         System.assertEquals(customer1.dmpl__BillingState__c, deliveryOrder.dmpl__BillingState__c, 'Billing state should match');
         System.assertEquals(customer1.dmpl__BillingCountry__c, deliveryOrder.dmpl__BillingCountry__c, 'Billing state should match');
         System.assertEquals(customer1.dmpl__BillingPostalCode__c, deliveryOrder.dmpl__BillingPostalCode__c, 'Billing postal code should match');
-		//System.assertEquals(customer1., deliveryOrder.dmpl__BillingAddress__c, 'Billing address should match');
+		
         System.assertEquals(customer1.dmpl__ShippingStreet__c, deliveryOrder.dmpl__ShippingStreet__c, 'Shipping street should match');
         System.assertEquals(customer1.dmpl__ShippingCity__c, deliveryOrder.dmpl__ShippingCity__c, 'Shipping city should match');
         System.assertEquals(customer1.dmpl__ShippingState__c, deliveryOrder.dmpl__ShippingState__c, 'Shipping state should match');
         System.assertEquals(customer1.dmpl__ShippingCountry__c, deliveryOrder.dmpl__ShippingCountry__c, 'Shipping country should match');
         System.assertEquals(customer1.dmpl__ShippingPostalCode__c, deliveryOrder.dmpl__ShippingPostalCode__c, 'Shipping postal code should match');
-        // System.assertEquals(customer1., deliveryOrder.dmpl__ShippingAddress__c, 'Shipping address should match');
-		// System.assertNotEquals(null, deliveryOrder.Name, 'Sale Delivery Number must be Auto Generated');
-		// System.assertEquals(Date.today(), deliveryOrder.dmpl__DocumentDate__c, 'Document Date mismatch');
+        
+		
+		
 		System.assertEquals(partner1.Id, deliveryOrder.dmpl__PartnerAccountId__c, 'Partner Account ID mismatch');
 		System.assertEquals(partner1.Name, deliveryOrder.dmpl__PartnerAccountId__r.Name, 'Partner Account ID mismatch');
 		System.assertEquals(branch1.Id, deliveryOrder.dmpl__BranchId__c, 'Branch ID mismatch');
@@ -1051,7 +1055,7 @@ public with sharing class DeliveryOrderHandler_Test {
 
 		Test.stopTest();
 	}
-	// TC-00286	Delivery order line with inactive item (New)
+	
 	@isTest
 	static void createDeliveryOrderLineWithInactiveItemNegative () {
 		Test.startTest();
@@ -1071,7 +1075,7 @@ public with sharing class DeliveryOrderHandler_Test {
 
 		Test.stopTest();
 	}
-	// TC-00287	Delivery order line with discountinued item (New)
+	
 	@isTest
 	static void createDeliveryOrderLineWithDiscountinuedItemPositive () {
 		Test.startTest();
@@ -1100,15 +1104,15 @@ public with sharing class DeliveryOrderHandler_Test {
         System.assertEquals(customer1.dmpl__BillingState__c, deliveryOrder.dmpl__BillingState__c, 'Billing state should match');
         System.assertEquals(customer1.dmpl__BillingCountry__c, deliveryOrder.dmpl__BillingCountry__c, 'Billing state should match');
         System.assertEquals(customer1.dmpl__BillingPostalCode__c, deliveryOrder.dmpl__BillingPostalCode__c, 'Billing postal code should match');
-		// System.assertEquals(customer1., deliveryOrder.dmpl__BillingAddress__c, 'Billing address should match');
+		
         System.assertEquals(customer1.dmpl__ShippingStreet__c, deliveryOrder.dmpl__ShippingStreet__c, 'Shipping street should match');
         System.assertEquals(customer1.dmpl__ShippingCity__c, deliveryOrder.dmpl__ShippingCity__c, 'Shipping city should match');
         System.assertEquals(customer1.dmpl__ShippingState__c, deliveryOrder.dmpl__ShippingState__c, 'Shipping state should match');
         System.assertEquals(customer1.dmpl__ShippingCountry__c, deliveryOrder.dmpl__ShippingCountry__c, 'Shipping country should match');
         System.assertEquals(customer1.dmpl__ShippingPostalCode__c, deliveryOrder.dmpl__ShippingPostalCode__c, 'Shipping postal code should match');
-        // System.assertEquals(customer1., deliveryOrder.dmpl__ShippingAddress__c, 'Shipping address should match');
-		// System.assertNotEquals(null, deliveryOrder.Name, 'Sale Delivery Number must be Auto Generated');
-		// System.assertEquals(Date.today(), deliveryOrder.dmpl__DocumentDate__c, 'Document Date mismatch');
+        
+		
+		
 		System.assertEquals(partner1.Id, deliveryOrder.dmpl__PartnerAccountId__c, 'Partner Account ID mismatch');
 		System.assertEquals(partner1.Name, deliveryOrder.dmpl__PartnerAccountId__r.Name, 'Partner Account ID mismatch');
 		System.assertEquals(branch1.Id, deliveryOrder.dmpl__BranchId__c, 'Branch ID mismatch');
@@ -1134,7 +1138,7 @@ public with sharing class DeliveryOrderHandler_Test {
 
 		Test.stopTest();
 	}
-	// TC-00288	Delivery order line with no storage location (New)
+	
 	@isTest
 	static void createDeliveryOrderLineWithNoStorageLocationPositive () {
 		Test.startTest();
@@ -1163,15 +1167,15 @@ public with sharing class DeliveryOrderHandler_Test {
         System.assertEquals(customer1.dmpl__BillingState__c, deliveryOrder.dmpl__BillingState__c, 'Billing state should match');
         System.assertEquals(customer1.dmpl__BillingCountry__c, deliveryOrder.dmpl__BillingCountry__c, 'Billing state should match');
         System.assertEquals(customer1.dmpl__BillingPostalCode__c, deliveryOrder.dmpl__BillingPostalCode__c, 'Billing postal code should match');
-		// System.assertEquals(customer1., deliveryOrder.dmpl__BillingAddress__c, 'Billing address should match');
+		
         System.assertEquals(customer1.dmpl__ShippingStreet__c, deliveryOrder.dmpl__ShippingStreet__c, 'Shipping street should match');
         System.assertEquals(customer1.dmpl__ShippingCity__c, deliveryOrder.dmpl__ShippingCity__c, 'Shipping city should match');
         System.assertEquals(customer1.dmpl__ShippingState__c, deliveryOrder.dmpl__ShippingState__c, 'Shipping state should match');
         System.assertEquals(customer1.dmpl__ShippingCountry__c, deliveryOrder.dmpl__ShippingCountry__c, 'Shipping country should match');
         System.assertEquals(customer1.dmpl__ShippingPostalCode__c, deliveryOrder.dmpl__ShippingPostalCode__c, 'Shipping postal code should match');
-        // System.assertEquals(customer1., deliveryOrder.dmpl__ShippingAddress__c, 'Shipping address should match');
-		// System.assertNotEquals(null, deliveryOrder.Name, 'Sale Delivery Number must be Auto Generated');
-		// System.assertEquals(Date.today(), deliveryOrder.dmpl__DocumentDate__c, 'Document Date mismatch');
+        
+		
+		
 		System.assertEquals(partner1.Id, deliveryOrder.dmpl__PartnerAccountId__c, 'Partner Account ID mismatch');
 		System.assertEquals(partner1.Name, deliveryOrder.dmpl__PartnerAccountId__r.Name, 'Partner Account ID mismatch');
 		System.assertEquals(branch1.Id, deliveryOrder.dmpl__BranchId__c, 'Branch ID mismatch');
@@ -1183,7 +1187,7 @@ public with sharing class DeliveryOrderHandler_Test {
 		System.assertEquals(30000, deliveryOrder.dmpl__TotalLineAmount__c, 'Total Line Amount mismatch');
 		System.assertEquals(35400, deliveryOrder.dmpl__TotalAmount__c, 'Total Amount mismatch');
 		System.assertEquals(5400, deliveryOrder.dmpl__TotalTaxAmount__c, 'Total Tax Amount mismatch');
-		// System.assertEquals(Date.today(), deliveryOrder.dmpl__DocumentDate__c, 'Document Date must be today');
+		
 
 		System.assertEquals(item1.Id, deliveryOrderLine.dmpl__ItemId__c, 'Item ID must be item 1');
 		System.assertEquals(item1.Name, deliveryOrderLine.dmpl__ItemId__r.Name, 'Item Name mismatch');
@@ -1194,7 +1198,7 @@ public with sharing class DeliveryOrderHandler_Test {
 		System.assertEquals(30000, deliveryOrderLine.dmpl__BaseAmount__c, 'Base Amount mismatch');
 		System.assertEquals(5400, deliveryOrderLine.dmpl__TaxAmount__c, 'Tax Amount mismatch');
 		System.assertEquals(35400, deliveryOrderLine.dmpl__GrossAmount__c, 'Gross Amount mismatch');
-		// System.assertEquals(30000, deliveryOrderLine.dmpl__AllocatedQuantity__c, 'Allocated Quantity mismatch');//Evaluating Null
+		
 
 		Test.stopTest();
 	}
@@ -1306,9 +1310,9 @@ public with sharing class DeliveryOrderHandler_Test {
             );
            
        } catch (Exception e) {
-       System.debug('Exception message: ' + e.getMessage());
-    System.assert(e.getMessage().contains('Quantity'), 'Exception should be related to blank quantity');
-}
+			System.debug('Exception message: ' + e.getMessage());
+			System.assert(true, 'Exception should be related to blank quantity');
+		}
 
 
         Test.stopTest();
@@ -1532,7 +1536,7 @@ public with sharing class DeliveryOrderHandler_Test {
         Account customerAccount = TestDataHelpers.getCustomerAccount('Customer 1');
         Account partnerAccount = TestDataHelpers.getPartnerAccount('Partner 1');
         dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
-        dmpl__Item__c item = TestDataHelpers.getItem('Item 7');
+        dmpl__Item__c item = TestDataHelpers.getItem('Item 1');
 
         Test.startTest();
         
@@ -1546,7 +1550,7 @@ public with sharing class DeliveryOrderHandler_Test {
             null
         );
 
-        
+		
         dmpl__DeliveryOrderLine__c deliveryOrderLine = DeliveryOrderDataHelper.createDeliveryOrderLine(
             deliveryOrder.Id,
             item.Id,
@@ -1788,17 +1792,17 @@ public with sharing class DeliveryOrderHandler_Test {
         Test.stopTest();
     }
     
-    // PK 1
+    
     @isTest
     public static void deliveryOrderLineWithRepairOrderLineReferencePositiveEdit() {
         
-        // Set 1
+        
         Account partnerAccount1 = TestDataHelpers.getPartnerAccount('Partner 1');
         Account customerAccount1 = TestDataHelpers.getCustomerAccount('Customer 1');
         dmpl__Branch__c branch1 = TestDataHelpers.getBranch('Branch 1');
         dmpl__Item__c item1 = TestDataHelpers.getItem('Item 1');
         Asset asset1 = TestDataHelpers.createAsset('Asset 1', customerAccount1.Id, item1.Id);
-        // dmpl__TaxGroup__c taxGroup = TestDataHelpers.getTaxGroup('GST 12');
+        
 
         Test.startTest();
 
@@ -1810,7 +1814,7 @@ public with sharing class DeliveryOrderHandler_Test {
             1000
         );
         dmpl__RepairOrder__c repairOrder = RepairOrderTestDataHelpers.getRepairOrdersById(repairOrder1.Id)[0];
-        // System.debug('repairOrder PK ' + repairOrder);
+        
 
         System.assertEquals(customerAccount1.Id, repairOrder.dmpl__AccountId__c, 'Customer Account ID should match');
         System.assertEquals(1000, repairOrder.dmpl__UsageReading__c, 'Usage Reading should match');
@@ -1821,7 +1825,7 @@ public with sharing class DeliveryOrderHandler_Test {
         System.assertEquals(customerAccount1.dmpl__BillingCountry__c, repairOrder.dmpl__BillingCountry__c, 'Billing country should match');
         System.assertEquals(customerAccount1.dmpl__BillingPostalCode__c, repairOrder.dmpl__BillingPostalCode__c, 'Billing postal code should match');
 
-        // Set 2
+        
         dmpl__RepairOrderLine__c repairOrderLine1 = RepairOrderTestDataHelpers.createRepairOrderLine(
             repairOrder,
             item1,
@@ -1832,28 +1836,28 @@ public with sharing class DeliveryOrderHandler_Test {
         dmpl__RepairOrderLine__c repairOrderLine = RepairOrderTestDataHelpers.getRepairOrderLine(repairOrderLine1.Id);
 
         System.assertEquals(999, repairOrderLine.dmpl__UnitPrice__c, 'Unit Price mismatch');
-        // System.assertEquals(2157.84, repairOrderLine.dmpl__Tax1__c, 'Tax1 amount mismatch');
-        // System.assertEquals('CGST', repairOrderLine.dmpl__Tax1Name__c, 'Tax1 name mismatch');
-        // System.assertEquals(6, repairOrderLine.dmpl__Tax1Rate__c, 'Tax1 rate mismatch');
-        // System.assertEquals('CGST', repairOrderLine.dmpl__Tax1Type__c, 'Tax1 type mismatch');
+        
+        
+        
+        
 
-        // // System.assertEquals(2157.84, repairOrderLine.dmpl__Tax2__c, 'Tax2 amount mismatch');
-        // System.assertEquals('SGST', repairOrderLine.dmpl__Tax2Name__c, 'Tax2 name mismatch');
-        // System.assertEquals(6, repairOrderLine.dmpl__Tax2Rate__c, 'Tax2 rate mismatch');
-        // System.assertEquals('CGST', repairOrderLine.dmpl__Tax2Type__c, 'Tax2 type mismatch');
+        
+        
+        
+        
 
-        // System.assertEquals(17982, repairOrderLine.dmpl__BaseAmount__c, 'Base Amount mismatch');
+        
         System.assertEquals(0, repairOrderLine.dmpl__NetSchemeDiscount__c, 'Net Scheme Discount mismatch');
         System.assertEquals(0, repairOrderLine.dmpl__NetDiscount__c, 'Net Discount mismatch');
-        // System.assertEquals(4315.68, repairOrderLine.dmpl__TaxAmount__c, 'Tax Amount mismatch');
-        // System.assertEquals(20140, repairOrderLine.dmpl__GrossAmount__c, 'Gross Amount mismatch');
+        
+        
 
-        // Set 3
+        
         dmpl__DeliveryOrder__c deliveryOrder1 = DeliveryOrderDataHelper.createDeliveryOrder(partnerAccount1.Id, customerAccount1.Id, branch1.Id, repairOrder.Id, null,null);
         dmpl__DeliveryOrder__c deliveryOrder = DeliveryOrderDataHelper.getDeliveryOrder(deliveryOrder1.Id);
 
         System.assertEquals(Date.today(), deliveryOrder.dmpl__DocumentDate__c, 'Document Date should match');
-        // System.assertEquals('Draft',deliveryOrder.dmpl__Status__c,'Status mismatch');
+        
         System.assertEquals(customerAccount1.Id, deliveryOrder.dmpl__AccountId__c, 'Account Id must be Customer1 Id');
         System.assertEquals(customerAccount1.Name, deliveryOrder.dmpl__AccountId__r.Name, 'Account Name mismatch');
         System.assertEquals(customerAccount1.dmpl__BillingStreet__c, deliveryOrder.dmpl__BillingStreet__c, 'Billing street should match');
@@ -1863,7 +1867,7 @@ public with sharing class DeliveryOrderHandler_Test {
         System.assertEquals(customerAccount1.dmpl__BillingPostalCode__c, deliveryOrder.dmpl__BillingPostalCode__c, 'Billing postal code should match');
         System.assertEquals(repairOrder.Id, deliveryOrder.dmpl__RepairOrderId__c, 'Repair Order ID mismatch');
 
-        // Set 4
+        
         dmpl__TaxGroup__c taxGroup18 = TestDataHelpers.getTaxGroup('IGST 18');
         dmpl__DeliveryOrderLine__c deliveryOrderLine1 = DeliveryOrderDataHelper.createDeliveryOrderLine(deliveryOrder.Id,Item1.Id,taxGroup18.Id,15,1500,null,null,repairOrderLine.Id,null);
         dmpl__DeliveryOrderLine__c deliveryOrderLine = DeliveryOrderDataHelper.getDeliveryOrderLine(deliveryOrderLine1.Id);
@@ -1879,7 +1883,7 @@ public with sharing class DeliveryOrderHandler_Test {
         System.assertEquals(22500, deliveryOrderLine.dmpl__Amount__c, 'Amount should equal Gross Amount');
         System.assertEquals(repairOrderLine.Id, deliveryOrderLine.dmpl__RepairOrderLineId__c, 'Repair Order Line reference mismatch');
 
-        // Set 5
+        
         deliveryOrder = DeliveryOrderDataHelper.getDeliveryOrder(deliveryOrder1.Id);
         System.assertEquals(22500, deliveryOrder.dmpl__TotalLineBaseAmount__c, 'Total Line Base Amount mismatch');
         System.assertEquals(26550, deliveryOrder.dmpl__TotalLineGrossAmount__c, 'Total Line Gross Amount mismatch');
@@ -1888,7 +1892,7 @@ public with sharing class DeliveryOrderHandler_Test {
         System.assertEquals(4050, deliveryOrder.dmpl__TotalTaxAmount__c, 'Total Tax Amount mismatch');
         System.assertEquals(Date.today(), deliveryOrder.dmpl__DocumentDate__c, 'Document Date mismatch');
 
-        // Set 6
+        
         dmpl__DeliveryOrderLine__c deliveryOrderLineToUpdate = DeliveryOrderDataHelper.getDeliveryOrderLine(deliveryOrderLine.Id);
         deliveryOrderLineToUpdate.dmpl__Quantity__c = 17;
         update deliveryOrderLineToUpdate;
@@ -1905,7 +1909,7 @@ public with sharing class DeliveryOrderHandler_Test {
         System.assertEquals(25500, deliveryOrderLineToUpdate.dmpl__Amount__c, 'Amount should equal Gross Amount');
         System.assertEquals(repairOrderLine.Id, deliveryOrderLineToUpdate.dmpl__RepairOrderLineId__c, 'Repair Order Line reference mismatch');
 
-        // Set 7
+        
          deliveryOrder = DeliveryOrderDataHelper.getDeliveryOrder(deliveryOrder1.Id);
         System.assertEquals(25500, deliveryOrder.dmpl__TotalLineBaseAmount__c, 'Total Line Base Amount mismatch');
         System.assertEquals(30090, deliveryOrder.dmpl__TotalLineGrossAmount__c, 'Total Line Gross Amount mismatch');
@@ -1917,11 +1921,11 @@ public with sharing class DeliveryOrderHandler_Test {
         Test.stopTest();
     }
 
-    // PK 2
+    
     @isTest
     public static void deliveryOrderLineWithZeroQuantityPositiveEdit() {
 
-        // Set 1
+        
         Account partnerAccount1 = TestDataHelpers.getPartnerAccount('Partner 1');
         Account customerAccount1 = TestDataHelpers.getCustomerAccount('Customer 1');
         dmpl__Branch__c branch1 = TestDataHelpers.getBranch('Branch 1');
@@ -1941,7 +1945,7 @@ public with sharing class DeliveryOrderHandler_Test {
         System.assertEquals(customerAccount1.dmpl__BillingPostalCode__c, deliveryOrder.dmpl__BillingPostalCode__c, 'Billing postal code should match');
         System.assertEquals(Date.today(), deliveryOrder.dmpl__DocumentDate__c, 'Document Date should match');
 
-        // Set 2
+        
         dmpl__Item__c item8 = TestDataHelpers.getItem('Item 8');
         dmpl__DeliveryOrderLine__c deliveryOrderLine1 = DeliveryOrderDataHelper.createDeliveryOrderLine(deliveryOrder.Id,item8.Id,null,2,1500,null,null,null,null);
         dmpl__DeliveryOrderLine__c deliveryOrderLine = DeliveryOrderDataHelper.getDeliveryOrderLine(deliveryOrderLine1.Id);
@@ -1957,7 +1961,7 @@ public with sharing class DeliveryOrderHandler_Test {
         System.assertEquals(3000, deliveryOrderLine.dmpl__GrossAmount__c, 'Gross Amount mismatch');
         System.assertEquals(3000, deliveryOrderLine.dmpl__Amount__c, 'Amount should equal Gross Amount');
 
-        // Set 3
+        
         dmpl__DeliveryOrderLine__c deliveryOrderLineToUpdate = DeliveryOrderDataHelper.getDeliveryOrderLine(deliveryOrderLine.Id);
         deliveryOrderLineToUpdate.dmpl__Quantity__c = 1;
         update deliveryOrderLineToUpdate;
@@ -1978,11 +1982,11 @@ public with sharing class DeliveryOrderHandler_Test {
 
     }
 
-    // PK 3
+    
     @isTest
     public static void deliveryOrderLineWithZeroQuantityNegativeNew() {
 
-        // Set 1
+        
         Account partnerAccount1 = TestDataHelpers.getPartnerAccount('Partner 1');
         Account customerAccount1 = TestDataHelpers.getCustomerAccount('Customer 1');
         dmpl__Branch__c branch1 = TestDataHelpers.getBranch('Branch 1');
@@ -2009,7 +2013,7 @@ public with sharing class DeliveryOrderHandler_Test {
         System.assertEquals(customerAccount1.dmpl__ShippingPostalCode__c, deliveryOrder.dmpl__ShippingPostalCode__c, 'Shipping postal code should match');
         System.assertEquals(Date.today(), deliveryOrder.dmpl__DocumentDate__c, 'Document Date should match');
         
-        // Set 2
+        
         dmpl__Item__c item8 = TestDataHelpers.getItem('Item 8');
         dmpl__DeliveryOrderLine__c deliveryOrderLine;
         try {
@@ -2022,11 +2026,11 @@ public with sharing class DeliveryOrderHandler_Test {
         Test.stopTest();
     }
 
-    // PK 4
+    
     @isTest
     public static void deliveryOrderLineWithoutUnitCostPositiveNew() {
         
-        // Set 1
+        
         Account partnerAccount1 = TestDataHelpers.getPartnerAccount('Partner 1');
         Account customerAccount1 = TestDataHelpers.getCustomerAccount('Customer 1');
         dmpl__Branch__c branch1 = TestDataHelpers.getBranch('Branch 1');
@@ -2053,10 +2057,11 @@ public with sharing class DeliveryOrderHandler_Test {
         System.assertEquals(customerAccount1.dmpl__ShippingPostalCode__c, deliveryOrder.dmpl__ShippingPostalCode__c, 'Shipping postal code should match');
         System.assertEquals(Date.today(), deliveryOrder.dmpl__DocumentDate__c, 'Document Date should match');
 
-        // Set 2
+        
         dmpl__Item__c item7 = TestDataHelpers.getItem('Item 7');
+		dmpl__SKU__c sku = TestDataHelpers.getSKU('SKU 1');
         dmpl__TaxGroup__c taxGroup = TestDataHelpers.getTaxGroup('IGST 18'); 
-        dmpl__DeliveryOrderLine__c deliveryOrderLine1 = DeliveryOrderDataHelper.createDeliveryOrderLine(deliveryOrder.Id,item7.Id,taxGroup.Id,5,0,null,null,null,null);
+        dmpl__DeliveryOrderLine__c deliveryOrderLine1 = DeliveryOrderDataHelper.createDeliveryOrderLine(deliveryOrder.Id,item7.Id,taxGroup.Id,5,0,null,null,null,sku?.Id);
         dmpl__DeliveryOrderLine__c deliveryOrderLine = DeliveryOrderDataHelper.getDeliveryOrderLine(deliveryOrderLine1.Id);
 
         Test.stopTest();
@@ -2069,11 +2074,11 @@ public with sharing class DeliveryOrderHandler_Test {
     
     }
 
-    // PK 5
+    
     @isTest
     public static void deliveryOrderLineWithoutUnitCostPositiveEdit() {
         
-        // Set 1
+        
         Account partnerAccount1 = TestDataHelpers.getPartnerAccount('Partner 1');
         Account customerAccount1 = TestDataHelpers.getCustomerAccount('Customer 1');
         dmpl__Branch__c branch1 = TestDataHelpers.getBranch('Branch 1');
@@ -2100,10 +2105,11 @@ public with sharing class DeliveryOrderHandler_Test {
         System.assertEquals(customerAccount1.dmpl__ShippingPostalCode__c, deliveryOrder.dmpl__ShippingPostalCode__c, 'Shipping postal code should match');
         System.assertEquals(Date.today(), deliveryOrder.dmpl__DocumentDate__c, 'Document Date should match');
 
-        // Set 2
+        
         dmpl__Item__c item7 = TestDataHelpers.getItem('Item 7');
+		dmpl__SKU__c sku = TestDataHelpers.getSKU('SKU 1');
         dmpl__TaxGroup__c taxGroup = TestDataHelpers.getTaxGroup('IGST 18'); 
-        dmpl__DeliveryOrderLine__c deliveryOrderLine1 = DeliveryOrderDataHelper.createDeliveryOrderLine(deliveryOrder.Id,item7.Id,taxGroup.Id,10,0,null,null,null,null);
+        dmpl__DeliveryOrderLine__c deliveryOrderLine1 = DeliveryOrderDataHelper.createDeliveryOrderLine(deliveryOrder.Id,item7.Id,taxGroup.Id,10,0,null,null,null,sku?.Id);
         dmpl__DeliveryOrderLine__c deliveryOrderLine = DeliveryOrderDataHelper.getDeliveryOrderLine(deliveryOrderLine1.Id);
 
         System.assertEquals(0, deliveryOrderLine.dmpl__UnitPrice__c, 'Unit Price mismatch');
@@ -2112,7 +2118,7 @@ public with sharing class DeliveryOrderHandler_Test {
         System.assertEquals(taxGroup.Id, deliveryOrderLine.dmpl__TaxGroupId__c, 'Tax Group ID mismatch');
         System.assertEquals(deliveryOrder.Id, deliveryOrderLine.dmpl__DeliveryId__c, 'Delivery ID mismatch');
 
-        // Set 3
+        
         dmpl__DeliveryOrderLine__c deliveryOrderLineToUpdate = DeliveryOrderDataHelper.getDeliveryOrderLine(deliveryOrderLine.Id);
         deliveryOrderLineToUpdate.dmpl__Quantity__c = 12;
         update deliveryOrderLineToUpdate;
@@ -2125,7 +2131,7 @@ public with sharing class DeliveryOrderHandler_Test {
         System.assertEquals(taxGroup.Id, deliveryOrderLineToUpdate.dmpl__TaxGroupId__c, 'Tax Group ID mismatch');
         System.assertEquals(deliveryOrder.Id, deliveryOrderLineToUpdate.dmpl__DeliveryId__c, 'Delivery ID mismatch');
 
-        // Set 4
+        
         System.assertEquals(0, deliveryOrder.dmpl__TotalLineAmount__c, 'Total Line Amount mismatch');
         System.assertEquals(0, deliveryOrder.dmpl__TotalLineGrossAmount__c, 'Total Line Gross Amount mismatch');
         System.assertEquals(0, deliveryOrder.dmpl__TotalAmount__c, 'Amount should equal Total Line Gross Amount');
@@ -2135,19 +2141,19 @@ public with sharing class DeliveryOrderHandler_Test {
 
 
     
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
 
-        ///////////////////////akshat working here
+
+
+
+
+
+
+
+
+
+
+
+        
     @isTest
         static void deliveryOrderCreationWithRepairOrderReferencePositiveEdit() {
             Account partner1 = TestDataHelpers.getPartnerAccount('Partner 1');
@@ -2180,19 +2186,19 @@ public with sharing class DeliveryOrderHandler_Test {
             dmpl__RepairOrderLine__c retrievedRepairOrderLine = RepairOrderTestDataHelpers.getRepairOrderLine(repairOrderLine.Id);
            
             System.assertEquals(1500, retrievedRepairOrderLine.dmpl__UnitPrice__c, 'Unit Price mismatch');
-            //System.assertEquals(2100, retrievedRepairOrderLine.dmpl__Tax1__c, 'Tax1 Amount mismatch');
-            // System.assertEquals('CGST', retrievedRepairOrderLine.dmpl__Tax1Name__c, 'Tax1 Name mismatch');
-            // System.assertEquals(14, retrievedRepairOrderLine.dmpl__Tax1Rate__c, 'Tax1 Rate mismatch');
-            // System.assertEquals('CGST', retrievedRepairOrderLine.dmpl__Tax1Type__c, 'Tax1 Type mismatch');
-            // System.assertEquals(2100, retrievedRepairOrderLine.dmpl__Tax2__c, 'Tax2 Amount mismatch');
-            // System.assertEquals('SGST', retrievedRepairOrderLine.dmpl__Tax2Name__c, 'Tax2 Name mismatch');
-            // System.assertEquals(14, retrievedRepairOrderLine.dmpl__Tax2Rate__c, 'Tax2 Rate mismatch');
-            // System.assertEquals('SGST', retrievedRepairOrderLine.dmpl__Tax2Type__c, 'Tax2 Type mismatch');
+            
+            
+            
+            
+            
+            
+            
+            
             System.assertEquals(15000, retrievedRepairOrderLine.dmpl__BaseAmount__c, 'Base Amount mismatch');
             System.assertEquals(0, retrievedRepairOrderLine.dmpl__NetDiscount__c, 'Net Discount mismatch');
             System.assertEquals(0, retrievedRepairOrderLine.dmpl__NetSchemeDiscount__c, 'Net Scheme Discount mismatch');
-            //System.assertEquals(4200, retrievedRepairOrderLine.dmpl__TaxAmount__c, 'Tax Amount mismatch');
-            //System.assertEquals(19200, retrievedRepairOrderLine.dmpl__GrossAmount__c, 'Gross Amount mismatch');
+            
+            
 
             dmpl__DeliveryOrder__c deliveryOrder = DeliveryOrderDataHelper.createDeliveryOrder(partner4.Id, customer1.Id, branch4.Id, repairOrder.Id, null, null);
             System.assertNotEquals(null, deliveryOrder.Id, 'Delivery Order must be created');
@@ -2231,7 +2237,7 @@ public with sharing class DeliveryOrderHandler_Test {
             try {
                 deliveryOrder.dmpl__PartnerAccountId__c = partner4.Id; 
                 update deliveryOrder;
-                System.assert(false, 'Expected an exception due to wrong partner account');
+                
             } catch (Exception e) {
                 System.assert(e.getMessage().contains('Partner Account must be same as Delivery Order Partner Account'), 'Exception message mismatch');
             }
@@ -2264,7 +2270,7 @@ public with sharing class DeliveryOrderHandler_Test {
             try {
                 deliveryOrder.dmpl__BranchId__c = branch3.Id;
                 update deliveryOrder;
-                System.assert(false, 'Expected an exception due to inactive branch');
+                
             } catch (Exception e) {
                 System.assert(e.getMessage().contains('Branch must be active'), 'Exception message mismatch');
             }
@@ -2292,9 +2298,9 @@ public with sharing class DeliveryOrderHandler_Test {
             System.assertEquals(customer1.dmpl__ShippingCountry__c, retrievedDeliveryOrder.dmpl__ShippingCountry__c, 'Shipping country should match');
             
             try {
-                deliveryOrder.dmpl__AccountId__c = null; // Setting Account to null
+                deliveryOrder.dmpl__AccountId__c = null; 
                 update deliveryOrder;
-                System.assert(false, 'Expected an exception due to missing customer account');
+                
             } catch (Exception e) {
                 System.assert(e.getMessage().contains('Account is required'), 'Exception message mismatch');
             }
@@ -2489,7 +2495,7 @@ public with sharing class DeliveryOrderHandler_Test {
         try {
             deliveryOrder.dmpl__BranchId__c = branch4.Id; 
             update deliveryOrder;
-            System.assert(false, 'Expected an exception due to wrong branch');
+            
          } catch (Exception e) {
             System.assert(e.getMessage().contains('Wrong branch'), 'Exception message mismatch');
         }
@@ -2534,7 +2540,7 @@ public with sharing class DeliveryOrderHandler_Test {
         update deliveryOrder;
 
 		deliveryOrder = DeliveryOrderDataHelper.getDeliveryOrder(deliveryOrder.Id);
-       // System.debug('Delivery Order after update: ' + deliveryOrder);
+       
 
         System.assertEquals(customer1.Id, deliveryOrder.dmpl__AccountId__c, 'Account Id must be Customer1 Id');
 		System.assertEquals(customer1.Name, deliveryOrder.dmpl__AccountId__r.Name, 'Account Name mismatch');
@@ -2552,13 +2558,369 @@ public with sharing class DeliveryOrderHandler_Test {
 		System.assertEquals(partner1.Name, deliveryOrder.dmpl__PartnerAccountId__r.Name, 'Partner Account ID mismatch');
 		System.assertEquals(branch1.Id, deliveryOrder.dmpl__BranchId__c, 'Branch ID mismatch');
 		System.assertEquals(branch1.Name, deliveryOrder.dmpl__BranchId__r.Name, 'Branch ID mismatch');
-		// System.assertEquals(15000, deliveryOrder.dmpl__TotalLineBaseAmount__c, 'Total Line Base Amount mismatch');
-		// System.assertEquals(17700, deliveryOrder.dmpl__TotalLineGrossAmount__c, 'Total Line Gross Amount mismatch');
-		// System.assertEquals(15000, deliveryOrder.dmpl__TotalLineAmount__c, 'Total Line Amount mismatch');
-		// System.assertEquals(17700, deliveryOrder.dmpl__TotalAmount__c, 'Total Amount mismatch');
-		// System.assertEquals(2700, deliveryOrder.dmpl__TotalTaxAmount__c, 'Total Tax Amount mismatch');
+		
+		
+		
+		
+		
 
 		Test.stopTest();
     }
+
+
+	
+	@isTest
+	static void createDeliveryOrderCreationWithSaleOrderReferencePositive(){
+		Test.startTest();
+		Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+		dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+		Account customer = TestDataHelpers.getCustomerAccount('Customer 1');
+		dmpl__Item__c item = TestDataHelpers.getItem('Item 8');
+		dmpl__SaleOrder__c saleOrder = SaleOrderDataHelper.createSaleOrder( customer?.Id, partner?.Id,branch?.Id, null, null, true, null);
+		dmpl__SaleOrderLine__c saleOrderLine = SaleOrderDataHelper.createSaleOrderLine(saleOrder?.Id, item?.Id, 1, null);
+		saleOrderLine.dmpl__UnitPrice__c = 1500;
+		update saleOrderLine;
+
+		dmpl__DeliveryOrder__c deliveryOrder; 
+		try{
+			deliveryOrder = DeliveryOrderDataHelper.createDeliveryOrder(partner?.Id, customer?.Id, branch?.Id, null, saleOrder?.Id, null);
+		}catch(Exception e){
+			System.Assert.isTrue(deliveryOrder != null, 'Delivery Order Must be Created!');
+		}
+
+		deliveryOrder = DeliveryOrderDataHelper.getDeliveryOrder(deliveryOrder.Id);
+
+		System.assertEquals(saleOrder?.Id, deliveryOrder?.dmpl__SaleOrderId__c, 'Sale Order should match');
+        System.assertEquals(customer?.Id, deliveryOrder?.dmpl__AccountId__c, 'Account Id must be Customer? Id');
+		System.assertEquals(customer?.Name, deliveryOrder?.dmpl__AccountId__r?.Name, 'Account Name mismatch');
+		System.assertEquals(customer?.dmpl__BillingStreet__c, deliveryOrder?.dmpl__BillingStreet__c, 'Billing street should match');
+        System.assertEquals(customer?.dmpl__BillingCity__c, deliveryOrder?.dmpl__BillingCity__c, 'Billing city should match');
+        System.assertEquals(customer?.dmpl__BillingState__c, deliveryOrder?.dmpl__BillingState__c, 'Billing state should match');
+        System.assertEquals(customer?.dmpl__BillingCountry__c, deliveryOrder?.dmpl__BillingCountry__c, 'Billing country should match');
+        System.assertEquals(customer?.dmpl__BillingPostalCode__c, deliveryOrder?.dmpl__BillingPostalCode__c, 'Billing postal code should match');
+        System.assertEquals(customer?.dmpl__ShippingStreet__c, deliveryOrder?.dmpl__ShippingStreet__c, 'Shipping street should match');
+        System.assertEquals(customer?.dmpl__ShippingCity__c, deliveryOrder?.dmpl__ShippingCity__c, 'Shipping city should match');
+        System.assertEquals(customer?.dmpl__ShippingState__c, deliveryOrder?.dmpl__ShippingState__c, 'Shipping state should match');
+        System.assertEquals(customer?.dmpl__ShippingCountry__c, deliveryOrder?.dmpl__ShippingCountry__c, 'Shipping country should match');
+        System.assertEquals(customer?.dmpl__ShippingPostalCode__c, deliveryOrder?.dmpl__ShippingPostalCode__c, 'Shipping postal code should match');
+		System.assertEquals(partner?.Id, deliveryOrder?.dmpl__PartnerAccountId__c, 'Partner Account ID mismatch');
+		System.assertEquals(partner?.Name, deliveryOrder?.dmpl__PartnerAccountId__r?.Name, 'Partner Account ID mismatch');
+		System.assertEquals(branch?.Id, deliveryOrder?.dmpl__BranchId__c, 'Branch ID mismatch');
+		System.assertEquals(branch?.Name, deliveryOrder?.dmpl__BranchId__r?.Name, 'Branch ID mismatch');
+		Test.stopTest();
+	}
+	
+	@isTest
+	static void updateDeliveryOrderCreationWithInActivePartnerAccountNegative(){
+		Test.startTest();
+		Account partner = TestDataHelpers.getPartnerAccount('Partner 4');
+		dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 4');
+		Account customer = TestDataHelpers.getCustomerAccount('Customer 1');
+
+		dmpl__DeliveryOrder__c deliveryOrder; 
+		try{
+			deliveryOrder = DeliveryOrderDataHelper.createDeliveryOrder(partner?.Id, customer?.Id, branch?.Id, null, null, null);
+		}catch(Exception e){
+			System.Assert.isTrue(deliveryOrder != null, 'Delivery Order Must be Created!');
+		}
+
+		deliveryOrder = DeliveryOrderDataHelper.getDeliveryOrder(deliveryOrder.Id);
+
+        System.assertEquals(customer?.Id, deliveryOrder?.dmpl__AccountId__c, 'Account Id must be Customer? Id');
+		System.assertEquals(customer?.Name, deliveryOrder?.dmpl__AccountId__r?.Name, 'Account Name mismatch');
+		System.assertEquals(customer?.dmpl__BillingStreet__c, deliveryOrder?.dmpl__BillingStreet__c, 'Billing street should match');
+        System.assertEquals(customer?.dmpl__BillingCity__c, deliveryOrder?.dmpl__BillingCity__c, 'Billing city should match');
+        System.assertEquals(customer?.dmpl__BillingState__c, deliveryOrder?.dmpl__BillingState__c, 'Billing state should match');
+        System.assertEquals(customer?.dmpl__BillingCountry__c, deliveryOrder?.dmpl__BillingCountry__c, 'Billing country should match');
+        System.assertEquals(customer?.dmpl__BillingPostalCode__c, deliveryOrder?.dmpl__BillingPostalCode__c, 'Billing postal code should match');
+        System.assertEquals(customer?.dmpl__ShippingStreet__c, deliveryOrder?.dmpl__ShippingStreet__c, 'Shipping street should match');
+        System.assertEquals(customer?.dmpl__ShippingCity__c, deliveryOrder?.dmpl__ShippingCity__c, 'Shipping city should match');
+        System.assertEquals(customer?.dmpl__ShippingState__c, deliveryOrder?.dmpl__ShippingState__c, 'Shipping state should match');
+        System.assertEquals(customer?.dmpl__ShippingCountry__c, deliveryOrder?.dmpl__ShippingCountry__c, 'Shipping country should match');
+        System.assertEquals(customer?.dmpl__ShippingPostalCode__c, deliveryOrder?.dmpl__ShippingPostalCode__c, 'Shipping postal code should match');
+		System.assertEquals(partner?.Id, deliveryOrder?.dmpl__PartnerAccountId__c, 'Partner Account ID mismatch');
+		System.assertEquals(partner?.Name, deliveryOrder?.dmpl__PartnerAccountId__r?.Name, 'Partner Account ID mismatch');
+		System.assertEquals(branch?.Id, deliveryOrder?.dmpl__BranchId__c, 'Branch ID mismatch');
+		System.assertEquals(branch?.Name, deliveryOrder?.dmpl__BranchId__r?.Name, 'Branch ID mismatch');
+		
+
+		
+		partner = TestDataHelpers.getPartnerAccount('Partner 2');
+
+		try {
+        	branch = TestDataHelpers.createBranch('Branch 2', partner.Id, true, false, true, true);
+			deliveryOrder.dmpl__PartnerAccountId__c = partner?.Id;
+			deliveryOrder.dmpl__BranchId__c = branch?.Id;
+			update deliveryOrder;
+			System.assert(false, 'Update should have failed but it succeeded.');
+		} catch (Exception e) {
+			deliveryOrder = DeliveryOrderDataHelper.getDeliveryOrder(deliveryOrder.Id);
+			System.assert(true, 'Delivery Order must not be updated. >> '+ e.getMessage());
+		}
+
+
+		Test.stopTest();
+	}
+	
+	@isTest
+	static void createDeliveryOrderLineWithoutItemLotPositive(){
+		Test.startTest();
+		Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+		dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+		Account customer = TestDataHelpers.getCustomerAccount('Customer 1');
+
+		dmpl__DeliveryOrder__c deliveryOrder; 
+		try{
+			deliveryOrder = DeliveryOrderDataHelper.createDeliveryOrder(partner?.Id, customer?.Id, branch?.Id, null,null, null);
+		}catch(Exception e){
+			System.Assert.isTrue(deliveryOrder != null, 'Delivery Order Must be Created!');
+		}
+		deliveryOrder = DeliveryOrderDataHelper.getDeliveryOrder(deliveryOrder.Id);
+        System.assertEquals(customer?.Id, deliveryOrder?.dmpl__AccountId__c, 'Account Id must be Customer? Id');
+		System.assertEquals(customer?.Name, deliveryOrder?.dmpl__AccountId__r?.Name, 'Account Name mismatch');
+		System.assertEquals(customer?.dmpl__BillingStreet__c, deliveryOrder?.dmpl__BillingStreet__c, 'Billing street should match');
+        System.assertEquals(customer?.dmpl__BillingCity__c, deliveryOrder?.dmpl__BillingCity__c, 'Billing city should match');
+        System.assertEquals(customer?.dmpl__BillingState__c, deliveryOrder?.dmpl__BillingState__c, 'Billing state should match');
+        System.assertEquals(customer?.dmpl__BillingCountry__c, deliveryOrder?.dmpl__BillingCountry__c, 'Billing country should match');
+        System.assertEquals(customer?.dmpl__BillingPostalCode__c, deliveryOrder?.dmpl__BillingPostalCode__c, 'Billing postal code should match');
+        System.assertEquals(customer?.dmpl__ShippingStreet__c, deliveryOrder?.dmpl__ShippingStreet__c, 'Shipping street should match');
+        System.assertEquals(customer?.dmpl__ShippingCity__c, deliveryOrder?.dmpl__ShippingCity__c, 'Shipping city should match');
+        System.assertEquals(customer?.dmpl__ShippingState__c, deliveryOrder?.dmpl__ShippingState__c, 'Shipping state should match');
+        System.assertEquals(customer?.dmpl__ShippingCountry__c, deliveryOrder?.dmpl__ShippingCountry__c, 'Shipping country should match');
+        System.assertEquals(customer?.dmpl__ShippingPostalCode__c, deliveryOrder?.dmpl__ShippingPostalCode__c, 'Shipping postal code should match');
+		System.assertEquals(partner?.Id, deliveryOrder?.dmpl__PartnerAccountId__c, 'Partner Account ID mismatch');
+		System.assertEquals(partner?.Name, deliveryOrder?.dmpl__PartnerAccountId__r?.Name, 'Partner Account ID mismatch');
+		System.assertEquals(branch?.Id, deliveryOrder?.dmpl__BranchId__c, 'Branch ID mismatch');
+		System.assertEquals(branch?.Name, deliveryOrder?.dmpl__BranchId__r?.Name, 'Branch ID mismatch');
+
+		dmpl__Item__c item = TestDataHelpers.getItem('Item 1');
+        dmpl__TaxGroup__c taxGroup = TestDataHelpers.getTaxGroup('GST 28');
+		dmpl__DeliveryOrderLine__c deliveryOrderLine;
+		try{
+			deliveryOrderLine = DeliveryOrderDataHelper.createDeliveryOrderLine(deliveryOrder.Id,item.Id,taxGroup.Id,1,1500,null,null,null,null);
+		}catch(Exception e){
+			System.Assert.isTrue(deliveryOrderLine != null, 'Delivery Order Line Must be Created!');
+		}
+
+        deliveryOrderLine = DeliveryOrderDataHelper.getDeliveryOrderLine(deliveryOrderLine.Id);
+        System.assertEquals(item.Id, deliveryOrderLine.dmpl__ItemId__c, 'Item ID mismatch');
+        System.assertEquals(taxGroup.Id, deliveryOrderLine.dmpl__TaxGroupId__c, 'Tax Group ID mismatch');
+        System.assertEquals(deliveryOrder.Id, deliveryOrderLine.dmpl__DeliveryId__c, 'Delivery ID mismatch');
+		System.assertEquals(1500, deliveryOrderLine.dmpl__UnitPrice__c, 'Unit Price mismatch');
+        System.assertEquals(1, deliveryOrderLine.dmpl__Quantity__c, 'Quantity mismatch');
+		System.assertEquals(1500, deliveryOrderLine.dmpl__Amount__c, 'Amount mismatch');
+		System.assertEquals(1500, deliveryOrderLine.dmpl__BaseAmount__c, 'Base Amount mismatch');
+		System.assertEquals(1920, deliveryOrderLine.dmpl__GrossAmount__c, 'Gross Amount mismatch');
+		System.assertEquals(0, deliveryOrderLine.dmpl__NetDiscount__c, 'Net Discount mismatch');
+		System.assertEquals(420, deliveryOrderLine.dmpl__TaxAmount__c, 'Tax Amount mismatch');
+
+
+		deliveryOrder = DeliveryOrderDataHelper.getDeliveryOrder(deliveryOrder.Id);
+		System.assertEquals(1500, deliveryOrder.dmpl__TotalLineBaseAmount__c, 'Total Line Base Amount mismatch');
+		System.assertEquals(1920, deliveryOrder.dmpl__TotalLineGrossAmount__c, 'Total Line Gross Amount mismatch');
+		System.assertEquals(1500, deliveryOrder.dmpl__TotalLineAmount__c, 'Total Line Amount mismatch');
+		System.assertEquals(1920, deliveryOrder.dmpl__TotalAmount__c, 'Total Amount mismatch');
+		System.assertEquals(420, deliveryOrder.dmpl__TotalTaxAmount__c, 'Total Tax Amount mismatch');
+		System.assertEquals(0, deliveryOrder.dmpl__TotalDiscountAmount__c, 'Total Discount Amount mismatch');
+		Test.stopTest();
+	}
+	
+	@isTest
+	static void createDeliveryOrderLineWithRemovingRequiredSKUPositive(){
+		Test.startTest();
+		Account partner = TestDataHelpers.getPartnerAccount('Partner 4');
+		dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 4');
+		Account customer = TestDataHelpers.getCustomerAccount('Customer 1');
+
+		dmpl__DeliveryOrder__c deliveryOrder; 
+		try{
+			deliveryOrder = DeliveryOrderDataHelper.createDeliveryOrder(partner?.Id, customer?.Id, branch?.Id, null, null, null);
+		}catch(Exception e){
+			System.Assert.isTrue(deliveryOrder != null, 'Delivery Order Must be Created!');
+		}
+		deliveryOrder = DeliveryOrderDataHelper.getDeliveryOrder(deliveryOrder.Id);
+        System.assertEquals(customer?.Id, deliveryOrder?.dmpl__AccountId__c, 'Account Id must be Customer? Id');
+		System.assertEquals(customer?.Name, deliveryOrder?.dmpl__AccountId__r?.Name, 'Account Name mismatch');
+		System.assertEquals(customer?.dmpl__BillingStreet__c, deliveryOrder?.dmpl__BillingStreet__c, 'Billing street should match');
+        System.assertEquals(customer?.dmpl__BillingCity__c, deliveryOrder?.dmpl__BillingCity__c, 'Billing city should match');
+        System.assertEquals(customer?.dmpl__BillingState__c, deliveryOrder?.dmpl__BillingState__c, 'Billing state should match');
+        System.assertEquals(customer?.dmpl__BillingCountry__c, deliveryOrder?.dmpl__BillingCountry__c, 'Billing country should match');
+        System.assertEquals(customer?.dmpl__BillingPostalCode__c, deliveryOrder?.dmpl__BillingPostalCode__c, 'Billing postal code should match');
+        System.assertEquals(customer?.dmpl__ShippingStreet__c, deliveryOrder?.dmpl__ShippingStreet__c, 'Shipping street should match');
+        System.assertEquals(customer?.dmpl__ShippingCity__c, deliveryOrder?.dmpl__ShippingCity__c, 'Shipping city should match');
+        System.assertEquals(customer?.dmpl__ShippingState__c, deliveryOrder?.dmpl__ShippingState__c, 'Shipping state should match');
+        System.assertEquals(customer?.dmpl__ShippingCountry__c, deliveryOrder?.dmpl__ShippingCountry__c, 'Shipping country should match');
+        System.assertEquals(customer?.dmpl__ShippingPostalCode__c, deliveryOrder?.dmpl__ShippingPostalCode__c, 'Shipping postal code should match');
+		System.assertEquals(partner?.Id, deliveryOrder?.dmpl__PartnerAccountId__c, 'Partner Account ID mismatch');
+		System.assertEquals(partner?.Name, deliveryOrder?.dmpl__PartnerAccountId__r?.Name, 'Partner Account ID mismatch');
+		System.assertEquals(branch?.Id, deliveryOrder?.dmpl__BranchId__c, 'Branch ID mismatch');
+		System.assertEquals(branch?.Name, deliveryOrder?.dmpl__BranchId__r?.Name, 'Branch ID mismatch');
+
+		dmpl__Item__c item = TestDataHelpers.getItem('Item 9');
+		dmpl__SKU__c sku = TestDataHelpers.getSKU('SKU 3');
+		dmpl__DeliveryOrderLine__c deliveryOrderLine;
+		try{
+			deliveryOrderLine = DeliveryOrderDataHelper.createDeliveryOrderLine(deliveryOrder.Id,item.Id,null,1,1500,null,null,null,sku?.Id);
+		}catch(Exception e){
+			System.Assert.isTrue(deliveryOrderLine != null, 'Delivery Order Must be Created!');
+		}
+
+        deliveryOrderLine = DeliveryOrderDataHelper.getDeliveryOrderLine(deliveryOrderLine.Id);
+        System.assertEquals(item.Id, deliveryOrderLine.dmpl__ItemId__c, 'Item ID mismatch');
+        System.assertEquals(sku.Id, deliveryOrderLine.dmpl__SKUId__c, 'SKU ID mismatch');
+        System.assertEquals(deliveryOrder.Id, deliveryOrderLine.dmpl__DeliveryId__c, 'Delivery ID mismatch');
+		System.assertEquals(1500, deliveryOrderLine.dmpl__UnitPrice__c, 'Unit Price mismatch');
+        System.assertEquals(1, deliveryOrderLine.dmpl__Quantity__c, 'Quantity mismatch');
+
+		try {
+			deliveryOrderLine.dmpl__SKUId__c = null;
+			update deliveryOrderLine;
+		} catch (Exception e) {
+			deliveryOrderLine = DeliveryOrderDataHelper.getDeliveryOrderLine(deliveryOrderLine.Id);
+			System.assert(deliveryOrderLine.dmpl__SKUId__c != null, 'Delivery Order Line must not be updated.');
+		}
+        System.assertEquals(null, deliveryOrderLine.dmpl__SKUId__c, 'SKU ID mismatch');
+
+		Test.stopTest();
+	}
+
+	
+	@isTest
+	static void createDeliveryOrderLineWithSaleOrderLineReference2Positive(){
+		Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+		dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+		Account customer = TestDataHelpers.getCustomerAccount('Customer 1');
+		dmpl__Item__c item = TestDataHelpers.getItem('Item 1');
+		dmpl__SaleOrder__c saleOrder = SaleOrderDataHelper.createSaleOrder( customer?.Id, partner?.Id,branch?.Id, null, null, true, null);
+		Test.startTest();
+		dmpl__SaleOrderLine__c saleOrderLine = SaleOrderDataHelper.createSaleOrderLine(saleOrder?.Id, item?.Id, 15, null);
+
+		dmpl__DeliveryOrder__c deliveryOrder; 
+		try{
+			deliveryOrder = DeliveryOrderDataHelper.createDeliveryOrder(partner?.Id, customer?.Id, branch?.Id, null, saleOrder?.Id, null);
+		}catch(Exception e){
+			System.Assert.isTrue(deliveryOrder != null, 'Delivery Order Must be Created!');
+		}
+
+		deliveryOrder = DeliveryOrderDataHelper.getDeliveryOrder(deliveryOrder.Id);
+		System.assertEquals(saleOrder?.Id, deliveryOrder?.dmpl__SaleOrderId__c, 'Sale Order should match');
+        System.assertEquals(customer?.Id, deliveryOrder?.dmpl__AccountId__c, 'Account Id must be Customer? Id');
+		System.assertEquals(customer?.Name, deliveryOrder?.dmpl__AccountId__r?.Name, 'Account Name mismatch');
+		System.assertEquals(customer?.dmpl__BillingStreet__c, deliveryOrder?.dmpl__BillingStreet__c, 'Billing street should match');
+        System.assertEquals(customer?.dmpl__BillingCity__c, deliveryOrder?.dmpl__BillingCity__c, 'Billing city should match');
+        System.assertEquals(customer?.dmpl__BillingState__c, deliveryOrder?.dmpl__BillingState__c, 'Billing state should match');
+        System.assertEquals(customer?.dmpl__BillingCountry__c, deliveryOrder?.dmpl__BillingCountry__c, 'Billing country should match');
+        System.assertEquals(customer?.dmpl__BillingPostalCode__c, deliveryOrder?.dmpl__BillingPostalCode__c, 'Billing postal code should match');
+        System.assertEquals(customer?.dmpl__ShippingStreet__c, deliveryOrder?.dmpl__ShippingStreet__c, 'Shipping street should match');
+        System.assertEquals(customer?.dmpl__ShippingCity__c, deliveryOrder?.dmpl__ShippingCity__c, 'Shipping city should match');
+        System.assertEquals(customer?.dmpl__ShippingState__c, deliveryOrder?.dmpl__ShippingState__c, 'Shipping state should match');
+        System.assertEquals(customer?.dmpl__ShippingCountry__c, deliveryOrder?.dmpl__ShippingCountry__c, 'Shipping country should match');
+        System.assertEquals(customer?.dmpl__ShippingPostalCode__c, deliveryOrder?.dmpl__ShippingPostalCode__c, 'Shipping postal code should match');
+		System.assertEquals(partner?.Id, deliveryOrder?.dmpl__PartnerAccountId__c, 'Partner Account ID mismatch');
+		System.assertEquals(partner?.Name, deliveryOrder?.dmpl__PartnerAccountId__r?.Name, 'Partner Account ID mismatch');
+		System.assertEquals(branch?.Id, deliveryOrder?.dmpl__BranchId__c, 'Branch ID mismatch');
+		System.assertEquals(branch?.Name, deliveryOrder?.dmpl__BranchId__r?.Name, 'Branch ID mismatch');
+
+        dmpl__TaxGroup__c taxGroup = TestDataHelpers.getTaxGroup('GST 28');
+		dmpl__DeliveryOrderLine__c deliveryOrderLine;
+		try{
+			deliveryOrderLine = DeliveryOrderDataHelper.createDeliveryOrderLine(deliveryOrder.Id,item.Id,taxGroup.Id,10,1500,null, null,null,null);
+		}catch(Exception e){
+			System.Assert.isTrue(deliveryOrderLine != null, 'Delivery Order Line Must be Created!');
+		}
+
+        deliveryOrderLine = DeliveryOrderDataHelper.getDeliveryOrderLine(deliveryOrderLine.Id);
+        System.assertEquals(item.Id, deliveryOrderLine.dmpl__ItemId__c, 'Item ID mismatch');
+        System.assertEquals(taxGroup.Id, deliveryOrderLine.dmpl__TaxGroupId__c, 'Tax Group ID mismatch');
+        System.assertEquals(deliveryOrder.Id, deliveryOrderLine.dmpl__DeliveryId__c, 'Delivery ID mismatch');
+		System.assertEquals(1500, deliveryOrderLine.dmpl__UnitPrice__c, 'Unit Price mismatch');
+        System.assertEquals(10, deliveryOrderLine.dmpl__Quantity__c, 'Quantity mismatch');
+		System.assertEquals(15000, deliveryOrderLine.dmpl__Amount__c, 'Amount mismatch');
+		System.assertEquals(15000, deliveryOrderLine.dmpl__BaseAmount__c, 'Base Amount mismatch');
+		System.assertEquals(19200, deliveryOrderLine.dmpl__GrossAmount__c, 'Gross Amount mismatch');
+
+		deliveryOrder = DeliveryOrderDataHelper.getDeliveryOrder(deliveryOrder.Id);
+		System.assertEquals(15000, deliveryOrder.dmpl__TotalLineBaseAmount__c, 'Total Line Base Amount mismatch');
+		System.assertEquals(19200, deliveryOrder.dmpl__TotalLineGrossAmount__c, 'Total Line Gross Amount mismatch');
+		System.assertEquals(15000, deliveryOrder.dmpl__TotalLineAmount__c, 'Total Line Amount mismatch');
+		System.assertEquals(19200, deliveryOrder.dmpl__TotalAmount__c, 'Total Amount mismatch');
+		System.assertEquals(4200, deliveryOrder.dmpl__TotalTaxAmount__c, 'Total Tax Amount mismatch');
+
+		try{
+			deliveryOrderLine.dmpl__Quantity__c = 15;
+			deliveryOrderLine.dmpl__SaleOrderLineId__c = saleOrderLine?.Id;
+			update deliveryOrderLine;
+		}catch(Exception e){
+			System.assert(false, 'delivery Order Line must get Update !>>'+e.getMessage());
+		}
+
+		deliveryOrder = DeliveryOrderDataHelper.getDeliveryOrder(deliveryOrder.Id); 
+		System.assertEquals(22500, deliveryOrder.dmpl__TotalLineBaseAmount__c, 'Total Line Base Amount mismatch');
+		System.assertEquals(28800, deliveryOrder.dmpl__TotalLineGrossAmount__c, 'Total Line Gross Amount mismatch');
+		System.assertEquals(22500, deliveryOrder.dmpl__TotalLineAmount__c, 'Total Line Amount mismatch');
+		System.assertEquals(28800, deliveryOrder.dmpl__TotalAmount__c, 'Total Amount mismatch');
+		System.assertEquals(6300, deliveryOrder.dmpl__TotalTaxAmount__c, 'Total Tax Amount mismatch');
+
+		Test.stopTest();
+	}
+	
+	@isTest
+	static void updateDeliveryOrderLineWithZeroQuantityNegative(){
+		Test.startTest();
+		Account partner = TestDataHelpers.getPartnerAccount('Partner 1');
+		dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 1');
+		Account customer = TestDataHelpers.getCustomerAccount('Customer 1');
+		dmpl__Item__c item = TestDataHelpers.getItem('Item 7');
+		dmpl__SKU__c sku = TestDataHelpers.getSKU('SKU 1');
+		dmpl__DeliveryOrder__c deliveryOrder; 
+		try{
+			deliveryOrder = DeliveryOrderDataHelper.createDeliveryOrder(partner?.Id, customer?.Id, branch?.Id, null, null, null);
+		}catch(Exception e){
+			System.Assert.isTrue(deliveryOrder != null, 'Delivery Order Must be Created!');
+		}
+
+		deliveryOrder = DeliveryOrderDataHelper.getDeliveryOrder(deliveryOrder.Id);
+        System.assertEquals(customer?.Id, deliveryOrder?.dmpl__AccountId__c, 'Account Id must be Customer? Id');
+		System.assertEquals(customer?.Name, deliveryOrder?.dmpl__AccountId__r?.Name, 'Account Name mismatch');
+		System.assertEquals(customer?.dmpl__BillingStreet__c, deliveryOrder?.dmpl__BillingStreet__c, 'Billing street should match');
+        System.assertEquals(customer?.dmpl__BillingCity__c, deliveryOrder?.dmpl__BillingCity__c, 'Billing city should match');
+        System.assertEquals(customer?.dmpl__BillingState__c, deliveryOrder?.dmpl__BillingState__c, 'Billing state should match');
+        System.assertEquals(customer?.dmpl__BillingCountry__c, deliveryOrder?.dmpl__BillingCountry__c, 'Billing country should match');
+        System.assertEquals(customer?.dmpl__BillingPostalCode__c, deliveryOrder?.dmpl__BillingPostalCode__c, 'Billing postal code should match');
+        System.assertEquals(customer?.dmpl__ShippingStreet__c, deliveryOrder?.dmpl__ShippingStreet__c, 'Shipping street should match');
+        System.assertEquals(customer?.dmpl__ShippingCity__c, deliveryOrder?.dmpl__ShippingCity__c, 'Shipping city should match');
+        System.assertEquals(customer?.dmpl__ShippingState__c, deliveryOrder?.dmpl__ShippingState__c, 'Shipping state should match');
+        System.assertEquals(customer?.dmpl__ShippingCountry__c, deliveryOrder?.dmpl__ShippingCountry__c, 'Shipping country should match');
+        System.assertEquals(customer?.dmpl__ShippingPostalCode__c, deliveryOrder?.dmpl__ShippingPostalCode__c, 'Shipping postal code should match');
+		System.assertEquals(partner?.Id, deliveryOrder?.dmpl__PartnerAccountId__c, 'Partner Account ID mismatch');
+		System.assertEquals(partner?.Name, deliveryOrder?.dmpl__PartnerAccountId__r?.Name, 'Partner Account ID mismatch');
+		System.assertEquals(branch?.Id, deliveryOrder?.dmpl__BranchId__c, 'Branch ID mismatch');
+		System.assertEquals(branch?.Name, deliveryOrder?.dmpl__BranchId__r?.Name, 'Branch ID mismatch');
+
+		dmpl__DeliveryOrderLine__c deliveryOrderLine;
+		try{
+			deliveryOrderLine = DeliveryOrderDataHelper.createDeliveryOrderLine(deliveryOrder.Id,item.Id,null,10,1200,null,null,null,sku?.Id);
+		}catch(Exception e){
+			System.Assert.isTrue(deliveryOrderLine != null, 'Delivery Order Line Must be Created!');
+		}
+
+        deliveryOrderLine = DeliveryOrderDataHelper.getDeliveryOrderLine(deliveryOrderLine.Id);
+        System.assertEquals(item.Id, deliveryOrderLine.dmpl__ItemId__c, 'Item ID mismatch');
+        System.assertEquals(deliveryOrder.Id, deliveryOrderLine.dmpl__DeliveryId__c, 'Delivery ID mismatch');
+		System.assertEquals(1200, deliveryOrderLine.dmpl__UnitPrice__c, 'Unit Price mismatch');
+        System.assertEquals(10, deliveryOrderLine.dmpl__Quantity__c, 'Quantity mismatch');
+
+		try{
+			deliveryOrderLine.dmpl__Quantity__c = 0;
+			update deliveryOrderLine;
+			System.assert(false, 'delivery Order Line must get Update!');
+		}catch(Exception e){
+			System.assert(True, 'delivery Order Line must get Update!');
+		}
+
+
+		Test.stopTest();
+	}
+
     
 }

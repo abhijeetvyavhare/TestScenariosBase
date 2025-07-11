@@ -25,17 +25,29 @@
         <lightning-radio-group name="documentScope" options={documentScopeOptions}
         value={documentScope} onchange={handleDocumentOptionChange} type="button" disabled={isAllRecordsRestricted}></lightning-radio-group>
       </div> icon-name="custom:custom17" -->
-        <c-header-card show-page-header show-header-border hide-body-margin>
-          <div slot="title" class="slds-m-around_x-small">
-            <lightning-radio-group name="documentScope1" options={documentScopeOptions} value={documentScope}
-              onchange={handleDocumentOptionChange} type="button" disabled={isAllRecordsRestricted}>
-            </lightning-radio-group>
+        <c-header-card show-page-header show-header-border hide-body-margin class="customSearch">
+          <div slot="title" class="slds-m-bottom_x-small slds-m-top_xx-small slds-grid  radioWrapper">
+            <!-- <lightning-radio-group name="documentScope1" options={documentScopeOptions} value={documentScope}
+              onchange={handleDocumentOptionChange} type="button" disabled={isAllRecordsRestricted}  class="customInput">
+            </lightning-radio-group> -->
+            <div class="button-toggle-group">
+              <template for:each={documentScopeOptions} for:item="option">
+                  <button key={option.value}
+                          type="button"
+                          class={option.className}
+                          data-value={option.value}
+                          onclick={handleOptionClick}
+                          disabled={isAllRecordsRestricted}>
+                      {option.label} 
+                  </button>
+              </template>
           </div>
-          <div slot="actions" class="slds-grid slds-m-around_x-small">
-            <lightning-input type="search" class="slds-col" variant="label-hidden" onchange={handleSearch}
+          </div>
+          <div slot="actions" class="slds-grid  slds-m-top_small slds-m-bottom_small">
+            <lightning-input type="search" variant="label-hidden" onchange={handleSearch} c1lass="  customSearchBar"
               placeholder="search..." value={searchKey}></lightning-input>
             <template if:false={getIsAllLinesVisible}>
-              <lightning-button-menu alternative-text="Show menu" class="slds-col" variant="border-filled"
+              <lightning-button-menu alternative-text="Show menu" class=" slds-m-left_small" variant="border-filled"
                 menu-alignment="right" icon-name="utility:connected_apps">
                 <lightning-menu-item value="SelectAll" onclick={handleSelectAllClick}
                   label="Select All"></lightning-menu-item>
@@ -49,18 +61,76 @@
           </div>
           <div class="dmpl-scrollable">
             <template if:true={getIsAllLinesVisible}>
-              <lightning-datatable key-field="Id" suppress-bottom-bar hide-checkbox-column
+              <template lwc:if={isMobile} for:each={mappedCardsData} for:item="card">
+                <div
+                  class="slds-grid slds-grid_vertical slds-box slds-box_x-small slds-theme_default slds-border_bottom slds-m-bottom_small"
+                  key={card.Id}
+                >
+                  <div class="cardContent">
+              
+                    <div class="slds-m-bottom_small">
+                      <lightning-input
+                        type="checkbox"
+                        label="Line Number"
+                        name="lineCheckbox"
+                        data-id={card.Id}
+                        checked={card.isSelected}
+                        onchange={handleCheckboxChange}
+                      ></lightning-input>
+                    </div>
+              
+                    <template lwc:if={card.fields} for:each={card.fields} for:item="item">
+                      <div key={item.label}>
+                        <div class="slds-grid slds-grid_align-start slds-grid_vertical-align-center slds-m-bottom_xx-small">
+                          <label
+                            class="slds-text-body_small slds-col slds-size_7-of-12 slds-truncate customLabel slds-m-bottom_xx-small slds-p-right_small"
+                          >
+                            {item.label}:
+                          </label>
+                          <p class={item.computedClass}>{item.value}</p>
+                        </div>
+                      </div>
+                    </template>
+              
+                  </div>
+                </div>
+              </template>
+              
+              <template lwc:else>
+                <lightning-datatable key-field="Id" suppress-bottom-bar hide-checkbox-column
                 columns={allChildObjectColumns} sorted-by={sortBy}
                 sorted-direction={sortDirection} onsort={doSorting} data={childObjectsData}>
-              </lightning-datatable>
+                </lightning-datatable>
+              </template>
             </template>
             <template if:false={getIsAllLinesVisible}>
-              <c-dmpl-datatable key-field="Id" suppress-bottom-bar hide-checkbox-column
-                onrowselection={handleRowSelection} oncellchange={handleCellChange} columns={selectedChildObjectColumns}
-                onselectedrec={handleSelectedRec} 
-                sorted-by={sortBy} sorted-direction={sortDirection} onsort={doSorting} 
-                draft-values={draftValues} data={childObjectsData}>
-              </c-dmpl-datatable>
+              <template lwc:if={isMobile} for:each={mappedCardsData} for:item="card">
+                  <div class="slds-grid slds-grid_vertical slds-box slds-box_x-small slds-theme_default slds-border_bottom slds-m-bottom_x-small" key={card.Id}>
+                    <div class="cardContent">
+                      <template lwc:if={card.fields} for:each={card.fields} for:item="item">
+                        <div class="slds-grid slds-grid_align-start slds-grid_vertical-align-cnter slds-m-bottom_xx-small" key={item.Id}>
+                          <!-- <label class="slds-text-body_small slds-col slds-size_7-of-12 slds-truncate">{item.label}: </label> -->
+                          <label class="slds-text-body_small slds-col slds-size_7-of-12 slds-truncate customLabel slds-m-bottom_xx-small slds-p-right_small">{item.label}: </label>
+                          <template if:true={item.showReleaseToggle}>
+                            <lightning-input type="toggle" variant="label-hidden" checked={item.value} data-id={card.Id} message-toggle-inactive="" message-toggle-active="" onchange={handleRowSelection}></lightning-input>
+                          </template>
+                          <template if:false={item.showReleaseToggle}>
+                            <!-- <p class="slds-text-body_small slds-truncate slds-col slds-size_5-of-12">{item.value}</p> -->
+                            <p class={item.computedClass}>{item.value}</p>
+                          </template>
+                        </div>
+                      </template> 
+                    </div>
+                  </div>
+              </template>
+              <template lwc:else>
+                <c-dmpl-datatable key-field="Id" suppress-bottom-bar hide-checkbox-column
+                  onrowselection={handleRowSelection} oncellchange={handleCellChange} columns={selectedChildObjectColumns}
+                  onselectedrec={handleSelectedRec} 
+                  sorted-by={sortBy} sorted-direction={sortDirection} onsort={doSorting} 
+                  draft-values={draftValues} data={childObjectsData} class="customTable">
+                </c-dmpl-datatable>
+              </template>
             </template>
           </div>
           <div if:true={noChildObjectsData}>

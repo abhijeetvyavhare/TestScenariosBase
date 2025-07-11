@@ -20,6 +20,29 @@ public with sharing class KPIRulesDataHelper {
         );
     }
 
+    
+    public static dmpl__KPIRules__c createKPIRuleName(
+        dmpl__KPIConfiguration__c kpiConfig,
+        String name,
+        String fieldName,
+        String fieldValue,
+        String operation,
+        Integer sequenceNumber
+    ) {
+        return (dmpl__KPIRules__c) TestFactory.createSObject(
+            new dmpl__KPIRules__c(
+                Name = name,
+                dmpl__KPIConfigurationId__c = kpiConfig.Id,
+                dmpl__FieldName__c = fieldName,
+                dmpl__FieldValue__c = fieldValue,
+                dmpl__Operation__c = operation,
+                dmpl__Sequence_Number__c = sequenceNumber
+            ),
+
+            true
+        );
+    }
+
     public static dmpl__KPIRules__c getKPIRule() {
         return [
             SELECT Id, Name, dmpl__KPIConfigurationId__c, dmpl__FieldName__c, dmpl__FieldValue__c, dmpl__Operation__c, dmpl__Sequence_Number__c
@@ -51,4 +74,4 @@ public with sharing class KPIRulesDataHelper {
             SELECT COUNT() FROM dmpl__KPIRules__c WHERE Id = :ruleId
         ];
     }
-}
+ }

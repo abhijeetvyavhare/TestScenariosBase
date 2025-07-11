@@ -27,6 +27,10 @@ public with sharing class SkillTestDataHelper {
     }
 
     public static dmpl__SkillLine__c createSkillLine(dmpl__Skill__c skill, dmpl__Item__c item) {
+        if (skill == null || item == null) {
+            throw new IllegalArgumentException('Skill and Work Item must not be null');
+        }
+
         return (dmpl__SkillLine__c) TestFactory.createSObject(
             new dmpl__SkillLine__c(
                 dmpl__SkillId__c = skill.Id,
@@ -36,4 +40,5 @@ public with sharing class SkillTestDataHelper {
             true
         );
     }
+
 }

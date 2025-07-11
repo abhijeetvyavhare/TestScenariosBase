@@ -16,7 +16,36 @@ public class PurchaseRequisitionTestDataHelpers {
             'PurchaseRequisitionDefaults',
             true
         );
+    }
+    public static dmpl__PurchaseRequisition__c CreateRequistion(
+        Account partnerAccount,
+        dmpl__Branch__c branch,
+        Account supplierAccount,
+        Id requestedByUserId
+    ) {
+        return (dmpl__PurchaseRequisition__c)TestFactory.createSObject(
+            new dmpl__PurchaseRequisition__c(
+                dmpl__PartnerAccountId__c = partnerAccount.Id,
+                dmpl__BranchId__c = branch.Id,
+                dmpl__SupplierAccountId__c = supplierAccount?.Id,
+                dmpl__RequestedById__c = requestedByUserId==null? null : requestedByUserId
+            ),
+            true
+        );
+    }
 
+    public static dmpl__PurchaseRequisition__c getRequisition(dmpl__PurchaseRequisition__c purchaseRequisition){
+        return [SELECT 
+            Id, 
+            Name,
+            dmpl__Status__c,
+            dmpl__DocumentDate__c,
+            dmpl__RequestedById__c,
+            dmpl__PartnerAccountId__c,
+            dmpl__BranchId__c,
+            dmpl__SupplierAccountId__c from dmpl__PurchaseRequisition__c 
+            WHERE Id = :purchaseRequisition.Id limit 1
+        ];
     }
 
     public static dmpl__PurchaseRequisitionLine__c CreateRequistionLine(

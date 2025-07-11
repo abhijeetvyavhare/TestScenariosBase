@@ -1,6 +1,7 @@
 import { LightningElement, api, wire } from 'lwc';
 import callHeadlessAction from '@salesforce/apex/HeadlessCallableController.callHeadlessAction';
-import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
+import { RefreshEvent } from 'lightning/refresh';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { reduceErrors } from 'c/utils';
 
@@ -60,7 +61,15 @@ export default class headlessAction3 extends LightningElement {
     }
 
     refreshPage(){
-        getRecordNotifyChange(new Array({ "recordId": this.recordId }));
-        eval("$A.get('e.force:refreshView').fire();");
+        notifyRecordUpdateAvailable([{ "recordId": this.recordId }]);
+        this.refreshStdComponents();
+    }
+
+    refreshStdComponents(){
+        try{
+            eval("$A.get('e.force:refreshView').fire();");
+        }catch(e){
+            this.dispatchEvent(new RefreshEvent());
+        }
     }
 }

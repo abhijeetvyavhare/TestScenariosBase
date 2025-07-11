@@ -36,7 +36,7 @@ public with sharing class ChecklistDataHelper {
 
     public static dmpl__ChecklistTemplate__c getChecklistTemplateById(Id checklistTemplateId) {
         List<dmpl__ChecklistTemplate__c> results = [
-            SELECT Id, Name, dmpl__Code__c, dmpl__Type__c
+            SELECT Id, Name, dmpl__Code__c, dmpl__Type__c,dmpl__ItemId__c ,dmpl__ParentChecklistId__c
             FROM dmpl__ChecklistTemplate__c
             WHERE Id = :checklistTemplateId
             LIMIT 1
@@ -128,11 +128,102 @@ public with sharing class ChecklistDataHelper {
 
     public static dmpl__CheckListLines__c getChecklistLineById(Id CheckListLineId) {
         List<dmpl__CheckListLines__c> results = [
-            SELECT Id, Name
+            SELECT Id, Name,dmpl__ChecklistTemplateId__c, dmpl__DataType__c
             FROM dmpl__CheckListLines__c
             WHERE Id = :CheckListLineId
             LIMIT 1
         ];
         return results.isEmpty() ? null : results[0];
     }
+
+    //New
+
+    public static dmpl__ChecklistTemplate__c createChecklistTemplate(
+        String checklistTemplateName,
+        Id itemId,
+        String type,
+        Id parentChecklistId,
+        String code
+    ){
+        return (dmpl__ChecklistTemplate__c) TestFactory.createSObject(
+            new dmpl__ChecklistTemplate__c(
+                Name = checklistTemplateName,
+                dmpl__ItemId__c = itemId,
+                dmpl__Type__c = type,
+                dmpl__ParentChecklistId__c = parentChecklistId,
+                dmpl__Code__c = code
+            ),
+            'ChecklistTemplateDefaults',
+            true
+        );
+    }
+
+
+    public static dmpl__ChecklistTemplate__c getChecklistTemplateByNameAndCode(String checklistTemplateName, String code) {
+        List<dmpl__ChecklistTemplate__c> results = [
+            SELECT Id, Name, dmpl__ItemId__c, dmpl__Type__c, dmpl__ParentChecklistId__c, dmpl__Code__c
+            FROM dmpl__ChecklistTemplate__c
+            WHERE Name = :checklistTemplateName AND dmpl__Code__c = :code
+            LIMIT 1
+        ];
+        return results.isEmpty() ? null : results[0];
+    }
+
+    public static dmpl__ChecklistTemplateLine__c createChecklistTemplateLine(
+        String checklistTemplateLineName,
+        Id checklistTemplateId,
+        String dataType,
+        String groupBy,
+        String defaultValue
+    ) {
+        return (dmpl__ChecklistTemplateLine__c) TestFactory.createSObject(
+            new dmpl__ChecklistTemplateLine__c(
+                Name = checklistTemplateLineName,
+                dmpl__ChecklistTemplateId__c = checklistTemplateId,
+                dmpl__DataType__c = dataType,
+                dmpl__GroupBy__c = groupBy,
+                dmpl__DefaultValue__c = defaultValue
+            ),
+            'ChecklistTemplateLineDefaults',
+            true
+        );
+    }
+
+    public static dmpl__ChecklistTemplate__c createChecklistTemplateWithoutInsert(
+        String checklistTemplateName,
+        Id itemId,
+        String type,
+        Id parentChecklistId,
+        String code
+    ) {
+        return new dmpl__ChecklistTemplate__c(
+            Name = checklistTemplateName,
+            dmpl__ItemId__c = itemId,
+            dmpl__Type__c = type,
+            dmpl__ParentChecklistId__c = parentChecklistId,
+            dmpl__Code__c = code
+        );
+    }
+
+    public static dmpl__CheckListLines__c createChecklistLine(
+        String name,
+        Id checklistTemplateId,
+        String dataType
+    ) {
+        return (dmpl__CheckListLines__c) TestFactory.createSObject(
+            new dmpl__CheckListLines__c(
+                Name = name,
+                dmpl__ChecklistTemplateId__c = checklistTemplateId,
+                dmpl__DataType__c = dataType
+            ),
+            'CheckListLinesDefaults',
+            true
+        );
+    }
+
+   
+
+
+
+
 }

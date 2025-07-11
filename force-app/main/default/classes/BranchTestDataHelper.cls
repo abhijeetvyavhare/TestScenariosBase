@@ -160,6 +160,15 @@ public with sharing class BranchTestDataHelper {
                 LIMIT 1   
         ];
     }
+
+     public static dmpl__PostalCode__c getPostalCode() {
+        return [SELECT 
+                Id, 
+                Name
+                FROM dmpl__PostalCode__c
+                LIMIT 1   
+        ];
+    }
     
 
     public static dmpl__Place__c createParentPlace(){
@@ -230,6 +239,22 @@ public with sharing class BranchTestDataHelper {
                 
             ),
             'BranchPostalCodeDefaults',
+            true
+        );
+    }
+
+    public static dmpl__BranchPostalCode__c createBranchPostalCode(
+        Account partnerAccount,
+        dmpl__Branch__c branch, 
+        dmpl__PostalCode__c postalCode,
+        String CoverageType){
+        return (dmpl__BranchPostalCode__c) TestFactory.createSObject(
+            new dmpl__BranchPostalCode__c(
+                dmpl__PartnerAccountId__c = partnerAccount != null ? partnerAccount.Id : null,
+                dmpl__BranchId__c = branch != null ? branch.Id : null,
+                dmpl__PostalCodeId__c = postalCode?.Id,
+                dmpl__CoverageType__c = CoverageType
+            ),
             true
         );
     }

@@ -4,7 +4,7 @@ import getSchemeLedgerEntries from '@salesforce/apex/SchemeController.getSchemeL
 import {subscribe, unsubscribe, MessageContext} from 'lightning/messageService';
 import FORCEREFRESHMC from '@salesforce/messageChannel/ForceReset__c';
 import { refreshApex } from '@salesforce/apex';
-import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
 
 export default class SchemeRecommendations extends LightningElement {
     @api title;
@@ -55,6 +55,6 @@ export default class SchemeRecommendations extends LightningElement {
     
     handleForceRefresh(message) {
         refreshApex(this.wiredSchemeLedgerEntries);
-        //getRecordNotifyChange(new Array({ "recordId": recordId }));
+        //notifyRecordUpdateAvailable([{ "recordId": recordId }]);
     }
 }

@@ -1,0 +1,17 @@
+<template>
+    <div class="slds-tooltip-trigger slds-tooltip-trigger_hover" onmouseover={handleMouseOver} onmouseout={handleMouseOut}>
+        <lightning-pill
+            label={label}
+            onremove={handleRemove}
+        ></lightning-pill>
+
+        <template if:true={showTooltip}>
+            <div class="slds-tooltip slds-nubbin_left" role="tooltip">
+                <p class="slds-text-color_inverse">Name: {conditionName}</p>
+                <p class="slds-text-color_inverse">Type: {conditionType}</p>
+                <p class="slds-text-color_inverse">Operator: {conditionOperator}</p>
+                <p class="slds-text-color_inverse">Value: {conditionValue}</p>
+            </div>
+        </template>
+    </div>
+</template>

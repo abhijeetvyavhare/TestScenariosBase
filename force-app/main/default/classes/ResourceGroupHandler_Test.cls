@@ -116,4 +116,34 @@ public with sharing class ResourceGroupHandler_Test {
     }
     System.assertEquals(null, deletedGroup, 'ResourceGroup should be deleted and not found in query.');
   }
+
+  @isTest
+  static void createResourceGroupWithNamePositive() {
+    Test.startTest();
+    dmpl__ResourceGroup__c resourceGroup = ResourceGroupDataHelper.createResourceGroupWithName('RSG-1');
+    Test.stopTest();
+
+    System.assertNotEquals(null, resourceGroup.Id, 'Resource Group should be created');
+    System.assertEquals('RSG-1', resourceGroup.Name, 'Resource Group Name should be RSG-1');
+}
+  @isTest
+  static void createResourceGroupWithoutNameNegative() {
+      Test.startTest();
+      try {
+          dmpl__ResourceGroup__c invalidGroup = ResourceGroupDataHelper.getResourceGroupWithoutName();
+          System.assert(false, 'Expected exception when Resource Group Name is blank');
+      } catch (Exception e) {
+          System.debug('Expected exception: ' + e.getMessage());
+          System.assert(
+              e.getMessage().toLowerCase().contains('name') ||
+              e.getMessage().toLowerCase().contains('resource group') ||
+              e.getMessage().toLowerCase().contains('required') ||
+              e.getMessage().toLowerCase().contains('review fields'),
+              'Exception should mention missing or blank Resource Group Name'
+          );
+      }
+      Test.stopTest();
+  }
+
+
 }

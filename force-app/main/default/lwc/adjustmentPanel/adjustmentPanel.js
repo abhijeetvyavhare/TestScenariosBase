@@ -1,6 +1,7 @@
 import { LightningElement, track, api, wire } from "lwc";
 import { NavigationMixin } from 'lightning/navigation';
-import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
+import { RefreshEvent } from 'lightning/refresh';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { CloseActionScreenEvent } from 'lightning/actions';
 import { getRecord } from "lightning/uiRecordApi";
@@ -167,11 +168,19 @@ export default class AdjustmentPanel extends NavigationMixin(LightningElement) {
         }).catch(error => {
             this.showError(error);
         })
-        getRecordNotifyChange(new Array({ "recordId": this.recordId }));
-        eval("$A.get('e.force:refreshView').fire();");
+        notifyRecordUpdateAvailable([{ "recordId": this.recordId }]);
+        this.refreshStdComponents();
         publish(this.messageContext, FORCEREFRESHMC, {});
     }
     this.handleClose();
+  }
+  
+  refreshStdComponents(){
+      try{
+          eval("$A.get('e.force:refreshView').fire();");
+      }catch(e){
+          this.dispatchEvent(new RefreshEvent());
+      }
   }
 
   handleError(error){

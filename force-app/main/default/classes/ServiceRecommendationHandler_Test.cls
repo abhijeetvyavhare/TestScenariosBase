@@ -29,6 +29,21 @@ public with sharing class ServiceRecommendationHandler_Test {
         dmpl__ComplaintFault__c complaintFault =  ComplaintTestDataHelpers.createComplaintFault(complaint);
         dmpl__ComplaintItem__c complaintItem = ComplaintItemDataHandler.createComplaintItem(complaint, complaintFault, item);
         dmpl__ServiceRecommendation__c serviceRecommendation = ServiceRecommendationTestDataHelper.createServiceRecommendation(serviceRequest, serviceRequestLine, quoteLine, serviceEstimateQuote, item, complaintLine, complaintItem, asset);
+
+        dmpl__Item__c  item1 = TestDataHelpers.createItem('Item 1','Product',true,false,false,'675654',false);
+        dmpl__Item__c item2 = TestDataHelpers.createItem('Item 2','Product',false,false,false,'654345',false);
+        dmpl__Item__c item8 = TestDataHelpers.createItem('Item 8','Product',true,false,false, '765456',false);
+        dmpl__Item__c item5 = TestDataHelpers.createItem('Item 5', 'Product', true, false, false, '876543', false);
+        Account customerAccount1 = TestDataHelpers.createCustomerAccount('Customer 1', true, false, false, true, 'MG Road', 'Pune', 'Maharashtra', 'India', '411001', 'Ring Rd', 'Nagpur', 'Maharashtra', 'India', '440001','9876543210', 'Created');
+        Account customerAccount2 = TestDataHelpers.createCustomerAccount('Customer 2', true, false, false, true, 'Park St', 'Kolkata', 'West Bengal', 'India', '700016', 'Lake Rd', 'Kolkata', 'West Bengal', 'India', '700029','9876543210', 'Created');
+        Account customerAccount3 = TestDataHelpers.createCustomerAccount('Customer 3', true, false, false, true, 'Anna Salai', 'Chennai', 'Tamil Nadu', 'India', '600002', 'T Nagar', 'Chennai', 'Tamil Nadu', 'India', '600017','9012345678', 'Created');
+
+
+        Asset asset1 = AssetDataHelper.createAsset('Asset 1', customerAccount1.Id, item1.Id);
+        Asset asset3 = AssetDataHelper.createAsset('Asset 3', customerAccount3.Id, item5.Id);
+ 
+
+
     }
 
     @isTest
@@ -78,4 +93,227 @@ public with sharing class ServiceRecommendationHandler_Test {
         }
         System.assertEquals(deletedServiceRecommendation, null, 'Service Request should be deleted and not found in query.');
     }
+    @isTest
+        static void createServiceRecommendationWithActiveItemPositive() {
+
+        dmpl__Item__c item = TestDataHelpers.getItem('Item 8'); 
+        Decimal quantity = 1;
+
+
+        Test.startTest();
+        dmpl__ServiceRecommendation__c createdRecommendation = 
+            ServiceRecommendationTestDataHelper.createServiceRecommendationWithChecklistFields(
+                 
+                null, 
+                quantity,
+                item,null
+            );
+        Test.stopTest();
+
+        dmpl__ServiceRecommendation__c fetchedRecommendation = 
+            ServiceRecommendationTestDataHelper.getServiceRecommendationWithChecklistFields(createdRecommendation.Id);
+
+
+        System.assertEquals(item.Id, fetchedRecommendation.dmpl__ItemId__c, 'Item should be Item 8');
+        System.assertEquals(quantity, fetchedRecommendation.dmpl__Quantity__c, 'Quantity should be 1');
+    }
+    @isTest
+    static void updateServiceRecommendationWithActiveItemPositive() {
+    
+    dmpl__Item__c item8 = TestDataHelpers.getItem('Item 8');
+    dmpl__Item__c item1 = TestDataHelpers.getItem('Item 1');
+    Decimal initialQuantity = 10;
+
+    
+    Test.startTest();
+    dmpl__ServiceRecommendation__c recommendation = 
+        ServiceRecommendationTestDataHelper.createServiceRecommendationWithChecklistFields(
+             null, initialQuantity, item8,null
+            
+        );
+
+
+
+    recommendation.dmpl__ItemId__c = item1.Id;
+    recommendation.dmpl__Quantity__c = initialQuantity;
+
+    update recommendation;
+    Test.stopTest();
+
+
+    dmpl__ServiceRecommendation__c updatedRec =
+        ServiceRecommendationTestDataHelper.getServiceRecommendationWithChecklistFields(recommendation.Id);
+
+    System.assertEquals(item1.Id, updatedRec.dmpl__ItemId__c, 'Item should be updated to Item 1');
+    System.assertEquals(initialQuantity, updatedRec.dmpl__Quantity__c, 'Quantity should remain 10');
+}
+@isTest
+static void createServiceRecommendationWithInactiveItemNegative() {
+    
+    dmpl__Item__c inactiveItem = TestDataHelpers.getItem('Item 2'); 
+    Decimal quantity = 1;
+    Boolean exceptionThrown = false;
+
+    Test.startTest();
+    try {
+        dmpl__ServiceRecommendation__c recommendation = 
+            ServiceRecommendationTestDataHelper.createServiceRecommendationWithChecklistFields(
+                 null, quantity, inactiveItem,null
+            );
+    } catch (Exception e) {
+        exceptionThrown = true;
+    }
+    Test.stopTest();
+
+    System.assertEquals(true, exceptionThrown, 'Exception should be thrown for inactive item');
+}
+@isTest
+static void updateServiceRecommendationWithInactiveItemNegative() {
+    dmpl__Item__c activeItem = TestDataHelpers.getItem('Item 8');
+    dmpl__Item__c inactiveItem = TestDataHelpers.getItem('Item 2');
+    Decimal quantity = 1;
+
+    dmpl__ServiceRecommendation__c recommendation = 
+        ServiceRecommendationTestDataHelper.createServiceRecommendationWithChecklistFields(
+             null, quantity, activeItem,null
+        );
+
+    Boolean exceptionThrown = false;
+
+    Test.startTest();
+    try {
+        recommendation.dmpl__ItemId__c = inactiveItem.Id;
+        update recommendation;
+    } catch (Exception e) {
+        exceptionThrown = true;
+    }
+    Test.stopTest();
+
+    System.assertEquals(true, exceptionThrown, 'Exception should be thrown while updating to inactive item');
+}
+// Service Recommendation creation with 0 quantity (New)
+    @isTest
+    static void createServiceRecommendationWithZeroQuantityNegative() {
+
+        dmpl__Item__c item = TestDataHelpers.getItem('Item 8'); 
+        Decimal quantity = 0;
+        dmpl__Item__c item1 = TestDataHelpers.getItem('Item 1');
+        Asset Asset=AssetDataHelper.getAsset('Asset 1');
+
+
+        Test.startTest();
+        dmpl__ServiceRecommendation__c createdRecommendation = 
+            ServiceRecommendationTestDataHelper.createServiceRecommendationWithChecklistFields(
+                
+                null, 
+                quantity,
+                item1,
+                asset
+            );
+        Test.stopTest();
+
+        dmpl__ServiceRecommendation__c fetchedRecommendation = 
+            ServiceRecommendationTestDataHelper.getServiceRecommendationWithChecklistFields(createdRecommendation.Id);
+
+
+        System.assertEquals(item1.Id, fetchedRecommendation.dmpl__ItemId__c, 'Item should be Item 8');
+        System.assertEquals(quantity, fetchedRecommendation.dmpl__Quantity__c, 'Quantity should be 1');
+        System.assertEquals(asset.Id,fetchedRecommendation.dmpl__AssetId__c,'Asset should match ');
+    }
+    // Service Recommendation creation with Asset (New)
+        @isTest
+        static void createServiceRecommendationWithAssetPositive() {
+
+        dmpl__Item__c item = TestDataHelpers.getItem('Item 1'); 
+        Decimal quantity = 1;
+         
+         Asset asset=AssetDataHelper.getAsset('Asset 1');
+
+
+        Test.startTest();
+        dmpl__ServiceRecommendation__c createdRecommendation = 
+            ServiceRecommendationTestDataHelper.createServiceRecommendationWithChecklistFields(
+                
+                null, 
+                quantity,
+                item,asset
+            );
+        Test.stopTest();
+
+        dmpl__ServiceRecommendation__c fetchedRecommendation = 
+            ServiceRecommendationTestDataHelper.getServiceRecommendationWithChecklistFields(createdRecommendation.Id);
+
+
+        System.assertEquals(item.Id, fetchedRecommendation.dmpl__ItemId__c, 'Item should be Item 8');
+        System.assertEquals(quantity, fetchedRecommendation.dmpl__Quantity__c, 'Quantity should be 1');
+    }
+    // Service Recommendation creation without Asset (New)
+    @isTest
+        static void createServiceRecommendationWithoutAssetPositive() {
+
+        dmpl__Item__c item = TestDataHelpers.getItem('Item 8'); 
+        Decimal quantity = 1;
+
+
+        Test.startTest();
+        dmpl__ServiceRecommendation__c createdRecommendation = 
+            ServiceRecommendationTestDataHelper.createServiceRecommendationWithChecklistFields(
+                
+                null, 
+                quantity,
+                item,null
+            );
+        Test.stopTest();
+
+        dmpl__ServiceRecommendation__c fetchedRecommendation = 
+            ServiceRecommendationTestDataHelper.getServiceRecommendationWithChecklistFields(createdRecommendation.Id);
+
+
+        System.assertEquals(item.Id, fetchedRecommendation.dmpl__ItemId__c, 'Item should be Item 8');
+        System.assertEquals(quantity, fetchedRecommendation.dmpl__Quantity__c, 'Quantity should be 1');
+    }
+    // Service Recommendation creation with Checklist line (New)
+    @isTest
+static void CreateServiceRecommendationWithChecklistLinePositive() {
+    dmpl__Item__c item8 = TestDataHelpers.getItem('Item 8');
+    dmpl__CheckListLines__c checklistLine1 = ChecklistDataHelper.createChecklistLine('Checklist line 1');
+
+    Test.startTest();
+    dmpl__ServiceRecommendation__c recommendation = ServiceRecommendationTestDataHelper.createServiceRecommendationWithChecklistFields(
+    checklistLine1,
+    1,
+    item8,null
+    );
+    dmpl__ServiceRecommendation__c fetchedRecommendation = ServiceRecommendationTestDataHelper.getServiceRecommendation(recommendation.Id);
+    Test.stopTest();
+
+    System.assertEquals(item8.Id, fetchedRecommendation.dmpl__ItemId__c, 'Item should be Item 8');
+    System.assertEquals(1, fetchedRecommendation.dmpl__Quantity__c, 'Quantity should be 1');
+    System.assertEquals(checklistLine1.Id, fetchedRecommendation.dmpl__ChecklistLineId__c, 'Checklist line should be Checklist line 1');
+}
+
+    @isTest
+static void UpdateServiceRecommendationWithChecklistLinePositive() {
+    dmpl__Item__c item1 = TestDataHelpers.getItem('Item 1');
+    dmpl__Item__c item8 = TestDataHelpers.getItem('Item 8');
+    dmpl__CheckListLines__c checklistLine1 = ChecklistDataHelper.createChecklistLine('Checklist line 1');
+    dmpl__CheckListLines__c checklistLine2 = ChecklistDataHelper.createChecklistLine('Checklist line 2');
+
+    dmpl__ServiceRecommendation__c recommendation = ServiceRecommendationTestDataHelper.createServiceRecommendationWithChecklistFields(
+        checklistLine2,1,item1,null
+    );
+
+    Test.startTest();
+    dmpl__ServiceRecommendation__c fetchedRecommendation = ServiceRecommendationTestDataHelper.getServiceRecommendation(recommendation.Id);
+    fetchedRecommendation.dmpl__ChecklistLineId__c=checklistLine2.Id;
+    update fetchedRecommendation;
+    Test.stopTest();
+
+    dmpl__ServiceRecommendation__c updatedRecommendation = ServiceRecommendationTestDataHelper.getServiceRecommendation(recommendation.Id);
+
+    System.assertEquals(item1.Id, updatedRecommendation.dmpl__ItemId__c, 'Item should be updated to Item 8');
+    System.assertEquals(1, updatedRecommendation.dmpl__Quantity__c, 'Quantity should remain 1');
+    System.assertEquals(checklistLine2.Id, updatedRecommendation.dmpl__ChecklistLineId__c, 'Checklist line should remain Checklist line 1');
+}
+
 }

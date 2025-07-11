@@ -1,5 +1,6 @@
 import { LightningElement, track, wire, api } from 'lwc';
 import { CurrentPageReference } from 'lightning/navigation';
+import { RefreshEvent } from 'lightning/refresh';
 import getFieldsByFieldSetName from '@salesforce/apex/MetadataController.getFieldsByFieldSetName';
 import getPostalCodeDefaults from '@salesforce/apex/RecordFormController.getPostalCodeDefaults';
 import getAllRelatedVisitRoute from '@salesforce/apex/VisitRouteSearchController.getAllRelatedVisitRoutes';
@@ -11,7 +12,6 @@ import { getObjectInfo, getPicklistValues } from "lightning/uiObjectInfoApi";
 import POSTALCODE_OBJECT from "@salesforce/schema/PostalCode__c";
 import CITY_FIELD from "@salesforce/schema/PostalCode__c.City__c";
 import STATE_FIELD from "@salesforce/schema/PostalCode__c.State__c";
-
 
 export default class VisitRouteSearchPanel extends LightningElement {
 
@@ -233,8 +233,16 @@ export default class VisitRouteSearchPanel extends LightningElement {
     }
     
     refreshPage() {
-        eval("$A.get('e.force:refreshView').fire();"); 
+        this.refreshStdComponents();
         window.location.reload();
+    }
+
+    refreshStdComponents(){
+        try{
+            eval("$A.get('e.force:refreshView').fire();");
+        }catch(e){
+            this.dispatchEvent(new RefreshEvent());
+        }
     }
 
     objectApiName = '';

@@ -87,6 +87,10 @@ public with sharing class ItemHandler_Test {
             true,
             'Warehouse'
         );
+
+        dmpl__ItemConsumptionSchedule__c  ItemConsumptionSchedule = TestDataHelpers.createItemConsumptionSchedule(Item.Id,'sc');
+
+        dmpl__ItemConsumptionRate__c  ItemConsumptionRate = TestDataHelpers.createItemConsumptionRate(ItemConsumptionSchedule.Id,'sr');
     }
  
     @isTest
@@ -1068,7 +1072,7 @@ public with sharing class ItemHandler_Test {
     @isTest
     static void createItemLotTypeWithInactiveItemIdNegative(){ 
         Boolean exceptionThrown= false;
-        dmpl__Item__c item2 = TestDataHelpers.createItem('Item 2','Product',false,false,false,'654345',false,false);
+        dmpl__Item__c item2 = TestDataHelpers.createItem('Item 2','Product',false,false,false,'654345',false);
 
         try {
             dmpl__ItemLotType__c itemLotType =ItemDataHelper.createItemLotType(item2,'Test Lot Type',false,false,false);
@@ -1994,6 +1998,40 @@ static void createItemInventoryAttributeWithMinimumStockLevelGreaterThanMaximumS
     Test.stopTest();
     }
 
+    @isTest
+    static void createItemInventoryAttributeWithSuggestedOrderQuantityMaximumOrderQuantityNegative() {
+
+    Test.startTest();
+
+    Account partnerAccount4 = TestDataHelpers.getPartnerAccount('Partner 4');
+    dmpl__Branch__c branch4 = TestDataHelpers.getBranch('Branch 4');
+
+    dmpl__ItemInventoryAttribute__c itemInventoryAttribute;
+    Boolean exceptionThrown = false;
+
+    try {
+        
+        itemInventoryAttribute = ItemDataHelper.createItemInventoryAttribute(
+            partnerAccount4.Id,
+            branch4.Id,
+            null,
+            null,
+            null,
+            null,
+            20,          
+            10,          
+            null
+        );
+
+        System.assert.isTrue(itemInventoryAttribute == null, 'Item Inventory Attribute creation must fail when MinStock > MaxStock');
+    } catch (Exception e) {
+        exceptionThrown = true;
+        System.assert.isTrue(itemInventoryAttribute == null, 'Item Inventory Attribute creation must fail when MinStock > MaxStock');
+    }
+
+    Test.stopTest();
+    }
+
 
     @isTest
     static void createItemInventoryAttributeWithNegativeQuantitiesNegative() {
@@ -2687,7 +2725,6 @@ static void updateItemLotWithInactiveItemNegative() {
 }
 
 
-
     @isTest
     static void createItemLotWithWrongBranchNegative() {
     Test.startTest();
@@ -2724,6 +2761,47 @@ static void updateItemLotWithInactiveItemNegative() {
     Test.stopTest();
     System.assert(exceptionThrown, 'Expected exception due to wrong branch usage was not thrown.');
     }
+
+
+    @isTest
+static void createItemLotWithQuantityAvailableLessThanNegative() {
+    
+    Test.startTest();
+    
+    Account partnerAccount1 = TestDataHelpers.getPartnerAccount('Partner 1');
+    dmpl__Item__c item1 = TestDataHelpers.getItem('Item 2'); 
+    dmpl__Branch__c validBranch = TestDataHelpers.getBranch('Branch 1');
+    dmpl__Branch__c invalidBranch = TestDataHelpers.getBranch('Invalid Branch');
+    
+    dmpl__ItemLot__c itemLot;
+    Boolean exceptionThrown = false;
+    
+    try {
+        itemLot = ItemDataHelper.createItemLot(
+            partnerAccount1.Id,
+            invalidBranch.Id,
+            item1.Id,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            -4,   
+            null
+        );
+        System.assert(false, 'Expected exception due to negative quantity or invalid branch was not thrown.');
+    } catch (Exception e) {
+        exceptionThrown = true;
+    }
+    
+    Test.stopTest();
+    System.assert(exceptionThrown, 'Expected exception due to negative quantity or wrong branch was not thrown.');
+}
+
 
     //Item
     @isTest
@@ -4599,7 +4677,6 @@ static void createItemWithoutGTINPositive() {
         //System.assertEquals(true, exceptionThrown, 'Expected exception was not thrown when using null as Contract Name');
     }
     
-    //ISC Creation with Item
     @isTest
     static void createIscCreationWithItemPositive(){
         dmpl__Item__c Item = TestDataHelpers.getItem();
@@ -4621,7 +4698,6 @@ static void createItemWithoutGTINPositive() {
         System.assertEquals(Date.today(), itemServiceContract.dmpl__DateEffectiveFrom__c, 'Start date should match');
     }
 
-    //ISC Creation without Item
     @isTest
     static void createIscCreationWithoutItemNegative(){
         Boolean exceptionThrown = false;
@@ -4643,7 +4719,6 @@ static void createItemWithoutGTINPositive() {
         System.assertEquals(true, exceptionThrown, 'Expected exception was not thrown when using null as Contract Name');
     }
 
-    //ISC Creation with Billing Account
     @isTest
     static void createIscCreationWithBillingAccountPositive(){
         dmpl__Item__c Item = TestDataHelpers.getItem();
@@ -4664,7 +4739,6 @@ static void createItemWithoutGTINPositive() {
         System.assertEquals(Date.today(), itemServiceContract.dmpl__DateEffectiveFrom__c, 'Start date should match');
     }
 
-    //ISC Creation with inactive Billing Account
     @isTest
     static void createIscCreationWithInactiveBillingAccountNegative(){
         dmpl__Item__c Item = TestDataHelpers.getItem();
@@ -4685,7 +4759,6 @@ static void createItemWithoutGTINPositive() {
         System.assertEquals(Date.today(), itemServiceContract.dmpl__DateEffectiveFrom__c, 'Start date should match');
     }
 
-    //ISC Creation with From Days
     @isTest
     static void createIscCreationWithFromDaysPositive(){
         dmpl__Item__c Item = TestDataHelpers.getItem();
@@ -4706,7 +4779,6 @@ static void createItemWithoutGTINPositive() {
         System.assertEquals(Date.today(), itemServiceContract.dmpl__DateEffectiveFrom__c, 'Start date should match');
     }
 
-    //ISC Creation without From Days
     @isTest
     static void createIscCreationWithoutFromDaysPositive(){
         dmpl__Item__c Item = TestDataHelpers.getItem();
@@ -4727,7 +4799,6 @@ static void createItemWithoutGTINPositive() {
         System.assertEquals(Date.today(), itemServiceContract.dmpl__DateEffectiveFrom__c, 'Start date should match');
     }
 
-    //ISC Creation with Date effective from
     @isTest
     static void createIscCreationWithDateEffectiveFromPositive(){
         dmpl__Item__c Item = TestDataHelpers.getItem();
@@ -4748,7 +4819,7 @@ static void createItemWithoutGTINPositive() {
         System.assertEquals(Date.today(), itemServiceContract.dmpl__DateEffectiveFrom__c, 'Start date should match');
     }
 
-    //ISC Creation without Date effective from
+    
     @isTest
     static void createIscCreationWithoutDateEffectiveFromPositive(){
         dmpl__Item__c Item = TestDataHelpers.getItem();
@@ -4769,7 +4840,6 @@ static void createItemWithoutGTINPositive() {
         System.assertEquals(null, itemServiceContract.dmpl__DateEffectiveFrom__c, 'Start date should be null');
     }
 
-    //ISC Creation with Contract Posting Treatment
     @isTest
     static void createIscCreationWithContractPostingTreatmentPositive(){
         dmpl__Item__c Item = TestDataHelpers.getItem();
@@ -4790,7 +4860,6 @@ static void createItemWithoutGTINPositive() {
         System.assertEquals(Date.today(), itemServiceContract.dmpl__DateEffectiveFrom__c, 'Start date should match');
     }
 
-    //ISC Creation without Contract Posting Treatment
     @isTest
     static void createIscCreationWithoutContractPostingTreatmentPositive(){
          dmpl__Item__c Item = TestDataHelpers.getItem();
@@ -4810,6 +4879,41 @@ static void createItemWithoutGTINPositive() {
         System.assertEquals(20, itemServiceContract.dmpl__FromDays__c, 'Contract quantity should match');
         System.assertEquals(Date.today(), itemServiceContract.dmpl__DateEffectiveFrom__c, 'Start date should match');
     }
+
+
+    @isTest
+    static void createItemConsumptionRateWithNamePositive() {
+            Test.startTest();
+             dmpl__Item__c Item = TestDataHelpers.getItem();
+            dmpl__ItemConsumptionSchedule__c schedule = TestDataHelpers.getItemConsumptionSchedule(Item.Id);
+            dmpl__ItemConsumptionRate__c rate = TestDataHelpers.getItemConsumptionRate(schedule.Id);
+            System.assertEquals('sr', rate.Name, 'Rate name should be ');
+            System.assertEquals(schedule.Id, rate.dmpl__ItemConsumptionSchedule__c, 'Schedule link should be correct');
+            Test.stopTest();
+    }
+    
+     @isTest
+        static void createItemConsumptionRateWithConsumptionSchedulePositive() {
+            Test.startTest();
+            dmpl__Item__c Item = TestDataHelpers.getItem();
+            dmpl__ItemConsumptionSchedule__c schedule = TestDataHelpers.getItemConsumptionSchedule(Item.Id);
+            dmpl__ItemConsumptionRate__c rate = TestDataHelpers.getItemConsumptionRate(schedule.Id);
+            System.assertEquals('sr', rate.Name, 'Rate name should be ');
+            System.assertEquals(schedule.Id, rate.dmpl__ItemConsumptionSchedule__c, 'Schedule link should be correct');
+            Test.stopTest();
+    }
+
+    
+    @isTest
+        static void createItemConsumptionRateWithPricingMethodPositive() {
+            Test.startTest();
+            dmpl__Item__c Item = TestDataHelpers.getItem();
+            dmpl__ItemConsumptionSchedule__c schedule = TestDataHelpers.getItemConsumptionSchedule(Item.Id);
+            dmpl__ItemConsumptionRate__c rate = TestDataHelpers.getItemConsumptionRate(schedule.Id);
+            System.assertEquals('sr', rate.Name, 'Rate name should be ');
+            System.assertEquals(schedule.Id, rate.dmpl__ItemConsumptionSchedule__c, 'Schedule link should be correct');
+            Test.stopTest();
+        }
 
 
 }

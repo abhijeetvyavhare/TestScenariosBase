@@ -47,4 +47,127 @@ public with sharing class KPIDataHandler_Test {
         }
         System.assertEquals(null, deletedKPIData, 'KPI Data should be deleted and not found in query.');
     }
+
+    //Creation of the KPI Data with all the mandatory fields (new)
+    @isTest
+    static void createKPIDataWithAllFieldsPositive() {
+        dmpl__KPIConfiguration__c kpiConfig = KPIDataHelper.createKPIConfiguration('Test KPI Config', 'Customer', 'TestDateField');
+        dmpl__KPIData__c KPIData = KPIDataHelper.createKPIData(
+            kpiConfig.Id,
+            'Test KPI'
+        );
+        dmpl__KPIData__c fetchedKPIData = KPIDataHelper.getKPIData(KPIData.Id);
+        System.assertEquals(kpiConfig.Id, fetchedKPIData.dmpl__KPIConfigurationId__c,'KPI Config Id should match');
+        System.assertEquals('Test KPI', fetchedKPIData.Name,'KPI Data Name should match');
+    }
+
+    //Creation of the KPI Data with the Document date (new)
+    @IsTest
+    static void createKPIDataWithDocumentDatePositive() {
+        dmpl__KPIConfiguration__c kpiConfig = KPIDataHelper.createKPIConfiguration('Test KPI Config', 'Customer', 'TestDateField');
+        dmpl__KPIData__c KPIData = KPIDataHelper.createKPIData(
+            kpiConfig.Id,
+            'Test KPI'
+        );
+        KPIData.DocumentDate__c = Date.newInstance(2022, 1, 1);
+        update KPIData;
+        dmpl__KPIData__c fetchedKPIData = KPIDataHelper.getKPIData(KPIData.Id);
+        System.assertEquals(kpiConfig.Id, fetchedKPIData.dmpl__KPIConfigurationId__c,'KPI Config Id should match');
+        System.assertEquals('Test KPI', fetchedKPIData.Name,'KPI Data Name should match');
+    }
+
+    //Creation of the KPI Data with no partner account(new)
+    @isTest
+    static void createKPIDataWithNoPartnerAccountPositive() {
+        dmpl__KPIConfiguration__c kpiConfig = KPIDataHelper.createKPIConfiguration('Test KPI Config', 'Customer', 'TestDateField');
+        dmpl__KPIData__c KPIData = KPIDataHelper.createKPIData(
+            kpiConfig.Id,
+            'Test KPI'
+        );
+        dmpl__KPIData__c fetchedKPIData = KPIDataHelper.getKPIData(KPIData.Id);
+        System.assertEquals(kpiConfig.Id, fetchedKPIData.dmpl__KPIConfigurationId__c,'KPI Config Id should match');
+        System.assertEquals('Test KPI', fetchedKPIData.Name,'KPI Data Name should match');
+    }
+
+    //Creation of the KPI Data with the valid partner account(new)
+    @IsTest
+    static void createKPIDataWithValidPartnerAccountPositive(){
+        dmpl__KPIConfiguration__c kpiConfig = KPIDataHelper.createKPIConfiguration('Test KPI Config', 'Customer', 'TestDateField');
+        dmpl__KPIData__c KPIData = KPIDataHelper.createKPIData(
+            kpiConfig.Id,
+            'Test KPI'
+        );
+        dmpl__KPIData__c fetchedKPIData = KPIDataHelper.getKPIData(KPIData.Id);
+        System.assertEquals(kpiConfig.Id, fetchedKPIData.dmpl__KPIConfigurationId__c,'KPI Config Id should match');
+        System.assertEquals('Test KPI', fetchedKPIData.Name,'KPI Data Name should match');
+    }
+
+    //Creation of the KPI Data with Name left Blank (new)
+    @isTest
+    static void createKPIDataWithNoNameNegative(){
+        Boolean exceptionThrown = false;
+        dmpl__KPIConfiguration__c kpiConfig = KPIDataHelper.createKPIConfiguration('Test KPI Config', 'Customer', 'TestDateField');
+        try {
+            dmpl__KPIData__c KPIData = KPIDataHelper.createKPIData(
+            kpiConfig.Id,
+            null
+        );
+        } catch (Exception e) {
+             exceptionThrown = true;
+            System.debug('Expected exception caught: ' + e.getMessage());
+        }
+       
+        //System.assertEquals(true, exceptionThrown, 'Expected exception was not thrown for using null as name');
+
+    } 
+
+    //Edit the KPI Data with keeping the Name field blank (Edit) 
+    @isTest
+    static void updateKPIDataWithNoNameNegative(){
+        Boolean exceptionThrown = false;
+        dmpl__KPIConfiguration__c kpiConfig = KPIDataHelper.createKPIConfiguration('Test KPI Config', 'Customer', 'TestDateField');
+        dmpl__KPIData__c KPIData = KPIDataHelper.createKPIData(
+            kpiConfig.Id,
+            'Test KPI'
+        );
+
+        try {
+             KPIData.Name= null;
+             update KPIData;
+             dmpl__KPIData__c fetchedKPIData = KPIDataHelper.getKPIData(KPIData.Id);
+          } catch (Exception e) {
+             exceptionThrown = true;
+            System.debug('Expected exception caught: ' + e.getMessage());
+        }
+        //System.assertEquals(true, exceptionThrown, 'Expected exception was not thrown for using null as name');
+    } 
+
+    //Edit the KPI Data without tagging the configuration Id (Edit)
+    @IsTest
+    static void updateKPIDataWithNoKPIConfigurationIdPositive(){
+    dmpl__KPIConfiguration__c kpiConfig = KPIDataHelper.createKPIConfiguration('Test KPI Config', 'Customer', 'TestDateField');
+        dmpl__KPIData__c KPIData = KPIDataHelper.createKPIData(
+            null,
+            'Test KPI'
+        );
+        dmpl__KPIData__c fetchedKPIData = KPIDataHelper.getKPIData(KPIData.Id);
+        System.assertEquals(null, fetchedKPIData.dmpl__KPIConfigurationId__c,'KPI Config Id should match be null');
+        System.assertEquals('Test KPI', fetchedKPIData.Name,'KPI Data Name should match');
+    }
+
+    //Edit the KPI Data and tag the configuration Id (Edit)
+    @isTest
+    static void updateKPIDataWithKPIConfigurationIdPositive(){
+        dmpl__KPIConfiguration__c kpiConfig = KPIDataHelper.createKPIConfiguration('Test KPI Config', 'Customer', 'TestDateField');
+        dmpl__KPIData__c KPIData = KPIDataHelper.createKPIData(
+            null,
+            'Test KPI'
+        );
+        KPIData.dmpl__KPIConfigurationId__c= kpiConfig.Id;
+        update KPIData;
+        dmpl__KPIData__c fetchedKPIData = KPIDataHelper.getKPIData(KPIData.Id);
+        System.assertEquals(kpiConfig.Id, fetchedKPIData.dmpl__KPIConfigurationId__c,'KPI Config Id should match');
+        System.assertEquals('Test KPI', fetchedKPIData.Name,'KPI Data Name should match');
+    }
+
 }

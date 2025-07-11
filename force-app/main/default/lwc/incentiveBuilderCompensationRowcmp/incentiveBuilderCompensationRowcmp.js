@@ -4,6 +4,7 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { getObjectInfo } from 'lightning/uiObjectInfoApi';
 import { deleteRecord } from 'lightning/uiRecordApi';
 import { reduceErrors } from 'c/utils';
+import { RefreshEvent } from 'lightning/refresh';
 import { publish, MessageContext } from 'lightning/messageService';
 import { NavigationMixin } from 'lightning/navigation';
 import FORCEREFRESHMC from '@salesforce/messageChannel/ForceReset__c';
@@ -216,7 +217,15 @@ export default class IncentiveBuilderRewardRowcmp extends NavigationMixin(Lightn
     }
 
     beginRefresh() {
-        eval("$A.get('e.force:refreshView').fire();");
+        this.refreshStdComponents();
         publish(this.messageContext, FORCEREFRESHMC);
      }
+
+    refreshStdComponents(){
+        try{
+            eval("$A.get('e.force:refreshView').fire();");
+        }catch(e){
+            this.dispatchEvent(new RefreshEvent());
+        }
+    }
 }

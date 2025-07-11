@@ -39,6 +39,23 @@ public with sharing class ChecklistTemplateTestDataHelpers {
             true
         );
     }
+
+    public static dmpl__CheckListTemplateLine__c createChecklistTemplateLine(
+        dmpl__ChecklistTemplate__c checkListTemplate,
+        String name
+) {
+        return (dmpl__CheckListTemplateLine__c) TestFactory.createSObject(
+            new dmpl__CheckListTemplateLine__c(
+                                            dmpl__ChecklistTemplateId__c = checkListTemplate?.Id,
+                                            Name=name,
+                                            dmpl__DataType__c='Text',
+                                            dmpl__DefaultValue__c='DateValue1',
+                                            dmpl__GroupBy__c='Sample1'
+                                            ),
+            // 'CheckListTemplateLineDefaults',
+            true
+        );
+    }
     
     public static dmpl__CheckListTemplateLine__c getChecklistTemplateLine() {
         return [SELECT
@@ -51,5 +68,18 @@ public with sharing class ChecklistTemplateTestDataHelpers {
             FROM dmpl__CheckListTemplateLine__c
             LIMIT 1
         ];
+    }
+    public static dmpl__ChecklistTemplate__c createChecklistTemplateWithIds(dmpl__Resource__c resource, dmpl__Item__c item, Account partnerAccount, Account account, dmpl__AccountGroup__c accountGroup) {
+        return (dmpl__ChecklistTemplate__c) TestFactory.createSObject(
+            new dmpl__ChecklistTemplate__c(
+                                            dmpl__ResourceId__c = resource?.Id,
+                                            dmpl__ItemId__c = item?.Id,
+                                            dmpl__PartnerAccountId__c = partnerAccount?.Id,
+                                            dmpl__AccountId__c = account?.Id,
+                                            dmpl__AccountGroupId__c = accountGroup?.Id
+                                            ),
+            'ChecklistTemplateDefaults',
+            true
+        );
     }
 }

@@ -1,8 +1,9 @@
 import { LightningElement, api, wire, track } from 'lwc';
 import getHealthCheckTemplates from '@salesforce/apex/HealthCheckController.getHealthCheckTemplates';
 import getChecklistLines from '@salesforce/apex/HealthCheckController.getChecklistLines';
-import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
 import { getRecord } from "lightning/uiRecordApi";
+import { RefreshEvent } from 'lightning/refresh';
 import { createRecord, updateRecord } from "lightning/uiRecordApi";
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { NavigationMixin } from 'lightning/navigation';
@@ -203,7 +204,7 @@ export default class HealthCheckPanel extends NavigationMixin(LightningElement)
                             variant: 'success'
                         })
                     );
-                    eval("$A.get('e.force:refreshView').fire();");
+                    this.refreshStdComponents();
                 })
                 .catch(error => {
                     console.log('Error :', error);
@@ -242,7 +243,7 @@ export default class HealthCheckPanel extends NavigationMixin(LightningElement)
                             variant: 'success'
                         })
                     );
-                    eval("$A.get('e.force:refreshView').fire();");
+                    this.refreshStdComponents();
                 }).catch((error) => {
                     console.log('Update Error ', error);
                     this.dispatchEvent(
@@ -254,6 +255,14 @@ export default class HealthCheckPanel extends NavigationMixin(LightningElement)
                     );
                 })
         })
+    }
+
+    refreshStdComponents(){
+        try{
+            eval("$A.get('e.force:refreshView').fire();");
+        }catch(e){
+            this.dispatchEvent(new RefreshEvent());
+        }
     }
 
     handleCancel() {

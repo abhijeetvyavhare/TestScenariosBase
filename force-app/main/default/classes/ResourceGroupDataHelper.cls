@@ -1,4 +1,3 @@
-@isTest
 public with sharing class ResourceGroupDataHelper {
   public static dmpl__ResourceGroup__c createResourceGroup() {
     return (dmpl__ResourceGroup__c) TestFactory.createSObject(
@@ -7,6 +6,20 @@ public with sharing class ResourceGroupDataHelper {
 	  true
     );
   }
+
+  public static dmpl__ResourceGroup__c createResourceGroupWithName(String name) {
+      return (dmpl__ResourceGroup__c) TestFactory.createSObject(
+          new dmpl__ResourceGroup__c(Name = name),
+          //'ResourceGroupDefaults',
+          true
+      );
+  }
+
+    public static dmpl__ResourceGroup__c getResourceGroupWithoutName() {
+        return new dmpl__ResourceGroup__c();
+    }
+    
+
 
   public static dmpl__ResourceGroup__c getResourceGroup() {
     return [
@@ -38,6 +51,7 @@ public with sharing class ResourceGroupDataHelper {
       true
     );
   }
+
 
   public static dmpl__ResourceGroupRule__c getResourceGroupRule() {
     return [
@@ -79,4 +93,6 @@ public with sharing class ResourceGroupDataHelper {
       LIMIT 1
     ];
   }
+    
+  
 }

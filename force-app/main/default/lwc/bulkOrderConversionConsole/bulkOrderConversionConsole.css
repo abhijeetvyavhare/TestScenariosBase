@@ -1,0 +1,22 @@
+body {
+    --slds-g-color-brand-base-50: #066AFE;
+    --slds-g-color-brand-base-40: #0250D9;
+    --slds-g-color-brand-base-30: #022AC0
+}
+
+.dmpl-flex-1 {
+    flex: 1;
+}
+
+.dmpl_color-blue {
+    color: var(--slds-g-color-brand-base-40);
+    --sds-c-icon-color-background: var(--slds-g-color-brand-base-50);
+}
+
+.dmpl-active {
+    color: var(--slds-g-color-brand-base-30);
+}
+
+.dmpl-active-border {
+    border-color: var(--slds-g-color-brand-base-30);
+}

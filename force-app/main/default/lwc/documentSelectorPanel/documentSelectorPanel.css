@@ -1,17 +1,101 @@
 .lgc-bg-inverse {
     background-color: rgb(242, 242, 242);
 }
-.dmpl-scrollable{
+
+.dmpl-scrollable {
     scroll-behavior: auto;
     max-height: 300px;
 }
+
 :host {
-    --slds-c-card-heading-font-size : var(slds-text-heading_small);
+    --slds-c-card-heading-font-size: var(slds-text-heading_small);
 }
 
-.spinnerHolder{
+.spinnerHolder {
     position: relative;
     display: inline-block;
     width: 100%;
     height: 300px;
+}
+
+.dmpl-flex-1 {
+    flex: 1;
+}
+
+@media screen and (max-width: 480px) {
+    .dmpl-scrollable {
+        scroll-behavior: scroll;
+        max-height: 600px;
+    }
+
+    .customInput {
+        --lwc-varFontSize5: 7px !important;
+        font-size: 7px !important;
+        display: flex !important;
+
+    }
+
+    .slds-radio_button-group {
+        display: flex !important;
+    }
+
+    .customInput span {
+        --lwc-varFontSize5: 7px !important;
+        font-size: 7px !important;
+    }
+
+    span.slds-radio_faux {
+        --lwc-varFontSize5: 7px !important;
+        font-size: 7px !important;
+    }
+
+    .customInput .slds-radio_button-group {
+        display: flex !important;
+        background-color: red;
+        padding: 10px;
+    }
+
+    .customBlock {
+        display: flex;
+    }
+
+    .button-toggle-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+
+    }
+
+    .slds-button-custom {
+        border: 1px solid #000 !important;
+        padding: 7px 10px !important;
+        font-size: 14px !important;
+        background: #fff;
+        border-radius: 2px;
+
+    }
+
+    .slds-button-custom.active {
+
+        background: rgba(1, 118, 211, 1) !important;
+        color: #ffff;
+        border-color: rgba(1, 118, 211, 1) !important;
+
+    }
+    .customLabel {
+        color: #8b8b8b;
+    }
+    .customValue{
+        color: #000;
+        font-weight: 600;
+    }
+    .highlight-line-number {
+        color: rgba(1, 118, 211, 1);
+        font-weight: 700;
+        cursor: pointer;
+    }
+
 }

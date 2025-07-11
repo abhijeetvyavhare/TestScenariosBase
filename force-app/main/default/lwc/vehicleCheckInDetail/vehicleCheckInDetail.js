@@ -3,6 +3,7 @@ import getCheckInTemplates from '@salesforce/apex/CheckInController.getCheckInTe
 import getCheckInInspection from '@salesforce/apex/CheckInController.getCheckInInspection';
 import getCheckInTemplateLineAttachments from '@salesforce/apex/CheckInController.getCheckInTemplateLineAttachments';
 import { getRecord, getFieldValue } from "lightning/uiRecordApi";
+import { RefreshEvent } from 'lightning/refresh';
 import { createRecord, deleteRecord, updateRecord } from "lightning/uiRecordApi";
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
@@ -258,6 +259,14 @@ export default class VehicleCheckInDetail extends LightningElement {
         }
     }
 
+    refreshStdComponents(){
+        try{
+            eval("$A.get('e.force:refreshView').fire();");
+        }catch(e){
+            this.dispatchEvent(new RefreshEvent());
+        }
+    }
+
     handleSave() {
         this.renderData.forEach((renderedDetails) => {
             if (renderedDetails.SubSections) {
@@ -280,7 +289,7 @@ export default class VehicleCheckInDetail extends LightningElement {
                                             variant: 'success'
                                         })
                                     );
-                                    eval("$A.get('e.force:refreshView').fire();");
+                                    this.refreshStdComponents();
                                     this.renderDetails = true;
                                 })
                                 .catch(error => {
@@ -304,7 +313,7 @@ export default class VehicleCheckInDetail extends LightningElement {
                                     let currentRemarks = this.renderRemarks.find(p => p.Section === renderedDetails.Section && p.SubSection === subSectionDetails.SubSectionName);
                                     currentRemarks.RecordId = '';
                                     currentRemarks.Remarks = '';
-                                    eval("$A.get('e.force:refreshView').fire();");
+                                    this.refreshStdComponents();
                                     this.renderDetails = true;
                                 })
                                 .catch(error => {
@@ -335,7 +344,7 @@ export default class VehicleCheckInDetail extends LightningElement {
                                             variant: 'success'
                                         })
                                     );
-                                    eval("$A.get('e.force:refreshView').fire();");
+                                    this.refreshStdComponents();
                                     this.renderDetails = true;
                                 })
                                 .catch(error => {

@@ -5,3 +5,10 @@
 .dmpl-justify_left{
     justify-content: left;
 }
+
+@media screen and (max-width: 400px) {
+  .dmpl-width-100 {
+    width: 100%;
+    height: auto;
+  }
+}

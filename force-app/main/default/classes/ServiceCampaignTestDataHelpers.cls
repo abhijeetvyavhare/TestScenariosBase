@@ -195,4 +195,87 @@ public with sharing class ServiceCampaignTestDataHelpers {
             LIMIT 1
         ];
     }
+
+
+
+    //New Methods:
+     public static dmpl__ServiceCampaign__c createServiceCampaign(String name) {
+        return (dmpl__ServiceCampaign__c) TestFactory.createSObject(
+            new dmpl__ServiceCampaign__c(
+                Name = name
+            ),
+            true
+        );
+    }
+
+    public static dmpl__ServiceCampaignItem__c createServiceCampaignItem(
+        Id serviceCampaignId,
+        Id itemId,
+        Id itemServiceContractId,
+        Decimal quantity,
+        Boolean isMandatory
+    ) {
+        return (dmpl__ServiceCampaignItem__c) TestFactory.createSObject(
+            new dmpl__ServiceCampaignItem__c(
+                dmpl__ServiceCampaignId__c = serviceCampaignId,
+                dmpl__ItemId__c = itemId,
+                dmpl__ItemServiceContractId__c = itemServiceContractId,
+                dmpl__Quantity__c = quantity,
+                dmpl__IsMandatory__c = isMandatory
+            ),
+            true
+        );
+    }
+
+    public static dmpl__ItemServiceContract__c createItemServiceContractWithName(
+        dmpl__Item__c item,
+        String name
+    ) {
+        return (dmpl__ItemServiceContract__c) TestFactory.createSObject(
+            new dmpl__ItemServiceContract__c(
+                Name = name,
+                dmpl__ItemId__c = item.Id,
+                dmpl__DateEffectiveFrom__c = Date.today(),
+                dmpl__DateEffectiveTill__c = Date.today().addDays(7),
+                dmpl__PopulateContractLines__c = true
+            ),
+            true
+        );
+    }
+
+    public static dmpl__ServiceCampaignMember__c createServiceCampaignMember(
+        Id campaignId,
+        Id partnerAccountId,
+        Id itemId,
+        String mobilePhone,
+        Date dueDate,
+        Id branchId
+    ) {
+        return (dmpl__ServiceCampaignMember__c) TestFactory.createSObject(
+            new dmpl__ServiceCampaignMember__c(
+                dmpl__ServiceCampaignId__c = campaignId,
+                dmpl__PartnerAccountId__c = partnerAccountId,
+                dmpl__ItemId__c = itemId,
+                dmpl__MobilePhone__c = mobilePhone,
+                dmpl__DueDate__c = dueDate,
+                dmpl__BranchId__c = branchId
+            ),
+            true
+        );
+    }
+
+    public static dmpl__ServiceCampaignRule__c createServiceCampaignRule(
+        Id campaignId,
+        String objectType,
+        String operation
+    ) {
+        return (dmpl__ServiceCampaignRule__c) TestFactory.createSObject(
+            new dmpl__ServiceCampaignRule__c(
+                dmpl__ServiceCampaignId__c = campaignId,
+                dmpl__ObjectType__c = objectType,
+                dmpl__Operation__c = operation
+            ),
+            true
+        );
+    }
 }

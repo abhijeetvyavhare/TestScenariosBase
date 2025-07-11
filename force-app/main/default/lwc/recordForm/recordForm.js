@@ -1,10 +1,11 @@
 import { LightningElement, api, wire } from 'lwc';
-import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
 import { refreshApex } from '@salesforce/apex';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { CurrentPageReference } from 'lightning/navigation';
 import { CloseActionScreenEvent } from 'lightning/actions';
 import { reduceErrors } from 'c/utils';
+import { RefreshEvent } from 'lightning/refresh';
 import { NavigationMixin } from 'lightning/navigation';
 import { getObjectInfo } from 'lightning/uiObjectInfoApi';
 
@@ -21,7 +22,6 @@ import getAssetDefaults from '@salesforce/apex/RecordFormController.getAssetDefa
 import getAllFieldMappings from '@salesforce/apex/RecordFormController.getAllFieldMappings';
 import getFieldMappingsData from '@salesforce/apex/RecordFormController.getFieldMappingsData';
 import getAccountAddressDefaults from '@salesforce/apex/RecordFormController.getAccountAddressDefaults';
-
 
 const SAS_NAME = 'Screen Action Settings';
 
@@ -490,9 +490,17 @@ export default class recordForm extends NavigationMixin(LightningElement) {
         );
         this.handleReset();
         refreshApex(this.recordId);
-        getRecordNotifyChange(new Array({ "recordId": this.recordId }));
-        eval("$A.get('e.force:refreshView').fire();");
+        notifyRecordUpdateAvailable([{ "recordId": this.recordId }]);
+        this.refreshStdComponents();
         this.fireSavedEvent();
+    }
+
+    refreshStdComponents(){
+        try{
+            eval("$A.get('e.force:refreshView').fire();");
+        }catch(e){
+            this.dispatchEvent(new RefreshEvent());
+        }
     }
 
     handleClose(event) {

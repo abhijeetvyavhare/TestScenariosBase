@@ -25,6 +25,20 @@ public with sharing class KPIDataDetailDataHelper {
         );
     }
 
+     public static dmpl__KPIDataDetail__c createKPIDataDetail( 
+        dmpl__KPIData__c kpiData,
+        String Detailname)
+        {
+         return (dmpl__KPIDataDetail__c) TestFactory.createSObject(
+            new dmpl__KPIDataDetail__c(
+                Name = Detailname,
+                dmpl__KPIDataId__c = kpiData != null ? kpiData.Id : null
+            ),
+            'KPIDataDetailDefaults',
+            true
+        );
+      }
+
     public static dmpl__KPIDataDetail__c getKPIDataDetail() {
         return [
             SELECT Id, Name, dmpl__KPIDataId__c, dmpl__BillNo__c, dmpl__KPIValue__c, dmpl__KPIValue2__c, dmpl__RewardValue__c, dmpl__SaleDoc__c, dmpl__SourceRecordId__c

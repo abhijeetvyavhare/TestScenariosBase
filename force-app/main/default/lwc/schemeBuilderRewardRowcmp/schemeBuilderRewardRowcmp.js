@@ -5,6 +5,7 @@ import { getObjectInfo } from 'lightning/uiObjectInfoApi';
 import { deleteRecord } from 'lightning/uiRecordApi';
 import { reduceErrors } from 'c/utils';
 import { publish, MessageContext } from 'lightning/messageService';
+import { RefreshEvent } from 'lightning/refresh';
 import { NavigationMixin } from 'lightning/navigation';
 import FORCEREFRESHMC from '@salesforce/messageChannel/ForceReset__c';
 import LightningConfirm from 'lightning/confirm';
@@ -206,7 +207,15 @@ export default class SchemeBuilderRewardRowcmp extends NavigationMixin(Lightning
     }
 
     beginRefresh() {
-        eval("$A.get('e.force:refreshView').fire();");
+        this.refreshStdComponents();
         publish(this.messageContext, FORCEREFRESHMC);
      }
+
+    refreshStdComponents(){
+        try{
+            eval("$A.get('e.force:refreshView').fire();");
+        }catch(e){
+            this.dispatchEvent(new RefreshEvent());
+        }
+    }
 }

@@ -2,6 +2,7 @@ import { LightningElement, api, wire, track } from 'lwc';
 import queryRepairOrderTimeSheets from '@salesforce/apex/RepairOrderTimeSheetHelper.queryRepairOrderTimeSheets';
 import queryPendingRepairOrderLines from '@salesforce/apex/RepairOrderTimeSheetHelper.queryPendingRepairOrderLines';
 import createTimeSheet from '@salesforce/apex/RepairOrderTimeSheetHelper.createTimeSheet';
+import { RefreshEvent } from 'lightning/refresh';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 const columns = [
@@ -120,13 +121,20 @@ export default class RepairOrderTimeSheetModal extends LightningElement {
                 })
             );
         }
-        // eval("$A.get('e.force:refreshView').fire();");
+        this.refreshStdComponents();
         this.cancel();
     }
 
     handleError(error) {
         console.log('error ', JSON.parse(JSON.stringify(error)));
-        // eval("$A.get('e.force:refreshView').fire();");
+    }
+
+    refreshStdComponents(){
+        try{
+            eval("$A.get('e.force:refreshView').fire();");
+        }catch(e){
+            this.dispatchEvent(new RefreshEvent());
+        }
     }
 
     updateSelectedRecords() {

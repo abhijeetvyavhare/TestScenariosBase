@@ -62,4 +62,26 @@ public with sharing class AssetDataHelper {
             LIMIT 1
         ];
     }
+
+	public static Asset createAsset(String name, Id accountId, Id itemId) {
+        return (Asset) TestFactory.createSObject(
+            new Asset(
+                Name = name,
+                AccountId = accountId,
+                dmpl__ItemId__c = itemId,
+                dmpl__SaleDate__c = Date.newInstance(2025, 1, 6)
+            ),
+            // 'AssetDefaults',
+            true
+        );
+    }
+
+    public static Asset getAsset(String name) {
+        return [
+            SELECT Id, Name, AccountId, dmpl__ItemId__c, dmpl__SaleDate__c
+            FROM Asset 
+            WHERE Name = :name
+            LIMIT 1
+        ];
+    }
 }

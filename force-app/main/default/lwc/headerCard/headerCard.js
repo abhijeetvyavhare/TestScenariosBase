@@ -18,8 +18,16 @@ export default class headerCard extends NavigationMixin(LightningElement) {
     @api viewStyle = 'page';
 
     @track privateVariant = 'base';
+    @track isMobile = false;
 
     showContent = true;
+
+    connectedCallback() {
+        if (window.innerWidth <= 480) {
+            this.isMobile = true;
+            console.log(this.isMobile, "isMobile")
+        }
+    }
 
     set variant(value) {
         if (isNarrow(value) || isBase(value)) {

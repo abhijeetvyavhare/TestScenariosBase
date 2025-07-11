@@ -51,6 +51,25 @@ public class InventoryAdjustmentDataHelper {
        );
     }
 
+    public static dmpl__InventoryAdjustmentLine__c CreateAdjustmentLine(
+        Id item,
+        Integer quantity,
+        Id adjustment
+    ) {
+       return (dmpl__InventoryAdjustmentLine__c)TestFactory.createSObject(
+        new dmpl__InventoryAdjustmentLine__c(
+            dmpl__ItemId__c = item,
+            dmpl__Quantity__c = quantity,
+            dmpl__TotalCost__c = 100,
+            dmpl__Remarks__c = 'Test - Remarks',
+            dmpl__InventoryAdjustmentId__c = adjustment,
+            dmpl__AdjustmentType__c = 'Assemble'
+        ),
+        'InventoryAdjustmentLineDefaults',
+        true
+       );
+    }
+
     public static dmpl__InventoryAdjustment__c getAdjustment() {
         return [SELECT 
         Id, 
@@ -90,7 +109,8 @@ public class InventoryAdjustmentDataHelper {
         dmpl__ItemId__c,
         dmpl__IsILPostingApproved__c,
         dmpl__Quantity__c,
-        dmpl__TotalCost__c
+        dmpl__TotalCost__c,
+        dmpl__InventoryAdjustmentId__c
         FROM dmpl__InventoryAdjustmentLine__c LIMIT 1];
     }
 
@@ -103,7 +123,8 @@ public class InventoryAdjustmentDataHelper {
         dmpl__ItemId__c,
         dmpl__IsILPostingApproved__c,
         dmpl__Quantity__c,
-        dmpl__TotalCost__c
+        dmpl__TotalCost__c,
+        dmpl__InventoryAdjustmentId__c
         FROM dmpl__InventoryAdjustmentLine__c
         WHERE Id = :id LIMIT 1];
     }

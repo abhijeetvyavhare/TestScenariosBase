@@ -1,5 +1,6 @@
 import { LightningElement, api, track, wire } from 'lwc';
 import { getRecord, updateRecord, createRecord, deleteRecord } from "lightning/uiRecordApi";
+import { RefreshEvent } from 'lightning/refresh';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import queryServiceRecommendations from '@salesforce/apex/ServiceRecommendationController.getChecklistServiceRecommendations';
 
@@ -137,12 +138,12 @@ export default class RecommendationPanel extends LightningElement {
                             updateRecord({ fields }).then((updateResult) => {
                                 this.getTransactedData();
                                 this.showMessage('Success', 'Item Added Successfully', 'success');
-                                eval("$A.get('e.force:refreshView').fire();");
+                                this.refreshStdComponents();
                             }).catch((error) => {
                                 this.getTransactedData();
                                 this.showMessage('Error', error.body.message, 'error');
                             })
-                            eval("$A.get('e.force:refreshView').fire();");
+                            this.refreshStdComponents();
                         })
                         .catch(error => {
                             this.getTransactedData();
@@ -163,7 +164,7 @@ export default class RecommendationPanel extends LightningElement {
                             item.IsPresentOld = false;
                             this.getTransactedData();
                             this.showMessage('Success', 'Item Removed Successfully', 'success');
-                            eval("$A.get('e.force:refreshView').fire();");
+                            this.refreshStdComponents();
                         }).catch((error) => {
                             this.getTransactedData();
                             this.showMessage('Error', error.body.message, 'error');
@@ -175,7 +176,15 @@ export default class RecommendationPanel extends LightningElement {
                 }
             })
         })
-        eval("$A.get('e.force:refreshView').fire();");
+        this.refreshStdComponents();
+    }
+
+    refreshStdComponents(){
+        try{
+            eval("$A.get('e.force:refreshView').fire();");
+        }catch(e){
+            this.dispatchEvent(new RefreshEvent());
+        }
     }
 
     showMessage(title, message, variant) {

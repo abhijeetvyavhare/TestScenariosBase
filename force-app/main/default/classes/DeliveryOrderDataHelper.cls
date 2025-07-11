@@ -187,7 +187,8 @@ public with sharing class DeliveryOrderDataHelper {
                 dmpl__BranchId__c = branchId,
                 dmpl__RepairOrderId__c = repairOrderId,
                 dmpl__SaleOrderId__c = saleOrderId,
-                dmpl__DeliveryAddressId__c = deliveryAddressId
+                dmpl__DeliveryAddressId__c = deliveryAddressId,
+				dmpl__Status__c = 'Draft'
             ),
             //'DeliveryOrderDefaults',
             true

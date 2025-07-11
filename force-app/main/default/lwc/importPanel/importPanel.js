@@ -3,6 +3,7 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { CloseActionScreenEvent } from 'lightning/actions';
 import { getObjectInfo } from 'lightning/uiObjectInfoApi';
 import { reduceErrors } from 'c/utils';
+import { RefreshEvent } from 'lightning/refresh';
 import { loadScript } from 'lightning/platformResourceLoader';
 import { CurrentPageReference } from 'lightning/navigation';
 import { publish, MessageContext } from 'lightning/messageService';
@@ -12,6 +13,7 @@ import getFieldsByFieldSetName from '@salesforce/apex/MetadataController.getFiel
 import importFieldsetData from '@salesforce/apex/ImportController.importFieldsetData';
 import getDMSImportSettings from '@salesforce/apex/ImportController.getDMSImportSettings';
 import FORCEREFRESHMC from '@salesforce/messageChannel/ForceReset__c';
+
 const PAGESIZE = 25;
 export default class ImportPanel extends LightningElement {
     @api recordId;
@@ -382,12 +384,20 @@ export default class ImportPanel extends LightningElement {
             this.objectsDataLoaded = this.objectsData.slice(0,PAGESIZE);
             this.isSaveVisible = false;
             this.isDownloadResultVisible = true;
-            eval("$A.get('e.force:refreshView').fire();");
+            this.refreshStdComponents();
             this.fireForceRefreshEvent();
         } catch (error) {
             this.showError(error);
         }finally{
             this.isLoading = false;
+        }
+    }
+
+    refreshStdComponents(){
+        try{
+            eval("$A.get('e.force:refreshView').fire();");
+        }catch(e){
+            this.dispatchEvent(new RefreshEvent());
         }
     }
 

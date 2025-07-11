@@ -298,11 +298,13 @@ public with sharing class BillTestDataHelpers {
                 dmpl__PartnerAccountId__c,
                 dmpl__PerformInventoryPosting__c,
                 dmpl__BranchId__c,
+                dmpl__Status__c,
                 dmpl__PriceListId__c,
 				dmpl__TotalLineAmount__c,
 				dmpl__TotalLineBaseAmount__c,
 				dmpl__TotalLineGrossAmount__c,
-				dmpl__SupplierAccountId__c
+				dmpl__SupplierAccountId__c,
+                dmpl__PurchaseOrderId__c
                 FROM dmpl__BillReturn__c
 				WHERE Id = :id LIMIT 1
         ];         
@@ -574,6 +576,7 @@ public with sharing class BillTestDataHelpers {
                 dmpl__StorageLocationId__c ,
                 dmpl__TaxGroupId__c,
                 dmpl__UnitCost__c,
+                dmpl__UnitCost2__c,
                 dmpl__PurchaseInvoiceId__c ,
                 dmpl__GoodsReceiptLineId__c ,
                 dmpl__EligibleReturnQuantity__c,
@@ -607,4 +610,183 @@ public with sharing class BillTestDataHelpers {
         );  
     }
 
+    public static dmpl__BillReturn__c createBillReturn(
+        Account supplierAccount,
+        Account partnerAccount,
+        dmpl__Branch__c branch,
+        dmpl__PriceList__c priceList,
+        Date documentDate
+    ){
+        return (dmpl__BillReturn__c)TestFactory.createSObject(
+            new dmpl__BillReturn__c(
+                dmpl__SupplierAccountId__c = supplierAccount.Id,
+                dmpl__BranchId__c = branch.Id,
+                dmpl__PartnerAccountId__c = partnerAccount.Id,
+                dmpl__SupplierInvoiceDate__c = documentDate,
+                dmpl__PerformReturn__c = false,
+                dmpl__PriceListId__c = priceList != null ? priceList.Id : null,
+                dmpl__IsReturned__c = false,
+                dmpl__PerformInventoryPosting__c = false,
+                dmpl__DocumentDate__c = documentDate
+            ),
+            'BillReturnDefaults',
+            true
+        );
+    }
+
+    public static dmpl__PurchaseOrder__c createPurchaseOrder(
+        dmpl__Branch__c branch,
+        Account supplier,
+        Account partner
+    ) {
+        return (dmpl__PurchaseOrder__c) TestFactory.createSObject(
+            new dmpl__PurchaseOrder__c(
+                dmpl__BranchId__c = branch.Id,
+                dmpl__SupplierAccountId__c = supplier.Id,
+                dmpl__PartnerAccountId__c = partner.Id,
+                dmpl__DocumentDate__c = Date.today(),
+                dmpl__Status__c = 'Draft'
+            ),
+            'PurchaseOrderDefaults',
+            true
+        );
+    }
+
+    public static dmpl__PurchaseOrderLine__c createPurchaseOrderLine(
+        dmpl__PurchaseOrder__c purchaseOrder,
+        Decimal unitPrice,
+        Decimal qty,
+        dmpl__Item__c item,
+        dmpl__SKU__c sku,
+        dmpl__TaxGroup__c taxGroup
+    ) {
+        return (dmpl__PurchaseOrderLine__c) TestFactory.createSObject(
+            new dmpl__PurchaseOrderLine__c(
+                dmpl__PurchaseOrderId__c = purchaseOrder != null ? purchaseOrder.Id : null,
+                dmpl__UnitCost2__c = unitPrice,
+                dmpl__UnitCost__c = unitPrice,
+                dmpl__Quantity__c = qty,
+                dmpl__ItemId__c = item.Id,
+                dmpl__SKUId__c = sku.Id, 
+                dmpl__TaxGroupId__c = taxGroup != null ? taxGroup.Id : null
+            ),
+            'PurchaseOrderLineDefaults',
+            true
+        );
+    }
+    
+    public static dmpl__BillReturn__c createBillReturnWithPurchaseOrderReference(
+        Account supplier,
+        Account partner,
+        dmpl__Branch__c branch,
+        dmpl__PurchaseOrder__c purchaseOrder
+    ) {
+        return (dmpl__BillReturn__c) TestFactory.createSObject(
+            new dmpl__BillReturn__c(
+                dmpl__SupplierAccountId__c = supplier.Id,
+                dmpl__PartnerAccountId__c = partner.Id,
+                dmpl__BranchId__c = branch.Id,
+                dmpl__DocumentDate__c = Date.today(),
+                dmpl__Status__c = 'Draft',
+                dmpl__PurchaseOrderId__c = purchaseOrder.Id
+            ),
+            'BillReturnDefaults',
+            true
+        );
+    }
+
+    public static dmpl__BillReturnLine__c createBillReturnLine(
+        dmpl__BillReturn__c billReturn,
+        dmpl__Item__c item,
+        dmpl__SKU__c sku,
+        Decimal quantity
+    ) {
+        return (dmpl__BillReturnLine__c) TestFactory.createSObject(
+            new dmpl__BillReturnLine__c(
+                dmpl__BillReturnId__c = billReturn.Id,
+                dmpl__ItemId__c = item.Id,
+                dmpl__SKUId__c = sku != null ? sku.Id : null,
+                dmpl__Quantity__c = quantity
+            ),
+            'BillReturnLineDefaults',
+            true
+        );
+    }
+
+    public static dmpl__Bill__c createBillNew(
+        Account supplierAccount,
+        dmpl__Branch__c branch,
+        dmpl__PriceList__c priceList,
+        dmpl__PurchaseOrder__c purchaseOrder,
+        dmpl__GoodsReceipt__c goodsReceipt
+    ) {
+        return (dmpl__Bill__c) TestFactory.createSObject(
+            new dmpl__Bill__c(
+                dmpl__SupplierAccountId__c = supplierAccount.Id,
+                dmpl__PartnerAccountId__c = branch.dmpl__PartnerAccountId__c,
+                dmpl__BranchId__c = branch.Id,
+                dmpl__PurchaseOrderId__c = purchaseOrder != null ? purchaseOrder.Id : null,
+                dmpl__DocumentDate__c = Date.today(),
+                dmpl__Status__c = 'Draft'
+            ),
+            'BillDefaults',
+            true
+        );
+    }
+
+    public static dmpl__BillLine__c createBillLine(
+        Id billId,
+        dmpl__Item__c item,
+        Decimal quantity,
+        Decimal unitCost,
+        dmpl__PurchaseOrderLine__c poLine
+    ) {
+        return (dmpl__BillLine__c) TestFactory.createSObject(
+            new dmpl__BillLine__c(
+                dmpl__PurchaseInvoiceId__c = billId,
+                dmpl__ItemId__c = item.Id,
+                dmpl__Quantity__c = quantity,
+                dmpl__UnitCost__c = unitCost,
+                dmpl__PurchaseOrderLineId__c = poLine != null ? poLine.Id : null
+            ),
+            //'BillLineDefaults',
+            true
+        );
+    }
+
+     public static dmpl__BillLine__c createBillLineWithNoUnitCost(
+        Id billId,
+        dmpl__Item__c item,
+        Decimal quantity
+    ) {
+        return (dmpl__BillLine__c) TestFactory.createSObject(
+            new dmpl__BillLine__c(
+                dmpl__PurchaseInvoiceId__c = billId,
+                dmpl__ItemId__c = item.Id,
+                dmpl__Quantity__c = quantity
+            ),
+            //'BillLineDefaults',
+            true
+        );
+    }
+
+    public static dmpl__BillLine__c createBillLineWithStorageLocation(
+        Id billId,
+        dmpl__Item__c item,
+        Decimal quantity,
+        Decimal unitCost,
+        dmpl__StorageLocation__c storageLocation
+    ) {
+        return (dmpl__BillLine__c) TestFactory.createSObject(
+            new dmpl__BillLine__c(
+                dmpl__PurchaseInvoiceId__c = billId,
+                dmpl__ItemId__c = item.Id,
+                dmpl__Quantity__c = quantity,
+                dmpl__UnitCost__c = unitCost,
+                dmpl__StorageLocationId__c = storageLocation.Id
+            ),
+            'BillLineDefaults',
+            true
+        );
+    }
 }

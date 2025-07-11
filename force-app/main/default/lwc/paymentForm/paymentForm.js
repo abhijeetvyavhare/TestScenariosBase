@@ -1,6 +1,6 @@
 import { LightningElement, track, api, wire } from "lwc";
 import { NavigationMixin } from 'lightning/navigation';
-import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { CloseActionScreenEvent } from 'lightning/actions';
 import { CurrentPageReference } from 'lightning/navigation';
@@ -238,7 +238,7 @@ export default class PaymentForm extends NavigationMixin(LightningElement) {
       : 'Record created successfully.';
     this.showMessage(messsage);
     if(this.invokedFromObjectId){
-      getRecordNotifyChange(new Array({ "recordId": this.invokedFromObjectId }));
+      notifyRecordUpdateAvailable([{ "recordId": this.invokedFromObjectId }]);
     }
     this.isLoading = false;
     this.handleClose();

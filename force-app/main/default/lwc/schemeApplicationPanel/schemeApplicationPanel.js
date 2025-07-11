@@ -3,8 +3,9 @@ import { getRecord } from "lightning/uiRecordApi";
 import { NavigationMixin } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { CloseActionScreenEvent } from 'lightning/actions';
-import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
 import { reduceErrors } from 'c/utils';
+import { RefreshEvent } from 'lightning/refresh';
 import { publish, MessageContext } from 'lightning/messageService';
 import FORCEREFRESHMC from '@salesforce/messageChannel/ForceReset__c';
 import getQualifiedSchemeSlabs from '@salesforce/apex/SchemeController.getQualifiedSchemeSlabs';
@@ -379,8 +380,8 @@ export default class SchemeApplicationPanel extends NavigationMixin(LightningEle
                 });
             if (result) {
                 this.applySchemeResult = result;
-                getRecordNotifyChange([{ "recordId": this.recordId }]);
-                eval("$A.get('e.force:refreshView').fire();");
+                notifyRecordUpdateAvailable([{ "recordId": this.recordId }]);
+                this.refreshStdComponents();
                 this.showMessage('Scheme Reset Successfully!');
                 this.handleClose();
             } else {
@@ -389,6 +390,14 @@ export default class SchemeApplicationPanel extends NavigationMixin(LightningEle
         }
         finally {
             this.isSaveDisabled = false;
+        }
+    }
+
+    refreshStdComponents(){
+        try{
+            eval("$A.get('e.force:refreshView').fire();");
+        }catch(e){
+            this.dispatchEvent(new RefreshEvent());
         }
     }
 
@@ -433,8 +442,8 @@ export default class SchemeApplicationPanel extends NavigationMixin(LightningEle
             if (result) {
                 this.applySchemeResult = result;
                 this.moveWizard('next');
-                getRecordNotifyChange([{ "recordId": this.recordId }]);
-                eval("$A.get('e.force:refreshView').fire();");
+                notifyRecordUpdateAvailable([{ "recordId": this.recordId }]);
+                this.refreshStdComponents();
                 // this.fireForceRefreshEvent();
                 this.showMessage('Scheme Applied Successfully!');
             } else {

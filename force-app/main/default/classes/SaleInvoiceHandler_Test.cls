@@ -1183,6 +1183,8 @@ public with sharing class SaleInvoiceHandler_Test {
         System.assertEquals(26880, fetchedsaleInvoice.dmpl__OutstandingAmount__c, 'Outstanding amount mismatch');
         
         System.assertEquals(0, fetchedsaleInvoiceLine.dmpl__NetSchemeDiscount__c);
+        
+        
     }
     
     

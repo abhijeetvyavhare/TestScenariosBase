@@ -1,14 +1,15 @@
 import { LightningElement, api, wire, track } from 'lwc';
 import { getObjectInfo } from 'lightning/uiObjectInfoApi';
-import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
+import { refreshApex } from '@salesforce/apex';
+import { RefreshEvent } from 'lightning/refresh';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { getRecord } from 'lightning/uiRecordApi';
-import { refreshApex } from '@salesforce/apex';
 import { publish, MessageContext } from 'lightning/messageService';
 import { reduceErrors } from 'c/utils';
 import { NavigationMixin } from 'lightning/navigation';
 import { getBarcodeScanner } from 'lightning/mobileCapabilities';
-import FORM_FACTOR from '@salesforce/client/formFactor'
+import FORM_FACTOR from '@salesforce/client/formFactor';
 import getFieldsByFieldSetName from '@salesforce/apex/MetadataController.getFieldsByFieldSetName';
 import getItemStock from '@salesforce/apex/QuickAddPanelController.getItemStock';
 import getItemSKUStock from '@salesforce/apex/QuickAddPanelController.getItemSKUStock';
@@ -89,7 +90,7 @@ export default class QuickAddPanelcmp extends NavigationMixin(LightningElement) 
     @api showCustomItemLookup;
     @api customItemLookupFilter;
     @api customItemLookupFieldsetName;
-
+    
     @track newObjectData;
     @track parenObjectFields;
     @track hasSKU;
@@ -455,15 +456,22 @@ export default class QuickAddPanelcmp extends NavigationMixin(LightningElement) 
             }),
         );
         this.handleReset(false);
-        getRecordNotifyChange(new Array({ "recordId": recordId }));
-        getRecordNotifyChange(new Array({ "recordId": this.recordId }));
-        eval("$A.get('e.force:refreshView').fire();");
+        notifyRecordUpdateAvailable([{recordId: this.recordId}, {recordId: recordId}]);
         refreshApex(this.itemStock);
         refreshApex(this.itemSKUStock);
         refreshApex(this.itemSKUBranchStock);
         refreshApex(this.itemLotTypeStock);
         refreshApex(this.itemLotTypesStock);
+        this.refreshStdComponents();
         this.fireForceRefreshEvent();
+    }
+    
+    refreshStdComponents(){
+        try{
+            eval("$A.get('e.force:refreshView').fire();");
+        }catch(e){
+            this.dispatchEvent(new RefreshEvent());
+        }
     }
 
     handleLoad() {
@@ -807,11 +815,11 @@ export default class QuickAddPanelcmp extends NavigationMixin(LightningElement) 
             let data = this.itemAlternateStock.data.map(x => {
                 let newRow = this.alternateItemTypes[x.dmpl__ItemId__c] ?this.alternateItemTypes[x.dmpl__ItemId__c]:this.alternateItemTypes[x.dmpl__AlternateItemId__c];
                 return {
-                    dmpl__AlternateItemId__c: x.dmpl__ItemId__c,
+                    dmpl__AlternateItemId__c: x.dmpl__AlternateItemId__c ?? x.dmpl__ItemId__c,
                     dmpl__AlternateItemName__c: x.Name,
                     QuantityAvailable: x.QuantityAvailable ?? 0,
                     QuantityInHand: x.QuantityInHand ?? 0,
-                    dmpl__BranchId__c: x.BranchId,
+                    dmpl__BranchId__c: this.getBranchId,
                     dmpl__AlternateItemType__c: newRow || 'Unknown'
                 };
             });
@@ -824,7 +832,7 @@ export default class QuickAddPanelcmp extends NavigationMixin(LightningElement) 
                 dmpl__BranchId__c: currentItemStock.BranchId || '',
                 dmpl__AlternateItemType__c: 'Original'
             });
-
+            
             const modal = this.template.querySelector('c-alternate-item-modal-cmp');
             if (modal) {
                 let selectedIds = [this.itemInfo.data.Id];

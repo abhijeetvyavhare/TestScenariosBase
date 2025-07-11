@@ -3,6 +3,7 @@ import { getPicklistValues } from 'lightning/uiObjectInfoApi';
 import { getObjectInfo } from 'lightning/uiObjectInfoApi';
 import { NavigationMixin } from 'lightning/navigation';
 import { publish, MessageContext } from 'lightning/messageService';
+import { RefreshEvent } from 'lightning/refresh';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { deleteRecord } from 'lightning/uiRecordApi';
 import { reduceErrors } from 'c/utils';
@@ -208,7 +209,15 @@ export default class IncentiveBuilderConditionRowcmp extends NavigationMixin(Lig
     }
 
     beginRefresh() {
-        eval("$A.get('e.force:refreshView').fire();");
+        this.refreshStdComponents();
         publish(this.messageContext, FORCEREFRESHMC);
      }
+
+    refreshStdComponents(){
+        try{
+            eval("$A.get('e.force:refreshView').fire();");
+        }catch(e){
+            this.dispatchEvent(new RefreshEvent());
+        }
+    }
 }
