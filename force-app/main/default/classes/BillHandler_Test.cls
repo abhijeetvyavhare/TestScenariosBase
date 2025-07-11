@@ -25,6 +25,8 @@ public with sharing class BillHandler_Test {
         Account partnerAccount2 = TestDataHelpers.createPartnerAccount('Partner 2', false, true, false, false, '45 Residency Road', 'Pune', 'Maharashtra', 'India', '411001', '22 Commerce Avenue', 'Pune', 'Maharashtra', 'India', '411038','91-99665544433');
         Account partnerAccount3 = TestDataHelpers.createPartnerAccount('Partner 3', false, true, false, true, '78 Nehru Nagar Road', 'Chennai', 'Tamil Nadu', 'India', '600042', '78 Nehru Nagar Road', 'Chennai', 'Tamil Nadu', 'India', '600042', '91-9123456789');
         Account partnerAccount4 = TestDataHelpers.createPartnerAccount('Partner 4', false, true, false, true, '12 Industrial Zone', 'Hyderabad','Telangana', 'India', '500032', '12 Industrial Zone', 'Hyderabad', 'Telangana', 'India','500032','9876012345');
+        Account partnerAccount6 = TestDataHelpers.createPartnerAccount('Partner 6', false, true, false, true, 'MG Road', 'Bengaluru', 'Karnataka', 'India', '560001', '56 Industrial Layout', 'Bengaluru', 'Karnataka', 'India', '560095', '9845543210');
+        dmpl__Branch__c branch6 = TestDataHelpers.createBranch('Branch 6', partnerAccount6.Id, true, false, false, false, true, false, true);
         dmpl__Branch__c branch1 = TestDataHelpers.createBranch('Branch 1', partnerAccount1.Id, true, true, false, true);
         dmpl__Branch__c branch3 = TestDataHelpers.createBranch('Branch 3', partnerAccount3.Id, false, true, true, false);
         dmpl__Branch__c branch4 = TestDataHelpers.createBranch('Branch 4',partnerAccount4.Id,true,true,false,false);
@@ -68,6 +70,7 @@ public with sharing class BillHandler_Test {
         
         dmpl__SKU__c sku1 = TestDataHelpers.createSKU('SKU 1', item7.id, true);
         dmpl__SKU__c sku2 = TestDataHelpers.createSKU('SKU 2', item8.id, false);
+        dmpl__SKU__c sku3 = TestDataHelpers.createSKU('SKU 3', item3.Id, false);
         dmpl__SKU__c sku4 = TestDataHelpers.createSKU('SKU 4', item10.id, true);
     }
     
@@ -356,8 +359,8 @@ public with sharing class BillHandler_Test {
         System.assertEquals(false, exceptionCaught,'Exception caught while assigning Supplier Account');
         Test.stopTest();
     }
-
-     @isTest
+    
+    @isTest
     static void updateBillWithoutSupplierAccountPositive(){
         Account partnerAccount4 = TestDataHelpers.getPartnerAccount('Partner 4');
         dmpl__Branch__c branch4 =TestDataHelpers.getBranch('Branch 4');
@@ -421,7 +424,7 @@ public with sharing class BillHandler_Test {
         }catch(Exception e){
             exceptionCaught = true;
         }
-        // System.assertNotEquals(true, exceptionCaught,'Expected exception while assigning wrong partner Account');
+        System.assertNotEquals(true, exceptionCaught,'Expected exception while assigning wrong partner Account');
         Test.stopTest();
     }
     
@@ -490,7 +493,7 @@ public with sharing class BillHandler_Test {
         }catch(Exception e){
             exceptionCaught = true;
         }
-        // System.assertNotEquals(true, exceptionCaught,'Expected exception while assigning wrong Branch');
+        System.assertNotEquals(true, exceptionCaught,'Expected exception while assigning wrong Branch');
         Test.stopTest();
     }
     
@@ -1040,9 +1043,9 @@ public with sharing class BillHandler_Test {
         System.assertEquals(15000, insertedBillLine.dmpl__Amount__c, 'Amount should be 15000');
         
         dmpl__Bill__c updatedBill = BillTestDataHelpers.getBill(bill.Id);
-        System.assertEquals(15000, updatedBill.dmpl__TotalAmount__c, 'Total amount should be ');
+        System.assertEquals(15000, updatedBill.dmpl__TotalAmount__c, 'Total amount should be 15000');
         System.assertEquals(15000, updatedBill.dmpl__TotalLineAmount__c, 'Total line amount should be 15000');
-        System.assertEquals(15000, updatedBill.dmpl__TotalLineBaseAmount__c, 'Total line base am15000ount should be 15000');
+        System.assertEquals(15000, updatedBill.dmpl__TotalLineBaseAmount__c, 'Total line base amount should be 15000');
         System.assertEquals(0, updatedBill.dmpl__TotalLineTaxAmount__c, 'Total line tax amount should be 0');
         System.assertEquals(0, updatedBill.dmpl__TotalSchemeDiscountAmount__c, 'Total scheme discount amount should be 0');
         
@@ -1353,6 +1356,149 @@ public with sharing class BillHandler_Test {
         System.assertEquals(22000, updatedBill.dmpl__TotalLineBaseAmount__c, 'Total line base amount should be 22000');
         System.assertEquals(0, updatedBill.dmpl__TotalSchemeDiscountAmount__c, 'Total scheme discount amount should be 0');
     }
+    
+    @isTest
+    static void createBillReturnWithBackwardDatePositive() {
+        
+        Account partnerAccount = TestDataHelpers.getPartnerAccount('Partner 4');
+        Account supplierAccount = TestDataHelpers.getSupplierAccount('Supplier 1');
+        dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 4');
+        dmpl__PriceList__c priceList = TestDataHelpers.getPriceList();
+        Date backwardDate = Date.today().addDays(-1);
+        
+        Test.startTest();
+        dmpl__BillReturn__c billReturnNew = BillTestDataHelpers.createBillReturn(
+            supplierAccount,
+        partnerAccount,
+        branch,
+        priceList,
+        backwardDate
+            );
+        Test.stopTest();
+        
+        dmpl__BillReturn__c billReturn = BillTestDataHelpers.getBillReturn(billReturnNew.Id);
+        
+        System.assertNotEquals(null, billReturn.Id, 'Bill Return should be created');
+        System.assertEquals(backwardDate, billReturn.dmpl__DocumentDate__c, 'Document date should be yesterday');
+        System.assertEquals('Draft', billReturn.dmpl__Status__c, 'Status should be draft');
+        System.assertEquals(partnerAccount.Id, billReturn.dmpl__PartnerAccountId__c, 'Partner should be Partner 4');
+        System.assertEquals(branch.Id, billReturn.dmpl__BranchId__c, 'Branch should be Branch 4');
+        System.assertEquals(supplierAccount.Id, billReturn.dmpl__SupplierAccountId__c, 'Supplier should be Supplier 1');
+    }
+    
+    @isTest
+    static void updateBillReturnWithBackwardDatePositive() {
+        
+        Account partnerAccount = TestDataHelpers.getPartnerAccount('Partner 4');
+        Account supplierAccount = TestDataHelpers.getSupplierAccount('Supplier 1');
+        dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 4');
+        dmpl__PriceList__c priceList = TestDataHelpers.getPriceList();
+        Date todayDate = Date.today();
+        Date backwardDate = Date.today().addDays(-1);
+        
+        Test.startTest();
+        dmpl__BillReturn__c billReturnInitial = BillTestDataHelpers.createBillReturn(
+            supplierAccount,
+        partnerAccount,
+        branch,
+        priceList,
+        todayDate
+            );
+        
+        
+        dmpl__BillReturn__c billReturnCreated = BillTestDataHelpers.getBillReturn(billReturnInitial.Id);
+        
+        System.assertNotEquals(null, billReturnCreated.Id, 'Bill Return should be created');
+        System.assertEquals(todayDate, billReturnCreated.dmpl__DocumentDate__c, 'Document date should be today');
+        System.assertEquals('Draft', billReturnCreated.dmpl__Status__c, 'Status should be draft');
+        System.assertEquals(partnerAccount.Id, billReturnCreated.dmpl__PartnerAccountId__c, 'Partner should be Partner 4');
+        System.assertEquals(branch.Id, billReturnCreated.dmpl__BranchId__c, 'Branch should be Branch 4');
+        System.assertEquals(supplierAccount.Id, billReturnCreated.dmpl__SupplierAccountId__c, 'Supplier should be Supplier 1');
+        
+        billReturnCreated.dmpl__DocumentDate__c = backwardDate;
+        update billReturnCreated;
+        
+        Test.stopTest();
+        
+        dmpl__BillReturn__c billReturnEdited = BillTestDataHelpers.getBillReturn(billReturnCreated.Id);
+        
+        System.assertEquals(backwardDate, billReturnEdited.dmpl__DocumentDate__c, 'Document date should be yesterday');
+        System.assertEquals('Draft', billReturnEdited.dmpl__Status__c, 'Status should still be draft after edit');
+        System.assertEquals(partnerAccount.Id, billReturnEdited.dmpl__PartnerAccountId__c, 'Partner should be Partner 4');
+        System.assertEquals(branch.Id, billReturnEdited.dmpl__BranchId__c, 'Branch should be Branch 4');
+        System.assertEquals(supplierAccount.Id, billReturnEdited.dmpl__SupplierAccountId__c, 'Supplier should be Supplier 1');
+    }
+    
+    @isTest
+    static void testBillReturnCreationWithPurchaseOrderReference_New() {
+        
+        Account partner = TestDataHelpers.getPartnerAccount('Partner 4');
+        Account supplier = TestDataHelpers.getSupplierAccount('Supplier 1');
+        dmpl__Branch__c branch = TestDataHelpers.getBranch('Branch 4');
+        dmpl__Item__c item = TestDataHelpers.getItem('Item 3');
+        dmpl__SKU__c sku = TestDataHelpers.getSKU('SKU 3');
+        dmpl__TaxGroup__c taxGroup = TestDataHelpers.getTaxGroup('GST 12');
+        
+        dmpl__PurchaseOrder__c po = BillTestDataHelpers.createPurchaseOrder(branch, supplier, partner);
+        System.assertEquals('Draft', po.dmpl__Status__c, 'PO should be created in Draft status');
+        
+        Decimal unitPrice = 2000;
+        Decimal quantity = 5;
+        dmpl__PurchaseOrderLine__c poLine = BillTestDataHelpers.createPurchaseOrderLine(po, unitPrice, quantity, item, sku, taxGroup);
+        
+        dmpl__BillReturn__c billReturn = BillTestDataHelpers.createBillReturnWithPurchaseOrderReference(
+            supplier, partner, branch, po
+            );
+        
+        
+        System.assertEquals(Date.today(), po.dmpl__DocumentDate__c, 'PO date should be today');
+        System.assertEquals('Draft', po.dmpl__Status__c, 'PO should be in Draft status');
+        System.assertEquals(2000, poLine.dmpl__UnitCost2__c, 'Unit Price should be 2000');
+        System.assertEquals(5, poLine.dmpl__Quantity__c, 'Quantity should be 5');
+        System.assertEquals(10000, poLine.dmpl__BaseAmount__c, 'Base Amount should be 10000');
+        System.assertEquals(1200, poLine.dmpl__TaxAmount__c, 'Tax Amount should be 1200');
+        System.assertEquals(11200, poLine.dmpl__GrossAmount__c, 'Gross should be 11200');
+        System.assertEquals(Date.today(), billReturn.dmpl__DocumentDate__c, 'Bill Return date should be today');
+        System.assertEquals('Draft', billReturn.dmpl__Status__c, 'Bill Return should be in Draft status');
+        System.assertEquals(supplier.Id, billReturn.dmpl__SupplierAccountId__c, 'Supplier should match');
+        System.assertEquals(partner.Id, billReturn.dmpl__PartnerAccountId__c, 'Partner should match');
+        System.assertEquals(branch.Id, billReturn.dmpl__BranchId__c, 'Branch should match');
+        System.assertEquals(po.Id, billReturn.dmpl__PurchaseOrderId__c, 'Purchase Order should match');
+    }
+    
+    //Bill creation with active price list (Edit)
+    @isTest
+    static void updateBillWithActivePriceListPositive(){
+        Account partnerAccount1 = TestDataHelpers.getPartnerAccount('Partner 1');
+        dmpl__Branch__c branch1 =TestDataHelpers.getBranch('Branch 1');
+        Account partnerAccount6 = TestDataHelpers.getPartnerAccount('Partner 6');
+        dmpl__Branch__c branch6 =TestDataHelpers.getBranch('Branch 6');
+        Account supplierAccount1 = TestDataHelpers.getSupplierAccount('Supplier 1');
+        Test.startTest();
+        dmpl__Bill__c bill = BillTestDataHelpers.createBill(supplierAccount1.Id,branch1.Id,partnerAccount1.Id,Date.today(),null,null,null);
+        bill.dmpl__PartnerAccountId__c = partnerAccount6.Id;
+        bill.dmpl__BranchId__c = branch6.Id;
+        Update bill;
+        Test.stopTest();
+        System.assertNotEquals(null, bill.Id, 'Bill Id should not be null');
+        dmpl__Bill__c insertedBill = BillTestDataHelpers.getBill(bill.Id);
+        
+        System.assertEquals(partnerAccount6.dmpl__ShippingStreet__c, insertedBill.dmpl__ShippingStreet__c, 'Shipping street should match');
+        System.assertEquals(partnerAccount6.dmpl__ShippingCity__c, insertedBill.dmpl__ShippingCity__c, 'Shipping city should match');
+        System.assertEquals(partnerAccount6.dmpl__ShippingState__c, insertedBill.dmpl__ShippingState__c, 'Shipping state should match');
+        System.assertEquals(partnerAccount6.dmpl__ShippingPostalCode__c, insertedBill.dmpl__ShippingPostalCode__c, 'Shipping postal code should match');
+        System.assertEquals(partnerAccount6.dmpl__BillingStreet__c, insertedBill.dmpl__BillingStreet__c, 'Billing street should match');
+        System.assertEquals(partnerAccount6.dmpl__BillingCity__c, insertedBill.dmpl__BillingCity__c, 'Billing city should match');
+        System.assertEquals(partnerAccount6.dmpl__BillingState__c, insertedBill.dmpl__BillingState__c, 'Billing state should match');
+        System.assertEquals(partnerAccount6.dmpl__ShippingCountry__c, insertedBill.dmpl__ShippingCountry__c, 'Shipping country should match');
+        System.assertEquals(partnerAccount6.dmpl__BillingPostalCode__c, insertedBill.dmpl__BillingPostalCode__c, 'Billing postal code should match');
+        System.assertEquals(Date.today(), insertedBill.dmpl__DocumentDate__c, 'Document date should match');
+        System.assertEquals('Draft', insertedBill.dmpl__Status__c, 'Status should be draft');
+        System.assertEquals(partnerAccount6.Id, insertedBill.dmpl__PartnerAccountId__c, 'Partner Account should match');
+    }
+    
+    
+    
     
     
 }
